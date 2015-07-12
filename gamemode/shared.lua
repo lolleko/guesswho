@@ -47,8 +47,12 @@ function GM:CreateTeams()
 	team.SetSpawnPoint( TEAM_SPECTATOR, "worldspawn" )
 end
 
-function GetRoundState()
+function GM:GetRoundState()
 	return GetGlobalString("RoundState", IN_ROUND)
+end
+
+function GM:InRound()
+	return GetGlobalString("RoundState", IN_ROUND) == IN_ROUND
 end
 
 function GM:PlayerShouldTakeDamage( ply, victim )
@@ -59,4 +63,22 @@ function GM:PlayerShouldTakeDamage( ply, victim )
 	end
 	
 	return true
+end
+
+function GM:EntityTakeDamage(target, dmginfo)
+
+	attacker = dmginfo:GetAttacker()
+
+	if GAMEMODE:InRound() && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
+	
+		attacker:SetHealth(attacker:Health() - 2)
+		
+		if attacker:Health() <= 0 then
+		
+			attacker:Kill()
+			
+		end
+		
+	end
+	
 end

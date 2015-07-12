@@ -76,7 +76,7 @@ function CHuntHUD()
 	local time = string.ToMinutesSeconds(GetGlobalFloat("EndTime", 0) - CurTime())
 	CHHUD:DrawPanel( ScrW()/2- 85, 0, 170, 65, {background = Color(120,120,120,20)})
 	CHHUD:DrawText( ScrW()/2 - (CHHUD:TextSize(time, "robot")/2), 5, time, "robot", Color(255,255,255) )
-    CHHUD:DrawText( ScrW()/2 - (CHHUD:TextSize(GetRoundState(), "robot_small")/2), 40, GetRoundState() , "robot_small", Color(255,255,255) )
+    CHHUD:DrawText( ScrW()/2 - (CHHUD:TextSize(GAMEMODE:GetRoundState(), "robot_small")/2), 40, GAMEMODE:GetRoundState() , "robot_small", Color(255,255,255) )
 
     if LocalPlayer():Team() == TEAM_SEEKING then CHHUD:Crosshair() end
 end

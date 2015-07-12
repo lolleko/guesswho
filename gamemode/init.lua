@@ -8,9 +8,13 @@ AddCSLuaFile( "cl_hud.lua" )
 include( "shared.lua" )
 include( "player.lua" )
 
+util.AddNetworkString("CleanUp")
+--TODO add convars
 GM.MaxWalkers = 25
 GM.RoundTime = 0
-GM.MaxRounds = 5
+GM.MaxRounds = 100
+GM.MinHiding = 1
+GM.MinSeeking = 1
 
 function GM:InitPostEntity()
 	self.SpawnPoints = ents.FindByClass( "info_player_start" )
@@ -67,7 +71,18 @@ function GM:InitPostEntity()
 
 	self.WalkerCount = 0
 
-	self:PreGame()
+	local rand = math.random
+	local n = #self.SpawnPoints
+
+	while n > 2 do
+
+		local k = rand(n) -- 1 <= k <= n
+
+		self.SpawnPoints[n], self.SpawnPoints[k] = self.SpawnPoints[k], self.SpawnPoints[n]
+		n = n - 1
+ 	end
+
+ 	self:PreGame()
 end
 
 function GM:PreGame()
@@ -79,7 +94,7 @@ end
 
 function GM:PreRoundStart()
 	--do not start round without players or at least one player in each team
-	if team.NumPlayers( TEAM_HIDING ) < 1 or team.NumPlayers( TEAM_SEEKING ) < 1 then
+	if team.NumPlayers( TEAM_HIDING ) < self.MinHiding or team.NumPlayers( TEAM_SEEKING ) < self.MinSeeking then
 		--check again after half a second second
 		timer.Simple(0.5, function() self:PreRoundStart() end)
 		--clear remaning npcs to save recources
@@ -140,7 +155,7 @@ function GM:RoundThink()
 
 	if self.RoundTime == 300 then self:RoundEnd( false ) end
 
-	if team.NumPlayers( TEAM_HIDING ) < 1 or team.NumPlayers( TEAM_SEEKING ) < 1 then
+	if team.NumPlayers( TEAM_HIDING ) < self.MinHiding or team.NumPlayers( TEAM_SEEKING ) < self.MinSeeking then
 		self:RoundEnd()
 	end
 
@@ -149,12 +164,10 @@ function GM:RoundThink()
 		if v:Alive() then seekersWin = false end
 	end
 
-	/*local hidingWin = true
-	for k,v in pairs(team.GetPlayers( TEAM_SEEKER )) do
+	local hidingWin = true
+	for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
 		if v:Alive() then hidingWin = false end
 	end
-	print(hidingWin)*/
-
 
 	if seekersWin then
 		self:RoundEnd(true)
@@ -178,7 +191,8 @@ function GM:RoundEnd( caught )
 end
 
 function GM:PostRound()
-	--game.CleanUpMap( false, {"info_player*"})
+	net.Start("CleanUp")
+	net.Broadcast()
 	timer.Simple( 5, function() self:PreRoundStart() end)
 	SetGlobalFloat("EndTime", CurTime() + 5 )
 	SetGlobalString("RoundState", POST_ROUND)

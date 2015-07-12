@@ -55,7 +55,7 @@ function GM:CalcView(ply, pos, angles, fov)
 		view.origin = pos - ( angles:Forward() * dist )
 		view.drawviewer = true
 
-	elseif ply:Team() == TEAM_SEEKING and GetRoundState() != IN_ROUND then -- blind seekers
+	elseif ply:Team() == TEAM_SEEKING and !GAMEMODE:InRound() then -- blind seekers
 		view.origin = Vector(20000, 0, 0)
 		view.angles = Angle(0, 0, 0)
 	end
@@ -63,3 +63,7 @@ function GM:CalcView(ply, pos, angles, fov)
 	return view
 	
 end
+
+net.Receive("CleanUp", function(ken)
+	game.CleanUpMap()
+end)

@@ -2,7 +2,16 @@ function GM:PlayerDeathThink( ply )
 
 	local spectargets = team.GetPlayers( ply:Team() )
 
-	if GetRoundState() == IN_ROUND then
+	if GAMEMODE:InRound() then
+		if not ply.SpecID then 
+			ply:Spectate(OBS_MODE_CHASE)
+			if spectargets != nil then
+				for k,v in pairs(spectargets) do
+			    	if v:Alive() then ply.SpecID = k ply:SpectateEntity(v)  break end
+				end
+			end
+			if !ply.SpecID then ply.SpecID = 1 end
+		end
 		if ply:KeyPressed( IN_ATTACK ) then
 			ply.SpecID = ply.SpecID + 1
 			if ply.SpecID > #spectargets then
@@ -27,7 +36,7 @@ function GM:PlayerDeathThink( ply )
 	if ( ply.NextSpawnTime && ply.NextSpawnTime > CurTime() ) then return end
 
 	--give hiders a 2nd chance if they died in prep
-	if ply:Team() == TEAM_HIDING and GetGlobalString("RoundState", IN_ROUND) == PRE_ROUND then
+	if ply:Team() == TEAM_HIDING and GAMEMODE:GetRoundState() == PRE_ROUND then
 		ply:Spawn()
 	end
 
