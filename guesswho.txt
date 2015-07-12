@@ -1,6 +1,6 @@
 "playerhunt"
 {
-	"title"		"Player Hunt"
+	"title"		"Guess Who"
 	"menusystem"	"1"
 	"base"		"base"
 
