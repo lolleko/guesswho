@@ -1,0 +1,18 @@
+"playerhunt"
+{
+	"title"		"Player Hunt"
+	"menusystem"	"1"
+	"base"		"base"
+
+	"settings"
+	{
+		1
+		{
+			"name"		"test"
+			"text"		"limit_physgun"
+			"help"		"When enabled the physgun can only pick up props and ragdolls"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+	}
+}
