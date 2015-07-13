@@ -215,3 +215,32 @@ function GM:IsSpawnpointSuitable( pl, spawnpointent, bMakeSuitable )
 	return true
 
 end
+
+function GM:PlayerCanJoinTeam( ply, teamid )
+	
+	local TimeBetweenSwitches = GAMEMODE.SecondsBetweenTeamSwitches or 10
+	if ( ply.LastTeamSwitch && RealTime()-ply.LastTeamSwitch < TimeBetweenSwitches ) then
+		ply.LastTeamSwitch = ply.LastTeamSwitch + 1
+		ply:ChatPrint( Format( "Please wait %i more seconds before trying to change team again", ( TimeBetweenSwitches - ( RealTime() - ply.LastTeamSwitch ) ) + 1 ) )
+		return false
+	end
+	
+	-- Already on this team!
+	if ( ply:Team() == teamid ) then
+		ply:ChatPrint( "You're already on that team" )
+		return false
+	end
+
+	if teamid == TEAM_SEEKING then
+		if team.NumPlayers( TEAM_SEEKING ) > team.NumPlayers( TEAM_HIDING ) then
+			return false
+		end
+	elseif teamid == TEAM_HIDING then
+		if team.NumPlayers( TEAM_HIDING ) > team.NumPlayers( TEAM_SEEKING ) then
+			return false
+		end
+	end
+	
+	return true
+	
+end

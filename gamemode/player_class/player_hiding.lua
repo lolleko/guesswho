@@ -9,8 +9,8 @@ PLAYER.CanUseFlashlight		= false
 
 function PLAYER:SetModel()
 	--TODO RANDOM MODEL
-	util.PrecacheModel( "models/Humans/Group02/female_02.mdl" )
-	self.Player:SetModel("models/Humans/Group02/female_02.mdl" )
+	util.PrecacheModel( "models/Humans/Group01/female_02.mdl" )
+	self.Player:SetModel("models/Humans/Group01/female_02.mdl" )
 end
 
 function PLAYER:Loadout()

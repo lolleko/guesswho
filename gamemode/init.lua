@@ -9,12 +9,20 @@ include( "shared.lua" )
 include( "player.lua" )
 
 util.AddNetworkString("CleanUp")
---TODO add convars
-GM.MaxWalkers = 25
-GM.RoundTime = 0
-GM.MaxRounds = 100
-GM.MinHiding = 1
-GM.MinSeeking = 1
+
+--[[
+	ROUND CONTROLLER
+]]--
+
+--Round settings
+GM.MaxWalkers = GetConVar( "gw_maxwalkers" ):GetInt()
+GM.PreGameDuration = GetConVar( "gw_pregameduration" ):GetInt()
+GM.RoundDuration = GetConVar( "gw_roundduration" ):GetInt()
+GM.HideDuration = GetConVar( "gw_hideduration" ):GetInt()
+GM.PostRoundDuration = GetConVar( "gw_postroundduration" ):GetInt()
+GM.MaxRounds = GetConVar( "gw_maxrounds" ):GetInt()
+GM.MinHiding = GetConVar( "gw_minhiding" ):GetInt()
+GM.MinSeeking = GetConVar( "gw_minseeking" ):GetInt()
 
 function GM:InitPostEntity()
 	self.SpawnPoints = ents.FindByClass( "info_player_start" )
@@ -71,6 +79,7 @@ function GM:InitPostEntity()
 
 	self.WalkerCount = 0
 
+	--shuffle spawnpoints (thx ttt)
 	local rand = math.random
 	local n = #self.SpawnPoints
 
@@ -86,8 +95,8 @@ function GM:InitPostEntity()
 end
 
 function GM:PreGame()
-	timer.Simple( 30, function() self:PreRoundStart() end)
-	SetGlobalFloat("EndTime", CurTime() + 30 )
+	timer.Simple( self.PreGameDuration, function() self:PreRoundStart() end)
+	SetGlobalFloat("EndTime", CurTime() + self.PreGameDuration )
 	SetGlobalString("RoundState", PRE_GAME)
 end
 
@@ -133,17 +142,17 @@ function GM:PreRoundStart()
 			v:Freeze( true )
 		end
 	end) 
-	timer.Simple(45, function() self:RoundStart() end )
-	SetGlobalFloat("EndTime", CurTime() + 45 )
+	timer.Simple(self.HideDuration + 5, function() self:RoundStart() end )
+	SetGlobalFloat("EndTime", CurTime() + self.HideDuration + 5 )
 end
 
 function GM:RoundStart()
 	for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
 		v:Freeze( false )
 	end
-	timer.Create( "RoundThink", 1, 300, function() self:RoundThink() end)
+	timer.Create( "RoundThink", 1, self.RoundDuration, function() self:RoundThink() end)
 	self.RoundTime = 1
-	SetGlobalFloat("EndTime", CurTime() + 300 )
+	SetGlobalFloat("EndTime", CurTime() + self.RoundDuration )
 	SetGlobalInt( GetGlobalInt("RoundNumber", 0) + 1)
 	SetGlobalString("RoundState", IN_ROUND)
 end
@@ -153,7 +162,7 @@ function GM:RoundThink()
 	--end conditions
 	self.RoundTime = self.RoundTime + 1
 
-	if self.RoundTime == 300 then self:RoundEnd( false ) end
+	if self.RoundTime == self.RoundDuration then self:RoundEnd( false ) end
 
 	if team.NumPlayers( TEAM_HIDING ) < self.MinHiding or team.NumPlayers( TEAM_SEEKING ) < self.MinSeeking then
 		self:RoundEnd()
@@ -193,8 +202,8 @@ end
 function GM:PostRound()
 	net.Start("CleanUp")
 	net.Broadcast()
-	timer.Simple( 5, function() self:PreRoundStart() end)
-	SetGlobalFloat("EndTime", CurTime() + 5 )
+	timer.Simple( self.PostRoundDuration, function() self:PreRoundStart() end)
+	SetGlobalFloat("EndTime", CurTime() + self.PostRoundDuration )
 	SetGlobalString("RoundState", POST_ROUND)
 
 	if GetGlobalInt("RoundNumber", 0) == self.MaxRounds then
@@ -211,3 +220,28 @@ function GM:PostRound()
 	end
 end
 
+--[[
+	GAMEMODE HOOKS
+]]--
+
+--Convars
+GM.DamageOnFail = GetConVar( "gw_damageonfailguess" ):GetInt()
+
+--Take Damage if innocent NPC damaged
+function GM:EntityTakeDamage(target, dmginfo)
+
+	attacker = dmginfo:GetAttacker()
+
+	if GAMEMODE:InRound() && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
+	
+		attacker:SetHealth(attacker:Health() - self.DamageOnFail)
+		
+		if attacker:Health() <= 0 then
+		
+			attacker:Kill()
+			
+		end
+		
+	end
+	
+end
