@@ -1,6 +1,7 @@
 include( "shared.lua" )
 include( "cl_hud.lua" )
 include( "cl_pickteam.lua")
+include( "cl_scoreboard.lua")
 
 function GM:CalcView(ply, pos, angles, fov)
 	

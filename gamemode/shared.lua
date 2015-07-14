@@ -1,4 +1,4 @@
-GM.Name = "Player Hunt"
+GM.Name = "Guess Who"
 GM.Author = "Lolleko"
 GM.Email = "N/A"
 GM.Website = "https://github.com/lolleko"

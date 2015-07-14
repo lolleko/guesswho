@@ -204,7 +204,6 @@ function GM:IsSpawnpointSuitable( pl, spawnpointent, bMakeSuitable )
 			Blockers = Blockers + 1
 			
 			if ( bMakeSuitable ) then
-				--v:Kill()
 			end
 			
 		end

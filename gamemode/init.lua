@@ -5,6 +5,8 @@ AddCSLuaFile( "player_class/player_hiding.lua")
 AddCSLuaFile( "player_class/player_seeker.lua")
 AddCSLuaFile( "sh_animations.lua")
 AddCSLuaFile( "cl_hud.lua" )
+AddCSLuaFile( "cl_pickteam.lua" )
+AddCSLuaFile( "cl_scoreboard.lua" )
 include( "shared.lua" )
 include( "player.lua" )
 
@@ -137,18 +139,21 @@ function GM:PreRoundStart()
 		for k,v in pairs(team.GetPlayers( TEAM_HIDING )) do
 			v:Spawn()
 		end
-		for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
-			v:Spawn()
-			v:Freeze( true )
+	end)
+	timer.Simple( 10, function() for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
+		v:Spawn()
+		v:Freeze( true )
+		v:SetAvoidPlayers( true )
 		end
-	end) 
+	end)
 	timer.Simple(self.HideDuration + 5, function() self:RoundStart() end )
-	SetGlobalFloat("EndTime", CurTime() + self.HideDuration + 5 )
+	SetGlobalFloat("EndTime", CurTime() + self.HideDuration + 10 )
 end
 
 function GM:RoundStart()
 	for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
 		v:Freeze( false )
+		v:SetAvoidPlayers( false )
 	end
 	timer.Create( "RoundThink", 1, self.RoundDuration, function() self:RoundThink() end)
 	self.RoundTime = 1
@@ -193,8 +198,13 @@ function GM:RoundEnd( caught )
 
 	if caught then
 		PrintMessage( HUD_PRINTCENTER, "The Hunters won." )
+		team.AddScore( TEAM_SEEKING, 1)
 	else
 		PrintMessage( HUD_PRINTCENTER, "The Citiziens won." )
+		for k,v in pairs(team.GetPlayers( TEAM_HIDING )) do
+			if v:Alive() then v:AddFrags( 1 ) end --if still alive as hiding after round give them one point (frag)
+		end
+		team.AddScore( TEAM_HIDING, 1)
 	end
 	self:PostRound()
 end
@@ -244,4 +254,99 @@ function GM:EntityTakeDamage(target, dmginfo)
 		
 	end
 	
+end
+
+function GM:DoPlayerDeath( ply, attacker, dmginfo )
+
+	ply:CreateRagdoll()
+	
+	ply:AddDeaths( 1 )
+	
+	if ( attacker:IsValid() && attacker:IsPlayer() ) then
+		
+		if attacker == ply then
+			return
+		end
+
+		if attacker:Team() == TEAM_SEEKING then
+			attacker:AddFrags( 1 )
+			if attacker:Health() + self.DamageOnFail*4 > 100 then
+				attacker:Health(100)
+			else
+				attacker:Health(attacker:Health() + self.DamageOnFail*4) 
+			end
+		end
+	
+	end
+
+end
+
+function GM:OnNPCKilled( ent, attacker, inflictor )
+
+	-- Don't spam the killfeed with scripted stuff
+	if ( ent:GetClass() == "npc_bullseye" || ent:GetClass() == "npc_launcher" ) then return end
+
+	if ( IsValid( attacker ) && attacker:GetClass() == "trigger_hurt" ) then attacker = ent end
+	
+	if ( IsValid( attacker ) && attacker:IsVehicle() && IsValid( attacker:GetDriver() ) ) then
+		attacker = attacker:GetDriver()
+	end
+
+	if ( !IsValid( inflictor ) && IsValid( attacker ) ) then
+		inflictor = attacker
+	end
+	
+	-- Convert the inflictor to the weapon that they're holding if we can.
+	if ( IsValid( inflictor ) && attacker == inflictor && ( inflictor:IsPlayer() || inflictor:IsNPC() ) ) then
+	
+		inflictor = inflictor:GetActiveWeapon()
+		if ( !IsValid( attacker ) ) then inflictor = attacker end
+	
+	end
+	
+	local InflictorClass = "worldspawn"
+	local AttackerClass = "worldspawn"
+	
+	if ( IsValid( inflictor ) ) then InflictorClass = inflictor:GetClass() end
+	if ( IsValid( attacker ) ) then
+
+		AttackerClass = attacker:GetClass()
+	
+		if ( attacker:IsPlayer() ) then
+
+			if ent:GetClass() == "npc_walker" then
+				
+				attacker:SetHealth(attacker:Health() - self.DamageOnFail*2)
+			
+				if attacker:Health() <= 0 then
+				
+					attacker:Kill()
+					
+				end
+
+			end
+
+			net.Start( "PlayerKilledNPC" )
+		
+				net.WriteString( ent:GetClass() )
+				net.WriteString( InflictorClass )
+				net.WriteEntity( attacker )
+		
+			net.Broadcast()
+
+			return
+		end
+
+	end
+
+	if ( ent:GetClass() == "npc_turret_floor" ) then AttackerClass = ent:GetClass() end
+
+	net.Start( "NPCKilledNPC" )
+	
+		net.WriteString( ent:GetClass() )
+		net.WriteString( InflictorClass )
+		net.WriteString( AttackerClass )
+	
+	net.Broadcast()
+
 end

@@ -55,7 +55,7 @@ function GM:ShowTeam()
 	SignatureLabel:SetPos( HeaderLabel:GetPos() + 15, 123 )
 	SignatureLabel:SetFont("Button_Small")
 	SignatureLabel:SetTextColor( clrs.lightgrey )
-	SignatureLabel:SetText("by Lolle")
+	SignatureLabel:SetText("")
 
 	--Hiding Button
 	local TeamHidingPanel = vgui.Create( "DPanel", self.TeamSelectFrame )
@@ -124,7 +124,7 @@ function GM:ShowTeam()
 	TeamSpectateButton:SetFont("Button_Normal")
 	TeamSpectateButton:SetText( "Spectate" )
 	TeamSpectateButton:SetTextColor( clrs.lightgrey )
-	function TeamSpectateButton.DoClick() RunConsoleCommand( "changeteam", TEAM_SPECTATOR ) end
+	function TeamSpectateButton.DoClick() self:HideTeam() RunConsoleCommand( "changeteam", TEAM_SPECTATOR ) end
 	function TeamSpectateButton:Paint( w, h)
 		draw.RoundedBox( 0, 0, 0, w, h, clrs.grey )
 	end
@@ -133,7 +133,7 @@ function GM:ShowTeam()
 	TeamAutoButton:SetPos( ScrW()/2 -340, 680 )
 	TeamAutoButton:SetSize( 680, 40 )
 	TeamAutoButton:SetFont("Button_Normal")
-	TeamAutoButton:SetText( "Auto" )
+	TeamAutoButton:SetText( "Auto Join" )
 	TeamAutoButton:SetTextColor( clrs.lightgrey )
 	function TeamAutoButton.DoClick() self:HideTeam() RunConsoleCommand( "changeteam", team.BestAutoJoinTeam() ) end
 	function TeamAutoButton:Paint( w, h)

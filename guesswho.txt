@@ -44,7 +44,7 @@
 			"text"		"The amount of NPCs"
 			"help"		"The maximum amount of NPCs that spawn in a  round."
 			"type"		"Numeric"
-			"default"	"20"
+			"default"	"25"
 		}
 		6
 		{
@@ -68,7 +68,7 @@
 			"text"		"The hide duration"
 			"help"		"The time that the hiding team get´s to disappear in seconds."
 			"type"		"Numeric"
-			"default"	"40"
+			"default"	"30"
 		}
 		9
 		{
@@ -82,9 +82,9 @@
 		{
 			"name"		"gw_damageonfailguess"
 			"text"		"The damage a hunter receives"
-			"help"		"The damage a hunter receives if he hits an NPC and not a player^."
+			"help"		"The damage a hunter receives if he hits an NPC and not a player."
 			"type"		"Numeric"
-			"default"	"2"
+			"default"	"7"
 		}
 	}
 }
