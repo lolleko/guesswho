@@ -123,31 +123,64 @@ function GM:PreRoundStart()
     	v:Remove()
 	end
 
+	local wave = 1
+
 	self.WalkerCount = 0
 	for k,v in pairs(self.SpawnPoints) do
 		if self.WalkerCount == self.MaxWalkers then break end
-		local walker = ents.Create("npc_walker")
-		if !IsValid( walker ) then break end
-		walker:SetPos( v:GetPos() )
-		walker:Spawn()
-		walker:Activate()
-		self.WalkerCount = self.WalkerCount + 1
+
+		local occupied = false
+		for _,ent in pairs(ents.FindInBox(v:GetPos() + Vector( -16, -16, 0 ), v:GetPos() + Vector( 16, 16, 64 ))) do
+			if ent:GetClass() == "npc_walker" then occupied = true end
+		end
+
+		if !occupied then
+			local walker = ents.Create("npc_walker")
+			if !IsValid( walker ) then break end
+			walker:SetPos( v:GetPos() )
+			walker:Spawn()
+			walker:Activate()
+			self.WalkerCount = self.WalkerCount + 1
+		end
 	end
 
+	wave = wave + 1
 	timer.Simple(5, function()
+		for k,v in pairs(self.SpawnPoints) do
+			if self.WalkerCount == self.MaxWalkers then break end
+
+			local occupied = false
+			for _,ent in pairs(ents.FindInBox(v:GetPos() + Vector( -16, -16, 0 ), v:GetPos() + Vector( 16, 16, 64 ))) do
+				if ent:GetClass() == "npc_walker" then occupied = true end
+			end
+
+			if !occupied then
+				local walker = ents.Create("npc_walker")
+				if !IsValid( walker ) then break end
+				walker:SetPos( v:GetPos() )
+				walker:Spawn()
+				walker:Activate()
+				self.WalkerCount = self.WalkerCount + 1
+			end
+		end
+	end)
+
+	timer.Simple(5*wave, function()
 		SetGlobalString("RoundState", PRE_ROUND)
 		for k,v in pairs(team.GetPlayers( TEAM_HIDING )) do
 			v:Spawn()
 		end
+
 	end)
-	timer.Simple( 10, function() for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
+	timer.Simple( 5 + (5*wave), function() for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
 		v:Spawn()
+		v:SetPos(2,2,2) --move them a little bit to make avoid players work
 		v:Freeze( true )
 		v:SetAvoidPlayers( true )
 		end
 	end)
-	timer.Simple(self.HideDuration + 5, function() self:RoundStart() end )
-	SetGlobalFloat("EndTime", CurTime() + self.HideDuration + 10 )
+	timer.Simple(self.HideDuration + (5*wave), function() self:RoundStart() end )
+	SetGlobalFloat("EndTime", CurTime() + self.HideDuration + 5 + (5*wave) )
 end
 
 function GM:RoundStart()
