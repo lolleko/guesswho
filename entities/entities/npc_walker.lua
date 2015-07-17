@@ -34,8 +34,8 @@ function ENT:Initialize()
 
 	self:SetModel("models/"..models[self:GetRandomInt()])
 	self:SetHealth(100)
-	self.Entity:SetCollisionBounds( Vector(-4,-4,0), Vector(4,4,70) ) 
-	self.loco:SetStepHeight(20)
+	self.Entity:SetCollisionBounds( Vector(-6,-6,0), Vector(6,6,70) ) 
+	self.loco:SetStepHeight(22)
 	self.loco:SetJumpHeight(58)
 
 	self.Jumped = CurTime()
@@ -76,11 +76,26 @@ function ENT:Think()
 			self:SetVelocity(self:GetForward() * 10000)
 		end
 	end*/
-	if self.Stucked and CurTime() > self.Stucked + 15 and self.StuckAt:Distance(self:GetPos()) < 10 then
+	local eyetrace = util.TraceHull({
+			start  = self:EyePos(),
+			endpos = self:GetPos() + self:EyeAngles():Forward() * 30,
+			filter = self.Entity
+		})
+	local nav = navmesh.GetNavArea(eyetrace.HitPos, 10)
+	local nav2 = navmesh.GetNavArea(self:GetPos(), 10)
+	if nav:HasAttributes( NAV_MESH_JUMP ) or nav2:HasAttributes( NAV_MESH_JUMP ) then
+		self.loco:Approach(self:GetPos() + self:EyeAngles():Forward() * 30, 1000)
+		if CurTime() > self.Jumped + 2 then
+			self.Jumped = CurTime()
+			self.loco:Jump()
+		end
+	end
+	if self.Stucked and CurTime() > self.Stucked + 15 and self.StuckAt:Distance(self:GetPos()) < 5 then
 		self:SetPos(GAMEMODE.SpawnPoints[math.random(1,#GAMEMODE.SpawnPoints)]:GetPos())
 		self.Stucked = nil
-		if SERVER then print("["..self:GetClass().."]["..tostring(self:EntIndex()).."] Got Stuck for over 15 seconds and will be repositioned, if you frequently get this error you might want to consider the following: Edit the navmesh or lower the walker amount.") end
+		if SERVER then print("["..self:GetClass().."]["..tostring(self:EntIndex()).."] Got Stuck for over 15 seconds and will be repositioned, if this error gets spammed you might want to consider the following: Edit the navmesh or lower the walker amount.") end
 	end
+
 end
 
 function ENT:RunBehaviour()
@@ -114,14 +129,16 @@ end
 
 function ENT:MoveToSpot( type )
 	local pos = self:FindSpot( "random", { type = type, radius = 5000 } )
-	local nav = navmesh.GetNavArea(pos, 20)
-	if ( pos ) and !nav:IsUnderwater() then
+	if ( pos ) then
+		local nav = navmesh.GetNavArea(pos, 20)
+		if !nav:IsUnderwater() then
 			self:StartActivity( ACT_RUN )
 			self:SetLastAct( ACT_RUN )											-- run anim
 			self.loco:SetDesiredSpeed( 200 )										-- run speed
 			self:MoveToPos( pos, { tolerance = 30, lookahead = 10, repath = 2 } )
 			self:StartActivity( ACT_IDLE )														-- move to position (yielding)
 			self:SetLastAct( ACT_IDLE )						
+		end
 	end
 end
 
@@ -143,9 +160,8 @@ function ENT:Use( act, call, type, value )
 end
 
 function ENT:OnNavAreaChanged( old, new)
-	if new:HasAttributes( NAV_MESH_JUMP ) then 
+	if new:HasAttributes( NAV_MESH_JUMP ) and CurTime() > self.Jumped + 2  then 
 		self.loco:Jump()
-		self:SetVelocity(self:GetForward() * 1000)
 	end
 end
 

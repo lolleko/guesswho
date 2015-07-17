@@ -42,12 +42,12 @@ function GM:ShowTeam()
 	HeaderLabel:SetText(" GUESS WHO ")
 	HeaderLabel:CenterHorizontal()
 	function HeaderLabel:Paint( w, h )
-		local x = 0
+		/*local x = 0
 		local y = 0
 		surface.SetDrawColor( clrs.lightgrey )
 		for i=0, 5 - 1 do
 			surface.DrawOutlinedRect( x + i, y + i, w - i * 2, h - i * 2 )
-		end
+		end*/
 	end
 
 	--signature you can remove it but you really shouldnt :(
@@ -86,6 +86,9 @@ function GM:ShowTeam()
 	function TeamHidingButton:Paint( w, h )
 		return
 	end
+	function TeamHidingButton:Think()
+		self:SetText( team.GetName( TEAM_HIDING ).."("..team.NumPlayers( TEAM_HIDING )..")" )
+	end
 
 	--Seeking Button
 	local TeamSeekingPanel = vgui.Create( "DPanel", self.TeamSelectFrame )
@@ -115,6 +118,9 @@ function GM:ShowTeam()
 	TeamSeekingButton:SetSize( 300, 400 )
 	function TeamSeekingButton:Paint( w, h )
 		return
+	end
+	function TeamSeekingButton:Think()
+		self:SetText( team.GetName( TEAM_SEEKING ).."("..team.NumPlayers( TEAM_SEEKING )..")" )
 	end
 
 	--spectate and auto buttons

@@ -2,6 +2,7 @@ include( "shared.lua" )
 include( "cl_hud.lua" )
 include( "cl_pickteam.lua")
 include( "cl_scoreboard.lua")
+include( "cl_help.lua")
 
 function GM:CalcView(ply, pos, angles, fov)
 	
@@ -65,7 +66,3 @@ function GM:CalcView(ply, pos, angles, fov)
 	return view
 	
 end
-
-net.Receive("CleanUp", function(ken)
-	game.CleanUpMap()
-end)

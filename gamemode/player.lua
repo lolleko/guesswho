@@ -243,3 +243,9 @@ function GM:PlayerCanJoinTeam( ply, teamid )
 	return true
 	
 end
+
+function GM:ShowHelp(ply)
+	if IsValid(ply) then
+		ply:ConCommand("gw_helpscreen")
+	end
+end

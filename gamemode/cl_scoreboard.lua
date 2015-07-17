@@ -39,12 +39,12 @@ function SB:Init()
 	HeaderLabel:SetText(" GUESS WHO ")
 	HeaderLabel:CenterHorizontal()
 	function HeaderLabel:Paint( w, h )
-		local x = 0
+		/*local x = 0
 		local y = 0
 		surface.SetDrawColor( clrs.lightgrey )
 		for i=0, 5 - 1 do
 			surface.DrawOutlinedRect( x + i, y + i, w - i * 2, h - i * 2 )
-		end
+		end*/
 	end
 
 	self.HidingHeader = vgui.Create("DLabel", self)
