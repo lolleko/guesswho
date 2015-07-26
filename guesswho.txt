@@ -84,7 +84,7 @@
 			"text"		"The damage a hunter receives"
 			"help"		"The damage a hunter receives if he hits an NPC and not a player."
 			"type"		"Numeric"
-			"default"	"7"
+			"default"	"10"
 		}
 	}
 }

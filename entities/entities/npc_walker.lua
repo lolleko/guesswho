@@ -4,7 +4,7 @@ ENT.Base 			= "base_nextbot"
 
 function ENT:SetupDataTables()
    self:NetworkVar("Int", 0, "RandomInt") --we need to generate the same random for both client and server
-   self:NetworkVar("Int", 0, "LastAct")
+   self:NetworkVar("Int", 0, "LastAct") --Act should be known for client and server
 end
 
 function ENT:Initialize()
@@ -34,11 +34,12 @@ function ENT:Initialize()
 
 	self:SetModel("models/"..models[self:GetRandomInt()])
 	self:SetHealth(100)
-	self.Entity:SetCollisionBounds( Vector(-6,-6,0), Vector(6,6,70) ) 
+	self:SetCollisionBounds( Vector(-4,-4,0), Vector(4,4,70) ) 
 	self.loco:SetStepHeight(22)
-	self.loco:SetJumpHeight(58)
-
-	self.Jumped = CurTime()
+	self.loco:SetJumpHeight(54)
+	self.Jumped = CurTime() + 5 -- prevent jumping for the first 6 seconds since the spawn is crowded
+	self.IsJumping = false
+	self.IsDuck = false
 end
 
 function ENT:Think()
@@ -76,24 +77,21 @@ function ENT:Think()
 			self:SetVelocity(self:GetForward() * 10000)
 		end
 	end*/
-	local eyetrace = util.TraceHull({
-			start  = self:EyePos(),
-			endpos = self:GetPos() + self:EyeAngles():Forward() * 30,
-			filter = self.Entity
-		})
-	local nav = navmesh.GetNavArea(eyetrace.HitPos, 10)
-	local nav2 = navmesh.GetNavArea(self:GetPos(), 10)
-	if nav:HasAttributes( NAV_MESH_JUMP ) or nav2:HasAttributes( NAV_MESH_JUMP ) then
-		self.loco:Approach(self:GetPos() + self:EyeAngles():Forward() * 30, 1000)
-		if CurTime() > self.Jumped + 2 then
-			self.Jumped = CurTime()
-			self.loco:Jump()
-		end
-	end
 	if self.Stucked and CurTime() > self.Stucked + 15 and self.StuckAt:Distance(self:GetPos()) < 5 then
 		self:SetPos(GAMEMODE.SpawnPoints[math.random(1,#GAMEMODE.SpawnPoints)]:GetPos())
 		self.Stucked = nil
-		if SERVER then print("["..self:GetClass().."]["..tostring(self:EntIndex()).."] Got Stuck for over 15 seconds and will be repositioned, if this error gets spammed you might want to consider the following: Edit the navmesh or lower the walker amount.") end
+		if SERVER then MsgN("Nextbot [",tostring(self:EntIndex()),"][",self:GetClass(),"] Got Stuck for over 15 seconds and will be repositioned, if this error gets spammed you might want to consider the following: Edit the navmesh or lower the walker amount.") end
+	end
+	/*local nav = navmesh.GetNavArea(self:GetPos(), 10)
+	if nav:HasAttributes( NAV_MESH_JUMP ) then
+		self.loco:Jump()
+	end*/
+	if !self.IsJumping and self:GetSolidMask() == MASK_NPCSOLID_BRUSHONLY then
+		local occupied = false
+		for _,ent in pairs(ents.FindInBox(self:GetPos() + Vector( -16, -16, 0 ), self:GetPos() + Vector( 16, 16, 70 ))) do
+			if ent:GetClass() == "npc_walker" then occupied = true end
+		end
+		if !occupied then self:SetSolidMask(MASK_NPCSOLID) end
 	end
 
 end
@@ -119,6 +117,7 @@ function ENT:MoveSomeWhere()
 	self.loco:SetDesiredSpeed( 100 )	
 	local navs = navmesh.Find(self:GetPos(), 1000, 40, 40)
 	local nav = navs[math.random(1,#navs)]
+	if !IsValid(nav) then return end
 	if nav:IsUnderwater() then return end -- we dont want them to go into water
 	local pos = nav:GetRandomPoint()
 	local maxAge = math.Clamp(pos:Distance(self:GetPos())/120,0.1,10)
@@ -131,6 +130,7 @@ function ENT:MoveToSpot( type )
 	local pos = self:FindSpot( "random", { type = type, radius = 5000 } )
 	if ( pos ) then
 		local nav = navmesh.GetNavArea(pos, 20)
+		if !IsValid(nav) then return end
 		if !nav:IsUnderwater() then
 			self:StartActivity( ACT_RUN )
 			self:SetLastAct( ACT_RUN )											-- run anim
@@ -155,31 +155,113 @@ function ENT:OnStuck()
 	self.StuckAt = self:GetPos()
 end
 
+function ENT:OnUnStuck()
+	self.Stucked = nil
+end
+
 function ENT:Use( act, call, type, value )
 	if call:Team() == TEAM_HIDING then call:SetModel(self:GetModel()) end
 end
 
 function ENT:OnNavAreaChanged( old, new)
-	if new:HasAttributes( NAV_MESH_JUMP ) and CurTime() > self.Jumped + 2  then 
-		self.loco:Jump()
-	end
+	/*if new:HasAttributes( NAV_MESH_JUMP ) then 
+		self:Jump()
+	end*/
+	if new:HasAttributes( NAV_MESH_CROUCH ) then self:Duck(true) end
+	if self.IsDuck and !new:HasAttributes( NAV_MESH_CROUCH ) then self:Duck(false) end
 end
 
 function ENT:OnContact( ent )
-	if ent:GetClass() == self:GetClass() or ent:IsPlayer() or ent:GetClass() == "prop_physics" then
+	if ent:GetClass() == self:GetClass() or ent:IsPlayer() then
 		self.loco:Approach( self:GetPos() + Vector( math.Rand( -1, 1 ), math.Rand( -1, 1 ), 0 ) * 2000,1000)
+		if math.abs(self:GetPos().z - ent:GetPos().z) > 30 then self:SetSolidMask( MASK_NPCSOLID_BRUSHONLY ) end
+	end
+	if ent:GetClass() == "prop_physics_multiplayer" or ent:GetClass() == "prop_physics" then
+		self.loco:Approach( self:GetPos() + Vector( math.Rand( -1, 1 ), math.Rand( -1, 1 ), 0 ) * 2000,1000)
+		local phys = ent:GetPhysicsObject()
+		if !IsValid(phys) then return end
+		phys:ApplyForceCenter( self:GetPos() - ent:GetPos() * 1.5 )
 	end
 end
 
 function ENT:OnLandOnGround( ent )
 	self:StartActivity(self:GetLastAct())
+	if ent:GetClass() == self:GetClass() then self:SetVelocity(self:GetPos() + Vector( math.Rand( -1, 1 ), math.Rand( -1, 1 ), 0 ) * 2000) end
+	self.loco:SetStepHeight(22)
+	self.IsJumping = false
+	if self:GetLastAct() == ACT_RUN then self.loco:SetDesiredSpeed(200) elseif self:GetLastAct() == ACT_WALK then self.loco:SetDesiredSpeed(100) end
 end
 
-function ENT:Draw()
-	self:DrawModel()
-	local start = self:GetPos() + Vector(0,0,59)
-	local endpos =  (self:GetPos() + Vector(0,0,55)) + self:EyeAngles():Forward() * 60
-	local mins = Vector(16,0,0)
-	local maxs = Vector(16,0,15)
-	render.DrawWireframeBox( start, Angle( 0, 0, 0 ), mins, maxs, Color( 255, 255, 255 ), true )
+---my attempt on improved pathing (with jumping)
+function ENT:MoveToPos( pos, options )
+
+	local options = options or {}
+
+	local path = Path( "Follow" )
+	path:SetMinLookAheadDistance( options.lookahead or 300 )
+	path:SetGoalTolerance( options.tolerance or 20 )
+	path:Compute( self, pos )
+
+	if ( !path:IsValid() ) then return "failed" end
+
+	while ( path:IsValid() ) do
+
+		path:Update( self )
+
+		--if ( options.draw ) then
+			path:Draw()
+		--end
+
+		--the jumping part simple and buggy if you have a smarter solution tell me please
+		--local scanDist = (self.loco:GetVelocity():Length()^2)/(2*900) + 15 
+		local scanDist = (self.loco:GetVelocity():Length() * 0.175) + 15 -- shitty approximation
+		--if path:IsValid() and self:GetPos().z - path:GetPositionOnPath(path:GetCursorPosition() +scanDist).z < 0 and math.abs(path:GetPositionOnPath(path:GetCursorPosition() + scanDist).z - self:GetPos().z) > 22 then
+		if path:IsValid() and self:GetPos().z - path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist).z < 0 and (math.abs(path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist).z - self:GetPos().z) > 22) then	
+			self:Jump()
+		end
+
+		-- If we're stuck then call the HandleStuck function and abandon
+		if ( self.loco:IsStuck() ) then
+
+			self:HandleStuck();
+			
+			return "stuck"
+
+		end
+
+		--
+		-- If they set maxage on options then make sure the path is younger than it
+		--
+		if ( options.maxage ) then
+			if ( path:GetAge() > options.maxage ) then return "timeout" end
+		end
+
+		--
+		-- If they set repath then rebuild the path every x seconds
+		--
+		if ( options.repath ) then
+			if ( path:GetAge() > options.repath ) then path:Compute( self, pos ) end
+		end
+
+		coroutine.yield()
+
+	end
+
+	return "ok"
+
+end
+
+--we do our own jump since the loco one is a bit weird.
+function ENT:Jump()
+	if CurTime() < self.Jumped + 1 or navmesh.GetNavArea(self:GetPos(), 50):HasAttributes( NAV_MESH_NO_JUMP ) then return end
+	self.Jumped = CurTime()
+	self.IsJumping = true
+	self:SetSolidMask( MASK_NPCSOLID_BRUSHONLY )
+	self.loco:SetStepHeight(64)
+	self.loco:Jump()
+	self.loco:SetDesiredSpeed(400) 
+end
+
+function ENT:Duck( state )
+	if state then self:SetCollisionBounds( Vector(-4,-4,0), Vector(4,4,30) ) self.IsDuck = true else self:SetCollisionBounds( Vector(-4,-4,0), Vector(4,4,70) ) self.IsDuck = false end
 end

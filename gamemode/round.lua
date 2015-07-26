@@ -139,6 +139,8 @@ function GM:PreRoundStart()
 		end
 	end
 
+	MsgN("GW Spawned ",self.WalkerCount," NPCs in wave ",wave)
+
 	if self.MaxWalkers > #self.SpawnPoints then
 		wave = wave + 1
 		timer.Simple(5, function()
@@ -159,8 +161,10 @@ function GM:PreRoundStart()
 					self.WalkerCount = self.WalkerCount + 1
 				end
 			end
+			MsgN("GW Spawned a total of ",self.WalkerCount," NPCs in ",wave," waves.")
 		end)
 	end
+
 
 	timer.Simple(5*wave, function()
 		SetGlobalString("RoundState", PRE_ROUND)
