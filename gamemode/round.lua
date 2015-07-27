@@ -2,7 +2,8 @@
 	ROUND CONTROLLER
 ]]--
 
---Round settings
+--Settings
+
 GM.MaxWalkers = GetConVar( "gw_maxwalkers" ):GetInt()
 GM.PreGameDuration = GetConVar( "gw_pregameduration" ):GetInt()
 GM.RoundDuration = GetConVar( "gw_roundduration" ):GetInt()
@@ -121,46 +122,15 @@ function GM:PreRoundStart()
 	local wave = 1
 
 	self.WalkerCount = 0
-	for k,v in pairs(self.SpawnPoints) do
-		if self.WalkerCount == self.MaxWalkers then break end
 
-		local occupied = false
-		for _,ent in pairs(ents.FindInBox(v:GetPos() + Vector( -16, -16, 0 ), v:GetPos() + Vector( 16, 16, 64 ))) do
-			if ent:GetClass() == "npc_walker" then occupied = true end
-		end
-
-		if !occupied then
-			local walker = ents.Create("npc_walker")
-			if !IsValid( walker ) then break end
-			walker:SetPos( v:GetPos() )
-			walker:Spawn()
-			walker:Activate()
-			self.WalkerCount = self.WalkerCount + 1
-		end
-	end
+	self:SpawnNPCWave()
 
 	MsgN("GW Spawned ",self.WalkerCount," NPCs in wave ",wave)
 
 	if self.MaxWalkers > #self.SpawnPoints then
 		wave = wave + 1
 		timer.Simple(5, function()
-			for k,v in pairs(self.SpawnPoints) do
-				if self.WalkerCount == self.MaxWalkers then break end
-
-				local occupied = false
-				for _,ent in pairs(ents.FindInBox(v:GetPos() + Vector( -16, -16, 0 ), v:GetPos() + Vector( 16, 16, 64 ))) do
-					if ent:GetClass() == "npc_walker" then occupied = true end
-				end
-
-				if !occupied then
-					local walker = ents.Create("npc_walker")
-					if !IsValid( walker ) then break end
-					walker:SetPos( v:GetPos() )
-					walker:Spawn()
-					walker:Activate()
-					self.WalkerCount = self.WalkerCount + 1
-				end
-			end
+			GAMEMODE:SpawnNPCWave()
 			MsgN("GW Spawned a total of ",self.WalkerCount," NPCs in ",wave," waves.")
 		end)
 	end
@@ -192,7 +162,7 @@ function GM:RoundStart()
 	timer.Create( "RoundThink", 1, self.RoundDuration, function() self:RoundThink() end)
 	self.RoundTime = 1
 	SetGlobalFloat("EndTime", CurTime() + self.RoundDuration )
-	SetGlobalInt( GetGlobalInt("RoundNumber", 0) + 1)
+	SetGlobalInt( "RoundNumber", GetGlobalInt("RoundNumber", 0) + 1)
 	SetGlobalString("RoundState", IN_ROUND)
 end
 
@@ -245,15 +215,20 @@ end
 
 function GM:PostRound()
 	
+	if GetGlobalInt("RoundNumber", 0) == self.MaxRounds then
+		MsgN("GW Round cap reached changing map..")
+		if MapVote then MsgN("GW Mapvote detected starting vote!") MapVote.Start() return end
+		game.LoadNextMap()
+	end
+
 	game.CleanUpMap()
 
 	timer.Simple( self.PostRoundDuration, function() self:PreRoundStart() end)
 	SetGlobalFloat("EndTime", CurTime() + self.PostRoundDuration )
 	SetGlobalString("RoundState", POST_ROUND)
 
-	if GetGlobalInt("RoundNumber", 0) == self.MaxRounds then
-		game.LoadNextMap()
-	end
+	self:UpdateSettings()	
+
 	--teamswap
 	for k,v in pairs(player.GetAll()) do
 		if v:Team() == TEAM_SEEKING then
@@ -263,4 +238,36 @@ function GM:PostRound()
 		end
 		v:KillSilent()
 	end
+
+end
+
+function GM:SpawnNPCWave()
+	for k,v in pairs(self.SpawnPoints) do
+		if self.WalkerCount == self.MaxWalkers then break end
+
+		local occupied = false
+		for _,ent in pairs(ents.FindInBox(v:GetPos() + Vector( -16, -16, 0 ), v:GetPos() + Vector( 16, 16, 64 ))) do
+			if ent:GetClass() == "npc_walker" then occupied = true end
+		end
+
+		if !occupied then
+			local walker = ents.Create("npc_walker")
+			if !IsValid( walker ) then break end
+			walker:SetPos( v:GetPos() )
+			walker:Spawn()
+			walker:Activate()
+			self.WalkerCount = self.WalkerCount + 1
+		end
+	end
+end
+
+function GM:UpdateSettings()
+	self.MaxWalkers = GetConVar( "gw_maxwalkers" ):GetInt()
+	self.PreGameDuration = GetConVar( "gw_pregameduration" ):GetInt()
+	self.RoundDuration = GetConVar( "gw_roundduration" ):GetInt()
+	self.HideDuration = GetConVar( "gw_hideduration" ):GetInt()
+	self.PostRoundDuration = GetConVar( "gw_postroundduration" ):GetInt()
+	self.MaxRounds = GetConVar( "gw_maxrounds" ):GetInt()
+	self.MinHiding = GetConVar( "gw_minhiding" ):GetInt()
+	self.MinSeeking = GetConVar( "gw_minseeking" ):GetInt()
 end

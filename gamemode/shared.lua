@@ -9,6 +9,7 @@ DeriveGamemode( "base" )
 
 include( "player_ext_shd.lua")
 include( "sh_animations.lua")
+include( "sh_config.lua")
 include( "player_class/player_hiding.lua")
 include( "player_class/player_seeker.lua")
 
@@ -19,7 +20,7 @@ TEAM_SEEKING = 2
 
 --Round states
 
---Strings are ugly i should exchange them with numbers
+--Really shouldnt use strings here but i'm also really lazy
 
 PRE_GAME = "Preparing Game"
 CREATING = "Creating NPCs"

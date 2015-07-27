@@ -170,3 +170,12 @@ function GM:IsBalancedToJoin( teamid )
 	
 	return true
 end
+
+function GM:HideTeam()
+
+	if ( IsValid(self.TeamSelectFrame) ) then
+		self.TeamSelectFrame:Remove()
+		self.TeamSelectFrame = nil
+	end
+
+end

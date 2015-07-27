@@ -8,13 +8,18 @@ PLAYER.JumpPower			= 200
 PLAYER.CanUseFlashlight		= false
 
 function PLAYER:SetModel()
-	--TODO RANDOM MODEL
-	util.PrecacheModel( "models/Humans/Group01/female_02.mdl" )
-	self.Player:SetModel("models/Humans/Group01/female_02.mdl" )
+
+	local models = GAMEMODE.Models
+
+	local rand = math.random(1,#models)
+
+	util.PrecacheModel( "models/"..models[rand] )
+	self.Player:SetModel( "models/"..models[rand] )
+
 end
 
 function PLAYER:Loadout()
-
+	self.Player:Give( "weapon_destroy" )
 end
 
 function PLAYER:ShouldDrawLocal() return true end

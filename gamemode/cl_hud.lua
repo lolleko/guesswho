@@ -99,7 +99,7 @@ function GM:HUDDrawTargetID()
     local text = "ERROR"
     local font = "robot_medium"
     
-    if ( trace.Entity:IsPlayer() and trace.Entity:Team() == LocalPlayer():Team() ) then
+    if ( trace.Entity:IsPlayer() and (trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():Team() == TEAM_HIDING )) then
         text = trace.Entity:Nick()
     else
         return

@@ -9,32 +9,13 @@ end
 
 function ENT:Initialize()
 
-	local models = {
-		--mains
-		"odessa.mdl",
-		"breen.mdl",
-		"alyx.mdl",
-		"barney.mdl",
-		"gman.mdl",
-		"eli.mdl",
-		"kleiner.mdl",
-		"mossman.mdl",
-		--mdics broken
-		--"Humans/Group03m/male_01.mdl",
-		--"Humans/Group03m/female_01.mdl",
-		--rebels broken
-		--"Humans/Group03/female_06.mdl",
-		--"Humans/Group03/male_06.mdl",
-		--citiziens white clothes
-		"Humans/Group02/male_08.mdl",
-		--blue clothes
-		"Humans/Group02/female_03.mdl",
-	}
+	local models = GAMEMODE.Models
+
 	if SERVER then self:SetRandomInt(math.random(1,#models)) end
 
 	self:SetModel("models/"..models[self:GetRandomInt()])
 	self:SetHealth(100)
-	self:SetCollisionBounds( Vector(-4,-4,0), Vector(4,4,70) ) 
+	self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,70) ) 
 	self.loco:SetStepHeight(22)
 	self.loco:SetJumpHeight(54)
 	self.Jumped = CurTime() + 5 -- prevent jumping for the first 6 seconds since the spawn is crowded
@@ -104,8 +85,12 @@ function ENT:RunBehaviour()
 			coroutine.wait(math.random(1,10))		
 		elseif rand > 10 and rand < 15 then
 			self:Sit()
+			coroutine.wait(1)
+			self:StartActivity( ACT_IDLE )
 		else
 			self:MoveSomeWhere()
+			coroutine.wait(1)
+			self:StartActivity( ACT_IDLE )
 		end
 	end
 
@@ -115,7 +100,7 @@ function ENT:MoveSomeWhere()
 	self:StartActivity( ACT_WALK )
 	self:SetLastAct( ACT_WALK )
 	self.loco:SetDesiredSpeed( 100 )	
-	local navs = navmesh.Find(self:GetPos(), 1000, 40, 40)
+	local navs = navmesh.Find(self:GetPos(), 1000, 120, 120)
 	local nav = navs[math.random(1,#navs)]
 	if !IsValid(nav) then return end
 	if nav:IsUnderwater() then return end -- we dont want them to go into water
@@ -144,8 +129,10 @@ end
 
 function ENT:Sit()
 	--self:PlaySequenceAndWait( "idle_to_sit_ground" )                        
-    self:SetSequence( "sit_ground" )                                           
+    self:SetSequence( "sit_ground" )
+    self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,36) )                                          
     coroutine.wait( math.Rand(10,60) )
+    self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,70) )
     --self:PlaySequenceAndWait( "sit_ground_to_idle" )
     --coroutine.wait( math.Rand(0,1.5) )
 end
@@ -160,7 +147,9 @@ function ENT:OnUnStuck()
 end
 
 function ENT:Use( act, call, type, value )
-	if call:Team() == TEAM_HIDING then call:SetModel(self:GetModel()) end
+	if call:Team() == TEAM_HIDING then
+		call:SetModel(self:GetModel())
+	end
 end
 
 function ENT:OnNavAreaChanged( old, new)
@@ -182,11 +171,13 @@ function ENT:OnContact( ent )
 		if !IsValid(phys) then return end
 		phys:ApplyForceCenter( self:GetPos() - ent:GetPos() * 1.5 )
 	end
+	if ent:GetClass() == "func_breakable" or ent:GetClass() == "func_breakable_surf" then
+    	ent:Fire("Shatter")
+    end
 end
 
 function ENT:OnLandOnGround( ent )
 	self:StartActivity(self:GetLastAct())
-	if ent:GetClass() == self:GetClass() then self:SetVelocity(self:GetPos() + Vector( math.Rand( -1, 1 ), math.Rand( -1, 1 ), 0 ) * 2000) end
 	self.loco:SetStepHeight(22)
 	self.IsJumping = false
 	if self:GetLastAct() == ACT_RUN then self.loco:SetDesiredSpeed(200) elseif self:GetLastAct() == ACT_WALK then self.loco:SetDesiredSpeed(100) end
@@ -208,15 +199,15 @@ function ENT:MoveToPos( pos, options )
 
 		path:Update( self )
 
-		--if ( options.draw ) then
+		if ( options.draw ) then
 			path:Draw()
-		--end
+		end
 
 		--the jumping part simple and buggy if you have a smarter solution tell me please
 		--local scanDist = (self.loco:GetVelocity():Length()^2)/(2*900) + 15 
-		local scanDist = (self.loco:GetVelocity():Length() * 0.175) + 15 -- shitty approximation
-		--if path:IsValid() and self:GetPos().z - path:GetPositionOnPath(path:GetCursorPosition() +scanDist).z < 0 and math.abs(path:GetPositionOnPath(path:GetCursorPosition() + scanDist).z - self:GetPos().z) > 22 then
-		if path:IsValid() and self:GetPos().z - path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist).z < 0 and (math.abs(path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist).z - self:GetPos().z) > 22) then	
+		local scanDist = (self.loco:GetVelocity():Length() * 0.075) + 20 -- shitty approximation
+		--print(scanDist)
+		if path:IsValid() and ((self:GetPos().z - path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist).z < 0 and (math.abs(path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist).z - self:GetPos().z) > 22)) or (self:GetPos().z - path:GetPositionOnPath(path:GetCursorPosition() +scanDist).z < 0 and math.abs(path:GetPositionOnPath(path:GetCursorPosition() + scanDist).z - self:GetPos().z) > 22)) then	
 			self:Jump()
 		end
 
@@ -263,5 +254,5 @@ function ENT:Jump()
 end
 
 function ENT:Duck( state )
-	if state then self:SetCollisionBounds( Vector(-4,-4,0), Vector(4,4,30) ) self.IsDuck = true else self:SetCollisionBounds( Vector(-4,-4,0), Vector(4,4,70) ) self.IsDuck = false end
+	if state then self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,30) ) self.IsDuck = true else self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,70) ) self.IsDuck = false end
 end

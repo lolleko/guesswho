@@ -1,8 +1,6 @@
 --[[
 	COPY of Base animations with overwritten ACTS for non playermodels
 ]]--
-
-
 function GM:HandlePlayerJumping( ply, velocity )
 
 	if ( ply:GetMoveType() == MOVETYPE_NOCLIP ) then
