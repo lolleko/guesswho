@@ -1,30 +1,8 @@
-surface.CreateFont( "Info_Header", {
-	font = "Roboto",
-	size = 48
-} )
-
-surface.CreateFont( "Info_Text", {
-	font = "Roboto",
-	size = 24
-} )
-
-surface.CreateFont( "Button_Normal", {
-	font = "Roboto",
-	size = 16
-} )
-
-surface.CreateFont( "Button_Small", {
-	font = "Roboto",
-	size = 12
-} )
-
 --[[---------------------------------------------------------
    Name: gamemode:ShowTeam()
    Desc:
 -----------------------------------------------------------]]
 function GM:ShowTeam()
-
-	local clrs = { red = Color(231,77,60), blue = Color(53,152,219), green = Color(45,204,113), purple = Color(108,113,196), yellow = Color(241,196,16), lightgrey = Color(236,240,241), grey = Color(42,42,42), darkgrey = Color(26,26,26), black = Color(0,0,0)}
 
 	if ( IsValid( self.TeamSelectFrame ) ) then return end
 	
@@ -33,11 +11,11 @@ function GM:ShowTeam()
 	self.TeamSelectFrame:SetPos(0,0)
 	self.TeamSelectFrame:SetSize( ScrW(), ScrH() )
 	
-	--Header
-	local HeaderLabel = vgui.Create("DLabel", self.TeamSelectFrame)
+	-- Old Header Stil in here for some reason im attached to it maybe
+	/*local HeaderLabel = vgui.Create("DLabel", self.TeamSelectFrame)
 	HeaderLabel:SetSize( 245, 80 )
 	HeaderLabel:SetPos( 0, 40 )
-	HeaderLabel:SetFont("Info_Header")
+	HeaderLabel:SetFont("robot_large")
 	HeaderLabel:SetTextColor( clrs.lightgrey )
 	HeaderLabel:SetText(" GUESS WHO ")
 	HeaderLabel:CenterHorizontal()
@@ -47,30 +25,36 @@ function GM:ShowTeam()
 		surface.SetDrawColor( clrs.lightgrey )
 		for i=0, 5 - 1 do
 			surface.DrawOutlinedRect( x + i, y + i, w - i * 2, h - i * 2 )
-		end*/
-	end
+		end
+	end*/
 
-	--signature you can remove it but you really shouldnt :(
-	local SignatureLabel = vgui.Create("DLabel", self.TeamSelectFrame)
-	SignatureLabel:SetPos( HeaderLabel:GetPos() + 15, 123 )
-	SignatureLabel:SetFont("Button_Small")
-	SignatureLabel:SetTextColor( clrs.lightgrey )
-	SignatureLabel:SetText("")
+	local HeaderImage = vgui.Create("DImage", self.TeamSelectFrame)
+	HeaderImage:SetSize( 380, 128 )
+	HeaderImage:SetPos( 0, 20 )
+	HeaderImage:SetImage( "vgui/gw/logo_main.png" )
+	HeaderImage:CenterHorizontal()
 
 	--Hiding Button
 	local TeamHidingPanel = vgui.Create( "DPanel", self.TeamSelectFrame )
 	TeamHidingPanel:SetPos( ScrW()/2-340, 180 )
 	TeamHidingPanel:SetSize( 300, 400 )
 	function TeamHidingPanel:Paint( w, h )
-		draw.RoundedBox( 0, 0, 0, w, h, clrs.grey )
-		draw.RoundedBox( 0, 0, h-5, w, h, clrs.red )
+		local x = 0
+		local y = 0
+		surface.SetDrawColor( clrs.red )
+		for i=0, 5 - 1 do
+			surface.DrawOutlinedRect( x + i, y + i, w - i * 2, h - i * 2 )
+		end
 	end
 
 	local TeamHidingModel = vgui.Create( "DModelPanel", TeamHidingPanel )
 	TeamHidingModel:SetSize( 300, 400 )
-	TeamHidingModel:SetModel( "models/player/Group01/female_02.mdl" )
+	TeamHidingModel:SetModel( GAMEMODE.Models[math.random(1,#GAMEMODE.Models)] )
+	TeamHidingModel.Entity:SetSequence("Wave")
 	function TeamHidingModel:LayoutEntity( ent ) 
-		return
+		ent:SetAngles( Angle( 0, 70, 0 ) )
+
+		self:RunAnimation()
 	end
 
 	local TeamHidingButton = vgui.Create( "DButton", TeamHidingPanel )
@@ -79,7 +63,7 @@ function GM:ShowTeam()
 			self:HideTeam() RunConsoleCommand( "changeteam", TEAM_HIDING )
 		end
 	end
-	TeamHidingButton:SetFont( "Info_Text" )
+	TeamHidingButton:SetFont( "robot_normal" )
 	TeamHidingButton:SetTextColor( clrs.lightgrey )
 	TeamHidingButton:SetText( team.GetName( TEAM_HIDING ).."("..team.NumPlayers( TEAM_HIDING )..")" )
 	TeamHidingButton:SetSize( 300, 400 )
@@ -95,15 +79,19 @@ function GM:ShowTeam()
 	TeamSeekingPanel:SetPos( ScrW()/2+40, 180 )
 	TeamSeekingPanel:SetSize( 300, 400 )
 	function TeamSeekingPanel:Paint( w, h )
-		draw.RoundedBox( 0, 0, 0, w, h, clrs.grey )
-		draw.RoundedBox( 0, 0, h-5, w, h, clrs.red )
+		local x = 0
+		local y = 0
+		surface.SetDrawColor( clrs.red )
+		for i=0, 5 - 1 do
+			surface.DrawOutlinedRect( x + i, y + i, w - i * 2, h - i * 2 )
+		end
 	end
 
 	local TeamSeekingModel = vgui.Create( "DModelPanel", TeamSeekingPanel )
 	TeamSeekingModel:SetSize( 300, 400 )
 	TeamSeekingModel:SetModel( "models/player/combine_super_soldier.mdl" )
 	function TeamSeekingModel:LayoutEntity( ent ) 
-		return
+		ent:SetAngles( Angle( 0, 30, 0 ) )
 	end
 
 	local TeamSeekingButton = vgui.Create( "DButton", TeamSeekingPanel )
@@ -112,7 +100,7 @@ function GM:ShowTeam()
 			self:HideTeam() RunConsoleCommand( "changeteam", TEAM_SEEKING )
 		end
 	end
-	TeamSeekingButton:SetFont( "Info_Text" )
+	TeamSeekingButton:SetFont( "robot_normal" )
 	TeamSeekingButton:SetTextColor( clrs.lightgrey )
 	TeamSeekingButton:SetText( team.GetName( TEAM_SEEKING ).."("..team.NumPlayers( TEAM_SEEKING )..")" )
 	TeamSeekingButton:SetSize( 300, 400 )
@@ -127,7 +115,7 @@ function GM:ShowTeam()
 	local TeamSpectateButton = vgui.Create( "DButton", self.TeamSelectFrame )
 	TeamSpectateButton:SetPos( ScrW()/2 -340, 620 )
 	TeamSpectateButton:SetSize( 680, 40 )
-	TeamSpectateButton:SetFont("Button_Normal")
+	TeamSpectateButton:SetFont("robot_small")
 	TeamSpectateButton:SetText( "Spectate" )
 	TeamSpectateButton:SetTextColor( clrs.lightgrey )
 	function TeamSpectateButton.DoClick() self:HideTeam() RunConsoleCommand( "changeteam", TEAM_SPECTATOR ) end
@@ -138,7 +126,7 @@ function GM:ShowTeam()
 	local TeamAutoButton = vgui.Create( "DButton", self.TeamSelectFrame )
 	TeamAutoButton:SetPos( ScrW()/2 -340, 680 )
 	TeamAutoButton:SetSize( 680, 40 )
-	TeamAutoButton:SetFont("Button_Normal")
+	TeamAutoButton:SetFont("robot_small")
 	TeamAutoButton:SetText( "Auto Join" )
 	TeamAutoButton:SetTextColor( clrs.lightgrey )
 	function TeamAutoButton.DoClick() self:HideTeam() RunConsoleCommand( "changeteam", team.BestAutoJoinTeam() ) end

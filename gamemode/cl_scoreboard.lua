@@ -1,10 +1,3 @@
-local clrs = { red = Color(231,77,60), blue = Color(53,152,219), green = Color(45,204,113), purple = Color(108,113,196), yellow = Color(241,196,16), lightgrey = Color(236,240,241), grey = Color(42,42,42), darkgrey = Color(26,26,26), black = Color(0,0,0)}
-
-surface.CreateFont( "Roboto_Normal", {
-	font = "Roboto",
-	size = 48
-} )
-
 function GM:ScoreboardShow()
 	if ( !IsValid( g_Scoreboard ) ) then
 		g_Scoreboard = vgui.Create( "DScoreboard" )
@@ -32,11 +25,11 @@ function SB:Init()
 	self:Center()
 
 	local HeaderLabel = vgui.Create("DLabel", self)
-	HeaderLabel:SetSize( 245, 64 )
-	HeaderLabel:SetPos( 0, 20 )
-	HeaderLabel:SetFont("Roboto_Normal")
+	HeaderLabel:SetSize( 150, 64 )
+	HeaderLabel:SetPos( 0, 0 )
+	HeaderLabel:SetFont("robot_medium")
 	HeaderLabel:SetTextColor( clrs.lightgrey )
-	HeaderLabel:SetText(" GUESS WHO ")
+	HeaderLabel:SetText("Guess Who?")
 	HeaderLabel:CenterHorizontal()
 	function HeaderLabel:Paint( w, h )
 		/*local x = 0
@@ -47,16 +40,24 @@ function SB:Init()
 		end*/
 	end
 
+	local Header2Label = vgui.Create("DLabel", self)
+	Header2Label:SetSize( 980, 64 )
+	Header2Label:SetPos( 20, 30 )
+	Header2Label:SetFont("robot_normal")
+	Header2Label:SetTextColor( clrs.lightgrey )
+	Header2Label:SetText("You are playing on "..GetHostName())
+	Header2Label:CenterHorizontal()
+
 	self.HidingHeader = vgui.Create("DLabel", self)
 	self.HidingHeader:SetPos( 30, 90 )
-	self.HidingHeader:SetFont("Info_Text")
-	self.HidingHeader:SetTextColor( clrs.lightgrey )
+	self.HidingHeader:SetFont("robot_normal")
+	self.HidingHeader:SetTextColor( clrs.lightgreybg )
 
 	local HidingPanel = vgui.Create("DScrollPanel", self)
 	HidingPanel:SetPos( 20, 120)
 	HidingPanel:SetSize( 470, 580 )
 	function HidingPanel:Paint( w, h )
-		draw.RoundedBox( 0, 0, 0, w, h, clrs.grey )
+		draw.RoundedBox( 0, 0, 0, w, h, clrs.greybg )
 	end
 
 	local HidingList = vgui.Create("DTeamPanel", HidingPanel)
@@ -65,14 +66,14 @@ function SB:Init()
 
 	self.SeekingHeader = vgui.Create("DLabel", self)
 	self.SeekingHeader:SetPos( 880, 90 )
-	self.SeekingHeader:SetFont("Info_Text")
+	self.SeekingHeader:SetFont("robot_normal")
 	self.SeekingHeader:SetTextColor( clrs.lightgrey )
 
 	local SeekingPanel = vgui.Create("DScrollPanel", self)
 	SeekingPanel:SetPos( 510, 120)
 	SeekingPanel:SetSize( 470, 580 )
 	function SeekingPanel:Paint( w, h )
-		draw.RoundedBox( 0, 0, 0, w, h, clrs.grey )
+		draw.RoundedBox( 0, 0, 0, w, h, clrs.greybg )
 	end
 
 	local SeekingList = vgui.Create("DTeamPanel", SeekingPanel)
@@ -81,7 +82,8 @@ function SB:Init()
 end
 
 function SB:Paint( w, h )
-	draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgrey )
+	draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg )
+	draw.RoundedBox( 0, 0, 0, w, 80, clrs.red )
 end
 
 function SB:Think()
@@ -121,7 +123,7 @@ vgui.Register("DTeamPanel", TEAMPANEL, "DIconLayout")
 local PLAYERINFO = {}
 
 function PLAYERINFO:Init()
-	self:SetSize( 470, 69 )
+	self:SetSize( 470, 64 )
 
 	self.AvatarButton = vgui.Create("DButton", self)
 	self.AvatarButton:SetSize( 64, 64 )
@@ -131,26 +133,26 @@ function PLAYERINFO:Init()
 	self.Avatar:SetSize( 64, 64 )
 	self.Avatar:SetMouseInputEnabled( false )
 
-	local txtClr = clrs.darkgrey
-	if LocalPlayer():Alive() then txtClr = clrs.lightgrey end
-
 	self.Name = vgui.Create( "DLabel" , self )
-	self.Name:SetPos( 68, 4)
-	self.Name:SetFont( "Roboto_Normal" )
-	self.Name:SetTextColor( txtClr )
+	self.Name:SetPos( 68, 8)
+	self.Name:SetFont( "robot_large" )
+	self.Name:SetTextColor( clrs.darkgrey )
 	self.Name:SetSize( 320, 48 )
 
 	self.Score = vgui.Create( "DLabel" , self )
-	self.Score:SetPos( 410, 4)
-	self.Score:SetFont( "Roboto_Normal" )
-	self.Score:SetTextColor( txtClr )
+	self.Score:SetPos( 410, 8)
+	self.Score:SetSize( 60, 48 )
+	self.Score:SetFont( "robot_large" )
+	self.Score:SetTextColor( clrs.darkgrey )
 
 	self.Mute = self:Add( "DImageButton" )
 	self.Mute:SetSize( 24, 24 )
 end
 
 function PLAYERINFO:Paint( w, h)
-	draw.RoundedBox( 0, 0, h-5, w, h, clrs.red )
+	if self.Player then
+		draw.RoundedBox( 0, 0, 0, w, h, team.GetColor(self.Player:Team()) )
+	end
 end
 
 function PLAYERINFO:Setup( ply, teamid )
@@ -166,8 +168,8 @@ function PLAYERINFO:Think()
 		return
 	end
 
-	local txtClr = clrs.darkgrey
-	if LocalPlayer():Alive() then txtClr = clrs.lightgrey end
+	local txtClr = clrs.grey
+	if self.Player:Alive() then txtClr = clrs.lightgrey end
 
 	self.Avatar:SetPlayer( self.Player, 64 )
 	self.Name:SetText( self.Player:Nick() )

@@ -113,29 +113,29 @@ function GM:PreRoundStart()
 
 	SetGlobalString("RoundState", CREATING)
 
-	for k,v in pairs(ents.FindByClass("npc_walker")) do
-    	v:Remove()
-	end
-
+	-- Wave based spawning
 	self:GetSpawnPoints()
 
 	local wave = 1
 
 	self.WalkerCount = 0
 
-	self:SpawnNPCWave()
-
-	MsgN("GW Spawned ",self.WalkerCount," NPCs in wave ",wave)
-
-	if self.MaxWalkers > #self.SpawnPoints then
-		wave = wave + 1
-		timer.Simple(5, function()
-			GAMEMODE:SpawnNPCWave()
-			MsgN("GW Spawned a total of ",self.WalkerCount," NPCs in ",wave," waves.")
-		end)
+	if #self.SpawnPoints > self.MaxWalkers then
+		GAMEMODE:SpawnNPCWave()
+		MsgN("GW Spawned ",self.WalkerCount," NPCs in 1 wave.")
+	else
+		local wpw
+		for w = 0,math.floor(self.MaxWalkers/#self.SpawnPoints)-1,1 do
+			wave = wave + 1
+			timer.Simple(w*5, function()
+				wpw = self.WalkerCount
+				GAMEMODE:SpawnNPCWave()
+				MsgN("GW Spawned ",self.WalkerCount - wpw," NPCs in wave ",w+1,".")
+			end)
+		end
+		wave = wave - 1
 	end
-
-
+	
 	timer.Simple(5*wave, function()
 		SetGlobalString("RoundState", PRE_ROUND)
 		for k,v in pairs(team.GetPlayers( TEAM_HIDING )) do
@@ -152,6 +152,9 @@ function GM:PreRoundStart()
 	end)
 	timer.Simple(self.HideDuration + (5*wave), function() self:RoundStart() end )
 	SetGlobalFloat("EndTime", CurTime() + self.HideDuration + (5*wave) )
+
+	PrintMessage( HUD_PRINTTALK, "Map will change in "..self.MaxRounds - GetGlobalInt("RoundNumber", 0).. " rounds." )
+
 end
 
 function GM:RoundStart()
@@ -164,6 +167,7 @@ function GM:RoundStart()
 	SetGlobalFloat("EndTime", CurTime() + self.RoundDuration )
 	SetGlobalInt( "RoundNumber", GetGlobalInt("RoundNumber", 0) + 1)
 	SetGlobalString("RoundState", IN_ROUND)
+
 end
 
 --will be called every second
@@ -222,6 +226,10 @@ function GM:PostRound()
 	end
 
 	game.CleanUpMap()
+
+	for k,v in pairs(ents.FindByClass("npc_walker")) do
+    	v:Remove()
+	end
 
 	timer.Simple( self.PostRoundDuration, function() self:PreRoundStart() end)
 	SetGlobalFloat("EndTime", CurTime() + self.PostRoundDuration )

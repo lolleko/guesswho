@@ -1,33 +1,16 @@
 CHHUD ={}
 
-surface.CreateFont( "robot",
-     {
-                    font    = "Roboto", -- Not file name, font name
-                    size    = 32,
-                    weight  = 400,
-                    antialias = true,
-                    shadow = false
-            })
-
-surface.CreateFont( "robot_small",
-     {
-                    font    = "Roboto", -- Not file name, font name
-                    size    = 16,
-                    weight  = 400,
-                    antialias = true,
-                    shadow = false
-            })
-surface.CreateFont( "robot_medium",
-     {
-                    font    = "Roboto", -- Not file name, font name
-                    size    = 24,
-                    weight  = 400,
-                    antialias = true,
-                    shadow = false
-            })
+function CHHUD:CreateHead()
+    if !self.HeadModel and !IsValid(self.HeadModel) and GetConVar("gw_hud_showhead"):GetInt() == 1 then
+        self.HeadModel = vgui.Create( "DModelPanel" )
+        self.HeadModel:SetPos( 22, ScrH()-180 )
+        self.HeadModel:SetSize( 96, 100 )
+        self.HeadModel.LayoutEntity = function() end
+    end
+end
 
 function HideHUD(name) -- Removing the default HUD
-	for k, v in pairs({"CHudCrosshair"})do
+	for k, v in pairs({"CHudCrosshair","CHudHealth","CHudAmmo","CHudSecondaryAmmo"})do
 		if name == v then return false end
 	end
 end
@@ -45,7 +28,7 @@ end
 
 function CHHUD:TextSize( text, font )
  
-	surface.SetFont( font );
+	surface.SetFont( font )
 	return surface.GetTextSize( text );
  
 end
@@ -80,12 +63,65 @@ function CHHUD:Crosshair()
 end
 
 function CHuntHUD()
+    if GetConVar("cl_drawhud"):GetInt() == 0 then
+        if CHHUD.HeadModel then 
+            CHHUD.HeadModel:Remove()
+            CHHUD.HeadModel = nil
+        end
+        return
+    end
+    local ply = LocalPlayer()
 	local time = string.ToMinutesSeconds(GetGlobalFloat("EndTime", 0) - CurTime())
-	CHHUD:DrawPanel( ScrW()/2- 85, 0, 170, 65, {background = Color(120,120,120,20)})
-	CHHUD:DrawText( ScrW()/2 - (CHHUD:TextSize(time, "robot")/2), 5, time, "robot", Color(255,255,255) )
-    CHHUD:DrawText( ScrW()/2 - (CHHUD:TextSize(GAMEMODE:GetRoundState(), "robot_small")/2), 40, GAMEMODE:GetRoundState() , "robot_small", Color(255,255,255) )
+    local teamColor = team.GetColor(ply:Team())
 
-    if LocalPlayer():Team() == TEAM_SEEKING then CHHUD:Crosshair() end
+	CHHUD:DrawPanel( ScrW()/2- 85, 0, 170, 50, {background = clrs.darkgreybg})
+    CHHUD:DrawPanel( ScrW()/2- 85, 45, 170, 5, {background = teamColor})
+	CHHUD:DrawText( ScrW()/2 - (CHHUD:TextSize(time, "robot_normal")/2), 5, time, "robot_normal", clrs.white )
+    CHHUD:DrawText( ScrW()/2 - (CHHUD:TextSize(GAMEMODE:GetRoundState(), "robot_small")/2), 26, GAMEMODE:GetRoundState() , "robot_small", clrs.white )
+
+    --Health
+    local health = ply:Health()
+
+    if ply:Team() != TEAM_SPECTATOR and health > 0 then
+        CHHUD:DrawPanel( 20, ScrH()-80, 100, 60, {background = clrs.darkgreybg})
+        CHHUD:DrawPanel( 20, ScrH()-25, 100, 5, {background = teamColor})
+        CHHUD:DrawText( 70 - (CHHUD:TextSize(health, "robot_large")/2), ScrH()-75, health, "robot_large", clrs.white )
+    end
+    if (GetConVar("gw_hud_showhead"):GetInt() == 0 or ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_UNASSIGNED or !ply:Alive()) and CHHUD.HeadModel then
+        CHHUD.HeadModel:Remove()
+        CHHUD.HeadModel = nil
+    elseif GetConVar("gw_hud_showhead"):GetInt() == 1 and (ply:Team() == TEAM_HIDING or ply:Team() == TEAM_SEEKING) and ply:Alive() then
+
+        if !CHHUD.HeadModel then
+            CHHUD:CreateHead()
+        end
+
+        CHHUD.HeadModel:SetModel( ply:GetModel() )
+
+        local headpos = CHHUD.HeadModel.Entity:GetBonePosition( CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
+        CHHUD.HeadModel:SetLookAt( headpos )
+
+        CHHUD.HeadModel:SetCamPos( headpos-Vector( -15, 0, 0 ) )
+    end
+
+    if ply:Team() == TEAM_SEEKING then CHHUD:Crosshair() end
+
+    --Ammo
+    if #ply:GetWeapons() > 0 then
+        local clipLeft = ply:GetActiveWeapon():Clip1()
+        local clipExtra = ply:GetAmmoCount(ply:GetActiveWeapon():GetPrimaryAmmoType())
+        local secondaryAmmo = ply:GetAmmoCount(ply:GetActiveWeapon():GetSecondaryAmmoType())
+
+        if clipLeft != -1 then
+                CHHUD:DrawPanel( ScrW()-220, ScrH()-80, 200, 60, {background = clrs.darkgreybg}) 
+                CHHUD:DrawPanel( ScrW()-220, ScrH()-25, 200, 5, {background = teamColor})
+                CHHUD:DrawText( ScrW() - 120 - (CHHUD:TextSize(clipLeft.."/"..clipExtra, "robot_large")/2), ScrH()-75, clipLeft.."/"..clipExtra, "robot_large", clrs.white )
+        end
+        if secondaryAmmo > 0 then
+            CHHUD:DrawPanel( ScrW()- 310, ScrH()-40, 80, 20, {background = teamColor})
+             CHHUD:DrawText( ScrW() - 305, ScrH()-38, "Nuke ready!", "robot_small", clrs.white )
+        end
+    end
 end
 hook.Add( "HUDPaint", "CHuntHUD", CHuntHUD)
 

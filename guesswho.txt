@@ -28,17 +28,9 @@
 			"text"		"Amount of rounds"
 			"help"		"The Amount of Rounds before a map change."
 			"type"		"Numeric"
-			"default"	"5"
+			"default"	"8"
 		}
 		4
-		{
-			"name"		"gw_maxrounds"
-			"text"		"Amount of rounds"
-			"help"		"The Amount of Rounds before a map change."
-			"type"		"Numeric"
-			"default"	"5"
-		}
-		5
 		{
 			"name"		"gw_maxwalkers"
 			"text"		"The amount of NPCs"
@@ -46,7 +38,7 @@
 			"type"		"Numeric"
 			"default"	"25"
 		}
-		6
+		5
 		{
 			"name"		"gw_pregameduration"
 			"text"		"The delay after map change"
@@ -54,7 +46,7 @@
 			"type"		"Numeric"
 			"default"	"20"
 		}
-		7
+		6
 		{
 			"name"		"gw_roundduration"
 			"text"		"The round duration"
@@ -62,7 +54,7 @@
 			"type"		"Numeric"
 			"default"	"300"
 		}
-		8
+		7
 		{
 			"name"		"gw_hideduration"
 			"text"		"The hide duration"
@@ -70,7 +62,7 @@
 			"type"		"Numeric"
 			"default"	"30"
 		}
-		9
+		8
 		{
 			"name"		"gw_postroundduration"
 			"text"		"The post round duration"
@@ -78,7 +70,7 @@
 			"type"		"Numeric"
 			"default"	"5"
 		}
-		10
+		9
 		{
 			"name"		"gw_damageonfailguess"
 			"text"		"The damage a hunter receives"

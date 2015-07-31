@@ -13,8 +13,8 @@ function PLAYER:SetModel()
 
 	local rand = math.random(1,#models)
 
-	util.PrecacheModel( "models/"..models[rand] )
-	self.Player:SetModel( "models/"..models[rand] )
+	util.PrecacheModel( models[rand] )
+	self.Player:SetModel( models[rand] )
 
 end
 

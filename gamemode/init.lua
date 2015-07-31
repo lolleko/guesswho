@@ -8,10 +8,12 @@ AddCSLuaFile( "sh_config.lua")
 AddCSLuaFile( "cl_hud.lua" )
 AddCSLuaFile( "cl_pickteam.lua" )
 AddCSLuaFile( "cl_scoreboard.lua" )
-AddCSLuaFile( "cl_help.lua" )
 include( "shared.lua" )
 include( "player.lua" )
 include( "round.lua" )
+
+--resources
+resource.AddFile( "materials/vgui/gw/logo_main.png" )
 
 --[[
 	GAMEMODE HOOKS
@@ -27,14 +29,8 @@ function GM:EntityTakeDamage(target, dmginfo)
 
 	if GAMEMODE:InRound() && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
 	
-		attacker:SetHealth(attacker:Health() - self.DamageOnFail)
-		
-		if attacker:Health() <= 0 then
-		
-			attacker:Kill()
+		attacker:TakeDamage( self.DamageOnFail , target, attacker:GetActiveWeapon())
 			
-		end
-		
 	end
 	
 end
@@ -56,7 +52,7 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 			if attacker:Health() + self.DamageOnFail*4 > 100 then
 				attacker:Health(100)
 			else
-				attacker:Health(attacker:Health() + self.DamageOnFail*4) 
+				attacker:SetHealth(attacker:Health() + self.DamageOnFail*2) 
 			end
 		end
 	
@@ -99,13 +95,7 @@ function GM:OnNPCKilled( ent, attacker, inflictor )
 
 			if ent:GetClass() == "npc_walker" then
 				
-				attacker:SetHealth(attacker:Health() - self.DamageOnFail*2)
-			
-				if attacker:Health() <= 0 then
-				
-					attacker:Kill()
-					
-				end
+				attacker:TakeDamage( self.DamageOnFail*2 , ent, attacker:GetActiveWeapon())
 
 			end
 

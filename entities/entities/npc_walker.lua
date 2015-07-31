@@ -13,7 +13,7 @@ function ENT:Initialize()
 
 	if SERVER then self:SetRandomInt(math.random(1,#models)) end
 
-	self:SetModel("models/"..models[self:GetRandomInt()])
+	self:SetModel(models[self:GetRandomInt()])
 	self:SetHealth(100)
 	self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,70) ) 
 	self.loco:SetStepHeight(22)
@@ -78,6 +78,8 @@ function ENT:Think()
 end
 
 function ENT:RunBehaviour()
+	--Scatter them after spawn
+	self:MoveSomeWhere(10000)
 	while ( true ) do
 		local rand = math.random(1,100)
 		if rand > 0 and rand < 10 then
@@ -96,11 +98,12 @@ function ENT:RunBehaviour()
 
 end
 
-function ENT:MoveSomeWhere()
+function ENT:MoveSomeWhere(distance)
 	self:StartActivity( ACT_WALK )
 	self:SetLastAct( ACT_WALK )
+	distance = distance or 1000
 	self.loco:SetDesiredSpeed( 100 )	
-	local navs = navmesh.Find(self:GetPos(), 1000, 120, 120)
+	local navs = navmesh.Find(self:GetPos(), distance, 120, 120)
 	local nav = navs[math.random(1,#navs)]
 	if !IsValid(nav) then return end
 	if nav:IsUnderwater() then return end -- we dont want them to go into water
@@ -118,17 +121,17 @@ function ENT:MoveToSpot( type )
 		if !IsValid(nav) then return end
 		if !nav:IsUnderwater() then
 			self:StartActivity( ACT_RUN )
-			self:SetLastAct( ACT_RUN )											-- run anim
-			self.loco:SetDesiredSpeed( 200 )										-- run speed
+			self:SetLastAct( ACT_RUN )
+			self.loco:SetDesiredSpeed( 200 )
 			self:MoveToPos( pos, { tolerance = 30, lookahead = 10, repath = 2 } )
-			self:StartActivity( ACT_IDLE )														-- move to position (yielding)
+			self:StartActivity( ACT_IDLE )
 			self:SetLastAct( ACT_IDLE )						
 		end
 	end
 end
 
 function ENT:Sit()
-	--self:PlaySequenceAndWait( "idle_to_sit_ground" )                        
+	--self:PlaySequenceAndWait( "idle_to_sit_ground" )     --broken for clients so removed                   
     self:SetSequence( "sit_ground" )
     self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,36) )                                          
     coroutine.wait( math.Rand(10,60) )
@@ -166,10 +169,10 @@ function ENT:OnContact( ent )
 		if math.abs(self:GetPos().z - ent:GetPos().z) > 30 then self:SetSolidMask( MASK_NPCSOLID_BRUSHONLY ) end
 	end
 	if ent:GetClass() == "prop_physics_multiplayer" or ent:GetClass() == "prop_physics" then
-		self.loco:Approach( self:GetPos() + Vector( math.Rand( -1, 1 ), math.Rand( -1, 1 ), 0 ) * 2000,1000)
+		--self.loco:Approach( self:GetPos() + Vector( math.Rand( -1, 1 ), math.Rand( -1, 1 ), 0 ) * 2000,1000)
 		local phys = ent:GetPhysicsObject()
 		if !IsValid(phys) then return end
-		phys:ApplyForceCenter( self:GetPos() - ent:GetPos() * 1.5 )
+		phys:ApplyForceCenter( self:GetPos() - ent:GetPos() * 1.2 )
 	end
 	if ent:GetClass() == "func_breakable" or ent:GetClass() == "func_breakable_surf" then
     	ent:Fire("Shatter")

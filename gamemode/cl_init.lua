@@ -1,9 +1,51 @@
+--settings client cvars
+CreateClientConVar( "gw_hud_showhead", "1", true, false )
+
+--Colors + fonts
+surface.CreateFont( "robot_medium",
+     {
+                    font    = "Roboto", -- Not file name, font name
+                    size    = 32,
+                    weight  = 400,
+                    antialias = true,
+                    shadow = false
+            })
+
+surface.CreateFont( "robot_large",
+     {
+                    font    = "Roboto", -- Not file name, font name
+                    size    = 48,
+                    weight  = 400,
+                    antialias = true,
+                    shadow = false
+            })
+
+surface.CreateFont( "robot_normal",
+     {
+                    font    = "Roboto", -- Not file name, font name
+                    size    = 24,
+                    weight  = 400,
+                    antialias = true,
+                    shadow = false
+            })
+surface.CreateFont( "robot_small",
+     {
+                    font    = "Roboto", -- Not file name, font name
+                    size    = 16,
+                    weight  = 400,
+                    antialias = true,
+                    shadow = false
+            })
+
+clrs = { red = Color(231,77,60), blue = Color(53,152,219), green = Color(45,204,113), purple = Color(108,113,196), yellow = Color(241,196,16), lightgrey = Color(240,240,240), grey = Color(42,42,42), darkgrey = Color(26,26,26), black = Color(0,0,0), darkgreybg = Color(26,26,26,245), greybg = Color(42,42,42,200), white = Color(255,255,255)}
+
+--includes
 include( "shared.lua" )
 include( "cl_hud.lua" )
 include( "cl_pickteam.lua")
 include( "cl_scoreboard.lua")
-include( "cl_help.lua")
 
+--Thirdpersoon + blinding
 function GM:CalcView(ply, pos, angles, fov)
 	
 	local Vehicle	= ply:GetVehicle()
