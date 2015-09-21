@@ -25,7 +25,7 @@ SWEP.WorldModel = ""
 
 function SWEP:PrimaryAttack()
 
-   self.Weapon:SetNextPrimaryFire( CurTime() + 3 )
+   self.Weapon:SetNextPrimaryFire( CurTime() + 1.5 )
 
    	if self.Owner.LagCompensation then
 		self.Owner:LagCompensation(true)

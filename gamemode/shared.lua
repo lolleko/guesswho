@@ -20,7 +20,7 @@ TEAM_SEEKING = 2
 
 --Round states
 
---Really shouldnt use strings here but i'm also really lazy
+--Really shouldnt use strings here but i'm really lazy
 
 PRE_GAME = "Preparing Game"
 CREATING = "Creating NPCs"

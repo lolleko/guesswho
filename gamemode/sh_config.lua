@@ -9,11 +9,11 @@ GM.Models = {
 	"models/kleiner.mdl",
 	"models/mossman.mdl",
 	--medics buggy use at own risk
-	--"Humans/Group03m/male_01.mdl",
-	--"Humans/Group03m/female_01.mdl",
+	"models/Humans/Group03m/male_01.mdl",
+	"models/Humans/Group03m/female_01.mdl",
 	--rebels buggy use at own risk
-	--"Humans/Group03/female_06.mdl",
-	--"Humans/Group03/male_06.mdl",
+	"models/Humans/Group03/female_06.mdl",
+	"models/Humans/Group03/male_06.mdl",
 	--citiziens white clothes
 	"models/Humans/Group02/male_08.mdl",
 	--blue clothes

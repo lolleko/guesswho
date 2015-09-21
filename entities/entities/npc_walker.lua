@@ -21,6 +21,7 @@ function ENT:Initialize()
 	self.Jumped = CurTime() + 5 -- prevent jumping for the first 6 seconds since the spawn is crowded
 	self.IsJumping = false
 	self.IsDuck = false
+
 end
 
 function ENT:Think()

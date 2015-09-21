@@ -21,5 +21,11 @@ function PLAYER:Loadout()
 	self.Player:Give( "weapon_crowbar" )
 end
 
+function PLAYER:GetHandsModel()
+
+	return { model = "models/weapons/c_arms_combine.mdl", skin = 1, body = "0100000" }
+
+end
+
 
 player_manager.RegisterClass( "player_seeker", PLAYER, "player_default" )

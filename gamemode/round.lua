@@ -208,13 +208,13 @@ function GM:RoundEnd( caught )
 		PrintMessage( HUD_PRINTCENTER, "The Hunters won." )
 		team.AddScore( TEAM_SEEKING, 1)
 	else
-		PrintMessage( HUD_PRINTCENTER, "The Citiziens won." )
+		PrintMessage( HUD_PRINTCENTER, "The Hiding won." )
 		for k,v in pairs(team.GetPlayers( TEAM_HIDING )) do
 			if v:Alive() then v:AddFrags( 1 ) end --if still alive as hiding after round give them one point (frag)
 		end
 		team.AddScore( TEAM_HIDING, 1)
 	end
-	self:PostRound()
+	timer.Simple(3, function() self:PostRound() end)
 end
 
 function GM:PostRound()
