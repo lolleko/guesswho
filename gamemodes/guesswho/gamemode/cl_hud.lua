@@ -99,9 +99,10 @@ function CHuntHUD()
         CHHUD.HeadModel:SetModel( ply:GetModel() )
 
         local headpos = CHHUD.HeadModel.Entity:GetBonePosition( CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
-        CHHUD.HeadModel:SetLookAt( headpos )
-
-        CHHUD.HeadModel:SetCamPos( headpos-Vector( -15, 0, 0 ) )
+        if headpos then
+            CHHUD.HeadModel:SetLookAt( headpos )
+            CHHUD.HeadModel:SetCamPos( headpos-Vector( -15, 0, 0 ) )
+        end
     end
 
     if ply:Team() == TEAM_SEEKING then CHHUD:Crosshair() end
