@@ -1,28 +1,29 @@
 GM.Models = {
-    --mains
-    "models/odessa.mdl",
-    "models/breen.mdl",
-    "models/alyx.mdl",
-    "models/barney.mdl",
-    "models/gman.mdl",
-    "models/eli.mdl",
-    "models/kleiner.mdl",
-    "models/mossman.mdl",
-    --medics buggy use at own risk
-    "models/Humans/Group03m/male_01.mdl",
-    "models/Humans/Group03m/female_01.mdl",
-    --rebels buggy use at own risk
-    "models/Humans/Group03/female_06.mdl",
-    "models/Humans/Group03/male_06.mdl",
-    --citiziens white clothes
-    "models/Humans/Group02/male_08.mdl",
-    --blue clothes
-    "models/Humans/Group02/female_03.mdl",
-    --You can add your csutom models here:
+    --Characters
+    "models/player/alyx.mdl",
+    "models/player/breen.mdl",
+    "models/player/barney.mdl",
+    "models/player/eli.mdl",
+    "models/player/gman_high.mdl",
+    "models/player/kleiner.mdl",
+    "models/player/monk.mdl",
+    "models/player/odessa.mdl",
+    "models/player/magnusson.mdl",
+    "models/player/p2_chell.mdl",
+    "models/player/mossman_arctic.mdl",
+    --medics
+    "models/player/Group03m/Female_06.mdl",
+    "models/player/Group03m/Male_01.mdl",
+    --rebels
+    "models/player/Group03/Female_06.mdl",
+    "models/player/Group03/Male_06.mdl",
+    --Citiziens
+    "models/player/Group01/Male_08.mdl",
+    "models/player/Group01/Female_03.mdl",
 }
 
-GM.TeamSeekingColor = Color(138,155,15)
-GM.TeamHidingColor = Color( 23, 89, 150 )
+GM.TeamSeekingColor = Color(138, 155, 15)
+GM.TeamHidingColor = Color(23, 89, 150)
 
 GM.ValidSequences = {
     "Wave",
@@ -45,5 +46,17 @@ GM.ValidSequences = {
     "ThrowItem",
     "pace_all",
     "preSkewer",
-    "DuckUnder"
+    "DuckUnder",
+}
+
+GM.WalkerColors = {
+    Color(61, 87, 105), -- original blue
+    Color(240, 240, 240), --Black/dark grey
+    Color(50, 50, 50), -- white /lightgrey
+    Color(139, 115, 85), --Brown
+    Color(241, 169, 101), --bright orange
+    Color(105, 139, 34), --olive
+    Color(157, 107, 0), --gold
+    Color(159, 205, 234 ), --light blue
+    Color(94, 25, 34) --dark red
 }

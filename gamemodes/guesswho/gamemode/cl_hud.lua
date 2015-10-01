@@ -97,6 +97,7 @@ function CHuntHUD()
         end
 
         CHHUD.HeadModel:SetModel( ply:GetModel() )
+        function CHHUD.HeadModel.Entity:GetPlayerColor() return LocalPlayer():GetPlayerColor() end
 
         local headpos = CHHUD.HeadModel.Entity:GetBonePosition( CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
         if headpos then

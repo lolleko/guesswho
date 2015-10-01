@@ -24,6 +24,7 @@ end
 --NetworkStrings
 --the only network string because for some resaons gestures aren networked!? whats the point of gestures if they can't be seen by others?
 util.AddNetworkString( "gwTauntExecuted" )
+util.AddNetworkString( "walkerSpawned" )
 
 --[[
     GAMEMODE HOOKS
@@ -132,4 +133,16 @@ function GM:OnNPCKilled( ent, attacker, inflictor )
 
     net.Broadcast()
 
+end
+
+function GM:OnEntityCreated(ent)
+    if ent:GetClass() == "npc_walker" then
+        local clr = self.WalkerColors[math.random(1,#self.WalkerColors)]
+        if !clr then return end
+        local col = Vector(clr.r / 255, clr.g / 255, clr.b / 255)
+        net.Start("walkerSpawned")
+            net.WriteVector(col)
+            net.WriteInt(ent:EntIndex(), 32)
+        net.Broadcast()
+    end
 end

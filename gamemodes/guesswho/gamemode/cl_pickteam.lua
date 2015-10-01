@@ -33,10 +33,11 @@ function GM:ShowTeam()
     local TeamHidingModel = vgui.Create( "DModelPanel", TeamHidingPanel )
     TeamHidingModel:SetSize( 300, 400 )
     TeamHidingModel:SetModel( GAMEMODE.Models[math.random(1,#GAMEMODE.Models)] )
-    TeamHidingModel.Entity:SetSequence("Wave")
+    local seq, dur = TeamHidingModel.Entity:LookupSequence("gesture_wave")
+    TeamHidingModel.Entity:SetSequence(seq)
+    TeamHidingModel.Entity:SetAngles( Angle( 0, 70, 0 ) )
+    timer.Simple(dur,function() if !TeamHidingModel.Entity then return end TeamHidingModel.Entity:SetSequence("idle_all_01") TeamHidingModel.Entity:SetAngles( Angle( 0, 0, 0 ) ) end)
     function TeamHidingModel:LayoutEntity( ent )
-        ent:SetAngles( Angle( 0, 70, 0 ) )
-
         self:RunAnimation()
     end
 
