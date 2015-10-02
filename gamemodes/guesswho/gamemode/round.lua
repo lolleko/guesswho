@@ -250,7 +250,7 @@ function GM:PostRound()
 end
 
 function GM:SpawnNPCWave()
-    local walkerclrsround = {}
+    self.walkerclrsround = {}
     for k,v in pairs(self.SpawnPoints) do
         if self.WalkerCount == self.MaxWalkers then break end
 
@@ -268,10 +268,10 @@ function GM:SpawnNPCWave()
             self.WalkerCount = self.WalkerCount + 1
         end
 
-        table.insert(walkerclrsround, GAMEMODE.WalkerColors[math.random(1,#GAMEMODE.WalkerColors)])
+        table.insert(self.walkerclrsround, GAMEMODE.WalkerColors[math.random(1,#GAMEMODE.WalkerColors)])
     end
     net.Start("WalkerColorsRound")
-        net.WriteTable(walkerclrsround)
+        net.WriteTable(self.walkerclrsround)
     net.Broadcast()
 end
 

@@ -276,4 +276,10 @@ function GM:PlayerInitialSpawn( pl )
     --sync endtime with clients that connected
     SetGlobalFloat("EndTime", GetGlobalFloat("EndTime", 0))
 
+    if self.walkerclrsround then
+        net.Start("WalkerColorsRound")
+            net.WriteTable(self.walkerclrsround)
+        net.Send(pl)
+    end
+
 end
