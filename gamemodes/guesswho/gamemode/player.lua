@@ -263,3 +263,17 @@ function GM:PlayerCanSeePlayersChat( text, teamonly, listenply, speakply )
     return true
 
 end
+
+
+function GM:PlayerInitialSpawn( pl )
+
+    pl:SetTeam( TEAM_UNASSIGNED )
+
+    if ( GAMEMODE.TeamBased ) then
+        pl:ConCommand( "gm_showteam" )
+    end
+
+    --sync endtime with clients that connected
+    SetGlobalFloat("EndTime", GetGlobalFloat("EndTime", 0))
+
+end

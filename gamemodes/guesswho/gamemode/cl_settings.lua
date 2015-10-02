@@ -68,14 +68,20 @@ function SETTINGSPANEL:Tutorial()
     introtext:SetContentAlignment( 5 )
     introtext:SetText("It’s all about spotting the odd one out.")
 
-    local maintext = vgui.Create( "DLabel", self.tutorial )
+    local maintext = vgui.Create( "RichText", self.tutorial )
     maintext:DockMargin(10,5,10,5)
     maintext:Dock( FILL )
     maintext:SetWrap(true)
-    maintext:SetFont("robot_normal")
-    maintext:SetTextColor(clrs.black)
     maintext:SetContentAlignment( 5 )
-    maintext:SetText("The Hider will have to act as one with the NPC crowd and to make sure they are not caught out by the Seeker.\nTo change to a different NPC's model press E or your \"use\" key while looking at a NPC.\nThe Seeker must search for the hiding player and kill them all in order to win. When a Seeker shots a NPC they will lose health.\nThe Hider must survive the time limit in order to win.")
+    maintext:AppendText("The Hider will have to act as one with the NPC crowd and to make sure they are not caught out by the Seeker.\nTo change to a different NPC's model press E or your \"use\" key while looking at a NPC.\n\nThe Seeker must search for the hiding player and kill them all in order to win. When a Seeker shots a NPC they will lose health.\nThe Hider must survive the time limit in order to win.")
+    maintext:AppendText("\n\nPress C or Q (Spawnmenu and Contextmenu binds) to open the body taunt menu,\ngoto the Taunts tab to learn about voice taunts.")
+    maintext:SetVerticalScrollbarEnabled( true )
+    function maintext:PerformLayout()
+
+        self:SetFontInternal( "robot_normal" )
+        self:SetFGColor( clrs.black )
+
+    end
 
     local outrotext = vgui.Create( "DLabel", self.tutorial )
     outrotext:DockMargin(0,5,0,5)
@@ -107,115 +113,9 @@ function SETTINGSPANEL:Taunts()
         return
     end
 
-    local sequenceList = vgui.Create( "DListView", self.taunts )
-    sequenceList:SetMultiSelect( false )
-    sequenceList:SetWidth(self:GetWide() / 3 - 20)
-    sequenceList:DockMargin(0,0,0,25)
-    sequenceList:Dock(LEFT)
-
-    sequenceList:AddColumn( "Sequence" )
-    sequenceList:AddColumn( "Available" )
-
-    local ply = LocalPlayer()
-
-    local bindSequence = vgui.Create( "DButton", self.taunts )
-    bindSequence:SetText("Bind sequence")
-    bindSequence:SetPos(0,self:GetTall() - 95)
-    bindSequence:SetSize(self:GetWide() / 3 - 20, 25)
-    bindSequence.DoClick = function()
-        if sequenceList:GetLine(sequenceList:GetSelectedLine()) == nil then Derma_Message( "Please select an item from the list above!", "Alert", "OK" )  return end
-        local seq = sequenceList:GetLine(sequenceList:GetSelectedLine()):GetValue(1)
-        Derma_StringRequest(
-            "Taunt Hotkey",
-            "Enter the key you want to bind the taunt to.",
-            "",
-            function( text ) command("bind " .. text .. " \"gw_bodytaunt " .. seq .. "\"", "Command", "OK") end,
-            function( text ) end,
-            "Generate"
-        )
-        function command(cmd)
-            Derma_StringRequest(
-                "Console Print",
-                "Execute in your console to generate keybinding for your taunt.",
-                cmd,
-                function( text ) SetClipboardText(cmd) end,
-                function( text ) end,
-                "Copy to Clipboard"
-            )
-        end
-    end
-
-    self.taunts.selectedModel = ply:GetModel()
-
-    self.taunts.previewModel = vgui.Create( "DModelPanel", self.taunts )
-    self.taunts.previewModel:SetWidth(self:GetWide() / 3 + 15)
-    self.taunts.previewModel:SetHeight(self:GetTall() - 120)
-    self.taunts.previewModel:SetPos(self:GetWide() / 3 - 20, 20)
-    self.taunts.previewModel:SetModel( self.taunts.selectedModel )
-
-    function self.taunts.previewModel:LayoutEntity( ent )
-        ent:SetAngles( Angle( 0, 50, 0 ) )
-
-        self:RunAnimation()
-    end
-
-    for _,seq in pairs(GAMEMODE.ValidSequences) do
-        sequenceList:AddLine(seq, tostring(table.HasValue(self.taunts.previewModel.Entity:GetSequenceList(), seq)))
-    end
-
-    function sequenceList:OnRowSelected( lineID, line )
-
-        resetPreview(line)
-
-    end
-
-    function resetPreview(line)
-        if g_Settings.taunts.previewModel then g_Settings.taunts.previewModel:Remove() g_Settings.taunts.previewModel = nil end
-        local previewModel = vgui.Create( "DModelPanel", g_Settings.taunts )
-        previewModel:SetWidth(g_Settings:GetWide() / 3 + 15)
-        previewModel:SetHeight(g_Settings:GetTall() - 120)
-        previewModel:SetPos(g_Settings:GetWide() / 3 - 20, 20)
-        previewModel:SetModel( g_Settings.taunts.selectedModel )
-        if line && table.HasValue(previewModel.Entity:GetSequenceList(), line:GetValue(1)) then
-            previewModel.Entity:ResetSequence(line:GetValue(1))
-        end
-        function previewModel:LayoutEntity( ent )
-            ent:SetAngles( Angle( 0, 50, 0 ) )
-
-            self:RunAnimation()
-        end
-
-        g_Settings.taunts.previewModel = previewModel
-
-    end
-
-    local modelSelect = vgui.Create( "DComboBox", self.taunts )
-    modelSelect:SetPos(self:GetWide() / 3 - 20, 0)
-    modelSelect:SetSize( self:GetWide() / 3 + 15, 20 )
-    modelSelect:SetValue( self.taunts.selectedModel )
-    for _,mdl in pairs(GAMEMODE.Models) do
-        modelSelect:AddChoice(mdl)
-    end
-    modelSelect.OnSelect = function( panel, index, value )
-        self.taunts.selectedModel = value
-        resetPreview()
-        sequenceList:Clear()
-        for _,seq in pairs(GAMEMODE.ValidSequences) do
-            sequenceList:AddLine(seq, tostring(table.HasValue(self.taunts.previewModel.Entity:GetSequenceList(), seq)))
-        end
-    end
-
-    local helpBtn = vgui.Create( "DButton", self.taunts )
-    helpBtn:SetText("Help")
-    helpBtn:SetPos(self:GetWide() / 2 - 35,self:GetTall() - 95)
-    helpBtn:SetSize(50,25)
-    helpBtn.DoClick = function()
-        Derma_Message( "You can preview body and voice taunts here. For that just select an item from the list and listen/watch what it does.\nNote that not every body taunt works for every model you can check the availabilty by switching the model in the dropdown at the top.\nIf you decieded which taunt you want to use select it from one of the lists and click the button below the list to generate a bind command.\nYou can use that command in the console to bind the taunt to a key.\nFor that you will need to have your console enabled. If you don't have your console enabled go to Options > Keyboard > Advanced and Check \"Enable developer console.\"", "Taunt Help", "OK, understood!" )
-    end
-
     local soundList = vgui.Create( "DListView", self.taunts )
     soundList:SetMultiSelect( false )
-    soundList:SetWidth(self:GetWide() / 3 -20)
+    soundList:SetWidth(self:GetWide() -26)
     soundList:DockMargin(0,0,0,25)
     soundList:Dock(RIGHT)
 
@@ -223,8 +123,8 @@ function SETTINGSPANEL:Taunts()
 
     local bindSound = vgui.Create( "DButton", self.taunts )
     bindSound:SetText("Bind sound")
-    bindSound:SetSize(self:GetWide() / 3 -20,25)
-    bindSound:SetPos(self:GetWide() - bindSound:GetWide() - 26,self:GetTall() - 95)
+    bindSound:SetSize((self:GetWide() -26) / 2,25)
+    bindSound:SetPos(0,self:GetTall() - 95)
     bindSound.DoClick = function()
         if soundList:GetLine(soundList:GetSelectedLine()) == nil then Derma_Message( "Please select an item from the list above!", "Alert", "OK" ) return end
         local sound = soundList:GetLine(soundList:GetSelectedLine()):GetValue(1)
@@ -246,6 +146,14 @@ function SETTINGSPANEL:Taunts()
                 "Copy to Clipboard"
             )
         end
+    end
+
+    local helpBtn = vgui.Create( "DButton", self.taunts )
+    helpBtn:SetText("Help")
+    helpBtn:SetPos(0 + bindSound:GetWide(), self:GetTall() - 95)
+    helpBtn:SetSize((self:GetWide() -26) / 2,25)
+    helpBtn.DoClick = function()
+        Derma_Message( "NOTE: This is a temporary solution a easier voice taunt menu will be added soon.\nYou can preview voice taunts here. For that just select an item from the list.\nIf you decided which voice taunt you want to use select it from list and click the button below the list to generate a bind command.\nYou can use that command in the console to bind the taunt to a key.\nFor that you will need to have your console enabled. If you don't have your console enabled go to Options > Keyboard > Advanced and Check \"Enable developer console.\"", "Taunt Help", "OK, understood!" )
     end
 
     local files = file.Find( "sound/gwtaunts/*", "GAME" )

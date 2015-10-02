@@ -25,30 +25,6 @@ GM.Models = {
 GM.TeamSeekingColor = Color(138, 155, 15)
 GM.TeamHidingColor = Color(23, 89, 150)
 
-GM.ValidSequences = {
-    "Wave",
-    "Wave_close",
-    "cower",
-    "Fear_Reaction",
-    "cheer1",
-    "cheer2",
-    "headcrabbed",
-    "Lying_Down",
-    "luggagepush",
-    "arrestcurious",
-    "MeleeAttack01",
-    "swing",
-    "Fear_Reaction_gesture",
-    "Heal",
-    "photo_react_blind",
-    "droprope1",
-    "g_salute",
-    "ThrowItem",
-    "pace_all",
-    "preSkewer",
-    "DuckUnder",
-}
-
 GM.WalkerColors = {
     Color(61, 87, 105), -- original blue
     Color(240, 240, 240), --Black/dark grey

@@ -96,15 +96,17 @@ end
 function ENT:Sit()
     --self:PlaySequenceAndWait( "idle_to_sit_ground" )     --broken for clients so removed
     self:SetSequence( "sit_zen" )
+    self.Siting = true
     self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,36) )
     coroutine.wait( math.Rand(10,60) )
     self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,70) )
+    self.Siting = false
     --self:PlaySequenceAndWait( "sit_ground_to_idle" )
     --coroutine.wait( math.Rand(0,1.5) )
 end
 
 function ENT:OnStuck()
-    debugoverlay.Cross( self:GetPos() + Vector(0,0,70), 10, 20, Color(0,255,255), true )
+    --debugoverlay.Cross( self:GetPos() + Vector(0,0,70), 10, 20, Color(0,255,255), true )
     if !self.Stucked then self.Stucked = CurTime() end
     self.StuckAt = self:GetPos()
 end
@@ -145,7 +147,7 @@ end
 
 function ENT:OnLandOnGround( ent )
     self.IsJumping = false
-    if self:GetLastAct() == ACT_HL2MP_RUN then self.loco:SetDesiredSpeed(200) else self.loco:SetDesiredSpeed(100) end
+    if self:GetLastAct() == ACT_HL2MP_RUN then self.loco:SetDesiredSpeed(200) self.loco:SetAcceleration(400) else self.loco:SetDesiredSpeed(100) self.loco:SetAcceleration(400) end
 end
 
 function ENT:OnLeaveGround( ent )
@@ -177,7 +179,7 @@ function ENT:MoveToPos( pos, options )
         local scanDist
         if self:GetVelocity():Length2D() > 150 then scanDist = 30 else scanDist = 20 end
 
-        debugoverlay.Line( self:GetPos(),  path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist), 0.1, Color(255,0,0,0), true )
+        --debugoverlay.Line( self:GetPos(),  path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist), 0.1, Color(255,0,0,0), true )
         --debugoverlay.Line( self:GetPos(),  path:GetPositionOnPath(path:GetCursorPosition() + scanDist), 0.1, Color(0,255,0,0), true )
         if path:IsValid() and ((self:GetPos().z - path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist).z < 0 and (math.abs(path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist).z - self:GetPos().z) > 22))) then
             self:Jump(path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist), scanDist)
@@ -228,14 +230,14 @@ function ENT:Jump(goal, scanDist)
         endpos = self:EyePos() + self:EyeAngles():Forward() * scanDist + Vector(0,0,94),
         filter = self
     } )
-    debugoverlay.Line(self:EyePos() + Vector(0,0,30), self:EyePos() + Vector(0,0,94), 5, Color(255,255,0), true)
-    debugoverlay.Line(self:EyePos() + Vector(0,0,30) + self:EyeAngles():Forward() * scanDist, self:EyePos() + self:EyeAngles():Forward() * scanDist + Vector(0,0,94), 5, Color(255,255,0), true)
+    --debugoverlay.Line(self:EyePos() + Vector(0,0,30), self:EyePos() + Vector(0,0,94), 5, Color(255,255,0), true)
+    --debugoverlay.Line(self:EyePos() + Vector(0,0,30) + self:EyeAngles():Forward() * scanDist, self:EyePos() + self:EyeAngles():Forward() * scanDist + Vector(0,0,94), 5, Color(255,255,0), true)
     local jmpHeight
     if tr.Hit then jmpHeight = tr.StartPos:Distance(tr.HitPos) else jmpHeight = 64 end
     if tr2.Hit and !tr.Hit then jmpHeight = tr2.StartPos:Distance(tr2.HitPos) end
     self.loco:SetJumpHeight(jmpHeight)
     self.loco:SetDesiredSpeed( 450 )
-    self.loco:SetAcceleration( 1000 )
+    self.loco:SetAcceleration( 5000 )
     self:SetLastAct(self:GetActivity())
     self.Jumped = CurTime()
     self.IsJumping = true
@@ -266,13 +268,13 @@ function ENT:BodyUpdate()
 
     local len2d = velocity:Length2D()
 
-    if ( len2d > 150 ) then self.CalcIdeal = ACT_HL2MP_RUN elseif ( len2d > 20 ) then self.CalcIdeal = ACT_HL2MP_WALK end
+    if ( len2d > 150 ) then self.CalcIdeal = ACT_HL2MP_RUN elseif ( len2d > 10 ) then self.CalcIdeal = ACT_HL2MP_WALK end
 
-    if ( self.IsJumping && self:WaterLevel() <= 0 ) then
+    if ( self.IsJumping && self:WaterLevel() <= 0 && (self.Jumped < CurTime() && self.Jumped + 1 > CurTime()) ) then
         self.CalcIdeal = ACT_HL2MP_JUMP_SLAM
     end
 
-    if self:GetActivity() != self.CalcIdeal then self:StartActivity(self.CalcIdeal) end
+    if self:GetActivity() != self.CalcIdeal && !self.Siting then self:StartActivity(self.CalcIdeal) end
 
     if ( self.CalcIdeal == ACT_HL2MP_RUN || self.CalcIdeal == ACT_HL2MP_WALK ) then
 

@@ -110,13 +110,5 @@
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-		14
-		{
-			"name"		"gw_taunt_body_cooldown"
-			"text"		"Body taunts cooldown"
-			"help"		"Sets how long the cooldown on body taunts should be (prevents spaming)."
-			"type"		"Numeric"
-			"default"	"0"
-		}
 	}
 }

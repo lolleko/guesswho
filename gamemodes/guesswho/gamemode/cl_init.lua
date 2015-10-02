@@ -45,6 +45,7 @@ include( "cl_hud.lua" )
 include( "cl_pickteam.lua")
 include( "cl_scoreboard.lua")
 include( "cl_settings.lua")
+include( "cl_acts.lua")
 
 --Thirdpersoon + blinding
 function GM:CalcView(ply, pos, angles, fov)
