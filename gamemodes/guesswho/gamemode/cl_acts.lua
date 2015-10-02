@@ -101,9 +101,6 @@ function GM:ActMenuOneOpen()
     end
 
     if ( IsValid( g_Acts ) and LocalPlayer():Alive() ) then
-        if timer.Exists("HideActsMenu") then
-            timer.Remove("HideActsMenu")
-        end
         g_Acts:Clear()
         g_Acts:SetActs(1)
         g_Acts:Show()
@@ -118,9 +115,6 @@ function GM:ActMenuTwoOpen()
     end
 
     if ( IsValid( g_Acts) and LocalPlayer():Alive() ) then
-        if timer.Exists("HideActsMenu") then
-            timer.Remove("HideActsMenu")
-        end
         g_Acts:Clear()
         g_Acts:SetActs(2)
         g_Acts:Show()

@@ -113,5 +113,5 @@ end
 
 net.Receive( "walkerSpawned", function( len )
     local col = net.ReadVector()
-    ents.GetByIndex(net.ReadInt(32)).GetPlayerColor = function() return col end
+    net.ReadEntity().GetPlayerColor = function() return col end
 end )

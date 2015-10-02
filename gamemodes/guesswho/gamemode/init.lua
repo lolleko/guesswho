@@ -143,7 +143,7 @@ function GM:OnEntityCreated(ent)
         local col = Vector(clr.r / 255, clr.g / 255, clr.b / 255)
         net.Start("walkerSpawned")
             net.WriteVector(col)
-            net.WriteInt(ent:EntIndex(), 32)
+            net.WriteEntity(ent)
         net.Broadcast()
     end
 end
