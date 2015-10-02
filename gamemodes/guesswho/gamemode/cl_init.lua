@@ -111,7 +111,10 @@ function GM:CalcView(ply, pos, angles, fov)
 
 end
 
-net.Receive( "walkerSpawned", function( len )
-    local col = net.ReadVector()
-    net.ReadEntity().GetPlayerColor = function() return col end
-end )
+--such a hacky solution
+net.Receive("WalkerColorsRound", function(ln)
+    local wclrs = net.ReadTable()
+    for k, v in pairs( ents.FindByClass( "npc_walker" ) ) do
+        v.GetPlayerColor = function() return Vector(wclrs[k].r / 255, wclrs[k].g / 255 , wclrs[k].b / 255)  end
+    end
+end)

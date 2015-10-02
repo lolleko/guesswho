@@ -126,11 +126,7 @@ end
 
 function GM:ActMenuClose()
      if ( IsValid( g_Acts ) ) then
-        if timer.Exists("HideActsMenu") then
-            timer.Adjust("HideActsMenu", 0.5, 0, function() g_Acts:Hide() end)
-        else
-            timer.Create("HideActsMenu", 0.5, 0, function() g_Acts:Hide() end)
-        end
+        g_Acts:Hide()
     end
 end
 

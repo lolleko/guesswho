@@ -23,9 +23,9 @@ for _,sound in pairs(file.Find( "sound/gwtaunts/*", "GAME" )) do
 end
 
 --NetworkStrings
---the only network string because for some resaons gestures aren networked!? whats the point of gestures if they can't be seen by others?
-util.AddNetworkString( "gwTauntExecuted" )
-util.AddNetworkString( "walkerSpawned" )
+util.AddNetworkString("WalkerColorsRound")
+
+
 
 --[[
     GAMEMODE HOOKS
@@ -134,16 +134,4 @@ function GM:OnNPCKilled( ent, attacker, inflictor )
 
     net.Broadcast()
 
-end
-
-function GM:OnEntityCreated(ent)
-    if ent:GetClass() == "npc_walker" then
-        local clr = self.WalkerColors[math.random(1,#self.WalkerColors)]
-        if !clr then return end
-        local col = Vector(clr.r / 255, clr.g / 255, clr.b / 255)
-        net.Start("walkerSpawned")
-            net.WriteVector(col)
-            net.WriteEntity(ent)
-        net.Broadcast()
-    end
 end

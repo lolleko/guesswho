@@ -6,7 +6,6 @@ function ENT:SetupDataTables()
    self:NetworkVar("Int", 0, "LastAct") --Act should be known for client and server
 end
 
-
 function ENT:Initialize()
     local models = GAMEMODE.Models
 
