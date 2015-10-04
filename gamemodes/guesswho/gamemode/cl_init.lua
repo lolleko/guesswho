@@ -124,11 +124,3 @@ function GM:CalcView(ply, pos, angles, fov)
     return view
 
 end
-
-
---Walker Colouring
-function GM:NotifyShouldTransmit( ent, shouldtransmit )
-    if ent:GetClass() == "npc_walker" then
-        ent:SetColor(Color(255,255,255,255)) --we need to reset the color everytime the entity gets transmitted to the client if you don't want them to have coloured heads
-    end
-end
