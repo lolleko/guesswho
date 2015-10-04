@@ -70,3 +70,11 @@ function GM:PlayerShouldTakeDamage( ply, victim )
 
     return true
 end
+
+function GM:OnEntityCreated(ent)
+    if ent:GetClass() == "npc_walker" then
+        ent.WalkerColor = Vector(ent:GetColor().r / 255, ent:GetColor().g / 255, ent:GetColor().b / 255)
+        function ent:GetPlayerColor() return self.WalkerColor end
+        ent:SetColor(Color(255, 255, 255, 255))
+    end
+end

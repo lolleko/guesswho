@@ -127,17 +127,8 @@ end
 
 
 --Walker Colouring
-function GM:OnEntityCreated(ent)
-    if ent:GetClass() == "npc_walker" then
-        ent.WalkerColor = Vector(ent:GetColor().r / 255, ent:GetColor().g / 255, ent:GetColor().b / 255)
-        function ent:GetPlayerColor() return self.WalkerColor end
-        ent:SetColor(Color(255, 255, 255, 255))
-    end
-end
-
 function GM:NotifyShouldTransmit( ent, shouldtransmit )
     if ent:GetClass() == "npc_walker" then
         ent:SetColor(Color(255,255,255,255)) --we need to reset the color everytime the entity gets transmitted to the client if you don't want them to have coloured heads
-        PrintTable(ent:GetColor())
     end
 end
