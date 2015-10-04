@@ -138,5 +138,6 @@ end
 function GM:NotifyShouldTransmit( ent, shouldtransmit )
     if ent:GetClass() == "npc_walker" then
         ent:SetColor(Color(255,255,255,255)) --we need to reset the color everytime the entity gets transmitted to the client if you don't want them to have coloured heads
+        print(ent:GetColor())
     end
 end
