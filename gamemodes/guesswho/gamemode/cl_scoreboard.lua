@@ -32,13 +32,14 @@ function SB:Init()
     HeaderLabel:SetText("Guess Who?")
     HeaderLabel:CenterHorizontal()
     function HeaderLabel:Paint( w, h )
-        /*local x = 0
-        local y = 0
-        surface.SetDrawColor( clrs.lightgrey )
-        for i=0, 5 - 1 do
-            surface.DrawOutlinedRect( x + i, y + i, w - i * 2, h - i * 2 )
-        end*/
     end
+
+    local Header1Label = vgui.Create("DLabel", self)
+    Header1Label:SetSize( 200, 64 )
+    Header1Label:SetPos( 560, 4 )
+    Header1Label:SetFont("robot_small")
+    Header1Label:SetTextColor( clrs.lightgrey )
+    Header1Label:SetText("by Lolle")
 
     local Header2Label = vgui.Create("DLabel", self)
     Header2Label:SetSize( 980, 64 )
@@ -62,6 +63,7 @@ function SB:Init()
     Header4Label:SetFont("robot_small")
     Header4Label:SetTextColor( clrs.lightgrey )
     Header4Label:SetText("Online: " .. #player.GetHumans() ..  "/" .. game.MaxPlayers())
+    function Header4Label:Think() self:SetText("Online: " .. #player.GetHumans() ..  "/" .. game.MaxPlayers()) end
     Header4Label:CenterHorizontal()
     Header4Label:SetContentAlignment(6)
 
@@ -71,6 +73,7 @@ function SB:Init()
     Header5Label:SetFont("robot_small")
     Header5Label:SetTextColor( clrs.lightgrey )
     Header5Label:SetText("Spectators: " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR))
+    function Header5Label:Think() self:SetText("Spectators: " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR)) end
     Header5Label:CenterHorizontal()
     Header5Label:SetContentAlignment(6)
 
@@ -113,9 +116,9 @@ function SB:Paint( w, h )
 end
 
 function SB:Think()
-    self.HidingHeader:SetText("Hiding " .. team.GetScore( TEAM_HIDING ))
+    self.HidingHeader:SetText( team.GetName( TEAM_HIDING ) .. " " .. team.GetScore( TEAM_HIDING ))
     self.HidingHeader:SizeToContents()
-    self.SeekingHeader:SetText("Seeking " .. team.GetScore( TEAM_SEEKING ))
+    self.SeekingHeader:SetText( team.GetName( TEAM_SEEKING ) .. " "  .. team.GetScore( TEAM_SEEKING ))
     self.SeekingHeader:SizeToContents()
 end
 

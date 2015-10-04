@@ -39,12 +39,7 @@ end
 
 function ActsFrame:Paint(w,h)
     draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg )
-    local clr
-    if LocalPlayer():Team() == TEAM_HIDING then
-        clr = GAMEMODE.TeamHidingColor
-    else
-        clr = GAMEMODE.TeamSeekingColor
-    end
+    local clr = team.GetColor(LocalPlayer():Team())
     draw.RoundedBox( 0, 0, 0, w, h-(h-20), clr )
 end
 
@@ -101,7 +96,7 @@ function GM:ActMenuOneOpen()
         g_Acts = vgui.Create("DActFrame")
     end
 
-    if ( IsValid( g_Acts ) and LocalPlayer():Alive() ) then
+    if ( IsValid( g_Acts ) and LocalPlayer():Alive() and LocalPlayer():Team() != TEAM_SPECTATOR ) then
         g_Acts:Clear()
         g_Acts:SetActs(1)
         g_Acts:Show()
@@ -115,7 +110,7 @@ function GM:ActMenuTwoOpen()
         g_Acts = vgui.Create("DActFrame")
     end
 
-    if ( IsValid( g_Acts) and LocalPlayer():Alive() ) then
+    if ( IsValid( g_Acts) and LocalPlayer():Alive() and LocalPlayer():Team() != TEAM_SPECTATOR ) then
         g_Acts:Clear()
         g_Acts:SetActs(2)
         g_Acts:Show()

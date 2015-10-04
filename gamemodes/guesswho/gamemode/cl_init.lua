@@ -124,3 +124,12 @@ function GM:CalcView(ply, pos, angles, fov)
     return view
 
 end
+
+--Walker Colouring
+function GM:NetworkEntityCreated( ent )
+    if ent:GetClass() == "npc_walker" then
+        ent.WalkerColor = Vector(ent:GetColor().r / 255, ent:GetColor().g / 255, ent:GetColor().b / 255)
+        function ent:GetPlayerColor() return self.WalkerColor end
+        function ent:RenderOverride() self:SetColor(Color(255,255,255,255)) self:DrawModel() end
+    end
+end

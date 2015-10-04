@@ -41,7 +41,7 @@ function GM:CreateTeams()
     team.SetSpawnPoint( TEAM_HIDING, "info_player_counterterrorist" )
     team.SetSpawnPoint( TEAM_HIDING, "info_player_terrorist" )
 
-    team.SetUp( TEAM_SEEKING, "Hunter", self.TeamSeekingColor )
+    team.SetUp( TEAM_SEEKING, "Seekers", self.TeamSeekingColor )
     team.SetClass( TEAM_SEEKING, { "player_seeker" } )
     team.SetSpawnPoint( TEAM_SEEKING, "info_player_start" )
     team.SetSpawnPoint( TEAM_SEEKING, "info_player_deathmatch" )
@@ -69,19 +69,4 @@ function GM:PlayerShouldTakeDamage( ply, victim )
     end
 
     return true
-end
-
---Walker Colouring
-function GM:NotifyShouldTransmit( ent, shouldtransmit )
-    if ent:GetClass() == "npc_walker" then
-        ent:SetColor(Color(255,255,255,255)) --we need to reset the color everytime the entity gets transmitted to the client if you don't want them to have coloured heads
-    end
-end
-
-function GM:OnEntityCreated(ent)
-    if ent:GetClass() == "npc_walker" then
-        ent.WalkerColor = Vector(ent:GetColor().r / 255, ent:GetColor().g / 255, ent:GetColor().b / 255)
-        function ent:GetPlayerColor() return self.WalkerColor end
-        ent:SetColor(Color(255, 255, 255, 255))
-    end
 end

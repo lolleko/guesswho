@@ -22,12 +22,7 @@ function GM:ShowTeam()
     TeamHidingPanel:SetPos( ScrW() / 2 - 340, 180 )
     TeamHidingPanel:SetSize( 300, 400 )
     function TeamHidingPanel:Paint( w, h )
-        local x = 0
-        local y = 0
-        surface.SetDrawColor( clrs.red )
-        for i = 0, 5 - 1 do
-            surface.DrawOutlinedRect( x + i, y + i, w - i * 2, h - i * 2 )
-        end
+        draw.RoundedBox( 0, 0, 0, w, h, team.GetColor(TEAM_HIDING) )
     end
 
     local TeamHidingModel = vgui.Create( "DModelPanel", TeamHidingPanel )
@@ -36,7 +31,8 @@ function GM:ShowTeam()
     local seq, dur = TeamHidingModel.Entity:LookupSequence("gesture_wave")
     TeamHidingModel.Entity:SetSequence(seq)
     TeamHidingModel.Entity:SetAngles( Angle( 0, 70, 0 ) )
-    timer.Simple(dur,function() if !TeamHidingModel.Entity then return end TeamHidingModel.Entity:SetSequence("idle_all_01") TeamHidingModel.Entity:SetAngles( Angle( 0, 0, 0 ) ) end)
+    TeamHidingModel.Entity:DrawShadow(true)
+    timer.Simple(dur-0.2,function() if !TeamHidingModel.Entity then return end TeamHidingModel.Entity:SetSequence("idle_all_01") TeamHidingModel.Entity:SetAngles( Angle( 0, 0, 0 ) ) end)
     function TeamHidingModel:LayoutEntity( ent )
         self:RunAnimation()
     end
@@ -63,12 +59,7 @@ function GM:ShowTeam()
     TeamSeekingPanel:SetPos( ScrW() / 2 + 40, 180 )
     TeamSeekingPanel:SetSize( 300, 400 )
     function TeamSeekingPanel:Paint( w, h )
-        local x = 0
-        local y = 0
-        surface.SetDrawColor( clrs.red )
-        for i = 0, 5 - 1 do
-            surface.DrawOutlinedRect( x + i, y + i, w - i * 2, h - i * 2 )
-        end
+        draw.RoundedBox( 0, 0, 0, w, h, team.GetColor(TEAM_SEEKING) )
     end
 
     local TeamSeekingModel = vgui.Create( "DModelPanel", TeamSeekingPanel )
@@ -131,7 +122,7 @@ end
 
 function GM:IsBalancedToJoin( teamid )
 
-    if LocalPlayer():Team() == teamid then return false end
+    if LocalPlayer():Team() == teamid then return true end
     
     if teamid == TEAM_SEEKING then
         if team.NumPlayers( TEAM_SEEKING ) > team.NumPlayers( TEAM_HIDING ) or (LocalPlayer():Team() == TEAM_HIDING and team.NumPlayers( TEAM_SEEKING ) == team.NumPlayers( TEAM_HIDING )) then
