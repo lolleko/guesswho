@@ -231,11 +231,11 @@ function GM:PlayerCanJoinTeam( ply, teamid )
     end
 
     if teamid == TEAM_SEEKING then
-        if team.NumPlayers( TEAM_SEEKING ) > team.NumPlayers( TEAM_HIDING ) then
+        if team.NumPlayers( TEAM_SEEKING ) > team.NumPlayers( TEAM_HIDING ) or (ply:Team() == TEAM_HIDING and team.NumPlayers( TEAM_SEEKING ) == team.NumPlayers( TEAM_HIDING )) then
             return false
         end
     elseif teamid == TEAM_HIDING then
-        if team.NumPlayers( TEAM_HIDING ) > team.NumPlayers( TEAM_SEEKING ) then
+        if team.NumPlayers( TEAM_HIDING ) > team.NumPlayers( TEAM_SEEKING ) or (ply:Team() == TEAM_SEEKING and team.NumPlayers( TEAM_SEEKING ) == team.NumPlayers( TEAM_HIDING )) then
             return false
         end
     end
@@ -261,5 +261,19 @@ function GM:PlayerCanSeePlayersChat( text, teamonly, listenply, speakply )
     if !listenply:Alive() and speakerply:Alive() then return false end
 
     return true
+
+end
+
+
+function GM:PlayerInitialSpawn( pl )
+
+    pl:SetTeam( TEAM_UNASSIGNED )
+
+    if ( GAMEMODE.TeamBased ) then
+        pl:ConCommand( "gm_showteam" )
+    end
+
+    --sync endtime with clients that connected
+    SetGlobalFloat("EndTime", GetGlobalFloat("EndTime", 0))
 
 end

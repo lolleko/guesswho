@@ -23,6 +23,13 @@ SWEP.Secondary.Ammo         = "none"
 SWEP.ViewModel = ""
 SWEP.WorldModel = ""
 
+function SWEP:Initialize()
+
+    self:SetHoldType( "normal" )
+
+end
+
+
 function SWEP:PrimaryAttack()
 
     self.Weapon:SetNextPrimaryFire( CurTime() + 1.5 )

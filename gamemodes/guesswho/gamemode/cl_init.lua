@@ -37,7 +37,21 @@ surface.CreateFont( "robot_small",
                     shadow = false
             })
 
-clrs = { red = Color(231,77,60), blue = Color(53,152,219), green = Color(45,204,113), purple = Color(108,113,196), yellow = Color(241,196,16), lightgrey = Color(240,240,240), grey = Color(42,42,42), darkgrey = Color(26,26,26), black = Color(0,0,0), darkgreybg = Color(26,26,26,245), greybg = Color(42,42,42,200), redbg = Color(231,77,60,50), white = Color(255,255,255)}
+clrs = {
+    red = Color(231,77,60),
+    blue = Color(53,152,219),
+    green = Color(45,204,113),
+    purple = Color(108,113,196),
+    yellow = Color(241,196,16),
+    lightgrey = Color(240,240,240),
+    grey = Color(42,42,42),
+    darkgrey = Color(26,26,26),
+    black = Color(0,0,0),
+    darkgreybg = Color(26,26,26,245),
+    greybg = Color(42,42,42,200),
+    redbg = Color(231,77,60,50),
+    white = Color(255,255,255)
+}
 
 --includes
 include( "shared.lua" )
@@ -45,6 +59,7 @@ include( "cl_hud.lua" )
 include( "cl_pickteam.lua")
 include( "cl_scoreboard.lua")
 include( "cl_settings.lua")
+include( "cl_acts.lua")
 
 --Thirdpersoon + blinding
 function GM:CalcView(ply, pos, angles, fov)
@@ -101,11 +116,20 @@ function GM:CalcView(ply, pos, angles, fov)
         view.origin = pos - ( angles:Forward() * dist )
         view.drawviewer = true
 
-    elseif ply:Team() == TEAM_SEEKING and !GAMEMODE:InRound() then -- blind seekers
+    elseif ply:Team() == TEAM_SEEKING and !self:InRound() then -- blind seekers
         view.origin = Vector(20000, 0, 0)
         view.angles = Angle(0, 0, 0)
     end
 
     return view
 
+end
+
+--Walker Colouring
+function GM:NetworkEntityCreated( ent )
+    if ent:GetClass() == "npc_walker" then
+        ent.WalkerColor = Vector(ent:GetColor().r / 255, ent:GetColor().g / 255, ent:GetColor().b / 255)
+        function ent:GetPlayerColor() return self.WalkerColor end
+        function ent:RenderOverride() self:SetColor(Color(255,255,255,255)) self:DrawModel() end
+    end
 end

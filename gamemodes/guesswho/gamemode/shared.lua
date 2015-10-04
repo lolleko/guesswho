@@ -41,7 +41,7 @@ function GM:CreateTeams()
     team.SetSpawnPoint( TEAM_HIDING, "info_player_counterterrorist" )
     team.SetSpawnPoint( TEAM_HIDING, "info_player_terrorist" )
 
-    team.SetUp( TEAM_SEEKING, "Hunter", self.TeamSeekingColor )
+    team.SetUp( TEAM_SEEKING, "Seekers", self.TeamSeekingColor )
     team.SetClass( TEAM_SEEKING, { "player_seeker" } )
     team.SetSpawnPoint( TEAM_SEEKING, "info_player_start" )
     team.SetSpawnPoint( TEAM_SEEKING, "info_player_deathmatch" )

@@ -10,6 +10,7 @@ AddCSLuaFile( "cl_hud.lua" )
 AddCSLuaFile( "cl_pickteam.lua" )
 AddCSLuaFile( "cl_scoreboard.lua" )
 AddCSLuaFile( "cl_settings.lua")
+AddCSLuaFile( "cl_acts.lua")
 include( "shared.lua" )
 include( "player.lua" )
 include( "round.lua" )
@@ -20,10 +21,6 @@ resource.AddFile( "materials/vgui/gw/logo_main.png" )
 for _,sound in pairs(file.Find( "sound/gwtaunts/*", "GAME" )) do
     resource.AddFile("sound/gwtaunts/" .. sound)
 end
-
---NetworkStrings
---the only network string because for some resaons gestures aren networked!? whats the point of gestures if they can't be seen by others?
-util.AddNetworkString( "gwTauntExecuted" )
 
 --[[
     GAMEMODE HOOKS
@@ -37,7 +34,7 @@ function GM:EntityTakeDamage(target, dmginfo)
 
     attacker = dmginfo:GetAttacker()
 
-    if GAMEMODE:InRound() && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
+    if self:InRound() && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
 
         attacker:TakeDamage( self.DamageOnFail , target, attacker:GetActiveWeapon())
 

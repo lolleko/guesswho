@@ -121,7 +121,7 @@ function GM:PreRoundStart()
     self.WalkerCount = 0
 
     if #self.SpawnPoints > self.MaxWalkers then
-        GAMEMODE:SpawnNPCWave()
+        self:SpawnNPCWave()
         MsgN("GW Spawned ",self.WalkerCount," NPCs in 1 wave.")
     else
         local wpw
@@ -129,7 +129,7 @@ function GM:PreRoundStart()
             wave = wave + 1
             timer.Simple(w * 5, function()
                 wpw = self.WalkerCount
-                GAMEMODE:SpawnNPCWave()
+                self:SpawnNPCWave()
                 MsgN("GW Spawned ",self.WalkerCount - wpw," NPCs in wave ", w + 1, ".")
             end)
         end
@@ -205,10 +205,10 @@ function GM:RoundEnd( caught )
     --choose winner and stuff
 
     if caught then
-        PrintMessage( HUD_PRINTCENTER, "The Hunters won." )
+        PrintMessage( HUD_PRINTCENTER, "The " .. team.GetName( TEAM_SEEKING ) .. " win." )
         team.AddScore( TEAM_SEEKING, 1)
     else
-        PrintMessage( HUD_PRINTCENTER, "The Hiding won." )
+        PrintMessage( HUD_PRINTCENTER, "The " .. team.GetName( TEAM_HIDING ) .. " win." )
         for k,v in pairs(team.GetPlayers( TEAM_HIDING )) do
             if v:Alive() then v:AddFrags( 1 ) end --if still alive as hiding after round give them one point (frag)
         end
@@ -250,6 +250,7 @@ function GM:PostRound()
 end
 
 function GM:SpawnNPCWave()
+    self.walkerclrsround = {}
     for k,v in pairs(self.SpawnPoints) do
         if self.WalkerCount == self.MaxWalkers then break end
 

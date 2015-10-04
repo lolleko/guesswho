@@ -1,5 +1,4 @@
 AddCSLuaFile()
-
 ENT.Base            = "base_nextbot"
 
 function ENT:SetupDataTables()
@@ -8,19 +7,18 @@ function ENT:SetupDataTables()
 end
 
 function ENT:Initialize()
-
     local models = GAMEMODE.Models
 
     if SERVER then self:SetRandomInt(math.random(1,#models)) end
 
     self:SetModel(models[self:GetRandomInt()])
     self:SetHealth(100)
-    self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,70) )
+    self:SetCollisionBounds( Vector(-9,-9,0), Vector(9,9,70) )
     self.loco:SetStepHeight(22)
-    self.loco:SetJumpHeight(54)
     self.Jumped = CurTime() + 5 -- prevent jumping for the first 6 seconds since the spawn is crowded
     self.IsJumping = false
     self.IsDuck = false
+    self:SetColor(GAMEMODE.WalkerColors[math.random(1, #GAMEMODE.WalkerColors)])
 
 end
 
@@ -36,42 +34,16 @@ function ENT:Think()
             end
         end
     end
-    /*if CurTime() > self.Jumped + 2 and self:GetActivity() == ACT_WALK or self:GetActivity() == ACT_RUN then
-        local bodytrace = util.TraceHull({
-        start = self:GetPos() + Vector(0,0,25),
-        endpos =  (self:GetPos() + Vector(0,0,25)) + self:EyeAngles():Forward() * 40,
-        mins = Vector(8,0,0),
-        maxs = Vector(8,0,33),
-        mask = MASK_NPCSOLID_BRUSHONLY,
-        filter = self.Entity
-        })
-        local eyetrace = util.TraceHull({
-        start = self:GetPos() + Vector(0,0,59),
-        endpos =  (self:GetPos() + Vector(0,0,55)) + self:EyeAngles():Forward() * 60,
-        mins = Vector(16,0,0),
-        maxs = Vector(16,0,15),
-        mask = MASK_NPCSOLID_BRUSHONLY,
-        filter = self.Entity
-        })
-        if bodytrace.Hit and !eyetrace.Hit then
-            self.Jumped = CurTime() --delay next jump
-            self.loco:Jump()
-            self:SetVelocity(self:GetForward() * 10000)
-        end
-    end*/
-    if self.Stucked and CurTime() > self.Stucked + 15 and self.StuckAt:Distance(self:GetPos()) < 5 then
+    if self.Stucked and CurTime() > self.Stucked + 20 and self.StuckAt:Distance(self:GetPos()) < 5 then
         self:SetPos(GAMEMODE.SpawnPoints[math.random(1,#GAMEMODE.SpawnPoints)]:GetPos())
         self.Stucked = nil
-        if SERVER then MsgN("Nextbot [",tostring(self:EntIndex()),"][",self:GetClass(),"] Got Stuck for over 15 seconds and will be repositioned, if this error gets spammed you might want to consider the following: Edit the navmesh or lower the walker amount.") end
+        if SERVER and !self.IsJumping then MsgN("Nextbot [",tostring(self:EntIndex()),"][",self:GetClass(),"] Got Stuck for over 20 seconds and will be repositioned, if this error gets spammed you might want to consider the following: Edit the navmesh or lower the walker amount.") end
     end
-    /*local nav = navmesh.GetNavArea(self:GetPos(), 10)
-    if nav:HasAttributes( NAV_MESH_JUMP ) then
-        self.loco:Jump()
-    end*/
+    if self.Stucked and self.StuckAt:Distance(self:GetPos()) > 10 then self.Stucked = nil end --Reset stuck state when moved
     if !self.IsJumping and self:GetSolidMask() == MASK_NPCSOLID_BRUSHONLY then
         local occupied = false
         for _,ent in pairs(ents.FindInBox(self:GetPos() + Vector( -16, -16, 0 ), self:GetPos() + Vector( 16, 16, 70 ))) do
-            if ent:GetClass() == "npc_walker" then occupied = true end
+            if ent:GetClass() == "npc_walker" and ent != self then occupied = true end
         end
         if !occupied then self:SetSolidMask(MASK_NPCSOLID) end
     end
@@ -89,19 +61,15 @@ function ENT:RunBehaviour()
         elseif rand > 10 and rand < 15 then
             self:Sit()
             coroutine.wait(1)
-            self:StartActivity( ACT_IDLE )
         else
             self:MoveSomeWhere()
             coroutine.wait(1)
-            self:StartActivity( ACT_IDLE )
         end
     end
 
 end
 
 function ENT:MoveSomeWhere(distance)
-    self:StartActivity( ACT_WALK )
-    self:SetLastAct( ACT_WALK )
     distance = distance or 1000
     self.loco:SetDesiredSpeed( 100 )
     local navs = navmesh.Find(self:GetPos(), distance, 120, 120)
@@ -111,8 +79,6 @@ function ENT:MoveSomeWhere(distance)
     local pos = nav:GetRandomPoint()
     local maxAge = math.Clamp(pos:Distance(self:GetPos())/120, 0.1,10)
     self:MoveToPos( pos, { tolerance = 30, maxage = maxAge, lookahead = 10, repath = 2 })
-    self:StartActivity( ACT_IDLE )
-    self:SetLastAct( ACT_IDLE )
 end
 
 function ENT:MoveToSpot( type )
@@ -121,33 +87,32 @@ function ENT:MoveToSpot( type )
         local nav = navmesh.GetNavArea(pos, 20)
         if !IsValid(nav) then return end
         if !nav:IsUnderwater() then
-            self:StartActivity( ACT_RUN )
-            self:SetLastAct( ACT_RUN )
             self.loco:SetDesiredSpeed( 200 )
             self:MoveToPos( pos, { tolerance = 30, lookahead = 10, repath = 2 } )
-            self:StartActivity( ACT_IDLE )
-            self:SetLastAct( ACT_IDLE )
         end
     end
 end
 
 function ENT:Sit()
     --self:PlaySequenceAndWait( "idle_to_sit_ground" )     --broken for clients so removed
-    self:SetSequence( "sit_ground" )
+    self:SetSequence( "sit_zen" )
+    self.Siting = true
     self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,36) )
     coroutine.wait( math.Rand(10,60) )
     self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,70) )
+    self.Siting = false
     --self:PlaySequenceAndWait( "sit_ground_to_idle" )
     --coroutine.wait( math.Rand(0,1.5) )
 end
 
 function ENT:OnStuck()
-    self.Stucked = CurTime()
+    --debugoverlay.Cross( self:GetPos() + Vector(0,0,70), 10, 20, Color(0,255,255), true )
+    if !self.Stucked then self.Stucked = CurTime() end
     self.StuckAt = self:GetPos()
 end
 
 function ENT:OnUnStuck()
-    self.Stucked = nil
+    if self.StuckAt:Distance(self:GetPos()) > 10 or self.Siting then self.Stucked = nil end
 end
 
 function ENT:Use( act, call, type, value )
@@ -181,10 +146,12 @@ function ENT:OnContact( ent )
 end
 
 function ENT:OnLandOnGround( ent )
-    self:StartActivity(self:GetLastAct())
-    self.loco:SetStepHeight(22)
     self.IsJumping = false
-    if self:GetLastAct() == ACT_RUN then self.loco:SetDesiredSpeed(200) elseif self:GetLastAct() == ACT_WALK then self.loco:SetDesiredSpeed(100) end
+    if self:GetLastAct() == ACT_HL2MP_RUN then self.loco:SetDesiredSpeed(200) self.loco:SetAcceleration(400) else self.loco:SetDesiredSpeed(100) self.loco:SetAcceleration(400) end
+end
+
+function ENT:OnLeaveGround( ent )
+    self.IsJumping = true
 end
 
 ---my attempt on improved pathing (with jumping)
@@ -209,10 +176,13 @@ function ENT:MoveToPos( pos, options )
 
         --the jumping part simple and buggy if you have a smarter solution tell me please
         --local scanDist = (self.loco:GetVelocity():Length()^2)/(2*900) + 15
-        local scanDist = (self.loco:GetVelocity():Length() * 0.075) + 20 -- shitty approximation
-        --print(scanDist)
-        if path:IsValid() and ((self:GetPos().z - path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist).z < 0 and (math.abs(path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist).z - self:GetPos().z) > 22)) or (self:GetPos().z - path:GetPositionOnPath(path:GetCursorPosition() +scanDist).z < 0 and math.abs(path:GetPositionOnPath(path:GetCursorPosition() + scanDist).z - self:GetPos().z) > 22)) then
-            self:Jump()
+        local scanDist
+        if self:GetVelocity():Length2D() > 150 then scanDist = 30 else scanDist = 20 end
+
+        --debugoverlay.Line( self:GetPos(),  path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist), 0.1, Color(255,0,0,0), true )
+        --debugoverlay.Line( self:GetPos(),  path:GetPositionOnPath(path:GetCursorPosition() + scanDist), 0.1, Color(0,255,0,0), true )
+        if path:IsValid() and ((self:GetPos().z - path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist).z < 0 and (math.abs(path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist).z - self:GetPos().z) > 22))) then
+            self:Jump(path:GetClosestPosition(self:EyePos() + self:EyeAngles():Forward() * scanDist), scanDist)
         end
 
         -- If we're stuck then call the HandleStuck function and abandon
@@ -247,15 +217,71 @@ function ENT:MoveToPos( pos, options )
 end
 
 --we do our own jump since the loco one is a bit weird.
-function ENT:Jump()
+function ENT:Jump(goal, scanDist)
     if CurTime() < self.Jumped + 1 or navmesh.GetNavArea(self:GetPos(), 50):HasAttributes( NAV_MESH_NO_JUMP ) then return end
+    if !self:IsOnGround() then return end
+    local tr = util.TraceLine( {
+        start = self:EyePos() + Vector(0,0,30),
+        endpos = self:EyePos() + Vector(0,0,94),
+        filter = self
+    } )
+    local tr2 = util.TraceLine( {
+        start = self:EyePos() + Vector(0,0,30) + self:EyeAngles():Forward() * scanDist,
+        endpos = self:EyePos() + self:EyeAngles():Forward() * scanDist + Vector(0,0,94),
+        filter = self
+    } )
+    --debugoverlay.Line(self:EyePos() + Vector(0,0,30), self:EyePos() + Vector(0,0,94), 5, Color(255,255,0), true)
+    --debugoverlay.Line(self:EyePos() + Vector(0,0,30) + self:EyeAngles():Forward() * scanDist, self:EyePos() + self:EyeAngles():Forward() * scanDist + Vector(0,0,94), 5, Color(255,255,0), true)
+    local jmpHeight
+    if tr.Hit then jmpHeight = tr.StartPos:Distance(tr.HitPos) else jmpHeight = 64 end
+    if tr2.Hit and !tr.Hit then jmpHeight = tr2.StartPos:Distance(tr2.HitPos) end
+    self.loco:SetJumpHeight(jmpHeight)
+    self.loco:SetDesiredSpeed( 450 )
+    self.loco:SetAcceleration( 5000 )
+    self:SetLastAct(self:GetActivity())
     self.Jumped = CurTime()
     self.IsJumping = true
     self:SetSolidMask( MASK_NPCSOLID_BRUSHONLY )
-    self.loco:SetStepHeight(64)
     self.loco:Jump()
+    self.loco:Approach(goal, 1000)
 end
 
 function ENT:Duck( state )
     if state then self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,30) ) self.IsDuck = true else self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,70) ) self.IsDuck = false end
+end
+
+function ENT:BodyUpdate()
+
+    local act = self:GetActivity()
+
+    self.CalcIdeal = ACT_HL2MP_IDLE
+
+    --
+    -- This helper function does a lot of useful stuff for us.
+    -- It sets the bot's move_x move_y pose parameters, sets their animation speed relative to the ground speed, and calls FrameAdvance.
+    --
+    --
+
+    --if act != self:GetLastAct() then act = self:GetLastAct() self:StartActivity(act) end
+
+    local velocity = self:GetVelocity()
+
+    local len2d = velocity:Length2D()
+
+    if ( len2d > 150 ) then self.CalcIdeal = ACT_HL2MP_RUN elseif ( len2d > 10 ) then self.CalcIdeal = ACT_HL2MP_WALK end
+
+    if ( self.IsJumping && self:WaterLevel() <= 0 && (self.Jumped < CurTime() && self.Jumped + 1 > CurTime()) ) then
+        self.CalcIdeal = ACT_HL2MP_JUMP_SLAM
+    end
+
+    if self:GetActivity() != self.CalcIdeal && !self.Siting then self:StartActivity(self.CalcIdeal) end
+
+    if ( self.CalcIdeal == ACT_HL2MP_RUN || self.CalcIdeal == ACT_HL2MP_WALK ) then
+
+        self:BodyMoveXY()
+
+    end
+
+    self:FrameAdvance()
+
 end
