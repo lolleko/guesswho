@@ -22,11 +22,6 @@ for _,sound in pairs(file.Find( "sound/gwtaunts/*", "GAME" )) do
     resource.AddFile("sound/gwtaunts/" .. sound)
 end
 
---NetworkStrings
-util.AddNetworkString("WalkerColorsRound")
-
-
-
 --[[
     GAMEMODE HOOKS
 ]]--
@@ -39,7 +34,7 @@ function GM:EntityTakeDamage(target, dmginfo)
 
     attacker = dmginfo:GetAttacker()
 
-    if GAMEMODE:InRound() && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
+    if self:InRound() && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
 
         attacker:TakeDamage( self.DamageOnFail , target, attacker:GetActiveWeapon())
 

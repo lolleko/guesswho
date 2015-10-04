@@ -37,7 +37,21 @@ surface.CreateFont( "robot_small",
                     shadow = false
             })
 
-clrs = { red = Color(231,77,60), blue = Color(53,152,219), green = Color(45,204,113), purple = Color(108,113,196), yellow = Color(241,196,16), lightgrey = Color(240,240,240), grey = Color(42,42,42), darkgrey = Color(26,26,26), black = Color(0,0,0), darkgreybg = Color(26,26,26,245), greybg = Color(42,42,42,200), redbg = Color(231,77,60,50), white = Color(255,255,255)}
+clrs = {
+    red = Color(231,77,60),
+    blue = Color(53,152,219),
+    green = Color(45,204,113),
+    purple = Color(108,113,196),
+    yellow = Color(241,196,16),
+    lightgrey = Color(240,240,240),
+    grey = Color(42,42,42),
+    darkgrey = Color(26,26,26),
+    black = Color(0,0,0),
+    darkgreybg = Color(26,26,26,245),
+    greybg = Color(42,42,42,200),
+    redbg = Color(231,77,60,50),
+    white = Color(255,255,255)
+}
 
 --includes
 include( "shared.lua" )
@@ -102,7 +116,7 @@ function GM:CalcView(ply, pos, angles, fov)
         view.origin = pos - ( angles:Forward() * dist )
         view.drawviewer = true
 
-    elseif ply:Team() == TEAM_SEEKING and !GAMEMODE:InRound() then -- blind seekers
+    elseif ply:Team() == TEAM_SEEKING and !self:InRound() then -- blind seekers
         view.origin = Vector(20000, 0, 0)
         view.angles = Angle(0, 0, 0)
     end
@@ -111,10 +125,18 @@ function GM:CalcView(ply, pos, angles, fov)
 
 end
 
---such a hacky solution
-net.Receive("WalkerColorsRound", function(ln)
-    local wclrs = net.ReadTable()
-    for k, v in pairs( ents.FindByClass( "npc_walker" ) ) do
-        v.GetPlayerColor = function() return Vector(wclrs[k].r / 255, wclrs[k].g / 255 , wclrs[k].b / 255)  end
+
+--Walker Colouring
+function GM:OnEntityCreated(ent)
+    if ent:GetClass() == "npc_walker" then
+        ent.WalkerColor = Vector(ent:GetColor().r / 255, ent:GetColor().g / 255, ent:GetColor().b / 255)
+        function ent:GetPlayerColor() return self.WalkerColor end
+        ent:SetColor(Color(255, 255, 255, 255))
     end
-end)
+end
+
+function GM:NotifyShouldTransmit( ent, shouldtransmit )
+    if shouldtransmit and ent:GetClass() == "npc_walker" then
+        ent:SetColor(Color(255,255,255,255)) --we need to reset the color everytime the entity gets transmitted to the client if you don't want them to have coloured heads
+    end
+end

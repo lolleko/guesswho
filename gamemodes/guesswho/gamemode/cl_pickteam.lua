@@ -43,7 +43,7 @@ function GM:ShowTeam()
 
     local TeamHidingButton = vgui.Create( "DButton", TeamHidingPanel )
     function TeamHidingButton.DoClick()
-        if self:IsBalancedToJoin(TEAM_HIDING) or LocalPlayer():Team() == TEAM_HIDING then
+        if self:IsBalancedToJoin(TEAM_HIDING) then
             self:HideTeam() RunConsoleCommand( "changeteam", TEAM_HIDING )
         end
     end
@@ -80,7 +80,7 @@ function GM:ShowTeam()
 
     local TeamSeekingButton = vgui.Create( "DButton", TeamSeekingPanel )
     function TeamSeekingButton.DoClick()
-        if self:IsBalancedToJoin(TEAM_SEEKING) or LocalPlayer():Team() == TEAM_SEEKING then
+        if self:IsBalancedToJoin(TEAM_SEEKING) then
             self:HideTeam() RunConsoleCommand( "changeteam", TEAM_SEEKING )
         end
     end
@@ -130,16 +130,18 @@ function GM:ShowTeam()
 end
 
 function GM:IsBalancedToJoin( teamid )
+
+    if LocalPlayer():Team() == teamid then return false end
+    
     if teamid == TEAM_SEEKING then
-        if team.NumPlayers( TEAM_SEEKING ) > team.NumPlayers( TEAM_HIDING ) then
+        if team.NumPlayers( TEAM_SEEKING ) > team.NumPlayers( TEAM_HIDING ) or (LocalPlayer():Team() == TEAM_HIDING and team.NumPlayers( TEAM_SEEKING ) == team.NumPlayers( TEAM_HIDING )) then
             return false
         end
     elseif teamid == TEAM_HIDING then
-        if team.NumPlayers( TEAM_HIDING ) > team.NumPlayers( TEAM_SEEKING ) then
+        if team.NumPlayers( TEAM_HIDING ) > team.NumPlayers( TEAM_SEEKING ) or (LocalPlayer():Team() == TEAM_SEEKING and team.NumPlayers( TEAM_SEEKING ) == team.NumPlayers( TEAM_HIDING )) then
             return false
         end
     end
-
     return true
 end
 

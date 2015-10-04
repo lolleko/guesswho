@@ -121,7 +121,7 @@ function GM:PreRoundStart()
     self.WalkerCount = 0
 
     if #self.SpawnPoints > self.MaxWalkers then
-        GAMEMODE:SpawnNPCWave()
+        self:SpawnNPCWave()
         MsgN("GW Spawned ",self.WalkerCount," NPCs in 1 wave.")
     else
         local wpw
@@ -129,7 +129,7 @@ function GM:PreRoundStart()
             wave = wave + 1
             timer.Simple(w * 5, function()
                 wpw = self.WalkerCount
-                GAMEMODE:SpawnNPCWave()
+                self:SpawnNPCWave()
                 MsgN("GW Spawned ",self.WalkerCount - wpw," NPCs in wave ", w + 1, ".")
             end)
         end
@@ -267,12 +267,7 @@ function GM:SpawnNPCWave()
             walker:Activate()
             self.WalkerCount = self.WalkerCount + 1
         end
-
-        table.insert(self.walkerclrsround, GAMEMODE.WalkerColors[math.random(1,#GAMEMODE.WalkerColors)])
     end
-    net.Start("WalkerColorsRound")
-        net.WriteTable(self.walkerclrsround)
-    net.Broadcast()
 end
 
 function GM:UpdateSettings()

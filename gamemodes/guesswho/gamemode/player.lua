@@ -231,11 +231,11 @@ function GM:PlayerCanJoinTeam( ply, teamid )
     end
 
     if teamid == TEAM_SEEKING then
-        if team.NumPlayers( TEAM_SEEKING ) > team.NumPlayers( TEAM_HIDING ) then
+        if team.NumPlayers( TEAM_SEEKING ) > team.NumPlayers( TEAM_HIDING ) or (ply:Team() == TEAM_HIDING and team.NumPlayers( TEAM_SEEKING ) == team.NumPlayers( TEAM_HIDING )) then
             return false
         end
     elseif teamid == TEAM_HIDING then
-        if team.NumPlayers( TEAM_HIDING ) > team.NumPlayers( TEAM_SEEKING ) then
+        if team.NumPlayers( TEAM_HIDING ) > team.NumPlayers( TEAM_SEEKING ) or (ply:Team() == TEAM_SEEKING and team.NumPlayers( TEAM_SEEKING ) == team.NumPlayers( TEAM_HIDING )) then
             return false
         end
     end
@@ -275,11 +275,5 @@ function GM:PlayerInitialSpawn( pl )
 
     --sync endtime with clients that connected
     SetGlobalFloat("EndTime", GetGlobalFloat("EndTime", 0))
-
-    if self.walkerclrsround then
-        net.Start("WalkerColorsRound")
-            net.WriteTable(self.walkerclrsround)
-        net.Send(pl)
-    end
 
 end

@@ -27,6 +27,7 @@ function ActsFrame:Init()
     self:SetSize(200, 400)
     self:CenterVertical()
     self:SetName("Select your Taunt!")
+    self:Hide()
 
     self:MakePopup()
 

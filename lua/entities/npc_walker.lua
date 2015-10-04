@@ -19,6 +19,8 @@ function ENT:Initialize()
     self.IsJumping = false
     self.IsDuck = false
 
+    self:SetColor(GAMEMODE.WalkerColors[math.random(1, #GAMEMODE.WalkerColors)])
+
 end
 
 function ENT:Think()
@@ -111,7 +113,7 @@ function ENT:OnStuck()
 end
 
 function ENT:OnUnStuck()
-    if self.StuckAt:Distance(self:GetPos()) > 10 then self.Stucked = nil end
+    if self.StuckAt:Distance(self:GetPos()) > 10 or self.Siting then self.Stucked = nil end
 end
 
 function ENT:Use( act, call, type, value )
