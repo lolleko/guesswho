@@ -258,7 +258,7 @@ function GM:PlayerCanSeePlayersChat( text, teamonly, listenply, speakply )
     end
 
     if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false end
-    if !listenply:Alive() and speakerply:Alive() then return false end
+    if !listenply:Alive() and speakply:Alive() then return false end
 
     return true
 
