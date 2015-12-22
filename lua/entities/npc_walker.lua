@@ -34,16 +34,16 @@ function ENT:Think()
             end
         end
     end
-    if self.Stucked and CurTime() > self.Stucked + 20 and self.StuckAt:Distance(self:GetPos()) < 5 then
+    if self.Stucked && CurTime() > self.Stucked + 20 && self.StuckAt:Distance(self:GetPos()) < 5 then
         self:SetPos(GAMEMODE.SpawnPoints[math.random(1,#GAMEMODE.SpawnPoints)]:GetPos())
         self.Stucked = nil
-        if SERVER and !self.IsJumping then MsgN("Nextbot [",tostring(self:EntIndex()),"][",self:GetClass(),"] Got Stuck for over 20 seconds and will be repositioned, if this error gets spammed you might want to consider the following: Edit the navmesh or lower the walker amount.") end
+        if SERVER && !self.IsJumping then MsgN("Nextbot [",tostring(self:EntIndex()),"][",self:GetClass(),"] Got Stuck for over 20 seconds and will be repositioned, if this error gets spammed you might want to consider the following: Edit the navmesh or lower the walker amount.") end
     end
-    if self.Stucked and self.StuckAt:Distance(self:GetPos()) > 10 then self.Stucked = nil end --Reset stuck state when moved
-    if !self.IsJumping and self:GetSolidMask() == MASK_NPCSOLID_BRUSHONLY then
+    if self.Stucked && self.StuckAt:Distance(self:GetPos()) > 10 then self.Stucked = nil end --Reset stuck state when moved
+    if !self.IsJumping && self:GetSolidMask() == MASK_NPCSOLID_BRUSHONLY then
         local occupied = false
         for _,ent in pairs(ents.FindInBox(self:GetPos() + Vector( -16, -16, 0 ), self:GetPos() + Vector( 16, 16, 70 ))) do
-            if ent:GetClass() == "npc_walker" and ent != self then occupied = true end
+            if ent:GetClass() == "npc_walker" && ent != self then occupied = true end
         end
         if !occupied then self:SetSolidMask(MASK_NPCSOLID) end
     end
@@ -55,10 +55,10 @@ function ENT:RunBehaviour()
     self:MoveSomeWhere(10000)
     while ( true ) do
         local rand = math.random(1,100)
-        if rand > 0 and rand < 10 then
+        if rand > 0 && rand < 10 then
             self:MoveToSpot( "hiding" )
             coroutine.wait(math.random(1,10))
-        elseif rand > 10 and rand < 15 then
+        elseif rand > 10 && rand < 15 then
             self:Sit()
             coroutine.wait(1)
         else
@@ -77,7 +77,7 @@ function ENT:MoveSomeWhere(distance)
     if !IsValid(nav) then return end
     if nav:IsUnderwater() then return end -- we dont want them to go into water
     local pos = nav:GetRandomPoint()
-    local maxAge = math.Clamp(pos:Distance(self:GetPos())/120, 0.1,10)
+    local maxAge = math.Clamp(pos:Distance(self:GetPos()) / 120, 0.1,10)
     self:MoveToPos( pos, { tolerance = 30, maxage = maxAge, lookahead = 10, repath = 2 })
 end
 

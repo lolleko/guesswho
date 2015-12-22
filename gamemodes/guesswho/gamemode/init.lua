@@ -26,9 +26,6 @@ end
     GAMEMODE HOOKS
 ]]--
 
---Convars
-GM.DamageOnFail = GetConVar( "gw_damageonfailguess" ):GetInt()
-
 --Take Damage if innocent NPC damaged
 function GM:EntityTakeDamage(target, dmginfo)
 
@@ -36,7 +33,7 @@ function GM:EntityTakeDamage(target, dmginfo)
 
     if self:InRound() && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
 
-        attacker:TakeDamage( self.DamageOnFail , target, attacker:GetActiveWeapon())
+        attacker:TakeDamage( GetConVar( "gw_damageonfailguess" ):GetInt() , target, attacker:GetActiveWeapon())
 
     end
 
@@ -56,10 +53,10 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
         if attacker:Team() == TEAM_SEEKING then
             attacker:AddFrags( 1 )
-            if attacker:Health() + self.DamageOnFail * 4 > 100 then
+            if attacker:Health() + GetConVar( "gw_damageonfailguess" ):GetInt() * 4 > 100 then
                 attacker:Health(100)
             else
-                attacker:SetHealth(attacker:Health() + self.DamageOnFail * 2)
+                attacker:SetHealth(attacker:Health() + GetConVar( "gw_damageonfailguess" ):GetInt() * 2)
             end
         end
 
@@ -102,7 +99,7 @@ function GM:OnNPCKilled( ent, attacker, inflictor )
 
             if ent:GetClass() == "npc_walker" then
 
-                attacker:TakeDamage( self.DamageOnFail * 2, ent, attacker:GetActiveWeapon())
+                attacker:TakeDamage( GetConVar( "gw_damageonfailguess" ):GetInt() * 2, ent, attacker:GetActiveWeapon())
 
             end
 

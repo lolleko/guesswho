@@ -91,9 +91,41 @@ function GM:GetSpawnPoints()
 end
 
 function GM:PreGame()
-    timer.Simple( self.PreGameDuration, function() self:PreRoundStart() end)
+    timer.Create( "PreGame.Timer", self.PreGameDuration, 1, function() self:PreRoundStart() end )
     SetGlobalFloat("EndTime", CurTime() + self.PreGameDuration )
     SetGlobalString("RoundState", PRE_GAME)
+    timer.Simple( 1, function() self:MeshController() end )
+end
+
+function GM:MeshController()
+    if navmesh.IsLoaded() then
+        MsgN( "Navmesh loaded waiting for game to start." )
+    else
+        SetGlobalString("RoundState", NAV_GEN)
+        timer.Pause( "PreGame.Timer" )
+        navmesh.BeginGeneration()
+        --force generate
+        if !navmesh.IsGenerating() then
+            self:GetSpawnPoints()
+
+            local tr = util.TraceLine( {
+                start = self.SpawnPoints[1]:GetPos(),
+                endpos = self.SpawnPoints[1]:GetPos() - Vector( 0, 0, 100),
+                filter = self.SpawnPoints[1]
+            } )
+
+            local ent = ents.Create("info_player_start")
+            ent:SetPos( tr.HitPos )
+            ent:Spawn()
+            navmesh.BeginGeneration()
+        end
+
+        if !navmesh.IsGenerating() then
+            PrintMessage( HUD_PRINTCENTER, "Navmesh generation failed, try to reload the map a few times.\nIf it still fails try a diffrent map!" )
+        else
+            timer.Create( "navmesh.gen", 1, 0, function() PrintMessage( HUD_PRINTCENTER, "Generating navmesh, this will take some time!\nUp to 20min (worst case) depending on map size and your system.\nYou will only need to do this once.\nOn auto generated navs the ai pathing will fail a lot.\nUse a custom navmesh if available!" ) end)
+        end
+    end
 end
 
 

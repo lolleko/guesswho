@@ -29,6 +29,7 @@ PRE_ROUND = "Hide"
 IN_ROUND = "Seek"
 POST_ROUND = "Next round soon"
 WAITING = "Waiting for more players"
+NAV_GEN = "Genearating Navmesh!"
 
 function GM:CreateTeams()
 
