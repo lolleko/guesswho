@@ -139,6 +139,7 @@ function ENT:OnContact( ent )
         local phys = ent:GetPhysicsObject()
         if !IsValid(phys) then return end
         phys:ApplyForceCenter( self:GetPos() - ent:GetPos() * 1.2 )
+        DropEntityIfHeld( ent )
     end
     if ent:GetClass() == "func_breakable" or ent:GetClass() == "func_breakable_surf" then
         ent:Fire("Shatter")

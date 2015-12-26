@@ -38,6 +38,7 @@ function GM:ShowTeam()
     if input.LookupBinding( "duck" ) then table.insert( controls, { string.upper( input.LookupBinding( "duck" ) ), "Sit"} ) end
     if input.LookupBinding( "gm_showhelp" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showhelp" ) ), "Help + Settings"} ) end
     if input.LookupBinding( "gm_showteam" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showteam" ) ), "Choose Team"} ) end
+    if input.LookupBinding( "attack2" ) then table.insert( controls, { string.upper( input.LookupBinding( "attack2" ) ), "Ability(Hiding)"} ) end
 
     local controlsOffsetY = 180
 
@@ -45,7 +46,7 @@ function GM:ShowTeam()
         local ControlKey = vgui.Create( "DLabel", self.TeamSelectFrame )
         ControlKey:SetPos( ScrW() / 2 + 340, controlsOffsetY )
         ControlKey:SetSize( 40, 40 )
-        ControlKey:SetFont("robot_small")
+        ControlKey:SetFont("robot_smaller")
         ControlKey:SetText( v[1] )
         ControlKey:SetTextColor( clrs.lightgrey )
         ControlKey:SetContentAlignment( 5 )
@@ -91,7 +92,6 @@ function GM:ShowTeam()
     timer.Simple(dur-0.2,function() if !TeamHidingModel.Entity then return end TeamHidingModel.Entity:SetSequence("idle_all_01") TeamHidingModel.Entity:SetAngles( Angle( 0, 0, 0 ) ) end)
     function TeamHidingModel:LayoutEntity( ent )
         self:RunAnimation()
-        print( ent.santa )
     end
 
     local TeamHidingButton = vgui.Create( "DButton", TeamHidingPanel )

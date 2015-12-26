@@ -36,6 +36,14 @@ surface.CreateFont( "robot_small",
                     antialias = true,
                     shadow = false
             })
+surface.CreateFont( "robot_smaller",
+     {
+                    font    = "Roboto", -- Not file name, font name
+                    size    = 9,
+                    weight  = 400,
+                    antialias = true,
+                    shadow = false
+            })
 
 clrs = {
     red = Color(231,77,60),

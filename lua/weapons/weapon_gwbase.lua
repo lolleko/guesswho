@@ -15,13 +15,15 @@ SWEP.Primary.Automatic      = false
 SWEP.Primary.Ammo           = "none"
 SWEP.Primary.NumShots       = 1
 
-SWEP.Secondary.ClipSize     = -1
-SWEP.Secondary.DefaultClip  = -1
+SWEP.Secondary.ClipSize     = 1
+SWEP.Secondary.DefaultClip  = 1
 SWEP.Secondary.Automatic    = false
-SWEP.Secondary.Ammo         = "none"
+SWEP.Secondary.Ammo         = "ability"
 
 SWEP.ViewModel = ""
 SWEP.WorldModel = ""
+
+SWEP.Cooldown = 30
 
 function SWEP:Initialize()
 
@@ -53,5 +55,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-
+    if ( !self:CanSecondaryAttack() ) then return end
+    self:Ability()
+    self:TakeSecondaryAmmo( 1 )
 end

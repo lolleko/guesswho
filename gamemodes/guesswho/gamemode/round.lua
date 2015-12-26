@@ -4,7 +4,8 @@
 
 --Settings
 
-GM.MaxWalkers = GetConVar( "gw_maxwalkers" ):GetInt()
+GM.BaseWalkers = GetConVar( "gw_basewalkeramount" ):GetInt()
+GM.WalkerPerPly = GetConVar( "gw_walkerperplayer" ):GetInt()
 GM.PreGameDuration = GetConVar( "gw_pregameduration" ):GetInt()
 GM.RoundDuration = GetConVar( "gw_roundduration" ):GetInt()
 GM.HideDuration = GetConVar( "gw_hideduration" ):GetInt()
@@ -151,6 +152,7 @@ function GM:PreRoundStart()
     local wave = 1
 
     self.WalkerCount = 0
+    self.MaxWalkers = self.BaseWalkers + ( #player.GetAll() * self.WalkerPerPly )
 
     if #self.SpawnPoints > self.MaxWalkers then
         self:SpawnNPCWave()

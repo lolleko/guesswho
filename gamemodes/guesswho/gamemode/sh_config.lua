@@ -22,6 +22,12 @@ GM.Models = {
     "models/player/Group01/Female_03.mdl",
 }
 
+GM.Weapons = {
+    "weapon_gw_cloak",
+    "weapon_gw_smoke",
+    "weapon_gw_shrink"
+}
+
 GM.TeamSeekingColor = Color(138, 155, 15)
 GM.TeamHidingColor = Color(23, 89, 150)
 

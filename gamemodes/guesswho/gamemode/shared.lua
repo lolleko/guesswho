@@ -71,3 +71,11 @@ function GM:PlayerShouldTakeDamage( ply, victim )
 
     return true
 end
+
+function GM:ShouldCollide( ent1, ent2 )
+    if ( ent1:IsPlayerHolding() or ent2:IsPlayerHolding() ) and (ent1:GetClass() == "npc_walker" or ent2:GetClass() == "npc_walker" or ( ent1:IsPlayer() and ent1:Team() == TEAM_HIDING ) or( ent2:IsPlayer() and ent2:Team() == TEAM_HIDING )  ) then
+        DropEntityIfHeld( ent1 )
+        DropEntityIfHeld( ent2 )
+    end
+    return true
+end
