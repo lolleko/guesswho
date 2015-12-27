@@ -305,7 +305,8 @@ function GM:SpawnNPCWave()
 end
 
 function GM:UpdateSettings()
-    self.MaxWalkers = GetConVar( "gw_maxwalkers" ):GetInt()
+    self.BaseWalkers = GetConVar( "gw_basewalkeramount" ):GetInt()
+    self.WalkerPerPly = GetConVar( "gw_walkerperplayer" ):GetInt()
     self.PreGameDuration = GetConVar( "gw_pregameduration" ):GetInt()
     self.RoundDuration = GetConVar( "gw_roundduration" ):GetInt()
     self.HideDuration = GetConVar( "gw_hideduration" ):GetInt()
