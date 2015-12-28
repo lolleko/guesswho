@@ -5,7 +5,7 @@ function SWEP:Ability()
     local ply = self.Owner
     timer.Create( "Ability.Effect." .. ply:SteamID(), 5, 1, function() self:OnRemove() end )
     ply:SetRenderMode( RENDERMODE_TRANSALPHA )
-    if SERVER then ply:Fire( "alpha", 15, 0 ) end
+    if SERVER then ply:Fire( "alpha", 10, 0 ) end
 end
 
 function SWEP:OnRemove()
