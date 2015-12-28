@@ -111,7 +111,7 @@ function CHuntHUD()
     if ply:Team() == TEAM_SEEKING then CHHUD:Crosshair() end
 
     --Ammo
-    if #ply:GetWeapons() > 0 then
+    if #ply:GetWeapons() > 0 and ply:GetActiveWeapon() then
         local clipLeft = ply:GetActiveWeapon():Clip1()
         local clipExtra = ply:GetAmmoCount(ply:GetActiveWeapon():GetPrimaryAmmoType())
         local secondaryAmmo = ply:GetAmmoCount(ply:GetActiveWeapon():GetSecondaryAmmoType())

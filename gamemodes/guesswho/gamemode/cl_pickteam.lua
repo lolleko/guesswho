@@ -69,8 +69,8 @@ function GM:ShowTeam()
     end
 
     local HeaderImage = vgui.Create("DImage", self.TeamSelectFrame)
-    HeaderImage:SetSize( 380, 128 )
-    HeaderImage:SetPos( 0, 40 )
+    HeaderImage:SetSize( 285, 96 )
+    HeaderImage:SetPos( 0, 60 )
     HeaderImage:SetImage( "vgui/gw/logo_main.png" )
     HeaderImage:CenterHorizontal()
 
