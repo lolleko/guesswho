@@ -19,7 +19,11 @@ function PLAYER:SetModel()
 end
 
 function PLAYER:Loadout()
-    self.Player:Give( GAMEMODE.Weapons[ math.random( 1, #GAMEMODE.Weapons ) ] )
+    if GetConVar( "gw_abilities_enabled" ):GetBool() then
+        self.Player:Give( GAMEMODE.Weapons[ math.random( 1, #GAMEMODE.Weapons ) ] )
+    else
+        self.Player:Give( "weapon_gw_default" )
+    end
 end
 
 function PLAYER:ShouldDrawLocal() return true end

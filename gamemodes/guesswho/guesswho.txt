@@ -118,5 +118,13 @@
 			"type"		"Numeric"
 			"default"	"1"
 		}
+		15
+		{
+			"name"		"gw_abilities_enabled"
+			"text"		"Wether abilities are on or off.."
+			"help"		"Should hiding have abilities or not."
+			"type"		"CheckBox"
+			"default"	"1"
+		}
 	}
 }
