@@ -32,11 +32,11 @@
 		}
 		4
 		{
-			"name"		"gw_maxwalkers"
-			"text"		"The amount of NPCs"
-			"help"		"The maximum amount of NPCs that spawn in a  round."
+			"name"		"gw_basewalkeramount"
+			"text"		"The base amount of NPCs"
+			"help"		"The base amount (minimum) of NPCs that spawn in a round."
 			"type"		"Numeric"
-			"default"	"25"
+			"default"	"15"
 		}
 		5
 		{
@@ -108,6 +108,14 @@
 			"text"		"Body taunts enabled"
 			"help"		"Sets if body taunts are enabled."
 			"type"		"CheckBox"
+			"default"	"1"
+		}
+		14
+		{
+			"name"		"gw_walkerperplayer"
+			"text"		"The amount of NPCs per player."
+			"help"		"The amount of NPCs to add for each player on the server."
+			"type"		"Numeric"
 			"default"	"1"
 		}
 	}

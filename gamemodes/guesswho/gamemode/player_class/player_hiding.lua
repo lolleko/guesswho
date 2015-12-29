@@ -19,7 +19,7 @@ function PLAYER:SetModel()
 end
 
 function PLAYER:Loadout()
-    self.Player:Give( "weapon_destroy" )
+    self.Player:Give( GAMEMODE.Weapons[ math.random( 1, #GAMEMODE.Weapons ) ] )
 end
 
 function PLAYER:ShouldDrawLocal() return true end

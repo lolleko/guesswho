@@ -82,7 +82,7 @@ function CHuntHUD()
     --Health
     local health = ply:Health()
 
-    if ply:Team() != TEAM_SPECTATOR and health > 0 then
+    if ( ply:Team() != TEAM_SPECTATOR or ply:Team() != TEAM_UNASSIGNED ) and health > 0 then
         CHHUD:DrawPanel( 20, ScrH() - 80, 100, 60, {background = clrs.darkgreybg})
         CHHUD:DrawPanel( 20, ScrH() - 25, 100, 5, {background = teamColor})
         CHHUD:DrawText( 70 - (CHHUD:TextSize(health, "robot_large") / 2), ScrH() - 75, health, "robot_large", clrs.white )
@@ -99,29 +99,36 @@ function CHuntHUD()
         CHHUD.HeadModel:SetModel( ply:GetModel() )
         function CHHUD.HeadModel.Entity:GetPlayerColor() return LocalPlayer():GetPlayerColor() end
 
-        local headpos = CHHUD.HeadModel.Entity:GetBonePosition( CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
-        if headpos then
-            CHHUD.HeadModel:SetLookAt( headpos )
-            CHHUD.HeadModel:SetCamPos( headpos-Vector( -15, 0, 0 ) )
+        if CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) then
+            local headpos = CHHUD.HeadModel.Entity:GetBonePosition( CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
+            if headpos then
+                CHHUD.HeadModel:SetLookAt( headpos )
+                CHHUD.HeadModel:SetCamPos( headpos-Vector( -15, 0, 0 ) )
+            end
         end
     end
 
     if ply:Team() == TEAM_SEEKING then CHHUD:Crosshair() end
 
     --Ammo
-    if #ply:GetWeapons() > 0 then
+    if #ply:GetWeapons() > 0 and ply:GetActiveWeapon() then
         local clipLeft = ply:GetActiveWeapon():Clip1()
         local clipExtra = ply:GetAmmoCount(ply:GetActiveWeapon():GetPrimaryAmmoType())
         local secondaryAmmo = ply:GetAmmoCount(ply:GetActiveWeapon():GetSecondaryAmmoType())
 
         if clipLeft != -1 then
-                CHHUD:DrawPanel( ScrW() - 220, ScrH() - 80, 200, 60, {background = clrs.darkgreybg})
-                CHHUD:DrawPanel( ScrW() - 220, ScrH() - 25, 200, 5, {background = teamColor})
-                CHHUD:DrawText( ScrW() - 120 - (CHHUD:TextSize(clipLeft.. "/" .. clipExtra, "robot_large") / 2), ScrH() - 75, clipLeft .. "/" .. clipExtra, "robot_large", clrs.white )
+            CHHUD:DrawPanel( ScrW() - 220, ScrH() - 80, 200, 60, {background = clrs.darkgreybg})
+            CHHUD:DrawPanel( ScrW() - 220, ScrH() - 25, 200, 5, {background = teamColor})
+            CHHUD:DrawText( ScrW() - 120 - (CHHUD:TextSize(clipLeft.. "/" .. clipExtra, "robot_large") / 2), ScrH() - 75, clipLeft .. "/" .. clipExtra, "robot_large", clrs.white )
         end
         if secondaryAmmo > 0 then
             CHHUD:DrawPanel( ScrW() - 310, ScrH() - 40, 80, 20, {background = teamColor})
-             CHHUD:DrawText( ScrW() - 305, ScrH() - 38, "Nuke ready!", "robot_small", clrs.white )
+            CHHUD:DrawText( ScrW() - 305, ScrH() - 38, "Nuke ready!", "robot_small", clrs.white )
+        end
+
+        if ply:Team() == TEAM_HIDING and ply:GetActiveWeapon():Clip2() > 0 then
+            CHHUD:DrawPanel( ScrW() - 220, ScrH() - 40, 200, 20, {background = teamColor})
+            CHHUD:DrawText( ScrW() - ( 120 + CHHUD:TextSize( ply:GetActiveWeapon().Name, "robot_small" ) / 2 ), ScrH() - 38, ply:GetActiveWeapon().Name, "robot_small", clrs.white )
         end
     end
 end

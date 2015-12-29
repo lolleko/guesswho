@@ -36,6 +36,14 @@ surface.CreateFont( "robot_small",
                     antialias = true,
                     shadow = false
             })
+surface.CreateFont( "robot_smaller",
+     {
+                    font    = "Roboto", -- Not file name, font name
+                    size    = 9,
+                    weight  = 400,
+                    antialias = true,
+                    shadow = false
+            })
 
 clrs = {
     red = Color(231,77,60),
@@ -104,11 +112,11 @@ function GM:CalcView(ply, pos, angles, fov)
 
         local dist = 100
 
-        local trace = {}
-        trace.start = pos
-        trace.endpos = pos - ( angles:Forward() * dist )
-        trace.filter = LocalPlayer()
-        local trace = util.TraceLine( trace )
+        local tr = {}
+        tr.start = pos
+        tr.endpos = pos - ( angles:Forward() * dist )
+        tr.filter = LocalPlayer()
+        local trace = util.TraceLine( tr )
         if trace.HitPos:Distance( pos ) < dist - 10 then
             dist = trace.HitPos:Distance( pos ) - 10;
         end
