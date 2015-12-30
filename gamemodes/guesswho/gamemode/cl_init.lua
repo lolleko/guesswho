@@ -1,6 +1,8 @@
 --settings client cvars
 CreateClientConVar( "gw_hud_showhead", "1", true, false )
 
+language.Add( "npc_walker", "an NPC" )
+
 --Colors + fonts
 surface.CreateFont( "robot_medium",
      {
