@@ -36,7 +36,7 @@ function GM:PlayerDeathThink( ply )
     if ( ply.NextSpawnTime and ply.NextSpawnTime > CurTime() ) then return end
 
     --give hiders a 2nd chance if they died in prep
-    if ply:Team() == TEAM_HIDING and GAMEMODE:GetRoundState() == PRE_ROUND then
+    if ply:Team() == TEAM_HIDING and GAMEMODE:GetRoundState() == ROUND_HIDE then
         ply:Spawn()
     end
 

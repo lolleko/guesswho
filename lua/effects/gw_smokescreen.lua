@@ -7,10 +7,10 @@ function EFFECT:Init( data )
 	local pos = data:GetEntity():GetPos() + Vector( 0, 0, 10 )
 
 	local em = ParticleEmitter( pos )
-		for i=0, 75 do
+		for i=0, 100 do
 			local p = em:Add( table.Random( self.Mat ), pos )
 			if p then
-		        local gray = math.random(30, 70)
+		        local gray = math.random(20, 50)
 		        p:SetColor(gray, gray, gray)
 		        p:SetStartAlpha(255)
 		        p:SetEndAlpha(255)

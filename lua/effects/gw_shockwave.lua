@@ -22,7 +22,7 @@ function EFFECT:Think()
 
     self:SetPos( self.Entity:GetPos() )
     self.Center = self.Entity:OBBCenter()
-    if self.Radius < 200 then self.Radius = self.Radius + 30 end
+    if self.Radius < 300 then self.Radius = self.Radius + 40 end
 
 	return ( CurTime() < self.EndTime )
 

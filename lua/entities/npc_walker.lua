@@ -87,7 +87,7 @@ function ENT:MoveToSpot( type )
         local nav = navmesh.GetNavArea(pos, 20)
         if !IsValid(nav) then return end
         if !nav:IsUnderwater() then
-            self.loco:SetDesiredSpeed( 230 )
+            self.loco:SetDesiredSpeed( 200 )
             self:MoveToPos( pos, { tolerance = 30, lookahead = 10, repath = 2 } )
         end
     end
@@ -148,7 +148,7 @@ end
 
 function ENT:OnLandOnGround( ent )
     self.IsJumping = false
-    if self:GetLastAct() == ACT_HL2MP_RUN then self.loco:SetDesiredSpeed(230) self.loco:SetAcceleration(400) else self.loco:SetDesiredSpeed(100) self.loco:SetAcceleration(400) end
+    if self:GetLastAct() == ACT_HL2MP_RUN then self.loco:SetDesiredSpeed(200) self.loco:SetAcceleration(400) else self.loco:SetDesiredSpeed(100) self.loco:SetAcceleration(400) end
 end
 
 function ENT:OnLeaveGround( ent )

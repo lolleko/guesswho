@@ -2,8 +2,8 @@ DEFINE_BASECLASS( "player_default" )
 
 local PLAYER = {}
 
-PLAYER.WalkSpeed            = 180
-PLAYER.RunSpeed             = 265
+PLAYER.WalkSpeed            = 160
+PLAYER.RunSpeed             = 260
 PLAYER.JumpPower            = 200
 PLAYER.CanUseFlashlight     = true
 
