@@ -2,14 +2,26 @@ DEFINE_BASECLASS( "player_default" )
 
 local PLAYER = {}
 
-PLAYER.WalkSpeed            = 200
-PLAYER.RunSpeed             = 300
+PLAYER.WalkSpeed            = 180
+PLAYER.RunSpeed             = 265
 PLAYER.JumpPower            = 200
 PLAYER.CanUseFlashlight     = true
 
 function PLAYER:SetModel()
-    util.PrecacheModel( "models/player/combine_super_soldier.mdl" )
-    self.Player:SetModel("models/player/combine_super_soldier.mdl" )
+
+    local model = "models/player/combine_super_soldier.mdl"
+
+    if GetConVar( "gw_disguise_seeker" ):GetBool() then
+        local models = GAMEMODE.Models
+
+        local rand = math.random(1,#models)
+
+        model = models[rand]
+    end
+
+    util.PrecacheModel( model )
+    self.Player:SetModel( model )
+
 end
 
 function PLAYER:Loadout()
@@ -20,12 +32,5 @@ function PLAYER:Loadout()
     self.Player:GiveAmmo( 20, "357", true )
     self.Player:Give( "weapon_crowbar" )
 end
-
-function PLAYER:GetHandsModel()
-
-    return { model = "models/weapons/c_arms_combine.mdl", skin = 1, body = "0100000" }
-
-end
-
 
 player_manager.RegisterClass( "player_seeker", PLAYER, "player_default" )

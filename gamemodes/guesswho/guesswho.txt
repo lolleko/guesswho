@@ -121,10 +121,18 @@
 		15
 		{
 			"name"		"gw_abilities_enabled"
-			"text"		"Wether abilities are on or off.."
+			"text"		"Enable abilities"
 			"help"		"Should hiding have abilities or not."
 			"type"		"CheckBox"
 			"default"	"1"
+		}
+		16
+		{
+			"name"		"gw_disguise_seeker"
+			"text"		"Disguise seekers"
+			"help"		"Wether seekers should have NPC models or not."
+			"type"		"CheckBox"
+			"default"	"0"
 		}
 	}
 }

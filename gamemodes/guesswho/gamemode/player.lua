@@ -2,7 +2,7 @@ function GM:PlayerDeathThink( ply )
 
     local spectargets = team.GetPlayers( ply:Team() )
 
-    if GAMEMODE:InRound() then
+    if GAMEMODE:GetRoundState() == ROUND_SEEK then
         if !ply.SpecID then
             ply:Spectate(OBS_MODE_CHASE)
             if spectargets != nil then
@@ -156,6 +156,28 @@ function GM:PlayerSpawn( pl )
 
 end
 
+function GM:PlayerSetModel( pl )
+
+	player_manager.RunClass( pl, "SetModel" )
+
+end
+
+function GM:PlayerSetHandsModel( pl, ent )
+
+	local info = player_manager.RunClass( pl, "GetHandsModel" )
+	if ( !info ) then
+		local playermodel = player_manager.TranslateToPlayerModelName( pl:GetModel() )
+		info = player_manager.TranslatePlayerHands( playermodel )
+	end
+
+	if ( info ) then
+		ent:SetModel( info.model )
+		ent:SetSkin( info.skin )
+		ent:SetBodyGroups( info.body )
+	end
+
+end
+
 function GM:OnPlayerChangedTeam( ply, oldteam, newteam )
 
     -- Here's an immediate respawn thing by default. If you want to
@@ -172,6 +194,14 @@ function GM:OnPlayerChangedTeam( ply, oldteam, newteam )
 
         -- If we're changing from spectator, join the game
         --disabled ply:Spawn()
+
+    elseif newteam == TEAM_SEEKING then
+
+        player_manager.SetPlayerClass( ply, "player_seeker")
+
+    elseif newteam == TEAM_HIDING then
+
+        player_manager.SetPlayerClass( ply, "player_hiding")
 
     else
 
@@ -274,6 +304,6 @@ function GM:PlayerInitialSpawn( pl )
     end
 
     --sync endtime with clients that connected
-    SetGlobalFloat("EndTime", GetGlobalFloat("EndTime", 0))
+    self:SendRoundState( self:GetRoundState(), pl )
 
 end

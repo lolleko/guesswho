@@ -31,6 +31,15 @@ POST_ROUND = "Next round soon"
 WAITING = "Waiting for more players"
 NAV_GEN = "Genearating Navmesh!"
 
+ROUND_PRE_GAME = 1
+ROUND_WAITING_PLAYERS = 2
+ROUND_CREATING = 3
+ROUND_HIDE = 4
+ROUND_SEEK = 5
+ROUND_POST = 6
+ROUND_NAV_GEN = 9
+
+
 function GM:CreateTeams()
 
     team.SetUp( TEAM_HIDING, "Hiding", self.TeamHidingColor )
@@ -52,14 +61,6 @@ function GM:CreateTeams()
     team.SetSpawnPoint( TEAM_SEEKING, "info_player_terrorist" )
 
     team.SetSpawnPoint( TEAM_SPECTATOR, "worldspawn" )
-end
-
-function GM:GetRoundState()
-    return GetGlobalString("RoundState", IN_ROUND)
-end
-
-function GM:InRound()
-    return GetGlobalString("RoundState", IN_ROUND) == IN_ROUND
 end
 
 function GM:PlayerShouldTakeDamage( ply, victim )

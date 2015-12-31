@@ -11,8 +11,10 @@ AddCSLuaFile( "cl_pickteam.lua" )
 AddCSLuaFile( "cl_scoreboard.lua" )
 AddCSLuaFile( "cl_settings.lua")
 AddCSLuaFile( "cl_acts.lua")
+AddCSLuaFile( "cl_round.lua")
 include( "shared.lua" )
 include( "player.lua" )
+include( "player_ext.lua" )
 include( "round.lua" )
 
 --resources
@@ -21,6 +23,9 @@ resource.AddFile( "materials/vgui/gw/logo_main.png" )
 for _,sound in pairs(file.Find( "sound/gwtaunts/*", "GAME" )) do
     resource.AddFile("sound/gwtaunts/" .. sound)
 end
+
+--NETWORK STRINGS
+util.AddNetworkString( "gwRoundState" )
 
 --[[
     GAMEMODE HOOKS
@@ -31,7 +36,7 @@ function GM:EntityTakeDamage(target, dmginfo)
 
     attacker = dmginfo:GetAttacker()
 
-    if self:InRound() && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
+    if self:GetRoundState() == ROUND_SEEK && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
 
         attacker:TakeDamage( GetConVar( "gw_damageonfailguess" ):GetInt() , target, attacker:GetActiveWeapon())
 

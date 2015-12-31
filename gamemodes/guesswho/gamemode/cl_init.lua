@@ -68,6 +68,7 @@ include( "cl_pickteam.lua")
 include( "cl_scoreboard.lua")
 include( "cl_settings.lua")
 include( "cl_acts.lua")
+include( "cl_round.lua" )
 
 --Thirdpersoon + blinding
 function GM:CalcView(ply, pos, angles, fov)
@@ -124,7 +125,7 @@ function GM:CalcView(ply, pos, angles, fov)
         view.origin = pos - ( angles:Forward() * dist )
         view.drawviewer = true
 
-    elseif ply:Team() == TEAM_SEEKING and !self:InRound() then -- blind seekers
+    elseif ply:Team() == TEAM_SEEKING and self:GetRoundState() == ROUND_HIDE then -- blind seekers
         view.origin = Vector(20000, 0, 0)
         view.angles = Angle(0, 0, 0)
     end
