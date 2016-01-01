@@ -19,7 +19,6 @@ function SWEP:Ability()
     }
 
     local model = models[ math.random( 1, #models ) ]
-    print( model )
 
     local prop = ents.Create( "prop_physics" )
     if ( !IsValid( prop ) ) then return end
