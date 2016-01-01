@@ -27,7 +27,7 @@ function GM:RoundStateChange( old, new )
     elseif ROUND_NAV_GEN == new then
         self:SetRoundLabel( "Generating Navmesh" )
     else
-
+        self:SetRoundLabel( "ERROR!" )
     end
 
 end

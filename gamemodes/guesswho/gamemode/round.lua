@@ -211,7 +211,7 @@ end
 
 function GM:MeshController()
     if navmesh.IsLoaded() then
-        MsgN( "Navmesh loaded waiting for game to start." )
+        MsgN( "GW Navmesh loaded waiting for game to start." )
     else
         self:SetRoundState( ROUND_NAV_GEN )
         timer.Pause( "gwPreGameTimer" )
@@ -233,7 +233,7 @@ function GM:MeshController()
         end
 
         if !navmesh.IsGenerating() then
-            PrintMessage( HUD_PRINTCENTER, "Navmesh generation failed, try to reload the map a few times.\nIf it still fails try a diffrent map!" )
+            PrintMessage( HUD_PRINTCENTER, " GW Navmesh generation failed, try to reload the map a few times.\nIf it still fails try a diffrent map!" )
         else
             timer.Create( "gwNavmeshGen", 1, 0, function() PrintMessage( HUD_PRINTCENTER, "Generating navmesh, this will take some time!\nUp to 20min (worst case) depending on map size and your system.\nYou will only need to do this once.\nOn auto generated navs the ai pathing will fail a lot.\nUse a custom navmesh if available!" ) end)
         end
