@@ -58,11 +58,12 @@ function SWEP:Ability()
         spd = 200
     end
 
+    ply:SetRenderMode(RENDERMODE_NONE)
+    ply:SetModel( tempEnt:GetModel() )
+
     ply:SetHull(Vector(-xy, -xy, 0), Vector(xy, xy, z))
     ply:SetHullDuck(Vector(-xy, -xy, 0), Vector(xy, xy, z))
 
-    ply:SetRenderMode(RENDERMODE_NONE)
-    ply:SetModel( tempEnt:GetModel() )
     ply:SetNoDraw(false)
     ply:DrawShadow(false)
 	ply:SetHealth( health )
@@ -80,7 +81,7 @@ function SWEP:OnRemove()
     ply:ResetHull()
     ply:SetRunSpeed( 200 )
     ply:SetWalkSpeed( 100 )
-    ply:SetModel( GAMEMODE.Models[ math.random( 1, #GAMEMODE.Models ) ] )
+    if SERVER then player_manager.RunClass( ply, "SetModel" ) end
     ply:SetRenderMode(RENDERMODE_NORMAL)
     ply:DrawShadow(true)
 
