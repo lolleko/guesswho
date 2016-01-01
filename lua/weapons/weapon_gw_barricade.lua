@@ -3,9 +3,11 @@ SWEP.Name = "Barricade"
 
 function SWEP:Ability()
 
+    if CLIENT then return end
+
     local trace = self.Owner:GetEyeTrace()
 
-    if !trace.Hit then return false end
+    if !trace.Hit then return end
 
     local models = {
         "models/props_c17/furnituretoilet001a.mdl",

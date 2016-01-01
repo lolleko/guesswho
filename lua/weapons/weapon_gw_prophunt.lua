@@ -3,6 +3,9 @@ SWEP.Name = "Prophunt"
 
 function SWEP:Ability()
     timer.Create( "Ability.Effect." .. self.Owner:SteamID(), 7, 1, function() self:OnRemove() end )
+
+    if CLIENT then return end
+
 	local health = 10
 	local volume = 1
     local ply = self.Owner
@@ -26,10 +29,8 @@ function SWEP:Ability()
     tempEnt:SetModel( model )
     tempEnt:Spawn()
     tempEnt:SetParent( ply )
-    if SERVER then
-        tempEnt:SetMoveType( MOVETYPE_NONE )
-		tempEnt:SetSolid( SOLID_NONE )
-    end
+    tempEnt:SetMoveType( MOVETYPE_NONE )
+	tempEnt:SetSolid( SOLID_NONE )
     tempEnt:SetPos( ply:GetPos() + Vector( 0, 0, 70 ) )
     tempEnt:DropToFloor()
 

@@ -10,13 +10,13 @@ function SWEP:Ability()
     effectdata:SetEntity( ply )
     effectdata:SetRadius( 10 )
 
-    util.Effect( "gw_shockwave", effectdata, true, true )
+    if IsFirstTimePredicted() then util.Effect( "gw_shockwave", effectdata, true, true ) end
     for _,v in pairs( player.GetAll() ) do
         if v:GetPos():Distance( ply:GetPos() ) < 300 and v:Team() == TEAM_SEEKING then
             local effect = EffectData()
             effect:SetEntity( v )
             effect:SetMagnitude( stunDur )
-            util.Effect( "gw_stunned", effect, true, true )
+            if IsFirstTimePredicted() then util.Effect( "gw_stunned", effect, true, true ) end
             if SERVER then v:ApplyStun( stunDur ) end
         end
     end

@@ -27,7 +27,7 @@ GM.Weapons = {
     "weapon_gw_barricade",
     "weapon_gw_shockwave",
     "weapon_gw_cloak",
-    "weapon_gw_smoke",
+    --"weapon_gw_smoke",
     "weapon_gw_shrink"
 }
 
