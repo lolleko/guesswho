@@ -152,30 +152,31 @@ vgui.Register("DTeamPanel", TEAMPANEL, "DIconLayout")
 local PLAYERINFO = {}
 
 function PLAYERINFO:Init()
-    self:SetSize( 470, 64 )
+    self:SetSize( 470, 32 )
 
     self.AvatarButton = vgui.Create("DButton", self)
-    self.AvatarButton:SetSize( 64, 64 )
+    self.AvatarButton:SetSize( 32, 64 )
     self.AvatarButton.DoClick = function() self.Player:ShowProfile() end
 
     self.Avatar = vgui.Create( "AvatarImage", self.AvatarButton )
-    self.Avatar:SetSize( 64, 64 )
+    self.Avatar:SetSize( 32, 32 )
     self.Avatar:SetMouseInputEnabled( false )
 
     self.Name = vgui.Create( "DLabel" , self )
-    self.Name:SetPos( 68, 8)
-    self.Name:SetFont( "robot_large" )
+    self.Name:SetPos( 68, 0)
+    self.Name:SetFont( "robot_normal" )
     self.Name:SetTextColor( clrs.darkgrey )
-    self.Name:SetSize( 320, 48 )
+    self.Name:SetSize( 320, 32 )
 
     self.Score = vgui.Create( "DLabel" , self )
-    self.Score:SetPos( 410, 8)
+    self.Score:SetPos( 410, 4)
     self.Score:SetSize( 60, 48 )
-    self.Score:SetFont( "robot_large" )
+    self.Score:SetFont( "robot_normal" )
     self.Score:SetTextColor( clrs.darkgrey )
 
     self.Mute = self:Add( "DImageButton" )
     self.Mute:SetSize( 24, 24 )
+	self.Mute:SetPos( self.Avatar:GetWide() + 8, 4 )
 end
 
 function PLAYERINFO:Paint( w, h)
