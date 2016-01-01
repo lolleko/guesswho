@@ -23,6 +23,9 @@ GM.Models = {
 }
 
 GM.Weapons = {
+    "weapon_gw_prophunt",
+    "weapon_gw_barricade",
+    "weapon_gw_shockwave",
     "weapon_gw_cloak",
     --"weapon_gw_smoke",
     "weapon_gw_shrink"
@@ -37,7 +40,7 @@ GM.WalkerColors = {
     Color(50, 50, 50), -- white /lightgrey
     Color(139, 115, 85), --Brown
     Color(241, 169, 101), --bright orange
-    Color(105, 139, 34), --olive
+    Color(75, 97, 34), --olive
     Color(157, 107, 0), --gold
     Color(159, 205, 234 ), --light blue
     Color(94, 25, 34) --dark red
