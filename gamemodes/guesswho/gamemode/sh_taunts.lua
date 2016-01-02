@@ -14,6 +14,7 @@ if SERVER then
             local sound = args[1] .. ".mp3"
             if !table.HasValue(sounds, sound) then ply:ChatPrint("Not a valid Guess Who taunt.") return end
             ply:EmitSound( Sound( "gwtaunts/" .. sound ))
+            ply:ChatPrint("Playing taunt: " .. args[1])
             ply.voicetauntcd = CurTime() + GetConVar( "gw_taunt_voice_cooldown" ):GetInt()
         end
     end
