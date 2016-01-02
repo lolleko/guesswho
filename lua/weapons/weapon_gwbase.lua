@@ -1,6 +1,7 @@
 AddCSLuaFile()
 
 SWEP.Base = "weapon_base"
+SWEP.Name = "NONAME"
 
 SWEP.Spawnable          = false
 SWEP.ViewModelFOV       = 54
