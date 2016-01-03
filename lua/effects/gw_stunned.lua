@@ -8,7 +8,11 @@ function EFFECT:Init( data )
 
 	self.Entity = data:GetEntity()
     self.EndTime = CurTime() + data:GetMagnitude()
-    self:SetPos( self.Entity:GetBonePosition( self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) ) )
+	if self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) then
+    	self:SetPos( self.Entity:GetBonePosition( self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) ) )
+	else
+		self:SetPos( self.Entity:GetPos() + Vector( 0, 0, 70 ) )
+	end
 
 
 end
@@ -18,7 +22,11 @@ end
 -----------------------------------------------------------]]
 function EFFECT:Think()
 
-    self:SetPos( self.Entity:GetBonePosition( self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) ) )
+	if self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) then
+		self:SetPos( self.Entity:GetBonePosition( self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) ) )
+	else
+		self:SetPos( self.Entity:GetPos() + Vector( 0, 0, 70 ) )
+	end
 
 	return ( CurTime() < self.EndTime )
 
