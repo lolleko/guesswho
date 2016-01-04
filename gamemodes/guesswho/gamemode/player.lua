@@ -280,6 +280,20 @@ function GM:ShowHelp(ply)
     end
 end
 
+function GM:ShowSpare2( ply)
+  if IsValid(ply) then
+
+    local taunt = file.Find("sound/gwtaunts/*.mp3", "GAME")
+    local randomNumber = math.random(1, table.Count(taunt))
+
+    tauntName = string.Explode(".mp3",tostring(taunt[randomNumber]))
+
+    ply:ConCommand("gw_voicetaunt " .. tauntName[1])
+
+  end
+end
+
+
 function GM:PlayerCanSeePlayersChat( text, teamonly, listenply, speakply )
 
     if ( teamonly ) then

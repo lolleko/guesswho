@@ -4,7 +4,7 @@ if SERVER then
             if !GetConVar( "gw_taunt_voice_enabled" ):GetBool() then ply:ChatPrint("Voice taunts are not enabled on this server.") return end
             if !GetConVar( "gw_taunt_voice_seeker_enabled" ):GetBool() and ply:IsSeeking() then ply:ChatPrint("Voice taunts connot be used by seekers on this server.") return end
             if !ply.voicetauntcd then ply.voicetauntcd = CurTime() end
-            if !ply:Alive() then ply:ChatPrint("You can't do that while dead.") return end
+            if !ply:Alive() then ply:ChatPrint("You can't taunt while dead.") return end
             if ply.voicetauntcd > CurTime() then
                 ply:ChatPrint("Wait " .. math.Round(ply.voicetauntcd - CurTime(), 1) .. " seconds before using that again.")
                 return
@@ -14,6 +14,7 @@ if SERVER then
             local sound = args[1] .. ".mp3"
             if !table.HasValue(sounds, sound) then ply:ChatPrint("Not a valid Guess Who taunt.") return end
             ply:EmitSound( Sound( "gwtaunts/" .. sound ))
+            ply:ChatPrint("Playing taunt: " .. args[1])
             ply.voicetauntcd = CurTime() + GetConVar( "gw_taunt_voice_cooldown" ):GetInt()
         end
     end
