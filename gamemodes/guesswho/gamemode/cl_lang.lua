@@ -1,6 +1,6 @@
 require( "gwlang" )
 
-for _,locale in pairs( file.Find( "gamemodes/guesswho/gamemode/lang/*", "GAME" ) ) do
+for _,locale in pairs( file.Find( "guesswho/gamemode/lang/*", "LUA" ) ) do
     include( "lang/" .. locale )
 end
 
