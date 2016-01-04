@@ -33,19 +33,19 @@ function GM:ShowTeam()
     end
 
     local controls = {}
-
-    if input.LookupBinding( "menu" ) && input.LookupBinding( "menu_context" ) then table.insert( controls, { string.upper( input.LookupBinding( "menu" ) ) .. "+" .. string.upper( input.LookupBinding( "menu_context" ) ), "Body Taunts"} ) end
     if input.LookupBinding( "duck" ) then table.insert( controls, { string.upper( input.LookupBinding( "duck" ) ), "Sit"} ) end
+    if input.LookupBinding( "attack2" ) then table.insert( controls, { string.upper( input.LookupBinding( "attack2" ) ), "Ability(Hiding)"} ) end
     if input.LookupBinding( "gm_showhelp" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showhelp" ) ), "Help + Settings"} ) end
     if input.LookupBinding( "gm_showteam" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showteam" ) ), "Choose Team"} ) end
-    if input.LookupBinding( "attack2" ) then table.insert( controls, { string.upper( input.LookupBinding( "attack2" ) ), "Ability(Hiding)"} ) end
+    if input.LookupBinding( "menu" ) && input.LookupBinding( "menu_context" ) then table.insert( controls, { string.upper( input.LookupBinding( "menu" ) ) .. " and " .. string.upper( input.LookupBinding( "menu_context" ) ), "Body Taunts"} ) end
+    if input.LookupBinding( "gm_showspare2" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showspare2" ) ), "Random Voice Taunt"} ) end
 
     local controlsOffsetY = 180
 
     for _, v in pairs( controls ) do
         local ControlKey = vgui.Create( "DLabel", self.TeamSelectFrame )
         ControlKey:SetPos( ScrW() / 2 + 340, controlsOffsetY )
-        ControlKey:SetSize( 40, 40 )
+        ControlKey:SetSize( 80, 40 )
         ControlKey:SetFont("robot_smaller")
         ControlKey:SetText( v[1] )
         ControlKey:SetTextColor( clrs.lightgrey )
@@ -55,7 +55,7 @@ function GM:ShowTeam()
         end
 
         local ControlDesc = vgui.Create( "DLabel", self.TeamSelectFrame )
-        ControlDesc:SetPos( ScrW() / 2 + 380, controlsOffsetY )
+        ControlDesc:SetPos( ScrW() / 2 + 420, controlsOffsetY )
         ControlDesc:SetSize( 160, 40 )
         ControlDesc:SetFont("robot_small")
         ControlDesc:SetText( v[2] )

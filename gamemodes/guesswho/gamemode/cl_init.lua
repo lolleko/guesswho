@@ -41,7 +41,7 @@ surface.CreateFont( "robot_small",
 surface.CreateFont( "robot_smaller",
      {
                     font    = "Roboto", -- Not file name, font name
-                    size    = 9,
+                    size    = 12,
                     weight  = 400,
                     antialias = true,
                     shadow = false
