@@ -1,5 +1,3 @@
-AddCSLuaFile()
-
 local table = table
 
 module( "gwlang" )
