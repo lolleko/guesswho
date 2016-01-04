@@ -6,7 +6,7 @@ AddCSLuaFile( "player_class/player_seeker.lua")
 AddCSLuaFile( "sh_animations.lua")
 AddCSLuaFile( "sh_config.lua")
 AddCSLuaFile( "sh_taunts.lua")
-AddCSLuaFile( "includes/modules/gwlang.lua")
+AddCSLuaFile( "modules/gwlang.lua")
 AddCSLuaFile( "cl_lang.lua" )
 --translations
 for _,locale in pairs( file.Find( "gamemodes/guesswho/gamemode/lang/*", "GAME" ) ) do
