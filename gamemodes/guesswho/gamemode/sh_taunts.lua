@@ -6,7 +6,7 @@ if SERVER then
             if !ply.voicetauntcd then ply.voicetauntcd = CurTime() end
             if !ply:Alive() then ply:ChatPrint("You can't taunt while dead.") return end
             if ply.voicetauntcd > CurTime() then
-                ply:ChatPrint("Wait " .. math.Round(ply.voicetauntcd - CurTime(), 1) .. " seconds before using that again.")
+                ply:ChatPrint("Wait " .. math.Round(ply.voicetauntcd - CurTime(), 1) .. " seconds before you can taunt again.")
                 return
             end
             if args[1] == nil then return end

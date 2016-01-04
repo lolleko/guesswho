@@ -83,14 +83,19 @@ function CHuntHUD()
     --Health
     local health = ply:Health()
 
-    if ( ply:Team() != TEAM_SPECTATOR or ply:Team() != TEAM_UNASSIGNED ) and health > 0 then
+    if ply:Alive() and ( ply:IsHiding() or ply:IsSeeking() ) and health > 0 then
+
         CHHUD:DrawPanel( 20, ScrH() - 80, 100, 60, {background = clrs.darkgreybg})
         CHHUD:DrawPanel( 20, ScrH() - 25, 100, 5, {background = teamColor})
         CHHUD:DrawText( 70 - (CHHUD:TextSize(health, "robot_large") / 2), ScrH() - 75, health, "robot_large", clrs.white )
+
     end
+
     if (GetConVar("gw_hud_showhead"):GetInt() == 0 or ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_UNASSIGNED or !ply:Alive()) and CHHUD.HeadModel then
+
         CHHUD.HeadModel:Remove()
         CHHUD.HeadModel = nil
+
     elseif GetConVar("gw_hud_showhead"):GetInt() == 1 and (ply:Team() == TEAM_HIDING or ply:Team() == TEAM_SEEKING) and ply:Alive() then
 
         if !CHHUD.HeadModel then
