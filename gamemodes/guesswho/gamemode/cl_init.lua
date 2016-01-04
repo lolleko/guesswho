@@ -1,5 +1,6 @@
 --settings client cvars
 CreateClientConVar( "gw_hud_showhead", "1", true, false )
+CreateClientConVar( "gw_language", "auto", true, false )
 
 language.Add( "npc_walker", "an NPC" )
 
@@ -64,6 +65,7 @@ clrs = {
 }
 
 --includes
+include( "cl_lang.lua" )
 include( "shared.lua" )
 include( "cl_hud.lua" )
 include( "cl_pickteam.lua")

@@ -11,10 +11,10 @@ function GM:ShowTeam()
     self.TeamSelectFrame:SetPos(0,0)
     self.TeamSelectFrame:SetSize( ScrW(), ScrH() )
 
-    local links = { {"Workshop Page", "http://steamcommunity.com/sharedfiles/filedetails/?id=480998235"},
-                    {"Changelog", "http://steamcommunity.com/sharedfiles/filedetails/changelog/480998235"},
-                    {"Submit a Bug", "http://steamcommunity.com/workshop/filedetails/discussion/480998235/523897653307060068/"},
-                    {"Contact", "http://steamcommunity.com/id/lolleko/"} }
+    local links = { { gwlang.translate( "teamselect_workshop_ref" ), "http://steamcommunity.com/sharedfiles/filedetails/?id=480998235" },
+                    { gwlang.translate( "teamselect_workshop_changelog" ), "http://steamcommunity.com/sharedfiles/filedetails/changelog/480998235" },
+                    { gwlang.translate( "teamselect_workshop_bug" ), "http://steamcommunity.com/workshop/filedetails/discussion/480998235/523897653307060068/" },
+                    { gwlang.translate( "teamselect_workshop_contact" ), "http://steamcommunity.com/id/lolleko/" } }
 
     local linkOffsetY = 180
 
@@ -33,12 +33,12 @@ function GM:ShowTeam()
     end
 
     local controls = {}
-    if input.LookupBinding( "duck" ) then table.insert( controls, { string.upper( input.LookupBinding( "duck" ) ), "Sit"} ) end
-    if input.LookupBinding( "attack2" ) then table.insert( controls, { string.upper( input.LookupBinding( "attack2" ) ), "Ability(Hiding)"} ) end
-    if input.LookupBinding( "gm_showhelp" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showhelp" ) ), "Help + Settings"} ) end
-    if input.LookupBinding( "gm_showteam" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showteam" ) ), "Choose Team"} ) end
-    if input.LookupBinding( "menu" ) && input.LookupBinding( "menu_context" ) then table.insert( controls, { string.upper( input.LookupBinding( "menu" ) ) .. " and " .. string.upper( input.LookupBinding( "menu_context" ) ), "Body Taunts"} ) end
-    if input.LookupBinding( "gm_showspare2" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showspare2" ) ), "Random Voice Taunt"} ) end
+    if input.LookupBinding( "duck" ) then table.insert( controls, { string.upper( input.LookupBinding( "duck" ) ), gwlang.translate( "teamselect_controls_sit" ) } ) end
+    if input.LookupBinding( "attack2" ) then table.insert( controls, { string.upper( input.LookupBinding( "attack2" ) ), gwlang.translate( "teamselect_controls_ability" ) } ) end
+    if input.LookupBinding( "gm_showhelp" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showhelp" ) ), gwlang.translate( "teamselect_controls_settings" ) } ) end
+    if input.LookupBinding( "gm_showteam" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showteam" ) ), gwlang.translate( "teamselect_controls_team" ) } ) end
+    if input.LookupBinding( "gm_showspare2" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showspare2" ) ), gwlang.translate( "teamselect_controls_random" ) } ) end
+    if input.LookupBinding( "menu" ) && input.LookupBinding( "menu_context" ) then table.insert( controls, { string.upper( input.LookupBinding( "menu" ) ) .. " + " .. string.upper( input.LookupBinding( "menu_context" ) ), gwlang.translate( "teamselect_controls_taunts" ) } ) end
 
     local controlsOffsetY = 180
 
@@ -148,7 +148,7 @@ function GM:ShowTeam()
     TeamSpectateButton:SetPos( ScrW() / 2 - 300, 500 )
     TeamSpectateButton:SetSize( 600, 40 )
     TeamSpectateButton:SetFont("robot_small")
-    TeamSpectateButton:SetText( "Spectate" )
+    TeamSpectateButton:SetText( gwlang.translate( "teamselect_buttons_spectate" ) )
     TeamSpectateButton:SetTextColor( clrs.lightgrey )
     function TeamSpectateButton.DoClick() self:HideTeam() RunConsoleCommand( "changeteam", TEAM_SPECTATOR ) end
     function TeamSpectateButton:Paint( w, h)
@@ -159,7 +159,7 @@ function GM:ShowTeam()
     TeamAutoButton:SetPos( ScrW() / 2 - 300, 580 )
     TeamAutoButton:SetSize( 600, 40 )
     TeamAutoButton:SetFont("robot_small")
-    TeamAutoButton:SetText( "Auto Join" )
+    TeamAutoButton:SetText( gwlang.translate( "teamselect_buttons_auto" ) )
     TeamAutoButton:SetTextColor( clrs.lightgrey )
     function TeamAutoButton.DoClick() self:HideTeam() RunConsoleCommand( "changeteam", team.BestAutoJoinTeam() ) end
     function TeamAutoButton:Paint( w, h)

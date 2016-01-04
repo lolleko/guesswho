@@ -42,7 +42,11 @@ ROUND_NAV_GEN = 9
 
 function GM:CreateTeams()
 
-    team.SetUp( TEAM_HIDING, "Hiding", self.TeamHidingColor )
+    if SERVER then
+        team.SetUp( TEAM_HIDING, "Hiding", self.TeamHidingColor )
+    else
+        team.SetUp( TEAM_HIDING, gwlang.translate( "team_hiding" ), self.TeamHidingColor )
+    end
     team.SetClass( TEAM_HIDING, { "player_hiding" } )
     team.SetSpawnPoint( TEAM_HIDING, "info_player_start" )
     team.SetSpawnPoint( TEAM_HIDING, "info_player_deathmatch" )
@@ -51,7 +55,11 @@ function GM:CreateTeams()
     team.SetSpawnPoint( TEAM_HIDING, "info_player_counterterrorist" )
     team.SetSpawnPoint( TEAM_HIDING, "info_player_terrorist" )
 
-    team.SetUp( TEAM_SEEKING, "Seekers", self.TeamSeekingColor )
+    if SERVER then
+        team.SetUp( TEAM_SEEKING, "Seekers", self.TeamSeekingColor )
+    else
+        team.SetUp( TEAM_SEEKING, gwlang.translate( "team_seeking" ), self.TeamSeekingColor )
+    end
     team.SetClass( TEAM_SEEKING, { "player_seeker" } )
     team.SetSpawnPoint( TEAM_SEEKING, "info_player_start" )
     team.SetSpawnPoint( TEAM_SEEKING, "info_player_deathmatch" )

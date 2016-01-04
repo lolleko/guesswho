@@ -46,7 +46,7 @@ function SB:Init()
     Header2Label:SetPos( 20, 15 )
     Header2Label:SetFont("robot_small")
     Header2Label:SetTextColor( clrs.lightgrey )
-    Header2Label:SetText("Server: " .. GetHostName())
+    Header2Label:SetText( gwlang.translate( "scoreboard_server" ) .. ": " .. GetHostName())
     Header2Label:CenterHorizontal()
 
     local Header3Label = vgui.Create("DLabel", self)
@@ -54,7 +54,7 @@ function SB:Init()
     Header3Label:SetPos( 20, 35 )
     Header3Label:SetFont("robot_small")
     Header3Label:SetTextColor( clrs.lightgrey )
-    Header3Label:SetText("Map: " .. game.GetMap())
+    Header3Label:SetText( gwlang.translate( "scoreboard_map" ) .. ": " .. game.GetMap())
     Header3Label:CenterHorizontal()
 
     local Header4Label = vgui.Create("DLabel", self)
@@ -62,8 +62,8 @@ function SB:Init()
     Header4Label:SetPos( 20, 15 )
     Header4Label:SetFont("robot_small")
     Header4Label:SetTextColor( clrs.lightgrey )
-    Header4Label:SetText("Online: " .. #player.GetHumans() ..  "/" .. game.MaxPlayers())
-    function Header4Label:Think() self:SetText("Online: " .. #player.GetHumans() ..  "/" .. game.MaxPlayers()) end
+    Header4Label:SetText( gwlang.translate( "scoreboard_online" ) .. ": " .. #player.GetHumans() ..  "/" .. game.MaxPlayers())
+    function Header4Label:Think() self:SetText( gwlang.translate( "scoreboard_online" ) .. ": " .. #player.GetHumans() ..  "/" .. game.MaxPlayers()) end
     Header4Label:CenterHorizontal()
     Header4Label:SetContentAlignment(6)
 
@@ -72,8 +72,8 @@ function SB:Init()
     Header5Label:SetPos( 20, 35 )
     Header5Label:SetFont("robot_small")
     Header5Label:SetTextColor( clrs.lightgrey )
-    Header5Label:SetText("Spectators: " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR))
-    function Header5Label:Think() self:SetText("Spectators: " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR)) end
+    Header5Label:SetText( gwlang.translate( "scoreboard_spectators" ) .. ": " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR))
+    function Header5Label:Think() self:SetText( gwlang.translate( "scoreboard_spectators" ) .. ": " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR)) end
     Header5Label:CenterHorizontal()
     Header5Label:SetContentAlignment(6)
 
