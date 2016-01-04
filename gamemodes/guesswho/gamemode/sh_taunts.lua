@@ -2,7 +2,7 @@ if SERVER then
     local function voiceTaunt(ply, cmd, args)
         if SERVER then
             if !GetConVar( "gw_taunt_voice_enabled" ):GetBool() then ply:ChatPrint("Voice taunts are not enabled on this server.") return end
-            if !GetConVar( "gw_taunt_voice_seeker_enabled" ):GetBool() and ply:Team() == TEAM_SEEKING then ply:ChatPrint("Voice taunts connot be used by seekers on this server.") return end
+            if !GetConVar( "gw_taunt_voice_seeker_enabled" ):GetBool() and ply:IsSeeking() then ply:ChatPrint("Voice taunts connot be used by seekers on this server.") return end
             if !ply.voicetauntcd then ply.voicetauntcd = CurTime() end
             if !ply:Alive() then ply:ChatPrint("You can't do that while dead.") return end
             if ply.voicetauntcd > CurTime() then

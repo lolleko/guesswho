@@ -116,7 +116,7 @@ function ENT:OnUnStuck()
 end
 
 function ENT:Use( act, call, type, value )
-    if call:Team() == TEAM_HIDING then
+    if call:IsHiding() and GetConVar( "gw_changemodel_hiding" ):GetBool() then
         call:SetModel(self:GetModel())
     end
 end
@@ -134,7 +134,7 @@ function ENT:OnContact( ent )
         self.loco:Approach( self:GetPos() + Vector( math.Rand( -1, 1 ), math.Rand( -1, 1 ), 0 ) * 2000,1000)
         if math.abs(self:GetPos().z - ent:GetPos().z) > 30 then self:SetSolidMask( MASK_NPCSOLID_BRUSHONLY ) end
     end
-    if ent:GetClass() == "prop_physics_multiplayer" or ent:GetClass() == "prop_physics" then
+    if  ( ent:GetClass() == "prop_physics_multiplayer" or ent:GetClass() == "prop_physics" ) and ent:IsOnGround() then
         --self.loco:Approach( self:GetPos() + Vector( math.Rand( -1, 1 ), math.Rand( -1, 1 ), 0 ) * 2000,1000)
         local phys = ent:GetPhysicsObject()
         if !IsValid(phys) then return end

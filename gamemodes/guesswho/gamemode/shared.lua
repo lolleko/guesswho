@@ -74,9 +74,19 @@ function GM:PlayerShouldTakeDamage( ply, victim )
 end
 
 function GM:ShouldCollide( ent1, ent2 )
-    if ( ent1:IsPlayerHolding() or ent2:IsPlayerHolding() ) and (ent1:GetClass() == "npc_walker" or ent2:GetClass() == "npc_walker" or ( ent1:IsPlayer() and ent1:Team() == TEAM_HIDING ) or( ent2:IsPlayer() and ent2:Team() == TEAM_HIDING )  ) then
+    if ( ent1:IsPlayerHolding() or ent2:IsPlayerHolding() ) and ( ent1:GetClass() == "npc_walker" or ent2:GetClass() == "npc_walker" or ent1:IsPlayer() or ent2:IsPlayer() ) then
         DropEntityIfHeld( ent1 )
         DropEntityIfHeld( ent2 )
     end
     return true
+end
+
+function GM:PlayerFootstep( ply, vPos, iFoot, strSoundName, fVolume, pFilter )
+
+    if ply:IsHiding() then
+
+        return true
+
+    end
+
 end

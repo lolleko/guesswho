@@ -56,7 +56,7 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
             return
         end
 
-        if attacker:Team() == TEAM_SEEKING then
+        if attacker:IsSeeking() then
             attacker:AddFrags( 1 )
             if attacker:Health() + GetConVar( "gw_damageonfailguess" ):GetInt() * 4 > 100 then
                 attacker:Health(100)

@@ -111,7 +111,7 @@ function GM:CalcView(ply, pos, angles, fov)
 
     end
 
-    if ply:Team() == TEAM_HIDING then
+    if ply:IsHiding() then
 
         local dist = 100
 
@@ -127,7 +127,7 @@ function GM:CalcView(ply, pos, angles, fov)
         view.origin = pos - ( angles:Forward() * dist )
         view.drawviewer = true
 
-    elseif ply:Team() == TEAM_SEEKING and self:GetRoundState() == ROUND_HIDE then -- blind seekers
+    elseif ply:IsSeeking() and self:GetRoundState() == ROUND_HIDE then -- blind seekers
         view.origin = Vector(20000, 0, 0)
         view.angles = Angle(0, 0, 0)
     end

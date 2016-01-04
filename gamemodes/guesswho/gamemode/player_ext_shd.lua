@@ -8,3 +8,10 @@ function plymeta:SetSpeed( spd )
     self:SetRunSpeed(spd)
 end
 
+function plymeta:IsSeeking()
+    return ( self:Team() == TEAM_SEEKING )
+end
+
+function plymeta:IsHiding()
+    return ( self:Team() == TEAM_HIDING )
+end

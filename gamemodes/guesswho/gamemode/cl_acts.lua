@@ -23,6 +23,7 @@ local DefaultActs2 = {
 }
 
 function ActsFrame:Init()
+
     self:SetPos( 0, 0 )
     self:SetSize(200, 400)
     self:CenterVertical()
@@ -33,7 +34,6 @@ function ActsFrame:Init()
 
     self:SetMouseInputEnabled( false )
     self:SetKeyboardInputEnabled( true )
-
 
 end
 
