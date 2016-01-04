@@ -8,6 +8,10 @@ AddCSLuaFile( "sh_config.lua")
 AddCSLuaFile( "sh_taunts.lua")
 AddCSLuaFile( "includes/modules/gwlang.lua")
 AddCSLuaFile( "cl_lang.lua" )
+--translations
+for _,locale in pairs( file.Find( "gamemodes/guesswho/gamemode/lang/*", "GAME" ) ) do
+    AddCSLuaFile( "lang/" .. locale )
+end
 AddCSLuaFile( "cl_hud.lua" )
 AddCSLuaFile( "cl_pickteam.lua" )
 AddCSLuaFile( "cl_scoreboard.lua" )
@@ -18,11 +22,6 @@ include( "shared.lua" )
 include( "player.lua" )
 include( "player_ext.lua" )
 include( "round.lua" )
-
---translations
-for _,locale in pairs( file.Find( "gamemodes/guesswho/gamemode/lang/*", "GAME" ) ) do
-    AddCSLuaFile( "lang/" .. locale )
-end
 
 --resources
 resource.AddFile( "materials/vgui/gw/logo_main.png" )
