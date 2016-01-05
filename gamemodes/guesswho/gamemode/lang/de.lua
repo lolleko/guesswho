@@ -5,6 +5,7 @@ local DE = {
     round_creating = "Erschaffe NPCs",
     round_hide = "Verstecken",
     round_seek = "Suchen",
+    round_post = "Gleich geht es weiter",
     round_nav_gen = "Erzeuge Navmesh",
 
     --Team Names
@@ -13,7 +14,7 @@ local DE = {
 
     --Team selection
     --Links
-    teamselect_workshop_ref = "Workshop seite",
+    teamselect_workshop_ref = "Workshop Seite",
     teamselect_workshop_changelog = "Changelog",
     teamselect_workshop_bug = "Fehler melden",
     teamselect_workshop_contact = "Kontakt",
@@ -22,7 +23,7 @@ local DE = {
     teamselect_controls_ability = "Fähigkeit (Hiding)",
     teamselect_controls_settings = "Hilfe + Einstellungen",
     teamselect_controls_team = "Team wählen",
-    teamselect_controls_random = "Zufälliger sound",
+    teamselect_controls_random = "Zufälliger Sound",
     teamselect_controls_taunts = "Geste",
     --Buttons
     teamselect_buttons_spectate = "Zuschauen",

@@ -27,7 +27,7 @@ function addLangguage( langTbl, locale )
 end
 
 function isLocale( locale )
-    return table.HasValue( table.GetKeys( locales ), locale )
+    return locales[ locale ] ~= nil
 end
 
 function getLocaleList()
