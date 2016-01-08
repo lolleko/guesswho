@@ -22,6 +22,10 @@ function getLocale()
     return currentLocale
 end
 
+function getLanguageName( locale )
+    return locales[ locale ].language_name or "MISSING NAME"
+end
+
 function addLangguage( langTbl, locale )
     locales[ locale ] = langTbl
 end

@@ -26,12 +26,13 @@ include( "round.lua" )
 --resources
 resource.AddFile( "materials/vgui/gw/logo_main.png" )
 
-for _,sound in pairs(file.Find( "sound/gwtaunts/*", "GAME" )) do
-    resource.AddFile("sound/gwtaunts/" .. sound)
+for _,sound in pairs( file.Find( "sound/gwtaunts/*", "GAME" ) ) do
+    resource.AddFile( "sound/gwtaunts/" .. sound )
 end
 
 --NETWORK STRINGS
 util.AddNetworkString( "gwRoundState" )
+util.AddNetworkString( "gwPlayerHull" )
 
 --[[
     GAMEMODE HOOKS

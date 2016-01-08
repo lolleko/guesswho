@@ -99,12 +99,30 @@ function SETTINGSPANEL:General()
         return
     end
 
-    local CBShowHead = vgui.Create( "DCheckBoxLabel", self.general )
-    CBShowHead:SetPos( 10,10 )
-    CBShowHead:SetText( "Show character portrait?" )
-    CBShowHead:SetTextColor(clrs.black)
-    CBShowHead:SetConVar( "gw_hud_showhead" ) -- ConCommand must be a 1 or 0 value
-    CBShowHead:SizeToContents()
+    local CheckShowHead = vgui.Create( "DCheckBoxLabel", self.general )
+    CheckShowHead:SetPos( 10, 10 )
+    CheckShowHead:SetText( "Show character portrait?" )
+    CheckShowHead:SetTextColor(clrs.black)
+    CheckShowHead:SetConVar( "gw_hud_showhead" ) -- ConCommand must be a 1 or 0 value
+    CheckShowHead:SizeToContents()
+
+    local LabelLang = vgui.Create( "DLabel", self.general )
+    LabelLang:SetPos( 10, 45 )
+    LabelLang:SetWide( self:GetWide() - 45 )
+    LabelLang:SetFont("robot_small")
+    LabelLang:SetTextColor(clrs.black)
+    LabelLang:SetText("Language:")
+
+    local ComboLang = vgui.Create( "DComboBox", self.general )
+    ComboLang:SetPos( 10, 80 )
+    ComboLang:SetWide( self:GetWide() - 45 )
+    ComboLang:SetValue( gwlang.getLocale() .. "| " .. gwlang.getLanguageName( gwlang.getLocale() ) )
+    for _,v in pairs( gwlang.getLocaleList() ) do
+        ComboLang:AddChoice( v .. "| " .. gwlang.getLanguageName( v ) )
+    end
+    ComboLang.OnSelect = function( panel, index, value )
+    	RunConsoleCommand( "gw_selectlanguage", string.Split( value, "|" )[1] )
+    end
 end
 
 function SETTINGSPANEL:Taunts()

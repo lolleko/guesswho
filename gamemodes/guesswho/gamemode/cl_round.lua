@@ -14,16 +14,21 @@ function GM:RoundStateChange( old, new )
 
     if ROUND_PRE_GAME == new then
         self:SetRoundLabel( gwlang.translate( "round_pre_game" ) )
+        hook.Call( "GWPreGame", GAMEMODE  )
     elseif ROUND_WAITING_PLAYERS == new then
         self:SetRoundLabel( gwlang.translate( "round_waiting_players" ) )
     elseif ROUND_CREATING == new then
         self:SetRoundLabel( gwlang.translate( "round_creating" ) )
+        hook.Call( "GWCreating", GAMEMODE  )
     elseif ROUND_HIDE == new then
         self:SetRoundLabel( gwlang.translate( "round_hide" ) )
+        hook.Call( "GWHide", GAMEMODE  )
     elseif ROUND_SEEK == new then
         self:SetRoundLabel( gwlang.translate( "round_seek" ) )
+        hook.Call( "GWSeek", GAMEMODE  )
     elseif ROUND_POST == new then
         self:SetRoundLabel( gwlang.translate( "round_post" ) )
+        hook.Call( "GWPostRound", GAMEMODE  )
     elseif ROUND_NAV_GEN == new then
         self:SetRoundLabel( gwlang.translate( "round_nav_gen" ) )
     else

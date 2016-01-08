@@ -1,4 +1,7 @@
 local DE = {
+    --Language name
+    language_name = "Deutsch (German)",
+
     --Round states
     round_pre_game = "Vorbereitung",
     round_waiting_players = "Warten auf Spieler",

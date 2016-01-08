@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 EFFECT.Mat = Material( "icon16/star.png", "unlitgeneric" )
 --EFFECT.Mat = Material( "models/effects/comball_tape" )
 

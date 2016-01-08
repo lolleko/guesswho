@@ -75,8 +75,8 @@ function CHuntHUD()
     local teamColor = team.GetColor(ply:Team())
     local label = GAMEMODE:GetRoundLabel() or "ERROR"
 
-    CHHUD:DrawPanel( ScrW() / 2 - 85, 0, 170, 50, {background = clrs.darkgreybg})
-    CHHUD:DrawPanel( ScrW() / 2 - 85, 45, 170, 5, {background = teamColor})
+    CHHUD:DrawPanel( ScrW() / 2 - 100, 0, 200, 50, {background = clrs.darkgreybg})
+    CHHUD:DrawPanel( ScrW() / 2 - 100, 45, 200, 5, {background = teamColor})
     CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(time, "robot_normal") / 2), 5, time, "robot_normal", clrs.white )
     CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize( label, "robot_small" ) / 2 ), 26, label , "robot_small", clrs.white )
 

@@ -1,4 +1,7 @@
 local EN = {
+    --Language label
+    language_name = "English",
+
     --Round states
     round_pre_game = "Preparing Game",
     round_waiting_players = "Waiting for Players",

@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 EFFECT.Mat = Material( "models/props_combine/portalball001_sheet" )
 --EFFECT.Mat = Material( "models/effects/comball_tape" )
 

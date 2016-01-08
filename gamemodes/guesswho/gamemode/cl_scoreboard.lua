@@ -46,7 +46,8 @@ function SB:Init()
     Header2Label:SetPos( 20, 15 )
     Header2Label:SetFont("robot_small")
     Header2Label:SetTextColor( clrs.lightgrey )
-    Header2Label:SetText( gwlang.translate( "scoreboard_server" ) .. ": " .. GetHostName())
+    Header2Label:SetText( gwlang.translate( "scoreboard_server" ) .. ": " .. GetHostName() )
+    function Header2Label:Think() self:SetText( gwlang.translate( "scoreboard_server" ) .. ": " .. GetHostName() ) end
     Header2Label:CenterHorizontal()
 
     local Header3Label = vgui.Create("DLabel", self)
@@ -55,6 +56,7 @@ function SB:Init()
     Header3Label:SetFont("robot_small")
     Header3Label:SetTextColor( clrs.lightgrey )
     Header3Label:SetText( gwlang.translate( "scoreboard_map" ) .. ": " .. game.GetMap())
+    function Header3Label:Think() self:SetText( gwlang.translate( "scoreboard_map" ) .. ": " .. game.GetMap() ) end
     Header3Label:CenterHorizontal()
 
     local Header4Label = vgui.Create("DLabel", self)
@@ -116,9 +118,9 @@ function SB:Paint( w, h )
 end
 
 function SB:Think()
-    self.HidingHeader:SetText( team.GetName( TEAM_HIDING ) .. " " .. team.GetScore( TEAM_HIDING ))
+    self.HidingHeader:SetText( gwlang.translate( "team_hiding" ) .. " " .. team.GetScore( TEAM_HIDING ))
     self.HidingHeader:SizeToContents()
-    self.SeekingHeader:SetText( team.GetName( TEAM_SEEKING ) .. " "  .. team.GetScore( TEAM_SEEKING ))
+    self.SeekingHeader:SetText( gwlang.translate( "team_seeking" ) .. " "  .. team.GetScore( TEAM_SEEKING ))
     self.SeekingHeader:SizeToContents()
 end
 

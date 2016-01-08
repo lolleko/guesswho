@@ -146,3 +146,15 @@ function GM:NetworkEntityCreated( ent )
         function ent:RenderOverride() self:SetColor(Color(255,255,255,255)) self:DrawModel() end
     end
 end
+
+--update playerhull
+local function RecievePlayerHull()
+
+    local xy = net.ReadFloat()
+    local y = net.ReadFloat()
+
+    LocalPlayer():SetHull(Vector(-xy, -xy, 0), Vector(xy, xy, z))
+    LocalPlayer():SetHullDuck(Vector(-xy, -xy, 0), Vector(xy, xy, z))
+
+end
+net.Receive( "gwPlayerHull", RecievePlayerHull )
