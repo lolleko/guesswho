@@ -1,4 +1,4 @@
-local TR = {
+local tr = {
     --Language name
     language_name = "Türkçe (Turkish)",
 
@@ -40,4 +40,4 @@ local TR = {
 
 }
 
-gwlang.addLangguage( TR, "TR" )
+gwlang.addLangguage( tr, "tr" )

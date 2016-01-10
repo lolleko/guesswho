@@ -1,4 +1,4 @@
-local FR = {
+local fr = {
     --Language label
     language_name = "Français (French)",
 
@@ -40,4 +40,4 @@ local FR = {
 
 }
 
-gwlang.addLangguage( FR, "FR" )
+gwlang.addLangguage( fr, "fr" )

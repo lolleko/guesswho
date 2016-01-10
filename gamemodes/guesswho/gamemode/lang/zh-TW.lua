@@ -1,4 +1,4 @@
-local CN = {
+local zhtw = {
     --language name
     language_name = "正體中文 (Traditional Chinese)",
 
@@ -40,4 +40,4 @@ local CN = {
 
 }
 
-gwlang.addLangguage( CN, "CN" )
+gwlang.addLangguage( zhtw, "zh-TW" )

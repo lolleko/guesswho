@@ -1,4 +1,4 @@
-local NL = {
+local nl = {
     --Language label
     language_name = "Dutch",
 
@@ -40,4 +40,4 @@ local NL = {
 
 }
 
-gwlang.addLangguage( NL, "NL" )
+gwlang.addLangguage( nl, "nl" )

@@ -113,16 +113,28 @@ function SETTINGSPANEL:General()
     LabelLang:SetTextColor(clrs.black)
     LabelLang:SetText("Language:")
 
-    local ComboLang = vgui.Create( "DComboBox", self.general )
-    ComboLang:SetPos( 10, 80 )
-    ComboLang:SetWide( self:GetWide() - 45 )
-    ComboLang:SetValue( gwlang.getLocale() .. "| " .. gwlang.getLanguageName( gwlang.getLocale() ) )
-    for _,v in pairs( gwlang.getLocaleList() ) do
-        ComboLang:AddChoice( v .. "| " .. gwlang.getLanguageName( v ) )
+    local PanelLang = vgui.Create( "DPanel", self.general )
+    PanelLang:SetPos( 10, 80 )
+    PanelLang:SetWide( self:GetWide() - 45 )
+    PanelLang:SetTall( 40 )
+
+    function PanelLang:Paint( w, h )
+        draw.RoundedBox( 0, 0, 0, w - 5, h, Color( 0, 0, 0, 220 ) )
     end
-    ComboLang.OnSelect = function( panel, index, value )
-    	RunConsoleCommand( "gw_selectlanguage", string.Split( value, "|" )[1] )
+
+    local p = vgui.Create( "DIconLayout", PanelLang )
+    p:Dock( FILL )
+    p:SetBorder( 5 )
+    p:SetSpaceY( 5 )
+    p:SetSpaceX( 5 )
+
+    for _, locale in pairs( gwlang.getLocaleList() ) do
+        local f = p:Add( "DImageButton" )
+        f:SetImage( "../resource/localization/" .. locale .. ".png" )
+        f:SetSize( 16, 12 )
+        f.DoClick = function() RunConsoleCommand( "gw_selectlanguage", locale )end
     end
+
 end
 
 function SETTINGSPANEL:Taunts()

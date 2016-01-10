@@ -65,8 +65,8 @@ clrs = {
 }
 
 --includes
-include( "cl_lang.lua" )
 include( "shared.lua" )
+include( "cl_lang.lua" )
 include( "cl_hud.lua" )
 include( "cl_pickteam.lua")
 include( "cl_scoreboard.lua")

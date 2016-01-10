@@ -12,7 +12,6 @@ include( "sh_config.lua")
 include( "sh_taunts.lua")
 include( "player_class/player_hiding.lua")
 include( "player_class/player_seeker.lua")
-
 include( "sh_animations.lua")
 --Globals
 
@@ -22,15 +21,6 @@ TEAM_SEEKING = 2
 --Round states
 
 --Really shouldnt use strings here but i'm really lazy
-
-PRE_GAME = "Preparing Game"
-CREATING = "Creating NPCs"
-PRE_ROUND = "Hide"
-IN_ROUND = "Seek"
-POST_ROUND = "Next round soon"
-WAITING = "Waiting for more players"
-NAV_GEN = "Genearating Navmesh!"
-
 ROUND_PRE_GAME = 1
 ROUND_WAITING_PLAYERS = 2
 ROUND_CREATING = 3
@@ -42,11 +32,7 @@ ROUND_NAV_GEN = 9
 
 function GM:CreateTeams()
 
-    if SERVER then
-        team.SetUp( TEAM_HIDING, "Hiding", self.TeamHidingColor )
-    else
-        team.SetUp( TEAM_HIDING, gwlang.translate( "team_hiding" ), self.TeamHidingColor )
-    end
+    team.SetUp( TEAM_HIDING, "Hiding", self.TeamHidingColor )
     team.SetClass( TEAM_HIDING, { "player_hiding" } )
     team.SetSpawnPoint( TEAM_HIDING, "info_player_start" )
     team.SetSpawnPoint( TEAM_HIDING, "info_player_deathmatch" )
@@ -55,11 +41,7 @@ function GM:CreateTeams()
     team.SetSpawnPoint( TEAM_HIDING, "info_player_counterterrorist" )
     team.SetSpawnPoint( TEAM_HIDING, "info_player_terrorist" )
 
-    if SERVER then
-        team.SetUp( TEAM_SEEKING, "Seekers", self.TeamSeekingColor )
-    else
-        team.SetUp( TEAM_SEEKING, gwlang.translate( "team_seeking" ), self.TeamSeekingColor )
-    end
+    team.SetUp( TEAM_SEEKING, "Seekers", self.TeamSeekingColor )
     team.SetClass( TEAM_SEEKING, { "player_seeker" } )
     team.SetSpawnPoint( TEAM_SEEKING, "info_player_start" )
     team.SetSpawnPoint( TEAM_SEEKING, "info_player_deathmatch" )

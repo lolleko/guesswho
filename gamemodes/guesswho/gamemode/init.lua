@@ -18,6 +18,7 @@ AddCSLuaFile( "cl_scoreboard.lua" )
 AddCSLuaFile( "cl_settings.lua")
 AddCSLuaFile( "cl_acts.lua")
 AddCSLuaFile( "cl_round.lua")
+
 include( "shared.lua" )
 include( "player.lua" )
 include( "player_ext.lua" )

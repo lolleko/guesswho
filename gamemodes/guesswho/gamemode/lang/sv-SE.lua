@@ -1,4 +1,4 @@
-local SE = {
+local svse = {
     --Language name
     language_name = "Svenska (Swedish)",
 
@@ -40,4 +40,4 @@ local SE = {
 
 }
 
-gwlang.addLangguage( SE, "SE" )
+gwlang.addLangguage( svse, "sv-SE" )

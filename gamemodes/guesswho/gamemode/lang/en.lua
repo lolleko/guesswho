@@ -1,4 +1,4 @@
-local EN = {
+local en = {
     --Language label
     language_name = "English",
 
@@ -40,4 +40,4 @@ local EN = {
 
 }
 
-gwlang.addLangguage( EN, "EN" )
+gwlang.addLangguage( en, "en" )

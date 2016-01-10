@@ -1,4 +1,4 @@
-local DK = {
+local da = {
     --Language name
     language_name = "Dansk (Danish)",
 
@@ -40,4 +40,4 @@ local DK = {
 
 }
 
-gwlang.addLangguage( DK, "DK" )
+gwlang.addLangguage( da, "da" )

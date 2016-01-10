@@ -2,7 +2,7 @@ local table = table
 
 module( "gwlang" )
 
-local defaultLocale = "EN"
+local defaultLocale = "en"
 local currentLocale = defaultLocale
 local locales = {}
 

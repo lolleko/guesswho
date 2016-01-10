@@ -1,4 +1,4 @@
-local DE = {
+local de = {
     --Language name
     language_name = "Deutsch (German)",
 
@@ -40,4 +40,4 @@ local DE = {
 
 }
 
-gwlang.addLangguage( DE, "DE" )
+gwlang.addLangguage( de, "de" )
