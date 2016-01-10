@@ -14,7 +14,8 @@ function GM:ShowTeam()
     local links = { { gwlang.translate( "teamselect_workshop_ref" ), "http://steamcommunity.com/sharedfiles/filedetails/?id=480998235" },
                     { gwlang.translate( "teamselect_workshop_changelog" ), "http://steamcommunity.com/sharedfiles/filedetails/changelog/480998235" },
                     { gwlang.translate( "teamselect_workshop_bug" ), "http://steamcommunity.com/workshop/filedetails/discussion/480998235/523897653307060068/" },
-                    --{ gwlang.translate( "teamselect_workshop_contact" ), "http://steamcommunity.com/id/lolleko/" } }
+                    --{ gwlang.translate( "teamselect_workshop_contact" ), "http://steamcommunity.com/id/lolleko/" }
+                  }
 
     local linkOffsetY = 180
 
