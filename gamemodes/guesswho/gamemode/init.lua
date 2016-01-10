@@ -25,6 +25,8 @@ include( "player_ext.lua" )
 include( "round.lua" )
 
 --resources
+resource.AddWorkshop( "480998235" )
+
 resource.AddFile( "materials/vgui/gw/logo_main.png" )
 
 for _,sound in pairs( file.Find( "sound/gwtaunts/*", "GAME" ) ) do

@@ -14,7 +14,7 @@ function GM:ShowTeam()
     local links = { { gwlang.translate( "teamselect_workshop_ref" ), "http://steamcommunity.com/sharedfiles/filedetails/?id=480998235" },
                     { gwlang.translate( "teamselect_workshop_changelog" ), "http://steamcommunity.com/sharedfiles/filedetails/changelog/480998235" },
                     { gwlang.translate( "teamselect_workshop_bug" ), "http://steamcommunity.com/workshop/filedetails/discussion/480998235/523897653307060068/" },
-                    { gwlang.translate( "teamselect_workshop_contact" ), "http://steamcommunity.com/id/lolleko/" } }
+                    --{ gwlang.translate( "teamselect_workshop_contact" ), "http://steamcommunity.com/id/lolleko/" } }
 
     local linkOffsetY = 180
 
@@ -102,13 +102,13 @@ function GM:ShowTeam()
     end
     TeamHidingButton:SetFont( "robot_normal" )
     TeamHidingButton:SetTextColor( clrs.lightgrey )
-    TeamHidingButton:SetText( team.GetName( TEAM_HIDING ) .. "(" .. team.NumPlayers( TEAM_HIDING ) .. ")" )
+    TeamHidingButton:SetText( gwlang.translate( "team_hiding" ) .. "(" .. team.NumPlayers( TEAM_HIDING ) .. ")" )
     TeamHidingButton:SetSize( 280, 280 )
     function TeamHidingButton:Paint( w, h )
         return
     end
     function TeamHidingButton:Think()
-        self:SetText( team.GetName( TEAM_HIDING ) .. "(" .. team.NumPlayers( TEAM_HIDING ) .. ")" )
+        self:SetText( gwlang.translate( "team_hiding" ) .. "(" .. team.NumPlayers( TEAM_HIDING ) .. ")" )
     end
 
     --Seeking Button
@@ -134,13 +134,13 @@ function GM:ShowTeam()
     end
     TeamSeekingButton:SetFont( "robot_normal" )
     TeamSeekingButton:SetTextColor( clrs.lightgrey )
-    TeamSeekingButton:SetText( team.GetName( TEAM_SEEKING ) .. "(" .. team.NumPlayers( TEAM_SEEKING ) .. ")" )
+    TeamSeekingButton:SetText( gwlang.translate( "team_seeking" ) .. "(" .. team.NumPlayers( TEAM_SEEKING ) .. ")" )
     TeamSeekingButton:SetSize( 280, 280 )
     function TeamSeekingButton:Paint( w, h )
         return
     end
     function TeamSeekingButton:Think()
-        self:SetText( team.GetName( TEAM_SEEKING ) .. "(" .. team.NumPlayers( TEAM_SEEKING ) .. ")" )
+        self:SetText( gwlang.translate( "team_seeking" ) .. "(" .. team.NumPlayers( TEAM_SEEKING ) .. ")" )
     end
 
     --spectate and auto buttons
