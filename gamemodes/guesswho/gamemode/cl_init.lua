@@ -2,7 +2,7 @@
 CreateClientConVar( "gw_hud_showhead", "1", true, false )
 CreateClientConVar( "gw_language", "auto", true, false )
 
-language.Add( "npc_walker", "an NPC" )
+language.Add( "npc_walker", "Walker" )
 
 --Colors + fonts
 surface.CreateFont( "robot_medium",

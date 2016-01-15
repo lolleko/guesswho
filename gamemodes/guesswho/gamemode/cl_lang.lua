@@ -1,7 +1,7 @@
 gwlang = {}
 
 gwlang.defaultLocale = "en"
-gwlang.currentLocale = defaultLocale
+gwlang.currentLocale = gwlang.defaultLocale
 gwlang.locales = {}
 
 function gwlang:translate( token )
