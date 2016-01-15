@@ -203,12 +203,12 @@ function SETTINGSPANEL:OnClose()
     gui.EnableScreenClicker( false )
 end
 
-vgui.Register( "DSettingsPanel", SETTINGSPANEL, "DFrame")
+vgui.Register( "DGuessWhoSettingsPanel", SETTINGSPANEL, "DFrame")
 
 local function showSettings(ply, cmd, args)
     -- Is it better resource wise to destroy the panel on close since it wont be used that much?
     if ( !IsValid( g_Settings ) ) then
-        g_Settings = vgui.Create("DSettingsPanel")
+        g_Settings = vgui.Create("DGuessWhoSettingsPanel")
         g_Settings:SetVisible(false) -- use the visible bool as toggle indicator
     end
 
