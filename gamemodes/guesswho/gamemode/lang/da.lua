@@ -40,4 +40,4 @@ local da = {
 
 }
 
-gwlang.addLangguage( da, "da" )
+gwlang:addLangguage( da, "da" )

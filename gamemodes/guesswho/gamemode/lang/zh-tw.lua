@@ -40,4 +40,4 @@ local zhtw = {
 
 }
 
-gwlang.addLangguage( zhtw, "zh-TW" )
+gwlang:addLangguage( zhtw, "zh-TW" )

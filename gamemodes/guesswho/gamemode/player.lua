@@ -318,6 +318,16 @@ function GM:PlayerInitialSpawn( pl )
     end
 
     --sync endtime with clients that connected
-    self:SendRoundState( self:GetRoundState(), pl )
+    if self:GetRoundState() then
+        self:SendRoundState( self:GetRoundState(), pl )
+    end
+
+end
+
+function GM:AllowPlayerPickup( ply, ent )
+
+    if !ply:Alive() then return false end
+
+    return true
 
 end

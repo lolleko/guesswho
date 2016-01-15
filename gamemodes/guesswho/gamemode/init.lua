@@ -1,13 +1,13 @@
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
+--AddCSLuaFile( "lua/includes/modules/gwlang.lua")
+AddCSLuaFile( "cl_lang.lua" )
 AddCSLuaFile( "player_ext_shd.lua")
 AddCSLuaFile( "player_class/player_hiding.lua")
 AddCSLuaFile( "player_class/player_seeker.lua")
 AddCSLuaFile( "sh_animations.lua")
 AddCSLuaFile( "sh_config.lua")
 AddCSLuaFile( "sh_taunts.lua")
-AddCSLuaFile( "lua/includes/modules/gwlang.lua")
-AddCSLuaFile( "cl_lang.lua" )
 --translations
 for _,locale in pairs( file.Find( "gamemodes/guesswho/gamemode/lang/*", "GAME" ) ) do
     AddCSLuaFile( "lang/" .. locale )

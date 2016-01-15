@@ -40,4 +40,4 @@ local fr = {
 
 }
 
-gwlang.addLangguage( fr, "fr" )
+gwlang:addLangguage( fr, "fr" )

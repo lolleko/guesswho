@@ -40,4 +40,4 @@ local svse = {
 
 }
 
-gwlang.addLangguage( svse, "sv-SE" )
+gwlang:addLangguage( svse, "sv-SE" )

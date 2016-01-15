@@ -1,7 +1,9 @@
 GM.Name = "Guess Who"
 GM.Author = "Lolleko"
 GM.Email = "N/A"
-GM.Website = "https://github.com/lolleko"
+GM.Website = "https://github.com/lolleko/guesswho"
+
+GM.Version = "1.2.2 (42)" --LastVersion 1.2.1a (41)
 
 GM.TeamBased    = true
 
@@ -13,14 +15,14 @@ include( "sh_taunts.lua")
 include( "player_class/player_hiding.lua")
 include( "player_class/player_seeker.lua")
 include( "sh_animations.lua")
+
 --Globals
 
+--Teams
 TEAM_HIDING = 1
 TEAM_SEEKING = 2
 
 --Round states
-
---Really shouldnt use strings here but i'm really lazy
 ROUND_PRE_GAME = 1
 ROUND_WAITING_PLAYERS = 2
 ROUND_CREATING = 3

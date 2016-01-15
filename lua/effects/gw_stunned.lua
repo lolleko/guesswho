@@ -24,6 +24,8 @@ end
 -----------------------------------------------------------]]
 function EFFECT:Think()
 
+	if !IsValid( self.Entity ) then return false end
+
 	if self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) then
 		self:SetPos( self.Entity:GetBonePosition( self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) ) )
 	else

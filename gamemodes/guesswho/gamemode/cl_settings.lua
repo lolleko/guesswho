@@ -128,7 +128,7 @@ function SETTINGSPANEL:General()
     p:SetSpaceY( 5 )
     p:SetSpaceX( 5 )
 
-    for _, locale in pairs( gwlang.getLocaleList() ) do
+    for _, locale in pairs( gwlang:getLocaleList() ) do
         local f = p:Add( "DImageButton" )
         f:SetImage( "../resource/localization/" .. locale .. ".png" )
         f:SetSize( 16, 12 )
