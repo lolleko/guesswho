@@ -149,7 +149,7 @@ end
 
 function GM:PostRound()
 
-    if GetGlobalInt("RoundNumber", 0) == self.MaxRounds then
+    if GetGlobalInt("RoundNumber", 0) >= self.MaxRounds then
         MsgN("GW Round cap reached changing map..")
         if MapVote then MsgN("GW Mapvote detected starting vote!") MapVote.Start() return end
         game.LoadNextMap()

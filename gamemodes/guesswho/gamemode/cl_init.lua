@@ -138,6 +138,7 @@ function GM:CalcView(ply, pos, angles, fov)
 
 end
 
+--NO Longer needed due to january update Todo remove hack
 --Walker Colouring
 function GM:NetworkEntityCreated( ent )
     if ent:GetClass() == "npc_walker" then

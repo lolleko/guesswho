@@ -23,29 +23,30 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-    --shitty open door stuff needs rework at somepoint
-    local doors = ents.FindInSphere(self:GetPos(),60)
-    if doors then
-        for k,v in pairs(doors) do
-            if v:GetClass() == "func_door" or v:GetClass() == "func_door_rotating" or v:GetClass() == "prop_door_rotating" then
-                v:Fire("Unlock", "", 0)
-                v:Fire("Open", "", 0.01)
-                v:SetCollisionGroup( COLLISION_GROUP_DEBRIS ) -- we need to no colide doors sadly since rotating doors mess up the navmesh
+    if SERVER then
+        local doors = ents.FindInSphere(self:GetPos(),60)
+        if doors then
+            for k,v in pairs(doors) do
+                if v:GetClass() == "func_door" or v:GetClass() == "func_door_rotating" or v:GetClass() == "prop_door_rotating" then
+                    v:Fire("Unlock", "", 0)
+                    v:Fire("Open", "", 0.01)
+                    v:SetCollisionGroup( COLLISION_GROUP_DEBRIS ) -- we need to no colide doors sadly since rotating doors mess up the navmesh
+                end
             end
         end
-    end
-    if self.Stucked && CurTime() > self.Stucked + 20 && self.StuckAt:Distance(self:GetPos()) < 5 then
-        self:SetPos(GAMEMODE.SpawnPoints[math.random(1,#GAMEMODE.SpawnPoints)]:GetPos())
-        self.Stucked = nil
-        if SERVER && !self.IsJumping then MsgN("Nextbot [",tostring(self:EntIndex()),"][",self:GetClass(),"] Got Stuck for over 20 seconds and will be repositioned, if this error gets spammed you might want to consider the following: Edit the navmesh or lower the walker amount.") end
-    end
-    if self.Stucked && self.StuckAt:Distance(self:GetPos()) > 10 then self.Stucked = nil end --Reset stuck state when moved
-    if !self.IsJumping && self:GetSolidMask() == MASK_NPCSOLID_BRUSHONLY then
-        local occupied = false
-        for _,ent in pairs(ents.FindInBox(self:GetPos() + Vector( -16, -16, 0 ), self:GetPos() + Vector( 16, 16, 70 ))) do
-            if ent:GetClass() == "npc_walker" && ent != self then occupied = true end
+        if self.Stucked && CurTime() > self.Stucked + 20 && self.StuckAt:Distance(self:GetPos()) < 5 then
+            self:SetPos(GAMEMODE.SpawnPoints[math.random(1,#GAMEMODE.SpawnPoints)]:GetPos())
+            self.Stucked = nil
+            if SERVER && !self.IsJumping then MsgN("Nextbot [",tostring(self:EntIndex()),"][",self:GetClass(),"] Got Stuck for over 20 seconds and will be repositioned, if this error gets spammed you might want to consider the following: Edit the navmesh or lower the walker amount.") end
         end
-        if !occupied then self:SetSolidMask(MASK_NPCSOLID) end
+        if self.Stucked && self.StuckAt:Distance(self:GetPos()) > 10 then self.Stucked = nil end --Reset stuck state when moved
+        if !self.IsJumping && self:GetSolidMask() == MASK_NPCSOLID_BRUSHONLY then
+            local occupied = false
+            for _,ent in pairs(ents.FindInBox(self:GetPos() + Vector( -16, -16, 0 ), self:GetPos() + Vector( 16, 16, 70 ))) do
+                if ent:GetClass() == "npc_walker" && ent != self then occupied = true end
+            end
+            if !occupied then self:SetSolidMask(MASK_NPCSOLID) end
+        end
     end
 
 end
