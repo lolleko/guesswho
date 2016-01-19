@@ -308,13 +308,18 @@ function GM:PlayerCanSeePlayersChat( text, teamonly, listenply, speakply )
 
 end
 
+local sv_alltalk = GetConVar( "sv_alltalk" )
+
 function GM:PlayerCanHearPlayersVoice( listenply, speakply )
 
-    if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false end
+    if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false, false end
 
-	if !listenply:Alive() or !speakply:Alive() then return false end
+	if listenply:Alive() or !speakply:Alive() then return false, false end
 
-	return true
+    local alltalk = sv_alltalk:GetInt()
+    if ( alltalk >= 1 ) then return true, alltalk == 2 end
+
+    return listenply:Team() == speakply:Team(), false
 
 end
 
