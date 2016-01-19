@@ -14,11 +14,13 @@ function ENT:Initialize()
     self:SetModel(models[self:GetRandomInt()])
     self:SetHealth(100)
     self:SetCollisionBounds( Vector(-9,-9,0), Vector(9,9,70) )
-    self.loco:SetStepHeight(22)
-    self.Jumped = CurTime() + 5 -- prevent jumping for the first 6 seconds since the spawn is crowded
-    self.IsJumping = false
-    self.IsDuck = false
-    self:SetColor(GAMEMODE.WalkerColors[math.random(1, #GAMEMODE.WalkerColors)])
+    if SERVER then
+        self.loco:SetStepHeight(22)
+        self.Jumped = CurTime() + 5 -- prevent jumping for the first 6 seconds since the spawn is crowded
+        self.IsJumping = false
+        self.IsDuck = false
+        self:SetColor(GAMEMODE.WalkerColors[math.random(1, #GAMEMODE.WalkerColors)])
+    end
 
 end
 
