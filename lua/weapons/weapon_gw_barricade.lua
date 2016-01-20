@@ -10,9 +10,7 @@ function SWEP:Ability()
     if !trace.Hit then return end
 
     local models = {
-        "models/props_c17/furnituretoilet001a.mdl",
         "models/props_c17/furniturefridge001a.mdl",
-        "models/props_c17/canister02a.mdl",
         "models/props_wasteland/controlroom_filecabinet002a.mdl",
         "models/props_wasteland/laundry_cart002.mdl",
         "models/props_wasteland/buoy01.mdl",

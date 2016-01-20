@@ -7,6 +7,7 @@ end
 
 function GM:RoundPreGame()
     self:SetRoundState( ROUND_PRE_GAME )
+    hook.Call( "GWPreGame", GAMEMODE )
     self:SetEndTime( CurTime() + self.PreGameDuration )
     timer.Create( "gwPreGameTimer", self.PreGameDuration, 1, function() self:RoundWaitForPlayers() end )
     timer.Simple( 1, function() self:MeshController() end )
@@ -33,6 +34,7 @@ end
 function GM:RoundCreateWalkers()
 
     self:SetRoundState( ROUND_CREATING )
+    hook.Call( "GWCreating", GAMEMODE  )
 
     self:GetSpawnPoints()
 
@@ -59,6 +61,7 @@ function GM:RoundCreateWalkers()
 
     timer.Simple(5 * wave, function()
         self:SetRoundState( ROUND_HIDE )
+        hook.Call( "GWHide", GAMEMODE  )
         for k,v in pairs(team.GetPlayers( TEAM_HIDING )) do
             v:Spawn()
         end
@@ -89,7 +92,9 @@ function GM:RoundStart()
     self.RoundTime = 1
     self:SetEndTime( CurTime() + self.RoundDuration )
     SetGlobalInt( "RoundNumber", GetGlobalInt("RoundNumber", 0 ) + 1 )
+
     self:SetRoundState( ROUND_SEEK )
+    hook.Call( "GWSeek", GAMEMODE  )
 
 end
 
@@ -124,6 +129,8 @@ function GM:RoundThink()
 end
 
 function GM:RoundEnd( caught )
+    hook.Call( "GWOnRoundEnd", GAMEMODE, caught )
+
     if timer.Exists("RoundThink") then timer.Remove("RoundThink") end
     --choose winner and stuff
 
@@ -142,7 +149,7 @@ end
 
 function GM:PostRound()
 
-    if GetGlobalInt("RoundNumber", 0) == self.MaxRounds then
+    if GetGlobalInt("RoundNumber", 0) >= self.MaxRounds then
         MsgN("GW Round cap reached changing map..")
         if MapVote then MsgN("GW Mapvote detected starting vote!") MapVote.Start() return end
         game.LoadNextMap()
@@ -157,6 +164,7 @@ function GM:PostRound()
     timer.Simple( self.PostRoundDuration, function() self:RoundWaitForPlayers() end)
     self:SetEndTime( CurTime() + self.PostRoundDuration )
     self:SetRoundState( ROUND_POST )
+    hook.Call( "GWPostRound", GAMEMODE  )
 
     self:UpdateSettings()
 

@@ -28,7 +28,7 @@ function GM:GrabEarAnimation( ply )
     -- Don't show this when we're playing a taunt!
     if ( ply:IsPlayingTaunt() ) then return end
 
-    if ply:Team() == TEAM_HIDING then return end
+    if ply:IsHiding() then return end
 
     if ( ply:IsTyping() ) then
         ply.ChatGestureWeight = math.Approach( ply.ChatGestureWeight, 1, FrameTime() * 5.0 )
@@ -37,10 +37,10 @@ function GM:GrabEarAnimation( ply )
     end
 
     if ( ply.ChatGestureWeight > 0 ) then
-    
+
         ply:AnimRestartGesture( GESTURE_SLOT_VCD, ACT_GMOD_IN_CHAT, true )
         ply:AnimSetGestureWeight( GESTURE_SLOT_VCD, ply.ChatGestureWeight )
-    
+
     end
 
 end

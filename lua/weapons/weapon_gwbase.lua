@@ -57,6 +57,13 @@ end
 
 function SWEP:SecondaryAttack()
     if ( !self:CanSecondaryAttack() ) then return end
+
+    if self.AbilitySound then
+        local abilitySound = Sound( self.AbilitySound )
+        if abilitySound then
+            self.Owner:EmitSound( abilitySound )
+        end
+    end
     self:Ability()
     self:TakeSecondaryAmmo( 1 )
 end

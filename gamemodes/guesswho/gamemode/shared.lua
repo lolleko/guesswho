@@ -1,7 +1,9 @@
 GM.Name = "Guess Who"
 GM.Author = "Lolleko"
 GM.Email = "N/A"
-GM.Website = "https://github.com/lolleko"
+GM.Website = "https://github.com/lolleko/guesswho"
+
+GM.Version = "1.2.2a (43)" --LastVersion 1.2.2 (42)
 
 GM.TeamBased    = true
 
@@ -12,25 +14,15 @@ include( "sh_config.lua")
 include( "sh_taunts.lua")
 include( "player_class/player_hiding.lua")
 include( "player_class/player_seeker.lua")
-
 include( "sh_animations.lua")
+
 --Globals
 
+--Teams
 TEAM_HIDING = 1
 TEAM_SEEKING = 2
 
 --Round states
-
---Really shouldnt use strings here but i'm really lazy
-
-PRE_GAME = "Preparing Game"
-CREATING = "Creating NPCs"
-PRE_ROUND = "Hide"
-IN_ROUND = "Seek"
-POST_ROUND = "Next round soon"
-WAITING = "Waiting for more players"
-NAV_GEN = "Genearating Navmesh!"
-
 ROUND_PRE_GAME = 1
 ROUND_WAITING_PLAYERS = 2
 ROUND_CREATING = 3
@@ -74,9 +66,18 @@ function GM:PlayerShouldTakeDamage( ply, victim )
 end
 
 function GM:ShouldCollide( ent1, ent2 )
-    if ( ent1:IsPlayerHolding() or ent2:IsPlayerHolding() ) and (ent1:GetClass() == "npc_walker" or ent2:GetClass() == "npc_walker" or ( ent1:IsPlayer() and ent1:Team() == TEAM_HIDING ) or( ent2:IsPlayer() and ent2:Team() == TEAM_HIDING )  ) then
-        DropEntityIfHeld( ent1 )
-        DropEntityIfHeld( ent2 )
+    if ( ent1:IsPlayerHolding() or ent2:IsPlayerHolding() )then
+        return false
     end
     return true
+end
+
+function GM:PlayerFootstep( ply, vPos, iFoot, strSoundName, fVolume, pFilter )
+
+    if ply:IsHiding() then
+
+        return true
+
+    end
+
 end

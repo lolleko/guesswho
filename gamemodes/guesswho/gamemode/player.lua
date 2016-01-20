@@ -280,17 +280,46 @@ function GM:ShowHelp(ply)
     end
 end
 
+function GM:ShowSpare2( ply)
+  if IsValid(ply) then
+
+    local taunt = file.Find("sound/gwtaunts/*.mp3", "GAME")
+    local randomNumber = math.random(1, table.Count(taunt))
+
+    tauntName = string.Explode(".mp3",tostring(taunt[randomNumber]))
+
+    ply:ConCommand("gw_voicetaunt " .. tauntName[1])
+
+  end
+end
+
+
 function GM:PlayerCanSeePlayersChat( text, teamonly, listenply, speakply )
 
+    if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false end
+
     if ( teamonly ) then
-        if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false end
         if ( listenply:Team() != speakply:Team() ) then return false end
     end
 
-    if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false end
-    if !listenply:Alive() and speakply:Alive() then return false end
+    if listenply:Alive() and !speakply:Alive() then return false end
 
     return true
+
+end
+
+local sv_alltalk = GetConVar( "sv_alltalk" )
+
+function GM:PlayerCanHearPlayersVoice( listenply, speakply )
+
+    if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false, false end
+
+	if listenply:Alive() and !speakply:Alive() then return false, false end
+
+    local alltalk = sv_alltalk:GetInt()
+    if ( alltalk >= 1 ) then return true, alltalk == 2 end
+
+    return listenply:Team() == speakply:Team(), false
 
 end
 
@@ -304,6 +333,16 @@ function GM:PlayerInitialSpawn( pl )
     end
 
     --sync endtime with clients that connected
-    self:SendRoundState( self:GetRoundState(), pl )
+    if self:GetRoundState() then
+        self:SendRoundState( self:GetRoundState(), pl )
+    end
+
+end
+
+function GM:AllowPlayerPickup( ply, ent )
+
+    if !ply:Alive() then return false end
+
+    return true
 
 end

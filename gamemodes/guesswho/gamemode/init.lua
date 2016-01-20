@@ -1,31 +1,45 @@
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
+--AddCSLuaFile( "lua/includes/modules/gwlang.lua")
+AddCSLuaFile( "cl_lang.lua" )
 AddCSLuaFile( "player_ext_shd.lua")
 AddCSLuaFile( "player_class/player_hiding.lua")
 AddCSLuaFile( "player_class/player_seeker.lua")
 AddCSLuaFile( "sh_animations.lua")
 AddCSLuaFile( "sh_config.lua")
 AddCSLuaFile( "sh_taunts.lua")
+--translations
+for _,locale in pairs( file.Find( "gamemodes/guesswho/gamemode/lang/*", "GAME" ) ) do
+    AddCSLuaFile( "lang/" .. locale )
+end
 AddCSLuaFile( "cl_hud.lua" )
 AddCSLuaFile( "cl_pickteam.lua" )
 AddCSLuaFile( "cl_scoreboard.lua" )
 AddCSLuaFile( "cl_settings.lua")
 AddCSLuaFile( "cl_acts.lua")
 AddCSLuaFile( "cl_round.lua")
+
 include( "shared.lua" )
 include( "player.lua" )
 include( "player_ext.lua" )
 include( "round.lua" )
 
 --resources
+resource.AddWorkshop( "480998235" )
+
 resource.AddFile( "materials/vgui/gw/logo_main.png" )
 
-for _,sound in pairs(file.Find( "sound/gwtaunts/*", "GAME" )) do
-    resource.AddFile("sound/gwtaunts/" .. sound)
+for _,sound in pairs( file.Find( "sound/gwtaunts/*", "GAME" ) ) do
+    resource.AddFile( "sound/gwtaunts/" .. sound )
+end
+
+for _,sound in pairs( file.Find( "sound/gwabilities/*", "GAME" ) ) do
+    resource.AddFile( "sound/gwabilities/" .. sound )
 end
 
 --NETWORK STRINGS
 util.AddNetworkString( "gwRoundState" )
+util.AddNetworkString( "gwPlayerHull" )
 
 --[[
     GAMEMODE HOOKS
@@ -58,7 +72,7 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
         if attacker:Team() == TEAM_SEEKING then
             attacker:AddFrags( 1 )
-            if attacker:Health() + GetConVar( "gw_damageonfailguess" ):GetInt() * 4 > 100 then
+            if attacker:Health() + GetConVar( "gw_damageonfailguess" ):GetInt() * 2 > 100 then
                 attacker:Health(100)
             else
                 attacker:SetHealth(attacker:Health() + GetConVar( "gw_damageonfailguess" ):GetInt() * 2)

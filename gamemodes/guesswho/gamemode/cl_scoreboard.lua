@@ -46,7 +46,8 @@ function SB:Init()
     Header2Label:SetPos( 20, 15 )
     Header2Label:SetFont("robot_small")
     Header2Label:SetTextColor( clrs.lightgrey )
-    Header2Label:SetText("Server: " .. GetHostName())
+    Header2Label:SetText( gwlang:translate( "scoreboard_server" ) .. ": " .. GetHostName() )
+    function Header2Label:Think() self:SetText( gwlang:translate( "scoreboard_server" ) .. ": " .. GetHostName() ) end
     Header2Label:CenterHorizontal()
 
     local Header3Label = vgui.Create("DLabel", self)
@@ -54,7 +55,8 @@ function SB:Init()
     Header3Label:SetPos( 20, 35 )
     Header3Label:SetFont("robot_small")
     Header3Label:SetTextColor( clrs.lightgrey )
-    Header3Label:SetText("Map: " .. game.GetMap())
+    Header3Label:SetText( gwlang:translate( "scoreboard_map" ) .. ": " .. game.GetMap())
+    function Header3Label:Think() self:SetText( gwlang:translate( "scoreboard_map" ) .. ": " .. game.GetMap() ) end
     Header3Label:CenterHorizontal()
 
     local Header4Label = vgui.Create("DLabel", self)
@@ -62,8 +64,8 @@ function SB:Init()
     Header4Label:SetPos( 20, 15 )
     Header4Label:SetFont("robot_small")
     Header4Label:SetTextColor( clrs.lightgrey )
-    Header4Label:SetText("Online: " .. #player.GetHumans() ..  "/" .. game.MaxPlayers())
-    function Header4Label:Think() self:SetText("Online: " .. #player.GetHumans() ..  "/" .. game.MaxPlayers()) end
+    Header4Label:SetText( gwlang:translate( "scoreboard_online" ) .. ": " .. #player.GetHumans() ..  "/" .. game.MaxPlayers())
+    function Header4Label:Think() self:SetText( gwlang:translate( "scoreboard_online" ) .. ": " .. #player.GetHumans() ..  "/" .. game.MaxPlayers()) end
     Header4Label:CenterHorizontal()
     Header4Label:SetContentAlignment(6)
 
@@ -72,8 +74,8 @@ function SB:Init()
     Header5Label:SetPos( 20, 35 )
     Header5Label:SetFont("robot_small")
     Header5Label:SetTextColor( clrs.lightgrey )
-    Header5Label:SetText("Spectators: " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR))
-    function Header5Label:Think() self:SetText("Spectators: " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR)) end
+    Header5Label:SetText( gwlang:translate( "scoreboard_spectators" ) .. ": " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR))
+    function Header5Label:Think() self:SetText( gwlang:translate( "scoreboard_spectators" ) .. ": " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR)) end
     Header5Label:CenterHorizontal()
     Header5Label:SetContentAlignment(6)
 
@@ -116,9 +118,9 @@ function SB:Paint( w, h )
 end
 
 function SB:Think()
-    self.HidingHeader:SetText( team.GetName( TEAM_HIDING ) .. " " .. team.GetScore( TEAM_HIDING ))
+    self.HidingHeader:SetText( gwlang:translate( "team_hiding" ) .. " " .. team.GetScore( TEAM_HIDING ))
     self.HidingHeader:SizeToContents()
-    self.SeekingHeader:SetText( team.GetName( TEAM_SEEKING ) .. " "  .. team.GetScore( TEAM_SEEKING ))
+    self.SeekingHeader:SetText( gwlang:translate( "team_seeking" ) .. " "  .. team.GetScore( TEAM_SEEKING ))
     self.SeekingHeader:SizeToContents()
 end
 
@@ -152,30 +154,31 @@ vgui.Register("DTeamPanel", TEAMPANEL, "DIconLayout")
 local PLAYERINFO = {}
 
 function PLAYERINFO:Init()
-    self:SetSize( 470, 64 )
+    self:SetSize( 470, 32 )
 
     self.AvatarButton = vgui.Create("DButton", self)
-    self.AvatarButton:SetSize( 64, 64 )
+    self.AvatarButton:SetSize( 32, 64 )
     self.AvatarButton.DoClick = function() self.Player:ShowProfile() end
 
     self.Avatar = vgui.Create( "AvatarImage", self.AvatarButton )
-    self.Avatar:SetSize( 64, 64 )
+    self.Avatar:SetSize( 32, 32 )
     self.Avatar:SetMouseInputEnabled( false )
 
     self.Name = vgui.Create( "DLabel" , self )
-    self.Name:SetPos( 68, 8)
-    self.Name:SetFont( "robot_large" )
+    self.Name:SetPos( 68, 0)
+    self.Name:SetFont( "robot_normal" )
     self.Name:SetTextColor( clrs.darkgrey )
-    self.Name:SetSize( 320, 48 )
+    self.Name:SetSize( 320, 32 )
 
     self.Score = vgui.Create( "DLabel" , self )
-    self.Score:SetPos( 410, 8)
+    self.Score:SetPos( 410, 4)
     self.Score:SetSize( 60, 48 )
-    self.Score:SetFont( "robot_large" )
+    self.Score:SetFont( "robot_normal" )
     self.Score:SetTextColor( clrs.darkgrey )
 
     self.Mute = self:Add( "DImageButton" )
     self.Mute:SetSize( 24, 24 )
+	self.Mute:SetPos( self.Avatar:GetWide() + 8, 4 )
 end
 
 function PLAYERINFO:Paint( w, h)
