@@ -1,5 +1,6 @@
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Shockwave"
+SWEP.AbilitySound = "ambient/energy/zap1.wav"
 
 function SWEP:Ability()
 
@@ -17,7 +18,7 @@ function SWEP:Ability()
             effect:SetEntity( v )
             effect:SetMagnitude( stunDur )
             util.Effect( "gw_stunned", effect, true, true )
-            if SERVER then v:ApplyStun( stunDur ) end
+            v:ApplyStun( stunDur )
         end
     end
 end

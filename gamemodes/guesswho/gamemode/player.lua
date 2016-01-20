@@ -314,7 +314,7 @@ function GM:PlayerCanHearPlayersVoice( listenply, speakply )
 
     if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false, false end
 
-	if listenply:Alive() or !speakply:Alive() then return false, false end
+	if listenply:Alive() and !speakply:Alive() then return false, false end
 
     local alltalk = sv_alltalk:GetInt()
     if ( alltalk >= 1 ) then return true, alltalk == 2 end

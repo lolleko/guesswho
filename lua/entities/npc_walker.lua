@@ -2,26 +2,34 @@ AddCSLuaFile()
 ENT.Base            = "base_nextbot"
 
 function ENT:SetupDataTables()
-   self:NetworkVar("Int", 0, "RandomInt") --we need to generate the same random for both client and server
-   self:NetworkVar("Int", 0, "LastAct") --Act should be known for client and server
+   self:NetworkVar( "Int", 0, "LastAct" ) --Act should be known for client and server
+   self:NetworkVar( "Int", 0, "WalkerColorIndex" )
+   self:NetworkVar( "Int", 1, "WalkerModelIndex" )
 end
 
 function ENT:Initialize()
 
+    local models = GAMEMODE.Models
+
+    if SERVER then self:SetWalkerModelIndex( math.random( 1, #models ) ) end
+    
+    self:SetModel( models[ self:GetWalkerModelIndex() ] )
+
+    local walkerColors = GAMEMODE.WalkerColors
+
+    if SERVER then self:SetWalkerColorIndex( math.random( 1, #walkerColors ) ) end
+
+    self.GetPlayerColor = function() return walkerColors[ self:GetWalkerColorIndex() ] end
+
+    self:SetHealth(100)
+
     if SERVER then
 
-        local models = GAMEMODE.Models
-
-        self:SetRandomInt(math.random(1,#models))
-
-        self:SetModel(models[self:GetRandomInt()])
-        self:SetHealth(100)
         self:SetCollisionBounds( Vector(-9,-9,0), Vector(9,9,70) )
         self.loco:SetStepHeight(22)
-        self.Jumped = CurTime() + 5 -- prevent jumping for the first 6 seconds since the spawn is crowded
+        self.Jumped = CurTime() + 5 -- prevent jumping for the first 5 seconds since the spawn is crowded
         self.IsJumping = false
         self.IsDuck = false
-        self:SetColor(GAMEMODE.WalkerColors[math.random(1, #GAMEMODE.WalkerColors)])
 
     end
 
@@ -250,7 +258,9 @@ function ENT:Jump(goal, scanDist)
     self.IsJumping = true
     self:SetSolidMask( MASK_NPCSOLID_BRUSHONLY )
     self.loco:Jump()
+    --Boost them
     self.loco:Approach(goal, 1000)
+
 end
 
 function ENT:Duck( state )

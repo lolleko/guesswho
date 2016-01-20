@@ -1,5 +1,6 @@
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Prophunt"
+SWEP.AbilitySound = "physics/metal/metal_barrel_impact_hard1.wav"
 
 function SWEP:Ability()
     timer.Create( "Ability.Effect." .. self.Owner:SteamID(), 7, 1, function() self:OnRemove() end )

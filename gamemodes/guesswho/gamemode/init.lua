@@ -33,6 +33,10 @@ for _,sound in pairs( file.Find( "sound/gwtaunts/*", "GAME" ) ) do
     resource.AddFile( "sound/gwtaunts/" .. sound )
 end
 
+for _,sound in pairs( file.Find( "sound/gwabilities/*", "GAME" ) ) do
+    resource.AddFile( "sound/gwabilities/" .. sound )
+end
+
 --NETWORK STRINGS
 util.AddNetworkString( "gwRoundState" )
 util.AddNetworkString( "gwPlayerHull" )

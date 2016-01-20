@@ -1,5 +1,6 @@
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Shrink"
+SWEP.AbilitySound = "gwabilities/smb2_shrink.wav"
 
 function SWEP:Ability()
     timer.Create( "Ability.Effect." .. self.Owner:SteamID(), 7, 1, function() self:OnRemove() end )
