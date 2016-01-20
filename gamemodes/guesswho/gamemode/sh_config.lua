@@ -22,6 +22,10 @@ GM.Models = {
     "models/player/Group01/Female_03.mdl",
 }
 
+GM.SeekerModels = {
+  "models/player/combine_super_soldier.mdl"
+}
+
 GM.Weapons = {
     "weapon_gw_prophunt",
     "weapon_gw_barricade",

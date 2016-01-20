@@ -8,19 +8,26 @@ PLAYER.JumpPower            = 200
 PLAYER.CanUseFlashlight     = true
 
 function PLAYER:SetModel()
-
-    local model = "models/player/combine_super_soldier.mdl"
-
     if GetConVar( "gw_disguise_seeker" ):GetBool() then
         local models = GAMEMODE.Models
 
         local rand = math.random(1,#models)
 
         model = models[rand]
-    end
 
-    util.PrecacheModel( model )
-    self.Player:SetModel( model )
+        util.PrecacheModel( model )
+        self.Player:SetModel( model )
+    else
+
+      local models = GAMEODE.SeekerModels
+      local rand = math.random(1,#models)
+
+      model = models[rand]
+
+      util.PrecacheModel( model )
+      self.Player:SetModel( model )
+
+    end
 
 end
 
