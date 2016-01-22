@@ -323,7 +323,6 @@ function GM:PlayerCanHearPlayersVoice( listenply, speakply )
 
 end
 
-
 function GM:PlayerInitialSpawn( pl )
 
     pl:SetTeam( TEAM_UNASSIGNED )

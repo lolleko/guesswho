@@ -12,7 +12,7 @@ function ENT:Initialize()
     local models = GAMEMODE.Models
 
     if SERVER then self:SetWalkerModelIndex( math.random( 1, #models ) ) end
-    
+
     self:SetModel( models[ self:GetWalkerModelIndex() ] )
 
     local walkerColors = GAMEMODE.WalkerColors

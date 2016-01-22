@@ -11,8 +11,10 @@ if ( CLIENT ) then
 end
 
 function ENT:Think()
-	if IsValid(self:GetOwner()) then
+	if IsValid( self:GetOwner() ) and self:GetOwner():Alive() then
 		self:SetPos(self:GetOwner():GetPos())
+	else
+		self:Remove()
 	end
 	self:NextThink(CurTime() + 0.05)
 	return true
