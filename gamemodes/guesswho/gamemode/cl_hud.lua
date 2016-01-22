@@ -75,22 +75,27 @@ function CHuntHUD()
     local teamColor = team.GetColor(ply:Team())
     local label = GAMEMODE:GetRoundLabel() or "ERROR"
 
-    CHHUD:DrawPanel( ScrW() / 2 - 85, 0, 170, 50, {background = clrs.darkgreybg})
-    CHHUD:DrawPanel( ScrW() / 2 - 85, 45, 170, 5, {background = teamColor})
+    CHHUD:DrawPanel( ScrW() / 2 - 100, 0, 200, 50, {background = clrs.darkgreybg})
+    CHHUD:DrawPanel( ScrW() / 2 - 100, 45, 200, 5, {background = teamColor})
     CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(time, "robot_normal") / 2), 5, time, "robot_normal", clrs.white )
     CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize( label, "robot_small" ) / 2 ), 26, label , "robot_small", clrs.white )
 
     --Health
     local health = ply:Health()
 
-    if ( ply:Team() != TEAM_SPECTATOR or ply:Team() != TEAM_UNASSIGNED ) and health > 0 then
+    if ply:Alive() and ( ply:IsHiding() or ply:IsSeeking() ) and health > 0 then
+
         CHHUD:DrawPanel( 20, ScrH() - 80, 100, 60, {background = clrs.darkgreybg})
         CHHUD:DrawPanel( 20, ScrH() - 25, 100, 5, {background = teamColor})
         CHHUD:DrawText( 70 - (CHHUD:TextSize(health, "robot_large") / 2), ScrH() - 75, health, "robot_large", clrs.white )
+
     end
+
     if (GetConVar("gw_hud_showhead"):GetInt() == 0 or ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_UNASSIGNED or !ply:Alive()) and CHHUD.HeadModel then
+
         CHHUD.HeadModel:Remove()
         CHHUD.HeadModel = nil
+
     elseif GetConVar("gw_hud_showhead"):GetInt() == 1 and (ply:Team() == TEAM_HIDING or ply:Team() == TEAM_SEEKING) and ply:Alive() then
 
         if !CHHUD.HeadModel then
@@ -112,25 +117,32 @@ function CHuntHUD()
     if ply:Team() == TEAM_SEEKING then CHHUD:Crosshair() end
 
     --Ammo
-    if #ply:GetWeapons() > 0 and ply:GetActiveWeapon() then
+    if ply:Alive() and #ply:GetWeapons() > 0 and IsValid( ply:GetActiveWeapon() ) then
+
         local clipLeft = ply:GetActiveWeapon():Clip1()
         local clipExtra = ply:GetAmmoCount(ply:GetActiveWeapon():GetPrimaryAmmoType())
         local secondaryAmmo = ply:GetAmmoCount(ply:GetActiveWeapon():GetSecondaryAmmoType())
 
-        if clipLeft != -1 then
-            CHHUD:DrawPanel( ScrW() - 220, ScrH() - 80, 200, 60, {background = clrs.darkgreybg})
-            CHHUD:DrawPanel( ScrW() - 220, ScrH() - 25, 200, 5, {background = teamColor})
-            CHHUD:DrawText( ScrW() - 120 - (CHHUD:TextSize(clipLeft.. "/" .. clipExtra, "robot_large") / 2), ScrH() - 75, clipLeft .. "/" .. clipExtra, "robot_large", clrs.white )
-        end
-        if secondaryAmmo > 0 then
-            CHHUD:DrawPanel( ScrW() - 310, ScrH() - 40, 80, 20, {background = teamColor})
-            CHHUD:DrawText( ScrW() - 305, ScrH() - 38, "Nuke ready!", "robot_small", clrs.white )
+        if ply:IsSeeking() then
+
+            if clipLeft != -1 then
+                CHHUD:DrawPanel( ScrW() - 220, ScrH() - 80, 200, 60, {background = clrs.darkgreybg})
+                CHHUD:DrawPanel( ScrW() - 220, ScrH() - 25, 200, 5, {background = teamColor})
+                CHHUD:DrawText( ScrW() - 120 - (CHHUD:TextSize(clipLeft.. "/" .. clipExtra, "robot_large") / 2), ScrH() - 75, clipLeft .. "/" .. clipExtra, "robot_large", clrs.white )
+            end
+
+            if secondaryAmmo > 0 then
+                CHHUD:DrawPanel( ScrW() - 310, ScrH() - 40, 80, 20, {background = teamColor})
+                CHHUD:DrawText( ScrW() - 305, ScrH() - 38, "Nuke ready!", "robot_small", clrs.white )
+            end
+
         end
 
-        if ply:Team() == TEAM_HIDING and ply:GetActiveWeapon():Clip2() > 0 then
+        if ply:IsHiding() and ply:GetActiveWeapon():Clip2() > 0 then
             CHHUD:DrawPanel( ScrW() - 220, ScrH() - 40, 200, 20, {background = teamColor})
             CHHUD:DrawText( ScrW() - ( 120 + CHHUD:TextSize( ply:GetActiveWeapon().Name, "robot_small" ) / 2 ), ScrH() - 38, ply:GetActiveWeapon().Name, "robot_small", clrs.white )
         end
+
     end
 end
 hook.Add( "HUDPaint", "CHuntHUD", CHuntHUD)
@@ -145,7 +157,7 @@ function GM:HUDDrawTargetID()
     local text = "ERROR"
     local font = "robot_medium"
 
-    if ( trace.Entity:IsPlayer() and (trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():Team() == TEAM_HIDING )) then
+    if ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() ) ) then
         text = trace.Entity:Nick()
     else
         return
@@ -177,8 +189,8 @@ function GM:HUDDrawTargetID()
 
     y = y + h + 5
 
-    local text = trace.Entity:Health() .. "%"
-    local font = "robot_small"
+    text = trace.Entity:Health() .. "%"
+    font = "robot_small"
 
     surface.SetFont( font )
     local w, h = surface.GetTextSize( text )

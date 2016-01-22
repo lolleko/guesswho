@@ -134,5 +134,13 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
+		17
+		{
+			"name"		"gw_changemodel_hiding"
+			"text"		"Allow model change"
+			"help"		"Wether hiding can change their model or not."
+			"type"		"CheckBox"
+			"default"	"1"
+		}
 	}
 }

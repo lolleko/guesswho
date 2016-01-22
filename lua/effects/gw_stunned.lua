@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 EFFECT.Mat = Material( "icon16/star.png", "unlitgeneric" )
 --EFFECT.Mat = Material( "models/effects/comball_tape" )
 
@@ -7,8 +9,12 @@ EFFECT.Mat = Material( "icon16/star.png", "unlitgeneric" )
 function EFFECT:Init( data )
 
 	self.Entity = data:GetEntity()
-    self.EndTime = CurTime() + data:GetMagnitude()
-    self:SetPos( self.Entity:GetBonePosition( self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) ) )
+	self.EndTime = CurTime() + data:GetMagnitude()
+	if self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) then
+		self:SetPos( self.Entity:GetBonePosition( self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) ) )
+	else
+		self:SetPos( self.Entity:GetPos() + Vector( 0, 0, 70 ) )
+	end
 
 
 end
@@ -18,7 +24,13 @@ end
 -----------------------------------------------------------]]
 function EFFECT:Think()
 
-    self:SetPos( self.Entity:GetBonePosition( self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) ) )
+	if !IsValid( self.Entity ) then return false end
+
+	if self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) then
+		self:SetPos( self.Entity:GetBonePosition( self.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) ) )
+	else
+		self:SetPos( self.Entity:GetPos() + Vector( 0, 0, 70 ) )
+	end
 
 	return ( CurTime() < self.EndTime )
 

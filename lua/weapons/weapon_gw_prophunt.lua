@@ -1,5 +1,6 @@
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Prophunt"
+SWEP.AbilitySound = "physics/metal/metal_barrel_impact_hard1.wav"
 
 function SWEP:Ability()
     timer.Create( "Ability.Effect." .. self.Owner:SteamID(), 7, 1, function() self:OnRemove() end )
@@ -25,10 +26,10 @@ function SWEP:Ability()
 
     local model = models[math.random( 1, #models ) ]
 
-    local tempEnt = ents.Create( "prop_physics" )
+    local tempEnt = ents.Create( "gw_ability_prophunt" )
     tempEnt:SetModel( model )
     tempEnt:Spawn()
-    tempEnt:SetParent( ply )
+    tempEnt:SetOwner( ply )
     tempEnt:SetMoveType( MOVETYPE_NONE )
 	tempEnt:SetSolid( SOLID_NONE )
     tempEnt:SetPos( ply:GetPos() + Vector( 0, 0, 70 ) )
@@ -63,6 +64,11 @@ function SWEP:Ability()
 
     ply:SetHull(Vector(-xy, -xy, 0), Vector(xy, xy, z))
     ply:SetHullDuck(Vector(-xy, -xy, 0), Vector(xy, xy, z))
+
+    net.Start( "gwPlayerHull" )
+        net.WriteFloat( xy )
+        net.WriteFloat( z )
+    net.Send( ply )
 
     ply:SetNoDraw(false)
     ply:DrawShadow(false)

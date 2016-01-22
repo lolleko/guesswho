@@ -99,12 +99,42 @@ function SETTINGSPANEL:General()
         return
     end
 
-    local CBShowHead = vgui.Create( "DCheckBoxLabel", self.general )
-    CBShowHead:SetPos( 10,10 )
-    CBShowHead:SetText( "Show character portrait?" )
-    CBShowHead:SetTextColor(clrs.black)
-    CBShowHead:SetConVar( "gw_hud_showhead" ) -- ConCommand must be a 1 or 0 value
-    CBShowHead:SizeToContents()
+    local CheckShowHead = vgui.Create( "DCheckBoxLabel", self.general )
+    CheckShowHead:SetPos( 10, 10 )
+    CheckShowHead:SetText( "Show character portrait?" )
+    CheckShowHead:SetTextColor(clrs.black)
+    CheckShowHead:SetConVar( "gw_hud_showhead" ) -- ConCommand must be a 1 or 0 value
+    CheckShowHead:SizeToContents()
+
+    local LabelLang = vgui.Create( "DLabel", self.general )
+    LabelLang:SetPos( 10, 45 )
+    LabelLang:SetWide( self:GetWide() - 45 )
+    LabelLang:SetFont("robot_small")
+    LabelLang:SetTextColor(clrs.black)
+    LabelLang:SetText("Language:")
+
+    local PanelLang = vgui.Create( "DPanel", self.general )
+    PanelLang:SetPos( 10, 80 )
+    PanelLang:SetWide( self:GetWide() - 45 )
+    PanelLang:SetTall( 40 )
+
+    function PanelLang:Paint( w, h )
+        draw.RoundedBox( 0, 0, 0, w - 5, h, Color( 0, 0, 0, 220 ) )
+    end
+
+    local p = vgui.Create( "DIconLayout", PanelLang )
+    p:Dock( FILL )
+    p:SetBorder( 5 )
+    p:SetSpaceY( 5 )
+    p:SetSpaceX( 5 )
+
+    for _, locale in pairs( gwlang:getLocaleList() ) do
+        local f = p:Add( "DImageButton" )
+        f:SetImage( "../resource/localization/" .. locale .. ".png" )
+        f:SetSize( 16, 12 )
+        f.DoClick = function() RunConsoleCommand( "gw_selectlanguage", locale )end
+    end
+
 end
 
 function SETTINGSPANEL:Taunts()
@@ -173,12 +203,12 @@ function SETTINGSPANEL:OnClose()
     gui.EnableScreenClicker( false )
 end
 
-vgui.Register( "DSettingsPanel", SETTINGSPANEL, "DFrame")
+vgui.Register( "DGuessWhoSettingsPanel", SETTINGSPANEL, "DFrame")
 
 local function showSettings(ply, cmd, args)
     -- Is it better resource wise to destroy the panel on close since it wont be used that much?
     if ( !IsValid( g_Settings ) ) then
-        g_Settings = vgui.Create("DSettingsPanel")
+        g_Settings = vgui.Create("DGuessWhoSettingsPanel")
         g_Settings:SetVisible(false) -- use the visible bool as toggle indicator
     end
 

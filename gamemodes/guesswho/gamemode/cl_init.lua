@@ -1,5 +1,8 @@
 --settings client cvars
 CreateClientConVar( "gw_hud_showhead", "1", true, false )
+CreateClientConVar( "gw_language", "auto", true, false )
+
+language.Add( "npc_walker", "Walker" )
 
 --Colors + fonts
 surface.CreateFont( "robot_medium",
@@ -39,7 +42,7 @@ surface.CreateFont( "robot_small",
 surface.CreateFont( "robot_smaller",
      {
                     font    = "Roboto", -- Not file name, font name
-                    size    = 9,
+                    size    = 12,
                     weight  = 400,
                     antialias = true,
                     shadow = false
@@ -63,6 +66,7 @@ clrs = {
 
 --includes
 include( "shared.lua" )
+include( "cl_lang.lua" )
 include( "cl_hud.lua" )
 include( "cl_pickteam.lua")
 include( "cl_scoreboard.lua")
@@ -109,7 +113,7 @@ function GM:CalcView(ply, pos, angles, fov)
 
     end
 
-    if ply:Team() == TEAM_HIDING then
+    if ply:IsHiding() or ply:IsStunned() then
 
         local dist = 100
 
@@ -125,7 +129,7 @@ function GM:CalcView(ply, pos, angles, fov)
         view.origin = pos - ( angles:Forward() * dist )
         view.drawviewer = true
 
-    elseif ply:Team() == TEAM_SEEKING and self:GetRoundState() == ROUND_HIDE then -- blind seekers
+    elseif ply:IsSeeking() and self:GetRoundState() == ROUND_HIDE then -- blind seekers
         view.origin = Vector(20000, 0, 0)
         view.angles = Angle(0, 0, 0)
     end
@@ -134,11 +138,23 @@ function GM:CalcView(ply, pos, angles, fov)
 
 end
 
---Walker Colouring
-function GM:NetworkEntityCreated( ent )
+--NO Longer needed due to january update
+/*function GM:NetworkEntityCreated( ent )
     if ent:GetClass() == "npc_walker" then
         ent.WalkerColor = Vector(ent:GetColor().r / 255, ent:GetColor().g / 255, ent:GetColor().b / 255)
         function ent:GetPlayerColor() return self.WalkerColor end
         function ent:RenderOverride() self:SetColor(Color(255,255,255,255)) self:DrawModel() end
     end
+end */
+
+--update playerhull
+local function RecievePlayerHull()
+
+    local xy = net.ReadFloat()
+    local y = net.ReadFloat()
+
+    LocalPlayer():SetHull(Vector(-xy, -xy, 0), Vector(xy, xy, z))
+    LocalPlayer():SetHullDuck(Vector(-xy, -xy, 0), Vector(xy, xy, z))
+
 end
+net.Receive( "gwPlayerHull", RecievePlayerHull )

@@ -11,17 +11,18 @@ function GM:ShowTeam()
     self.TeamSelectFrame:SetPos(0,0)
     self.TeamSelectFrame:SetSize( ScrW(), ScrH() )
 
-    local links = { {"Workshop Page", "http://steamcommunity.com/sharedfiles/filedetails/?id=480998235"},
-                    {"Changelog", "http://steamcommunity.com/sharedfiles/filedetails/changelog/480998235"},
-                    {"Submit a Bug", "http://steamcommunity.com/workshop/filedetails/discussion/480998235/523897653307060068/"},
-                    {"Contact", "http://steamcommunity.com/id/lolleko/"} }
+    local links = { { gwlang:translate( "teamselect_workshop_ref" ), "http://steamcommunity.com/sharedfiles/filedetails/?id=480998235" },
+                    { gwlang:translate( "teamselect_workshop_changelog" ), "http://steamcommunity.com/sharedfiles/filedetails/changelog/480998235" },
+                    { gwlang:translate( "teamselect_workshop_bug" ), "http://steamcommunity.com/workshop/filedetails/discussion/480998235/523897653307060068/" },
+                    --{ gwlang:translate( "teamselect_workshop_contact" ), "http://steamcommunity.com/id/lolleko/" }
+                  }
 
     local linkOffsetY = 180
 
     for _, v in pairs( links ) do
         local LinkButton = vgui.Create( "DButton", self.TeamSelectFrame )
-        LinkButton:SetPos( ScrW() / 2 - 540, linkOffsetY )
-        LinkButton:SetSize( 200, 40 )
+        LinkButton:SetPos( ScrW() / 2 - 620, linkOffsetY )
+        LinkButton:SetSize( 280, 40 )
         LinkButton:SetFont("robot_small")
         LinkButton:SetText( v[1] )
         LinkButton:SetTextColor( clrs.lightgrey )
@@ -33,19 +34,19 @@ function GM:ShowTeam()
     end
 
     local controls = {}
-
-    if input.LookupBinding( "menu" ) && input.LookupBinding( "menu_context" ) then table.insert( controls, { string.upper( input.LookupBinding( "menu" ) ) .. "+" .. string.upper( input.LookupBinding( "menu_context" ) ), "Body Taunts"} ) end
-    if input.LookupBinding( "duck" ) then table.insert( controls, { string.upper( input.LookupBinding( "duck" ) ), "Sit"} ) end
-    if input.LookupBinding( "gm_showhelp" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showhelp" ) ), "Help + Settings"} ) end
-    if input.LookupBinding( "gm_showteam" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showteam" ) ), "Choose Team"} ) end
-    if input.LookupBinding( "attack2" ) then table.insert( controls, { string.upper( input.LookupBinding( "attack2" ) ), "Ability(Hiding)"} ) end
+    if input.LookupBinding( "duck" ) then table.insert( controls, { string.upper( input.LookupBinding( "duck" ) ), gwlang:translate( "teamselect_controls_sit" ) } ) end
+    if input.LookupBinding( "attack2" ) then table.insert( controls, { string.upper( input.LookupBinding( "attack2" ) ), gwlang:translate( "teamselect_controls_ability" ) } ) end
+    if input.LookupBinding( "gm_showhelp" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showhelp" ) ), gwlang:translate( "teamselect_controls_settings" ) } ) end
+    if input.LookupBinding( "gm_showteam" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showteam" ) ), gwlang:translate( "teamselect_controls_team" ) } ) end
+    if input.LookupBinding( "gm_showspare2" ) then table.insert( controls, { string.upper( input.LookupBinding( "gm_showspare2" ) ), gwlang:translate( "teamselect_controls_random" ) } ) end
+    if input.LookupBinding( "menu" ) && input.LookupBinding( "menu_context" ) then table.insert( controls, { string.upper( input.LookupBinding( "menu" ) ) .. " + " .. string.upper( input.LookupBinding( "menu_context" ) ), gwlang:translate( "teamselect_controls_taunts" ) } ) end
 
     local controlsOffsetY = 180
 
     for _, v in pairs( controls ) do
         local ControlKey = vgui.Create( "DLabel", self.TeamSelectFrame )
         ControlKey:SetPos( ScrW() / 2 + 340, controlsOffsetY )
-        ControlKey:SetSize( 40, 40 )
+        ControlKey:SetSize( 80, 40 )
         ControlKey:SetFont("robot_smaller")
         ControlKey:SetText( v[1] )
         ControlKey:SetTextColor( clrs.lightgrey )
@@ -55,8 +56,8 @@ function GM:ShowTeam()
         end
 
         local ControlDesc = vgui.Create( "DLabel", self.TeamSelectFrame )
-        ControlDesc:SetPos( ScrW() / 2 + 380, controlsOffsetY )
-        ControlDesc:SetSize( 160, 40 )
+        ControlDesc:SetPos( ScrW() / 2 + 420, controlsOffsetY )
+        ControlDesc:SetSize( 200, 40 )
         ControlDesc:SetFont("robot_small")
         ControlDesc:SetText( v[2] )
         ControlDesc:SetTextColor( clrs.lightgrey )
@@ -102,13 +103,13 @@ function GM:ShowTeam()
     end
     TeamHidingButton:SetFont( "robot_normal" )
     TeamHidingButton:SetTextColor( clrs.lightgrey )
-    TeamHidingButton:SetText( team.GetName( TEAM_HIDING ) .. "(" .. team.NumPlayers( TEAM_HIDING ) .. ")" )
+    TeamHidingButton:SetText( gwlang:translate( "team_hiding" ) .. "(" .. team.NumPlayers( TEAM_HIDING ) .. ")" )
     TeamHidingButton:SetSize( 280, 280 )
     function TeamHidingButton:Paint( w, h )
         return
     end
     function TeamHidingButton:Think()
-        self:SetText( team.GetName( TEAM_HIDING ) .. "(" .. team.NumPlayers( TEAM_HIDING ) .. ")" )
+        self:SetText( gwlang:translate( "team_hiding" ) .. "(" .. team.NumPlayers( TEAM_HIDING ) .. ")" )
     end
 
     --Seeking Button
@@ -134,13 +135,13 @@ function GM:ShowTeam()
     end
     TeamSeekingButton:SetFont( "robot_normal" )
     TeamSeekingButton:SetTextColor( clrs.lightgrey )
-    TeamSeekingButton:SetText( team.GetName( TEAM_SEEKING ) .. "(" .. team.NumPlayers( TEAM_SEEKING ) .. ")" )
+    TeamSeekingButton:SetText( gwlang:translate( "team_seeking" ) .. "(" .. team.NumPlayers( TEAM_SEEKING ) .. ")" )
     TeamSeekingButton:SetSize( 280, 280 )
     function TeamSeekingButton:Paint( w, h )
         return
     end
     function TeamSeekingButton:Think()
-        self:SetText( team.GetName( TEAM_SEEKING ) .. "(" .. team.NumPlayers( TEAM_SEEKING ) .. ")" )
+        self:SetText( gwlang:translate( "team_seeking" ) .. "(" .. team.NumPlayers( TEAM_SEEKING ) .. ")" )
     end
 
     --spectate and auto buttons
@@ -148,7 +149,7 @@ function GM:ShowTeam()
     TeamSpectateButton:SetPos( ScrW() / 2 - 300, 500 )
     TeamSpectateButton:SetSize( 600, 40 )
     TeamSpectateButton:SetFont("robot_small")
-    TeamSpectateButton:SetText( "Spectate" )
+    TeamSpectateButton:SetText( gwlang:translate( "teamselect_buttons_spectate" ) )
     TeamSpectateButton:SetTextColor( clrs.lightgrey )
     function TeamSpectateButton.DoClick() self:HideTeam() RunConsoleCommand( "changeteam", TEAM_SPECTATOR ) end
     function TeamSpectateButton:Paint( w, h)
@@ -159,7 +160,7 @@ function GM:ShowTeam()
     TeamAutoButton:SetPos( ScrW() / 2 - 300, 580 )
     TeamAutoButton:SetSize( 600, 40 )
     TeamAutoButton:SetFont("robot_small")
-    TeamAutoButton:SetText( "Auto Join" )
+    TeamAutoButton:SetText( gwlang:translate( "teamselect_buttons_auto" ) )
     TeamAutoButton:SetTextColor( clrs.lightgrey )
     function TeamAutoButton.DoClick() self:HideTeam() RunConsoleCommand( "changeteam", team.BestAutoJoinTeam() ) end
     function TeamAutoButton:Paint( w, h)
@@ -180,6 +181,17 @@ function GM:ShowTeam()
             self:Remove()
             self = nil
         end
+    end
+
+    local GMVersion = vgui.Create( "DLabel", self.TeamSelectFrame )
+    GMVersion:SetPos( ScrW() - 400, ScrH() - 40 )
+    GMVersion:SetSize( 400, 40 )
+    GMVersion:SetFont("robot_medium")
+    GMVersion:SetText( "Version " .. GAMEMODE.Version )
+    GMVersion:SetTextColor( clrs.lightgrey )
+    GMVersion:SetContentAlignment( 6 )
+    function GMVersion:Paint( w, h)
+        return
     end
 
 end
