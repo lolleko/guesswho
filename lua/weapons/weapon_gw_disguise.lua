@@ -5,7 +5,7 @@ function SWEP:Ability()
     local ply = self.Owner
     timer.Create( "Ability.Effect." .. ply:SteamID(), 15, 1, function() self:OnRemove() end )
     if SERVER then
-        ply:SetModel( GAMEMODE.SeekerModel )
+        ply:SetModel( GAMEMODE.SeekerModels[ math.random( 1, #GAMEMODE.SeekerModels ) ] )
         ply:Give( "weapon_gw_smgdummy" )
         ply:SelectWeapon( "weapon_gw_smgdummy" )
     end
