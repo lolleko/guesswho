@@ -32,7 +32,8 @@ GM.Weapons = {
     --"weapon_gw_smoke",
     "weapon_gw_shrink",
     "weapon_gw_decoy",
-    "weapon_gw_sudoku"
+    "weapon_gw_sudoku",
+    "weapon_gw_disguise"
 }
 
 GM.TeamSeekingColor = Color(138, 155, 15)

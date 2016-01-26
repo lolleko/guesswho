@@ -24,11 +24,11 @@ SWEP.Secondary.Ammo         = "ability"
 SWEP.ViewModel = ""
 SWEP.WorldModel = ""
 
-SWEP.Cooldown = 30
+SWEP.HoldType = "normal"
 
 function SWEP:Initialize()
 
-    self:SetHoldType( "normal" )
+    self:SetHoldType( self.HoldType )
 
 end
 
