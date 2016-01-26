@@ -22,13 +22,17 @@ GM.Models = {
     "models/player/Group01/Female_03.mdl",
 }
 
+GM.SeekerModel = "models/player/combine_super_soldier.mdl"
+
 GM.Weapons = {
     "weapon_gw_prophunt",
-    "weapon_gw_barricade",
+    --"weapon_gw_barricade",
     "weapon_gw_shockwave",
     "weapon_gw_cloak",
     --"weapon_gw_smoke",
-    "weapon_gw_shrink"
+    "weapon_gw_shrink",
+    "weapon_gw_decoy",
+    "weapon_gw_sudoku"
 }
 
 GM.TeamSeekingColor = Color(138, 155, 15)

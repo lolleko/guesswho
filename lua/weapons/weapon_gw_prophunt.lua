@@ -13,15 +13,15 @@ function SWEP:Ability()
 
     local models = {
         "models/props_c17/signpole001.mdl",
-        "models/props_junk/garbage_coffeemug001a.mdl",
+        --"models/props_junk/garbage_coffeemug001a.mdl",
         "models/props_lab/huladoll.mdl",
         "models/props_junk/plasticbucket001a.mdl",
         "models/props_c17/doll01.mdl",
         "models/props_trainstation/trainstation_post001.mdl",
-        "models/props_trainstation/trashcan_indoor001b.mdl",
-        "models/props_lab/cactus.mdl",
+        --"models/props_trainstation/trashcan_indoor001b.mdl",
+        --"models/props_lab/cactus.mdl",
         "models/props_c17/oildrum001.mdl",
-        "models/props_junk/wood_crate001a.mdl"
+        --"models/props_junk/wood_crate001a.mdl"
     }
 
     local model = models[math.random( 1, #models ) ]
@@ -32,8 +32,8 @@ function SWEP:Ability()
     tempEnt:SetOwner( ply )
     tempEnt:SetMoveType( MOVETYPE_NONE )
 	tempEnt:SetSolid( SOLID_NONE )
-    tempEnt:SetPos( ply:GetPos() + Vector( 0, 0, 70 ) )
-    tempEnt:DropToFloor()
+    tempEnt:SetPos( ply:GetPos() )
+    --tempEnt:DropToFloor()
 
     local xy = math.Round(math.Max(tempEnt:OBBMaxs().x - tempEnt:OBBMins().x, tempEnt:OBBMaxs().y - tempEnt:OBBMins().y) / 2)
     local z = math.Round(tempEnt:OBBMaxs().z - tempEnt:OBBMins().z)
