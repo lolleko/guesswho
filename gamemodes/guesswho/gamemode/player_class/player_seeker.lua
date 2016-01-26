@@ -9,7 +9,7 @@ PLAYER.CanUseFlashlight     = true
 
 function PLAYER:SetModel()
 
-    local model = "models/player/combine_super_soldier.mdl"
+    local model = GAMEMODE.SeekerModel
 
     if GetConVar( "gw_disguise_seeker" ):GetBool() then
         local models = GAMEMODE.Models
