@@ -12,11 +12,15 @@ function PLAYER:SetModel()
     local model = GAMEMODE.SeekerModel
 
     if GetConVar( "gw_disguise_seeker" ):GetBool() then
-        local models = GAMEMODE.Models
+          local models = GAMEMODE.Models
 
-        local rand = math.random(1,#models)
+          local rand = math.random(1,#models)
 
-        model = models[rand]
+          model = models[rand]
+    else
+
+      model = GAMEMODE.SeekerModels[ math.random( 1, #GAMEMODE.SeekerModels ) ]
+
     end
 
     util.PrecacheModel( model )
