@@ -2,9 +2,9 @@ AddCSLuaFile()
 ENT.Base            = "base_nextbot"
 
 function ENT:SetupDataTables()
-   self:NetworkVar( "Int", 0, "LastAct" ) --Act should be known for client and server
-   self:NetworkVar( "Int", 0, "WalkerColorIndex" )
-   self:NetworkVar( "Int", 1, "WalkerModelIndex" )
+   self:NetworkVar( "Int", 0, "LastAct" )
+   self:NetworkVar( "Int", 1, "WalkerColorIndex" )
+   self:NetworkVar( "Int", 2, "WalkerModelIndex" )
 end
 
 function ENT:Initialize()
@@ -27,7 +27,7 @@ function ENT:Initialize()
 
     if SERVER then
 
-        self:SetCollisionBounds( Vector(-9,-9,0), Vector(9,9,70) )
+        self:SetCollisionBounds( Vector(-16,-16,0), Vector(16,16,70) )
         self.loco:SetStepHeight(22)
         self.Jumped = CurTime() + 5 -- prevent jumping for the first 5 seconds since the spawn is crowded
         self.IsJumping = false
@@ -225,6 +225,10 @@ function ENT:MoveToPos( pos, options )
             if ( path:GetAge() > options.repath ) then path:Compute( self, pos ) end
         end
 
+        if self.loco:GetVelocity():Length() < 10 then
+            self.loco:SetVelocity( self.loco:GetVelocity() + VectorRand() * 100 )
+        end
+
         coroutine.yield()
 
     end
@@ -237,22 +241,6 @@ end
 function ENT:Jump(goal, scanDist)
     if CurTime() < self.Jumped + 1 or navmesh.GetNavArea(self:GetPos(), 50):HasAttributes( NAV_MESH_NO_JUMP ) then return end
     if !self:IsOnGround() then return end
-    local tr = util.TraceLine( {
-        start = self:EyePos() + Vector(0,0,30),
-        endpos = self:EyePos() + Vector(0,0,94),
-        filter = self
-    } )
-    local tr2 = util.TraceLine( {
-        start = self:EyePos() + Vector(0,0,30) + self:EyeAngles():Forward() * scanDist,
-        endpos = self:EyePos() + self:EyeAngles():Forward() * scanDist + Vector(0,0,94),
-        filter = self
-    } )
-    --debugoverlay.Line(self:EyePos() + Vector(0,0,30), self:EyePos() + Vector(0,0,94), 5, Color(255,255,0), true)
-    --debugoverlay.Line(self:EyePos() + Vector(0,0,30) + self:EyeAngles():Forward() * scanDist, self:EyePos() + self:EyeAngles():Forward() * scanDist + Vector(0,0,94), 5, Color(255,255,0), true)
-    local jmpHeight
-    if tr.Hit then jmpHeight = tr.StartPos:Distance(tr.HitPos) else jmpHeight = 64 end
-    if tr2.Hit and !tr.Hit then jmpHeight = tr2.StartPos:Distance(tr2.HitPos) end
-    self.loco:SetJumpHeight(jmpHeight)
     self.loco:SetDesiredSpeed( 450 )
     self.loco:SetAcceleration( 5000 )
     self:SetLastAct(self:GetActivity())
@@ -266,7 +254,7 @@ function ENT:Jump(goal, scanDist)
 end
 
 function ENT:Duck( state )
-    if state then self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,30) ) self.IsDuck = true else self:SetCollisionBounds( Vector(-8,-8,0), Vector(8,8,70) ) self.IsDuck = false end
+    if state then self:SetCollisionBounds( Vector(-16,-16,0), Vector(16,16,30) ) self.IsDuck = true else self:SetCollisionBounds( Vector(-16,-16,0), Vector(16,16,70) ) self.IsDuck = false end
 end
 
 function ENT:BodyUpdate()

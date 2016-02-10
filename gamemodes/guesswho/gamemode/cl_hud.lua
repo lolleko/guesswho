@@ -6,6 +6,7 @@ function CHHUD:CreateHead()
         self.HeadModel:SetPos( 22, ScrH() - 180 )
         self.HeadModel:SetSize( 96, 100 )
         self.HeadModel.LayoutEntity = function() end
+        self.HeadModel:ParentToHUD()
     end
 end
 
