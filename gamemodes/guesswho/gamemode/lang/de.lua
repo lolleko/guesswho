@@ -31,7 +31,7 @@ local de = {
     --Buttons
     teamselect_buttons_spectate = "Zuschauen",
     teamselect_buttons_auto = "Automatisch wählen",
-
+    teamselect_buttons_close = "Schließen",
     --Scoreboard
     scoreboard_server = "Server",
     scoreboard_map = "Map",
