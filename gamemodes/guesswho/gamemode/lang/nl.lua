@@ -31,7 +31,7 @@ local nl = {
     --Buttons
     teamselect_buttons_spectate = "Kijken",
     teamselect_buttons_auto = "Automatisch meedoen",
-
+    teamselect_buttons_close = "Dicht",
     --Scoreboard
     scoreboard_server = "Server",
     scoreboard_map = "Map",
