@@ -31,7 +31,7 @@ local zhtw = {
     --Buttons
     teamselect_buttons_spectate = "旁觀",
     teamselect_buttons_auto = "自動加入",
-
+    teamselect_buttons_close = "關閉",
     --Scoreboard
     scoreboard_server = "伺服器",
     scoreboard_map = "地圖",
