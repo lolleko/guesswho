@@ -157,7 +157,7 @@ function GM:ShowTeam()
     end
 
     local TeamAutoButton = vgui.Create( "DButton", self.TeamSelectFrame )
-    TeamAutoButton:SetPos( ScrW() / 2 - 300, 580 )
+    TeamAutoButton:SetPos( ScrW() / 2 - 300, 560 )
     TeamAutoButton:SetSize( 600, 40 )
     TeamAutoButton:SetFont("robot_small")
     TeamAutoButton:SetText( gwlang:translate( "teamselect_buttons_auto" ) )
@@ -167,6 +167,17 @@ function GM:ShowTeam()
         draw.RoundedBox( 0, 0, 0, w, h, clrs.grey )
     end
 
+   local CloseButton = vgui.Create( "DButton", self.TeamSelectFrame )
+    CloseButton:SetPos( ScrW() / 2 - 300, 620 )
+    CloseButton:SetSize( 600, 40 )
+    CloseButton:SetFont("robot_small")
+    CloseButton:SetText( gwlang:translate( "teamselect_buttons_close" ) )
+    CloseButton:SetTextColor( clrs.lightgrey )
+    function CloseButton.DoClick() self:HideTeam() end
+    function CloseButton:Paint( w, h)
+        draw.RoundedBox( 0, 0, 0, w, h, clrs.grey )
+    end
+    
     self.TeamSelectFrame:SetSize( ScrW(), ScrH() )
     self.TeamSelectFrame:Center()
     self.TeamSelectFrame:MakePopup()
