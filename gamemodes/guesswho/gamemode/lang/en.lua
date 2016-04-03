@@ -31,7 +31,7 @@ local en = {
     --Buttons
     teamselect_buttons_spectate = "Spectate",
     teamselect_buttons_auto = "Auto Join",
-
+    teamselect_buttons_close = "Close",
     --Scoreboard
     scoreboard_server = "Server",
     scoreboard_map = "Map",
