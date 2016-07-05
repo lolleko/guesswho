@@ -75,15 +75,17 @@ function GM:ShouldCollide( ent1, ent2 )
     end
 
     if SERVER and GetConVar( "gw_abilities_enabled" ):GetBool() and GetConVar("gw_touches_enabled"):GetBool() then
-        local hider
+        local hider, seeker
         if ent1:IsPlayer() and ent2:IsPlayer() then
-            if ent1:IsHiding() then
+            if ent1:IsHiding() and ent2:IsSeeking() then
                 hider = ent1
-            elseif ent2:IsHiding() then
+                seeker = ent2
+            elseif ent2:IsHiding() and ent1:IsSeeking()  then
                 hider = ent2
+                seeker = ent1
             end
 
-            if hider and hider:GetLastSeekerTouch() + 2 < CurTime() then
+            if hider and hider:GetLastSeekerTouch() + 3 < CurTime() and hider:GetPos():Distance(seeker:GetPos() < 20)  then
                 hider:AddSeekerTouch()
 
                 if hider:GetSeekerTouches() >= GetConVar("gw_touches_required"):GetInt() then
