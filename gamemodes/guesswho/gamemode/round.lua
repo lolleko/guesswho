@@ -71,6 +71,7 @@ function GM:RoundCreateWalkers()
         v:Spawn()
         v:SetPos(v:GetPos() + Vector(2,2,2)) --move them a little bit to make avoid players work
         v:Freeze( true )
+        v:GodEnable()
         v:SetAvoidPlayers( true )
         end
     end)
@@ -86,6 +87,7 @@ function GM:RoundStart()
     for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
         v:Freeze( false )
         v:SetAvoidPlayers( false )
+        v:GodDisable()
     end
 
     timer.Create( "RoundThink", 1, self.RoundDuration, function() self:RoundThink() end)
