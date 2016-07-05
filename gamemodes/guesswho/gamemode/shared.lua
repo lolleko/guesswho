@@ -3,7 +3,7 @@ GM.Author = "Lolleko"
 GM.Email = "N/A"
 GM.Website = "https://github.com/lolleko/guesswho"
 
-GM.Version = "1.3.1b (47)" --LastVersion 1.3.1 (46)
+GM.Version = "1.4 (48)" --LastVersion 1.3.1b (47)
 
 GM.TeamBased    = true
 
@@ -30,6 +30,9 @@ ROUND_HIDE = 4
 ROUND_SEEK = 5
 ROUND_POST = 6
 ROUND_NAV_GEN = 9
+
+--Shared CVars fallback
+CreateConVar("gw_target_finder_threshold", "700", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "The distance before the target finder will display nearby")
 
 
 function GM:CreateTeams()
@@ -66,9 +69,36 @@ function GM:PlayerShouldTakeDamage( ply, victim )
 end
 
 function GM:ShouldCollide( ent1, ent2 )
-    if ( ent1:IsPlayerHolding() or ent2:IsPlayerHolding() )then
+
+    if ( (!ent1:IsPlayer() and ent1:IsPlayerHolding()) or (!ent1:IsPlayer() and ent2:IsPlayerHolding() )) then
         return false
     end
+
+    if GetConVar( "gw_abilities_enabled" ):GetBool() and GetConVar("gw_touches_enabled"):GetBool() then
+        local hider
+        local seeker
+        if ent1:IsPlayer() and ent2:IsPlayer() then
+            if ent1:IsHiding() then
+                hider = ent1
+                seeker = ent2
+            elseif ent1:IsSeeking() then
+                hider = ent2
+                seeker = ent1
+            end
+
+            if hider and seeker then
+                hider:AddSeekerTouch()
+
+                if hider:GetSeekerTouches() >= GetConVar("gw_touches_required"):GetInt() then
+                    hider:ChatPrint("You received a new ability.")
+                    hider:ResetSeekerTouches()
+                else
+                    hider:ChatPrint("Touch " .. hider:GetSeekerTouches() - GetConVar("gw_touches_required"):GetInt() .. " more seekers to recieve a new ability.")
+                end
+            end
+        end
+    end
+
     return true
 end
 
