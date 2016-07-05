@@ -171,10 +171,16 @@ function PLAYERINFO:Init()
     self.Name:SetSize( 320, 32 )
 
     self.Score = vgui.Create( "DLabel" , self )
-    self.Score:SetPos( 410, 4)
+    self.Score:SetPos( 340, 4)
     self.Score:SetSize( 60, 48 )
     self.Score:SetFont( "robot_normal" )
     self.Score:SetTextColor( clrs.darkgrey )
+    
+    self.Ping = vgui.Create( "DLabel" , self )
+    self.Ping:SetPos( 410, 4 )
+    self.Ping:SetWidth( 50 )
+    self.Ping:SetFont( "robot_normal" )
+    self.Ping:SetTextColor( clrs.darkgrey )
 
     self.Mute = self:Add( "DImageButton" )
     self.Mute:SetSize( 24, 24 )
@@ -202,13 +208,20 @@ function PLAYERINFO:Think()
 
     local txtClr = clrs.grey
     if self.Player:Alive() then txtClr = clrs.lightgrey end
+    
+    if ( self.NumPing == nil || self.NumPing != self.Player:Ping() ) then
+	self.NumPing = self.Player:Ping()
+	self.Ping:SetText( self.NumPing )
+    end
 
     self.Avatar:SetPlayer( self.Player, 64 )
     self.Name:SetText( self.Player:Nick() )
     self.Score:SetText( self.Player:Frags() )
     self.Score:SizeToContents()
+    self.Ping:SizeToContents()
     self.Name:SetTextColor( txtClr )
     self.Score:SetTextColor( txtClr )
+    self.Ping:SetTextColor( txtClr )
 
     if ( self.Muted == nil or self.Muted != self.Player:IsMuted() ) then
 
