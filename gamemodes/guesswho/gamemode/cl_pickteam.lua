@@ -156,6 +156,7 @@ function GM:ShowTeam()
         draw.RoundedBox( 0, 0, 0, w, h, clrs.grey )
     end
 
+
     local TeamAutoButton = vgui.Create( "DButton", self.TeamSelectFrame )
     TeamAutoButton:SetPos( ScrW() / 2 - 300, 580 )
     TeamAutoButton:SetSize( 600, 40 )
@@ -164,6 +165,17 @@ function GM:ShowTeam()
     TeamAutoButton:SetTextColor( clrs.lightgrey )
     function TeamAutoButton.DoClick() self:HideTeam() RunConsoleCommand( "changeteam", team.BestAutoJoinTeam() ) end
     function TeamAutoButton:Paint( w, h)
+        draw.RoundedBox( 0, 0, 0, w, h, clrs.grey )
+    end
+
+    local CloseButton = vgui.Create( "DButton", self.TeamSelectFrame )
+    CloseButton:SetPos( ScrW() - 80, 40 )
+    CloseButton:SetSize( 40, 40 )
+    CloseButton:SetFont("robot_medium")
+    CloseButton:SetText( "X" )
+    CloseButton:SetTextColor( clrs.lightgrey )
+    function CloseButton.DoClick()  self.TeamSelectFrame:Remove() end
+    function CloseButton:Paint( w, h)
         draw.RoundedBox( 0, 0, 0, w, h, clrs.grey )
     end
 

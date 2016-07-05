@@ -246,11 +246,9 @@ function ENT:Jump(goal, scanDist)
     self:SetLastAct(self:GetActivity())
     self.Jumped = CurTime()
     self.IsJumping = true
-    self:SetSolidMask( MASK_NPCSOLID_BRUSHONLY )
     self.loco:Jump()
     --Boost them
-    self.loco:Approach(goal, 1000)
-
+    timer.Simple( 0.5, function() if IsValid(self) then self.loco:SetVelocity( self:GetForward() * 5 ) end end)
 end
 
 function ENT:Duck( state )

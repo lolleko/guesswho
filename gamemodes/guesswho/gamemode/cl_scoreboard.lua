@@ -171,15 +171,15 @@ function PLAYERINFO:Init()
     self.Name:SetSize( 320, 32 )
 
     self.Score = vgui.Create( "DLabel" , self )
-    self.Score:SetPos( 340, 4)
+    self.Score:SetPos( 380, 4)
     self.Score:SetSize( 60, 48 )
     self.Score:SetFont( "robot_normal" )
     self.Score:SetTextColor( clrs.darkgrey )
-    
+
     self.Ping = vgui.Create( "DLabel" , self )
-    self.Ping:SetPos( 410, 4 )
+    self.Ping:SetPos( 450, 8 )
     self.Ping:SetWidth( 50 )
-    self.Ping:SetFont( "robot_normal" )
+    self.Ping:SetFont( "robot_small" )
     self.Ping:SetTextColor( clrs.darkgrey )
 
     self.Mute = self:Add( "DImageButton" )
@@ -208,7 +208,7 @@ function PLAYERINFO:Think()
 
     local txtClr = clrs.grey
     if self.Player:Alive() then txtClr = clrs.lightgrey end
-    
+
     if ( self.NumPing == nil || self.NumPing != self.Player:Ping() ) then
 	self.NumPing = self.Player:Ping()
 	self.Ping:SetText( self.NumPing )

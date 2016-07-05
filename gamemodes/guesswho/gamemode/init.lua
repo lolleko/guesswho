@@ -23,6 +23,7 @@ include( "shared.lua" )
 include( "player.lua" )
 include( "player_ext.lua" )
 include( "round.lua" )
+include( "targetfinder.lua")
 
 --resources
 resource.AddWorkshop( "480998235" )
@@ -44,6 +45,10 @@ util.AddNetworkString( "gwPlayerHull" )
 --[[
     GAMEMODE HOOKS
 ]]--
+
+function GM:Initialize()
+    timer.Create( "gw.player.distance.update.think", 0.1, 0, self.TargetFinderThink)
+end
 
 --Take Damage if innocent NPC damaged
 function GM:EntityTakeDamage(target, dmginfo)

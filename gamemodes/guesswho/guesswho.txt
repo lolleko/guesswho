@@ -73,7 +73,7 @@
 		9
 		{
 			"name"		"gw_damageonfailguess"
-			"text"		"The damage a hunter receives"
+			"text"		"Damage on Fail guess"
 			"help"		"The damage a hunter receives if he hits an NPC and not a player."
 			"type"		"Numeric"
 			"default"	"10"
@@ -113,7 +113,7 @@
 		14
 		{
 			"name"		"gw_walkerperplayer"
-			"text"		"The amount of NPCs per player."
+			"text"		"Extra NPCs per player."
 			"help"		"The amount of NPCs to add for each player on the server."
 			"type"		"Numeric"
 			"default"	"1"
@@ -141,6 +141,38 @@
 			"help"		"Wether hiding can change their model or not."
 			"type"		"CheckBox"
 			"default"	"1"
+		}
+		18
+		{
+			"name"		"gw_target_finder_enabled"
+			"text"		"Target Finder"
+			"help"		"Wether the target finder is enabled or not."
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		19
+		{
+			"name"		"gw_target_finder_threshold"
+			"text"		"Target Finder Threshold"
+			"help"		"The distance before the target finder will display nearby"
+			"type"		"Numeric"
+			"default"	"700"
+		}
+		20
+		{
+			"name"		"gw_touches_enabled"
+			"text"		"Touch for Weapon"
+			"help"		"Wether touching for weapons is enabled."
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		21
+		{
+			"name"		"gw_touches_required"
+			"text"		"Touches required"
+			"help"		"The amount of seeker touches that are required for a hider to receive a new weapon."
+			"type"		"Numeric"
+			"default"	"3"
 		}
 	}
 }

@@ -20,3 +20,25 @@ function plymeta:ApplyStun( dur )
     end
 
 end
+
+function plymeta:GetSeekerTouches()
+    return self.iSeekerTouches or 0
+end
+
+function plymeta:SetSeekerTouches(val)
+    self.iSeekerTouches = val
+end
+
+function plymeta:AddSeekerTouch()
+    if (self.fLastSeekerTouch or 0) + 2 < CurTime() then
+        self.iSeekerTouches = self:GetSeekerTouches() + 1
+        self.fLastSeekerTouch = CurTime()
+    end
+end
+
+function plymeta:ResetSeekerTouches()
+    self.iSeekerTouches = 0
+    self:StripWeapons()
+
+    self:Give( GAMEMODE.Weapons[ math.random( 1, #GAMEMODE.Weapons ) ] )
+end

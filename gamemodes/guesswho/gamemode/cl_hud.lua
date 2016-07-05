@@ -54,6 +54,26 @@ function CHHUD:DrawPanel( x, y, w, h, clrs, brdwidth)
 
 end
 
+function CHHUD:DrawCircle( x, y, radius, seg, clr)
+
+    if radius == 0 then return end
+
+    surface.SetDrawColor( clr )
+
+    local cir = {}
+
+    table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
+    for i = 0, seg do
+        local a = math.rad( ( i / seg ) * -360 )
+        table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+    end
+
+    local a = math.rad( 0 ) -- This is need for non absolute segment counts
+    table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+
+    surface.DrawPoly( cir )
+end
+
 function CHHUD:Crosshair()
     local x = ScrW() / 2
     local y = ScrH() / 2
@@ -145,6 +165,35 @@ function CHuntHUD()
         end
 
     end
+
+    --TargetFinder
+    if ply:Alive() and ply:IsSeeking() then
+        local distance = ply:GetNWFloat("gwClosestTargetDistance", -1)
+
+        local distanceThreshold = GetConVar( "gw_target_finder_threshold" ):GetInt()
+        local maxRadius = 50
+        local circleRadius
+        if distance == 0 then
+            circleRadius = maxRadius
+        elseif distance == -1 then
+            circleRadius = 0
+        else
+            circleRadius = distanceThreshold / distance * maxRadius
+        end
+        CHHUD:DrawCircle( ScrW() / 2, ScrH() - 75, maxRadius, 32, clrs.darkgreybg )
+        CHHUD:DrawCircle( ScrW() / 2, ScrH() - 75, circleRadius, 32, teamColor )
+
+        local distanceText = "No Target"
+        if distance != -1 then
+            if distance == 0 then
+                distanceText = "Nearby"
+            else
+                distanceText = math.ceil(distance)
+            end
+        end
+        CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize( distanceText, "robot_small" ) / 2), ScrH() - 83, distanceText, "robot_small", clrs.white )
+    end
+
 end
 hook.Add( "HUDPaint", "CHuntHUD", CHuntHUD)
 

@@ -28,7 +28,7 @@ GM.SeekerModels = {
 
 GM.Weapons = {
     "weapon_gw_prophunt",
-    --"weapon_gw_barricade",
+    "weapon_gw_wall",
     "weapon_gw_shockwave",
     "weapon_gw_cloak",
     --"weapon_gw_smoke",
