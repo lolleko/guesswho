@@ -29,8 +29,12 @@ function plymeta:SetSeekerTouches(val)
     self.iSeekerTouches = val
 end
 
+function plymeta:GetLastSeekerTouch()
+    return self.fLastSeekerTouch or 0
+end
+
 function plymeta:AddSeekerTouch()
-    if (self.fLastSeekerTouch or 0) + 2 < CurTime() then
+    if self.GetLastSeekerTouch + 2 < CurTime() then
         self.iSeekerTouches = self:GetSeekerTouches() + 1
         self.fLastSeekerTouch = CurTime()
     end

@@ -74,26 +74,23 @@ function GM:ShouldCollide( ent1, ent2 )
         return false
     end
 
-    if GetConVar( "gw_abilities_enabled" ):GetBool() and GetConVar("gw_touches_enabled"):GetBool() then
+    if SERVER and GetConVar( "gw_abilities_enabled" ):GetBool() and GetConVar("gw_touches_enabled"):GetBool() then
         local hider
-        local seeker
         if ent1:IsPlayer() and ent2:IsPlayer() then
             if ent1:IsHiding() then
                 hider = ent1
-                seeker = ent2
-            elseif ent1:IsSeeking() then
+            elseif ent2:IsHiding() then
                 hider = ent2
-                seeker = ent1
             end
 
-            if hider and seeker then
+            if hider and hider:GetLastSeekerTouch() + 2 < CurTime() then
                 hider:AddSeekerTouch()
 
                 if hider:GetSeekerTouches() >= GetConVar("gw_touches_required"):GetInt() then
                     hider:ChatPrint("You received a new ability.")
                     hider:ResetSeekerTouches()
                 else
-                    hider:ChatPrint("Touch " .. hider:GetSeekerTouches() - GetConVar("gw_touches_required"):GetInt() .. " more seekers to recieve a new ability.")
+                    hider:ChatPrint("Touch " .. GetConVar("gw_touches_required"):GetInt() - hider:GetSeekerTouches() .. " more seekers to recieve a new ability.")
                 end
             end
         end
