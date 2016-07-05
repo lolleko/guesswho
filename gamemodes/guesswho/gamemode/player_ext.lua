@@ -34,7 +34,7 @@ function plymeta:GetLastSeekerTouch()
 end
 
 function plymeta:AddSeekerTouch()
-    if self.GetLastSeekerTouch() + 2 < CurTime() then
+    if self:GetLastSeekerTouch() + 2 < CurTime() then
         self.iSeekerTouches = self:GetSeekerTouches() + 1
         self.fLastSeekerTouch = CurTime()
     end
