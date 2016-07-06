@@ -30,6 +30,11 @@ resource.AddWorkshop( "480998235" )
 
 resource.AddFile( "materials/vgui/gw/logo_main.png" )
 
+local icons = file.Find("materials/vgui/gw/abilityicons/*.png", "GAME")
+for _, icon in pairs(icons) do
+    resource.AddFile( icon )
+end
+
 for _,sound in pairs( file.Find( "sound/gwtaunts/*", "GAME" ) ) do
     resource.AddFile( "sound/gwtaunts/" .. sound )
 end

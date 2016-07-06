@@ -31,6 +31,7 @@ function PLAYER:ShouldDrawLocal() return true end
 function PLAYER:Spawn()
     local clr = GAMEMODE.WalkerColors[math.random(1,#GAMEMODE.WalkerColors)]
     self.Player:SetPlayerColor(Vector(clr.r / 255, clr.g / 255, clr.b / 255))
+    self.Player:SetCustomCollisionCheck(true)
 end
 
 

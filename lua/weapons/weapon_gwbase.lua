@@ -72,3 +72,8 @@ function SWEP:SecondaryAttack()
     self:Ability()
     self:TakeSecondaryAmmo( 1 )
 end
+
+function SWEP:GiveSecondaryAmmo(amount)
+    self.Owner:GiveAmmo(amount, "ability", true)
+    self:SetClip2( self:Clip2() + amount )
+end
