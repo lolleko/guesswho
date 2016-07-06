@@ -1,4 +1,10 @@
 CHHUD = {}
+CHHUD.AbilityIcons = {}
+
+local icons = file.Find("materials/vgui/gw/abilityicons/*.png", "GAME")
+for _, icon in pairs(icons) do
+    CHHUD.AbilityIcons[string.StripExtension(icon)] = Material("materials/vgui/gw/abilityicons/" .. icon, "noclamp smooth")
+end
 
 function CHHUD:CreateHead()
     if !self.HeadModel and !IsValid(self.HeadModel) and GetConVar("gw_hud_showhead"):GetInt() == 1 then
@@ -72,6 +78,16 @@ function CHHUD:DrawCircle( x, y, radius, seg, clr)
     table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
 
     surface.DrawPoly( cir )
+end
+
+function CHHUD:DrawAbilityIcon(ability, x, y, w, h)
+    if self.AbilityIcons[ability] then
+        w = w or 128
+        h = h or 128
+        surface.SetDrawColor( 255, 255, 255, 255 )
+        surface.SetMaterial( self.AbilityIcons[ability]	)
+        surface.DrawTexturedRect( x, y, w, h )
+    end
 end
 
 function CHHUD:Crosshair()
@@ -160,8 +176,9 @@ function CHuntHUD()
         end
 
         if ply:IsHiding() and ply:GetActiveWeapon():Clip2() > 0 then
-            CHHUD:DrawPanel( ScrW() - 220, ScrH() - 40, 200, 20, {background = teamColor})
-            CHHUD:DrawText( ScrW() - ( 120 + CHHUD:TextSize( ply:GetActiveWeapon().Name, "robot_small" ) / 2 ), ScrH() - 38, ply:GetActiveWeapon().Name, "robot_small", clrs.white )
+            CHHUD:DrawPanel( ScrW() - 148, ScrH() - 40, 128, 20, {background = clrs.darkgreybg})
+            CHHUD:DrawAbilityIcon(ply:GetActiveWeapon():GetClass(), ScrW() - 148, ScrH() - 168)
+            CHHUD:DrawText( ScrW() - ( 84 + CHHUD:TextSize( ply:GetActiveWeapon().Name, "robot_small" ) / 2 ), ScrH() - 38, ply:GetActiveWeapon().Name, "robot_small", clrs.white )
         end
 
     end
