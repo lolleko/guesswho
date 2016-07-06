@@ -15,7 +15,7 @@ function SWEP:Ability()
 	local hitPos = trace.HitPos
 
 	if IsValid(hitEnt) and hitEnt:IsPlayer() and hitEnt:IsSeeking() then
-		if hitPos:Distance(ply:GetPos()) < 50 then
+		if hitPos:Distance(ply:GetPos()) < 80 then
 			local dmg =  hitEnt:Health() / 3
 			hitEnt:TakeDamage(dmg, ply, self)
 			ply:SetHealth(ply:Health() + dmg)
