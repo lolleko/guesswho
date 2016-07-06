@@ -85,7 +85,7 @@ function GM:ShouldCollide( ent1, ent2 )
                 seeker = ent1
             end
 
-            if hider and hider:GetLastSeekerTouch() + 3 < CurTime() and hider:GetPos():Distance(seeker:GetPos()) < 30  then
+            if hider and hider:GetLastSeekerTouch() + 3 < CurTime() and hider:GetPos():Distance(seeker:GetPos()) < 40  then
                 hider:AddSeekerTouch()
 
                 if hider:GetSeekerTouches() >= GetConVar("gw_touches_required"):GetInt() then
