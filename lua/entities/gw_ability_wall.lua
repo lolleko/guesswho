@@ -68,7 +68,7 @@ function ENT:Think()
 			else
 
 				if target:GetMoveType() == MOVETYPE_STEP then
-					--pushDir.z = 0
+					pushDir.z = 0
 				end
 
 				local vecPush = magnitude * pushDir
