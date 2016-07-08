@@ -184,7 +184,7 @@ function CHuntHUD()
     end
 
     --TargetFinder
-    if ply:Alive() and ply:IsSeeking() then
+    if ply:Alive() and ply:IsSeeking() and GetConVar("gw_target_finder_enabled"):GetBool() then
         local distance = ply:GetNWFloat("gwClosestTargetDistance", -1)
 
         local distanceThreshold = GetConVar( "gw_target_finder_threshold" ):GetInt()
