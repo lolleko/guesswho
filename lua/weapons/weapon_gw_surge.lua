@@ -7,11 +7,18 @@ function SWEP:Ability()
 
     local ply = self.Owner
 
-    local trace = ply:GetEyeTrace()
+    local trace = util.TraceLine( {
+    	start = ply:EyePos(),
+        endpos = ply:EyePos() + ply:GetAimVector() * 500,
+        filter  = ply
+    } )
 
-    if !trace.Hit then return end
-
-    local hitPos = trace.HitPos + Vector(0, 0, 50)
+    local hitPos
+    if trace.Hit then
+        hitPos = trace.HitPos + Vector(0, 0, 50)
+    else
+        hitPos = ply:EyePos() + ply:GetAimVector() * 500
+    end
 
     if CLIENT then
         local dlight = DynamicLight( self:EntIndex() )
@@ -37,28 +44,6 @@ function SWEP:Ability()
     pull:Spawn()
     pull:Activate()
 
-    local tesla = ents.Create("point_tesla")
-
-    if !IsValid( tesla ) then return end
-    tesla:SetPos( hitPos )
-
-    tesla:SetKeyValue("m_Color", "255 100 200")
-    tesla:SetKeyValue("m_flRadius", "50")
-    tesla:SetKeyValue("interval_min", "0.1")
-    tesla:SetKeyValue("interval_max", "0.3")
-    tesla:SetKeyValue("beamcount_min", "20")
-    tesla:SetKeyValue("beamcount_max", "40")
-    tesla:SetKeyValue("thick_min", "5")
-    tesla:SetKeyValue("thick_max", "15")
-    tesla:SetKeyValue("lifetime_min", "0.3")
-    tesla:SetKeyValue("lifetime_max", "1")
-
-    tesla:Spawn()
-    tesla:Activate()
-
-    tesla:Fire("TurnOn", "", 0)
-
-    SafeRemoveEntityDelayed( tesla, 5 )
     SafeRemoveEntityDelayed( pull, 5)
 
 end
