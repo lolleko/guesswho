@@ -3,7 +3,7 @@ GM.Author = "Lolleko"
 GM.Email = "N/A"
 GM.Website = "https://github.com/lolleko/guesswho"
 
-GM.Version = "1.4.1 (49)" --LastVersion 1.4 (48)
+GM.Version = "1.4.1a (50)" --LastVersion 1.4.1 (49)
 
 GM.TeamBased    = true
 
@@ -33,7 +33,7 @@ ROUND_NAV_GEN = 9
 
 --Shared CVars fallback
 CreateConVar("gw_target_finder_threshold", "700", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "The distance before the target finder will display nearby")
-
+CreateConVar("gw_target_finder_enabled", "1", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Wether target finder is enabled or not")
 
 function GM:CreateTeams()
 
