@@ -3,18 +3,18 @@ GM.Author = "Lolleko"
 GM.Email = "N/A"
 GM.Website = "https://github.com/lolleko/guesswho"
 
-GM.Version = "1.4.1a (50)" --LastVersion 1.4.1 (49)
+GM.Version = "1.5 (51)" --LastVersion 1.4.1a (50)
 
 GM.TeamBased    = true
 
 DeriveGamemode( "base" )
 
-include( "player_ext_shd.lua")
-include( "sh_config.lua")
-include( "sh_taunts.lua")
-include( "player_class/player_hiding.lua")
-include( "player_class/player_seeker.lua")
-include( "sh_animations.lua")
+include("player_ext_shd.lua")
+include("sh_config.lua")
+include("sh_taunts.lua")
+include("player_class/player_hiding.lua")
+include("player_class/player_seeker.lua")
+include("sh_animations.lua")
 
 --Globals
 

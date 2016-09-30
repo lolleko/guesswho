@@ -3,28 +3,29 @@ SWEP.Name = "Vampirism"
 
 function SWEP:Ability()
 
-	if CLIENT then return end
+    if CLIENT then return end
 
-	local ply = self.Owner
+    local ply = self.Owner
 
-	local trace = ply:GetEyeTrace()
+    for _,v in pairs( player.GetAll() ) do
+        if v:Alive() and v:GetPos():Distance( ply:GetPos() ) < 350 and v:IsSeeking() then
 
-	if !trace.Hit then return end
+            v:EmitSound("physics/flesh/flesh_bloody_impact_hard1.wav")
 
-	local hitEnt = trace.Entity
-	local hitPos = trace.HitPos
+            local effectdata = EffectData()
+            effectdata:SetEntity( ply )
+            effectdata:SetOrigin(v:GetPos() + v:OBBCenter() + Vector(0, 0, 10))
+            effectdata:SetRadius( 10 )
 
-	if IsValid(hitEnt) and hitEnt:IsPlayer() and hitEnt:IsSeeking() then
-		if hitPos:Distance(ply:GetPos()) < 80 then
-			local dmg =  hitEnt:Health() / 3
-			hitEnt:TakeDamage(dmg, ply, self)
-			ply:SetHealth(ply:Health() + dmg)
-		else
-			ply:ChatPrint("Target not close enough!")
-			self:GiveSecondaryAmmo(1)
-		end
-	else
-		ply:ChatPrint("Please target a seeker!")
-		self:GiveSecondaryAmmo(1)
-	end
+            util.Effect( "gw_vampirism", effectdata, true, true )
+
+            local dmg =  v:Health() / 3
+            v:TakeDamage(dmg, ply, self)
+            timer.Create( "gw.vamp." .. ply:EntIndex() .. "." .. v:EntIndex(), 0.25, 4, function()
+                if IsValid(ply) and ply:Alive() then
+                    ply:SetHealth(ply:Health() + dmg / 4)
+                end
+            end)
+        end
+    end
 end

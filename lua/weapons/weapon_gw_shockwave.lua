@@ -13,7 +13,7 @@ function SWEP:Ability()
 
     util.Effect( "gw_shockwave", effectdata, true, true )
     for _,v in pairs( player.GetAll() ) do
-        if v:GetPos():Distance( ply:GetPos() ) < 300 and v:Team() == TEAM_SEEKING then
+        if v:GetPos():Distance( ply:GetPos() ) < 300 and v:IsSeeking() then
             local effect = EffectData()
             effect:SetEntity( v )
             effect:SetMagnitude( stunDur )
