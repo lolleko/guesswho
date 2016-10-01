@@ -1,8 +1,8 @@
 if SERVER then
 	CreateConVar( "gw_propfreeze_enabled", "1", { FCVAR_REPLICATED, FCVAR_ARCHIVE } )
 
-	local IsTimed = GM.PropFreezeIsTimed
-	local Delay = GM.PropFreezeDelay
+	local IsTimed = true -- false makes instant freeze
+	local Delay = 5 -- between 5-10 is recommended
 
 	function DoPropFreeze(ply)
 		for k, v in pairs( ents.FindByClass( "prop_*" ) ) do 
