@@ -1,4 +1,4 @@
-"guesswho"
+﻿"guesswho"
 {
 	"title"		"Guess Who"
 	"menusystem"	"1"
@@ -173,6 +173,14 @@
 			"help"		"The amount of seeker touches that are required for a hider to receive a new weapon."
 			"type"		"Numeric"
 			"default"	"3"
+		}
+		22
+		{
+			"name"		"gw_propfreeze_enabled"
+			"text"		"Freeze props"
+			"help"		"Shoud props freeze or not."
+			"type"		"CheckBox"
+			"default"	"1"
 		}
 	}
 }

@@ -1,6 +1,6 @@
--- Needs few language functions to understand it better
-
 if SERVER then
+	CreateConVar( "gw_propfreeze_enabled", "1", { FCVAR_REPLICATED, FCVAR_ARCHIVE } )
+
 	local Enabled = GM.PropFreezeEnabled
 	local IsTimed = GM.PropFreezeIsTimed
 	local Delay = GM.PropFreezeDelay

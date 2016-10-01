@@ -22,9 +22,8 @@ GM.Models = {
     "models/player/Group01/Female_03.mdl",
 }
 
-GM.PropFreezeEnabled = false -- if set to true, world props wont move.(default: false)
 GM.PropFreezeIsTimed = true -- if set false, props will be instantly freezed.(default: true, setting false may cause props stuck on air(EXPERIMENTAL))
-GM.PropFreezeDelay = 5 -- after how many seconds should the props freeze?.(default: 5, recommend between 5-7 seconds)
+GM.PropFreezeDelay = 5 -- after how many seconds should the props freeze?.(default: 5, recommend between 5-10 seconds)
 
 GM.SeekerModels = {
   "models/player/combine_super_soldier.mdl"
