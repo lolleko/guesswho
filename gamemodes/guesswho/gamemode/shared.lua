@@ -11,6 +11,7 @@ DeriveGamemode( "base" )
 
 include("player_ext_shd.lua")
 include("sh_config.lua")
+include("sh_propfreeze.lua")
 include("sh_taunts.lua")
 include("player_class/player_hiding.lua")
 include("player_class/player_seeker.lua")
