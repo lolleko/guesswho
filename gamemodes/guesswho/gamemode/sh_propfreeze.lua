@@ -1,7 +1,6 @@
 if SERVER then
 	CreateConVar( "gw_propfreeze_enabled", "1", { FCVAR_REPLICATED, FCVAR_ARCHIVE } )
 
-	local Enabled = GM.PropFreezeEnabled
 	local IsTimed = GM.PropFreezeIsTimed
 	local Delay = GM.PropFreezeDelay
 
@@ -25,7 +24,7 @@ if SERVER then
 		print("[INFO] Props are frozen now!")
 	end
 
-	if Enabled == true then
+	if GetConvar("gw_propfreeze_enabled"):GetBool() then
 		hook.Add( "InitPostEntity", "PropFreezeOnInit", DoPropFreeze )
 		hook.Add( "PostCleanupMap", "PropFreezeOnCleanUP", DoPropFreeze )
 	end
