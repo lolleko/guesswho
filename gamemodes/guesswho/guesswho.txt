@@ -1,4 +1,4 @@
-﻿"guesswho"
+"guesswho"
 {
 	"title"		"Guess Who"
 	"menusystem"	"1"
@@ -58,7 +58,7 @@
 		{
 			"name"		"gw_hideduration"
 			"text"		"The hide duration"
-			"help"		"The time that the hiding team get´s to disappear in seconds."
+			"help"		"The time that the hiding team get�s to disappear in seconds."
 			"type"		"Numeric"
 			"default"	"30"
 		}
