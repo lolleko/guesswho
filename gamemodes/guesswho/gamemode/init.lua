@@ -23,6 +23,7 @@ include( "shared.lua" )
 include( "player.lua" )
 include( "player_ext.lua" )
 include( "round.lua" )
+include( "propfreeze.lua" )
 include( "targetfinder.lua")
 
 --resources
