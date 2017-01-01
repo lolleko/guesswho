@@ -59,7 +59,7 @@
 		{
 			"name"		"gw_hideduration"
 			"text"		"The hide duration"
-			"help"		"The time that the hiding team get´s to disappear in seconds."
+			"help"		"The time that the hiding team getï¿½s to disappear in seconds."
 			"type"		"Numeric"
 			"default"	"30"
 		}
@@ -149,7 +149,7 @@
 			"text"		"Target Finder"
 			"help"		"Wether the target finder is enabled or not."
 			"type"		"CheckBox"
-			"default"	"1"
+			"default"	"0"
 		}
 		19
 		{
@@ -181,7 +181,7 @@
 			"text"		"Freeze props"
 			"help"		"Shoud props freeze or not."
 			"type"		"CheckBox"
-			"default"	"1"
+			"default"	"0"
 		}
 	}
 }
