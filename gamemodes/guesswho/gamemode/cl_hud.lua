@@ -211,6 +211,20 @@ function CHuntHUD()
         CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize( distanceText, "robot_small" ) / 2), ScrH() - 83, distanceText, "robot_small", clrs.white )
     end
 
+    -- TOUCHES
+    if ply:Alive() and ply:IsHiding() and GetConVar("gw_touches_enabled"):GetBool() then
+
+        for i = 1, GetConVar("gw_touches_required"):GetInt() do
+            CHHUD:DrawPanel( 110 + i * 20, ScrH() - 50, 10, 30, {background = clrs.darkgreybg})
+        end
+
+        for i = 1, ply:GetSeekerTouches() do
+            CHHUD:DrawPanel( 110 + i * 20, ScrH() - 50, 10, 30, {background = teamColor})
+        end
+
+
+    end
+
 end
 hook.Add( "HUDPaint", "CHuntHUD", CHuntHUD)
 
@@ -266,4 +280,75 @@ function GM:HUDDrawTargetID()
     draw.SimpleText( text, font, x + 1, y + 1, Color( 0, 0, 0, 120 ) )
     draw.SimpleText( text, font, x + 2, y + 2, Color( 0, 0, 0, 50 ) )
     draw.SimpleText( text, font, x, y, self:GetTeamColor( trace.Entity ) )
+end
+
+function GM:HUDDrawPickupHistory()
+
+	if ( self.PickupHistory == nil ) then return end
+
+	local x, y = ScrW() - self.PickupHistoryWide - 20, self.PickupHistoryTop
+	local tall = 0
+	local wide = 0
+
+    local ply = LocalPlayer()
+    local teamColor = team.GetColor(ply:Team())
+
+	for k, v in pairs( self.PickupHistory ) do
+
+		if ( !istable( v ) ) then
+
+			Msg( tostring( v ) .. "\n" )
+			PrintTable( self.PickupHistory )
+			self.PickupHistory[ k ] = nil
+			return
+		end
+
+		if ( v.time < CurTime() ) then
+
+			if ( v.y == nil ) then v.y = y end
+
+			v.y = ( v.y * 5 + y ) / 6
+
+			local delta = ( v.time + v.holdtime ) - CurTime()
+			delta = delta / v.holdtime
+
+			local alpha = 255
+			local colordelta = math.Clamp( delta, 0.6, 0.7 )
+
+			-- Fade in/out
+			if ( delta > 1 - v.fadein ) then
+				alpha = math.Clamp( ( 1.0 - delta ) * ( 255 / v.fadein ), 0, 255 )
+			elseif ( delta < v.fadeout ) then
+				alpha = math.Clamp( delta * ( 255 / v.fadeout ), 0, 255 )
+			end
+
+			v.x = x + self.PickupHistoryWide - (self.PickupHistoryWide * ( alpha / 255 ) )
+
+            local pickupText
+
+            if ply:IsHiding() and ply:GetActiveWeapon():GetClass() != "weapon_gw_smgdummy" then
+                pickupText = gwlang:translate("hud_ability_pickup")
+            else
+                pickupText = v.name
+            end
+
+            local pickupTextSize = CHHUD:TextSize(pickupText, "robot_normal")
+
+            CHHUD:DrawPanel( v.x + v.height + 8 - pickupTextSize / 2 - 5, v.y - ( v.height / 2 ) - 80, pickupTextSize + 10, 35, {background = clrs.darkgreybg})
+            CHHUD:DrawPanel( v.x + v.height + 8 - pickupTextSize / 2 - 5, v.y - ( v.height / 2 ) - 50, pickupTextSize + 10, 5, {background = teamColor})
+            CHHUD:DrawText( v.x + v.height + 8 - (pickupTextSize / 2), v.y - ( v.height / 2 ) - 75, pickupText, "robot_normal", clrs.white )
+
+			y = y + ( v.height + 26 )
+			tall = tall + v.height + 18
+			wide = math.Max( wide, v.width + v.height + 24 )
+
+			if ( alpha == 0 ) then self.PickupHistory[ k ] = nil end
+
+		end
+
+	end
+
+	self.PickupHistoryTop = ( self.PickupHistoryTop * 5 + ( ScrH() * 0.75 - tall ) / 2 ) / 6
+	self.PickupHistoryWide = ( self.PickupHistoryWide * 5 + wide ) / 6
+
 end

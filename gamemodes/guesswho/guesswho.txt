@@ -1,8 +1,8 @@
 "guesswho"
 {
-	"title"		"Guess Who"
+	"title"			"Guess Who"
 	"menusystem"	"1"
-	"base"		"base"
+	"base"			"base"
 	"workshopid"	"480998235"
 
 	"settings"
@@ -59,7 +59,7 @@
 		{
 			"name"		"gw_hideduration"
 			"text"		"The hide duration"
-			"help"		"The time that the hiding team get�s to disappear in seconds."
+			"help"		"The time that the hiding team gets to disappear in seconds."
 			"type"		"Numeric"
 			"default"	"30"
 		}

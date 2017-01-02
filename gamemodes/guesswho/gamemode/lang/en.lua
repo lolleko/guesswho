@@ -38,6 +38,9 @@ local en = {
     scoreboard_online = "Online",
     scoreboard_spectators = "Spectators",
 
+    --HUD
+    hud_ability_pickup = "New Ability Recieved",
+
 }
 
 gwlang:addLangguage( en, "en" )

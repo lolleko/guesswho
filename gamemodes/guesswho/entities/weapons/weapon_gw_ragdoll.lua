@@ -8,6 +8,10 @@ function SWEP:Ability()
 
     if SERVER then
 
+        net.Start( "PlayerKilledSelf" )
+            net.WriteEntity( ply )
+        net.Broadcast()
+
         if ply:InVehicle() then
             ply:ExitVehicle()
         end

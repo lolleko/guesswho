@@ -6,15 +6,22 @@ function SWEP:Ability()
     if SERVER then
         GAMEMODE.AbilitySuperHotMode = true
         GAMEMODE.AbilitySuperHotModePly = ply
-        GAMEMODE.AbilitySuperHotModeEndTime = RealTime() + 12
+        GAMEMODE.AbilitySuperHotModeEndTime = RealTime() + 6
+        ply:SetWalkSpeed(ply:GetWalkSpeed() * 3)
+        ply:SetRunSpeed(ply:GetRunSpeed() * 3)
+        game.SetTimeScale(0.3)
     end
 end
 
 local function endSuperHotMode()
     if SERVER then
+        local ply = GAMEMODE.AbilitySuperHotModePly
+        game.SetTimeScale(1)
+        ply:SetWalkSpeed(ply:GetWalkSpeed() / 3)
+        ply:SetRunSpeed(ply:GetRunSpeed() / 3)
+
         GAMEMODE.AbilitySuperHotMode = false
         GAMEMODE.AbilitySuperHotModePly = nill
-        game.SetTimeScale(1)
 
         if math.random(1, 100) <= 4 then
             PrintMessage( HUD_PRINTCENTER, "BONUS SLOWMOTION" )
@@ -38,9 +45,6 @@ if SERVER then
                 endSuperHotMode()
             else
                 PrintMessage( HUD_PRINTCENTER, "SUPER HOT" )
-                local velLen = ply:GetVelocity():Length()
-                local scale = math.Clamp(velLen / 200, 0.1, 1)
-                game.SetTimeScale(scale)
             end
         end
     end
