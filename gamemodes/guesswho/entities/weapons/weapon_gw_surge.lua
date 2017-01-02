@@ -1,5 +1,6 @@
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Graviton Surge"
+SWEP.AbilitySound = "vo/npc/vortigaunt/surge.wav"
 
 -- Zarya Main 4 life
 AccessorFunc(SWEP, "det_time", "DetTime")

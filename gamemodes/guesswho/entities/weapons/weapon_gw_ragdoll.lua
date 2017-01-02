@@ -1,4 +1,3 @@
-
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Ragdoll"
 

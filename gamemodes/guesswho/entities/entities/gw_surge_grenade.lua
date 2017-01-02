@@ -41,6 +41,8 @@ function ENT:Explode(tr)
 	    pull:Spawn()
 	    pull:Activate()
 
+        pull:EmitSound("ambient/levels/labs/electric_explosion1.wav", 200)
+
 	    SafeRemoveEntityDelayed( pull, 5)
 		self:Remove()
 	end
