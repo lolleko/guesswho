@@ -108,6 +108,9 @@ function CHuntHUD()
         return
     end
     local ply = LocalPlayer()
+    if !ply:Alive() and IsValid(ply:GetObserverTarget()) then
+        ply = ply:GetObserverTarget()
+    end
     local time = string.ToMinutesSeconds( GAMEMODE:GetEndTime() - CurTime())
     local teamColor = team.GetColor(ply:Team())
     local label = GAMEMODE:GetRoundLabel() or "ERROR"
@@ -116,6 +119,13 @@ function CHuntHUD()
     CHHUD:DrawPanel( ScrW() / 2 - 100, 45, 200, 5, {background = teamColor})
     CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(time, "robot_normal") / 2), 5, time, "robot_normal", clrs.white )
     CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize( label, "robot_small" ) / 2 ), 26, label , "robot_small", clrs.white )
+
+    -- spectator
+    if IsValid(LocalPlayer():GetObserverTarget()) then
+        local specEnt = LocalPlayer():GetObserverTarget()
+        local nick = specEnt:Nick()
+        CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(nick, "robot_large") / 2), ScrH() - 40, nick, "robot_normal", clrs.white )
+    end
 
     --Health
     local health = ply:Health()
@@ -238,7 +248,7 @@ function GM:HUDDrawTargetID()
     local text = "ERROR"
     local font = "robot_medium"
 
-    if ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() ) ) then
+    if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() ) ) then
         text = trace.Entity:Nick()
     else
         return

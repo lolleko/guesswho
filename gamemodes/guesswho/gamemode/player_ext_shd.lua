@@ -42,26 +42,31 @@ end
 
 -- TOUCHES
 function plymeta:GetSeekerTouches()
-    return self.iSeekerTouches or 0
+    return self:GetNWInt("seeker_touches", 0)
 end
 
 function plymeta:SetSeekerTouches(val)
-    self.iSeekerTouches = val
+    self:SetNWInt("seeker_touches", val)
 end
 
 function plymeta:GetLastSeekerTouch()
-    return self.fLastSeekerTouch or 0
+    return self:GetNWFloat("last_seeker_touch", 0)
 end
+
+function plymeta:SetLastSeekerTouch(val)
+    self:SetNWFloat("last_seeker_touch", val)
+end
+
 
 function plymeta:AddSeekerTouch()
     if self:GetLastSeekerTouch() + 2 < CurTime() then
-        self.iSeekerTouches = self:GetSeekerTouches() + 1
-        self.fLastSeekerTouch = CurTime()
+        self:SetSeekerTouches(self:GetSeekerTouches() + 1)
+        self:SetLastSeekerTouch(CurTime())
     end
 end
 
 function plymeta:ResetSeekerTouches()
-    self.iSeekerTouches = 0
+    self:SetSeekerTouches(0)
 
     if SERVER then
         self:StripWeapons()

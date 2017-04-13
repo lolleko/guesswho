@@ -56,6 +56,9 @@ function GM:PlayerDeath( ply, inflictor, attacker )
     ply.NextSpawnTime = CurTime() + 2
     ply.DeathTime = CurTime()
 
+    -- reset touches
+    ply:SetSeekerTouches(0)
+
     ---spectate first alive player in team
     ply:Spectate(OBS_MODE_CHASE)
     local spectargets = team.GetPlayers( ply:Team() )
@@ -158,23 +161,23 @@ end
 
 function GM:PlayerSetModel( pl )
 
-	player_manager.RunClass( pl, "SetModel" )
+    player_manager.RunClass( pl, "SetModel" )
 
 end
 
 function GM:PlayerSetHandsModel( pl, ent )
 
-	local info = player_manager.RunClass( pl, "GetHandsModel" )
-	if ( !info ) then
-		local playermodel = player_manager.TranslateToPlayerModelName( pl:GetModel() )
-		info = player_manager.TranslatePlayerHands( playermodel )
-	end
+    local info = player_manager.RunClass( pl, "GetHandsModel" )
+    if ( !info ) then
+        local playermodel = player_manager.TranslateToPlayerModelName( pl:GetModel() )
+        info = player_manager.TranslatePlayerHands( playermodel )
+    end
 
-	if ( info ) then
-		ent:SetModel( info.model )
-		ent:SetSkin( info.skin )
-		ent:SetBodyGroups( info.body )
-	end
+    if ( info ) then
+        ent:SetModel( info.model )
+        ent:SetSkin( info.skin )
+        ent:SetBodyGroups( info.body )
+    end
 
 end
 
@@ -183,8 +186,7 @@ function GM:OnPlayerChangedTeam( ply, oldteam, newteam )
     -- Here's an immediate respawn thing by default. If you want to
     -- re-create something more like CS or some shit you could probably
     -- change to a spectator or something while dead.
-    if ( newteam == TEAM_SPECTATOR ) then
-
+    if newteam == TEAM_SPECTATOR then
         -- If we changed to spectator mode, respawn where we are
         local Pos = ply:EyePos()
         ply:Spawn()

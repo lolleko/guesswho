@@ -7,8 +7,8 @@ function SWEP:Ability()
         GAMEMODE.AbilitySuperHotMode = true
         GAMEMODE.AbilitySuperHotModePly = ply
         GAMEMODE.AbilitySuperHotModeEndTime = RealTime() + 6
-        ply:SetWalkSpeed(ply:GetWalkSpeed() * 3)
-        ply:SetRunSpeed(ply:GetRunSpeed() * 3)
+        ply:SetWalkSpeed(ply:GetWalkSpeed() * 4)
+        ply:SetRunSpeed(ply:GetRunSpeed() * 4)
         game.SetTimeScale(0.3)
     end
 end
@@ -17,8 +17,8 @@ local function endSuperHotMode()
     if SERVER then
         local ply = GAMEMODE.AbilitySuperHotModePly
         game.SetTimeScale(1)
-        ply:SetWalkSpeed(ply:GetWalkSpeed() / 3)
-        ply:SetRunSpeed(ply:GetRunSpeed() / 3)
+        ply:SetWalkSpeed(ply:GetWalkSpeed() / 4)
+        ply:SetRunSpeed(ply:GetRunSpeed() / 4)
 
         GAMEMODE.AbilitySuperHotMode = false
         GAMEMODE.AbilitySuperHotModePly = nill

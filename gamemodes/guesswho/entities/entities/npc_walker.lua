@@ -34,7 +34,6 @@ function ENT:Initialize()
         self.IsDuck = false
 
     end
-
 end
 
 function ENT:Think()
@@ -121,6 +120,10 @@ function ENT:Sit()
     --coroutine.wait( math.Rand(0,1.5) )
 end
 
+function ENT:Dance()
+    self.Dancing = true
+end
+
 function ENT:OnStuck()
     --debugoverlay.Cross( self:GetPos() + Vector(0,0,70), 10, 20, Color(0,255,255), true )
     if !self.Stucked then self.Stucked = CurTime() end
@@ -138,9 +141,9 @@ function ENT:Use( act, call, type, value )
 end
 
 function ENT:OnNavAreaChanged( old, new)
-    /*if new:HasAttributes( NAV_MESH_JUMP ) then
-        self:Jump()
-    end*/
+    --if new:HasAttributes( NAV_MESH_JUMP ) then
+    --    self:Jump()
+    --end
     if new:HasAttributes( NAV_MESH_CROUCH ) then self:Duck(true) end
     if self.IsDuck and !new:HasAttributes( NAV_MESH_CROUCH ) then self:Duck(false) end
 end
@@ -229,6 +232,16 @@ function ENT:MoveToPos( pos, options )
             self.loco:SetVelocity( self.loco:GetVelocity() + VectorRand() * 100 )
         end
 
+        if self.Dancing then
+            local seqs = {
+                "taunt_robot",
+                "taunt_dance",
+                "taunt_muscle"
+            }
+            self:PlaySequenceAndWait(table.Random(seqs), 1)
+            self.Dancing = false
+        end
+
         coroutine.yield()
 
     end
@@ -279,7 +292,7 @@ function ENT:BodyUpdate()
         self.CalcIdeal = ACT_HL2MP_JUMP_SLAM
     end
 
-    if self:GetActivity() != self.CalcIdeal && !self.Siting then self:StartActivity(self.CalcIdeal) end
+    if self:GetActivity() != self.CalcIdeal && !self.Siting && !self.Dancing then self:StartActivity(self.CalcIdeal) end
 
     if ( self.CalcIdeal == ACT_HL2MP_RUN || self.CalcIdeal == ACT_HL2MP_WALK ) then
 

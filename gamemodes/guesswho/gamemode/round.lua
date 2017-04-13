@@ -142,11 +142,12 @@ function GM:RoundEnd( caught )
     else
         PrintMessage( HUD_PRINTTALK, "The " .. team.GetName( TEAM_HIDING ) .. " win." )
         for k,v in pairs(team.GetPlayers( TEAM_HIDING )) do
+            v:ConCommand("act cheer")
             if v:Alive() then v:AddFrags( 1 ) end --if still alive as hiding after round give them one point (frag)
         end
         team.AddScore( TEAM_HIDING, 1)
     end
-    timer.Simple(3, function() self:PostRound() end)
+    timer.Simple(5, function() self:PostRound() end)
 end
 
 function GM:PostRound()

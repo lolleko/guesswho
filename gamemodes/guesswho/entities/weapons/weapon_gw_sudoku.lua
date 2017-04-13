@@ -35,9 +35,9 @@ function SWEP:Ability()
         	explode:SetPos( ply:GetPos() )
         	explode:SetOwner( ply:GetPos() )
         	explode:Spawn()
-        	explode:SetKeyValue( "iMagnitude", "105" )
+        	explode:SetKeyValue( "iMagnitude", "115" )
         	explode:Fire( "Explode", 0, 0 )
-        	explode:EmitSound( "weapon_AWP.Single", 1000, 1000 )
+        	explode:EmitSound( "BaseExplosionEffect.Sound", 100, 100 )
         end
     end)
 

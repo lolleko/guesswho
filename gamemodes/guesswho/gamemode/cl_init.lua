@@ -112,8 +112,7 @@ function GM:CalcView(ply, pos, angles, fov)
         end
 
     end
-
-    if ply:IsHiding() or ply:IsStunned() then
+    if ply:IsHiding() or ((ply:IsStunned() or ply:IsPlayingTaunt()) and self:GetRoundState() ~= ROUND_HIDE) then
 
         local dist = 100
 

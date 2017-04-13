@@ -38,7 +38,9 @@ GM.Weapons = {
     "weapon_gw_disguise",
     "weapon_gw_vampirism",
     "weapon_gw_ragdoll",
-    "weapon_gw_superhot"
+    "weapon_gw_superhot",
+    "weapon_gw_dance_party",
+    "weapon_gw_blasting_off"
 }
 
 GM.TeamSeekingColor = Color(138, 155, 15)
