@@ -83,6 +83,7 @@ function GM:RoundCreateWalkers()
 end
 
 function GM:RoundStart()
+    hook.Call("OnRoundStart")
 
     for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
         v:Freeze( false )
