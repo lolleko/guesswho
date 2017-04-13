@@ -31,7 +31,7 @@ local tr = {
     --Buttons
     teamselect_buttons_spectate = "İzle",
     teamselect_buttons_auto = "Otomatik katıl",
-
+    teamselect_buttons_close = "Yakın",
     --Scoreboard
     scoreboard_server = "Server",
     scoreboard_map = "Map",
