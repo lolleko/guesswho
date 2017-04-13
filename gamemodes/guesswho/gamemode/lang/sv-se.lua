@@ -31,7 +31,7 @@ local svse = {
     --Buttons
     teamselect_buttons_spectate = "Åskåda",
     teamselect_buttons_auto = "Automatisk",
-
+    teamselect_buttons_close = "Stänga",
     --Scoreboard
     scoreboard_server = "Server",
     scoreboard_map = "Bana",
