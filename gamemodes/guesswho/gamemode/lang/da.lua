@@ -31,7 +31,7 @@ local da = {
     --Buttons
     teamselect_buttons_spectate = "Tilskuer",
     teamselect_buttons_auto = "Automatisk",
-
+    teamselect_buttons_close = "Tæt",
     --Scoreboard
     scoreboard_server = "Server",
     scoreboard_map = "Bane",
