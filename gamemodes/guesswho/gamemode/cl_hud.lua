@@ -337,7 +337,7 @@ function GM:HUDDrawPickupHistory()
 
             local pickupText
 
-            if ply:IsHiding() and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() != "weapon_gw_smgdummy" then
+            if ply:IsHiding() and IsValid( ply:GetActiveWeapon() ) and ply:GetActiveWeapon():GetClass() != "weapon_gw_smgdummy" then
                 pickupText = gwlang:translate("hud_ability_pickup")
             else
                 pickupText = v.name
