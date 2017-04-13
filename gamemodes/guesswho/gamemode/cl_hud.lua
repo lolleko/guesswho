@@ -303,6 +303,7 @@ function GM:HUDDrawPickupHistory()
     local ply = LocalPlayer()
     local teamColor = team.GetColor(ply:Team())
 
+	if not IsValid(ply) then return end
 	for k, v in pairs( self.PickupHistory ) do
 
 		if ( !istable( v ) ) then
@@ -336,7 +337,7 @@ function GM:HUDDrawPickupHistory()
 
             local pickupText
 
-            if ply:IsHiding() and ply:GetActiveWeapon():GetClass() != "weapon_gw_smgdummy" then
+            if ply:IsHiding() and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() != "weapon_gw_smgdummy" then
                 pickupText = gwlang:translate("hud_ability_pickup")
             else
                 pickupText = v.name
