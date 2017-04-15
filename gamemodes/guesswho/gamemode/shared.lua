@@ -3,9 +3,9 @@ GM.Author = "Lolleko"
 GM.Email = "N/A"
 GM.Website = "https://github.com/lolleko/guesswho"
 
-GM.Version = "1.6.2 (55)"
+GM.Version = "1.6.3 (56)"
 
-GM.TeamBased    = true
+GM.TeamBased = true
 
 DeriveGamemode( "base" )
 
@@ -91,14 +91,6 @@ function GM:ShouldCollide( ent1, ent2 )
 
             if hider and hider:GetLastSeekerTouch() + 3 < CurTime() and hider:GetPos():Distance(seeker:GetPos()) < 40  then
                 hider:AddSeekerTouch()
-
-                if CLIENT and LocalPlayer() == hider then
-                    LocalPlayer():EmitSound("buttons/blip1.wav", 50)
-                end
-
-                if hider:GetSeekerTouches() >= GetConVar("gw_touches_required"):GetInt() then
-                    hider:ResetSeekerTouches()
-                end
             end
         end
     end

@@ -33,6 +33,34 @@ function GM:ShowTeam()
         linkOffsetY = linkOffsetY + 80
     end
 
+    local InfoBox = vgui.Create( "DPanel", self.TeamSelectFrame )
+    InfoBox:SetPos( ScrW() / 2 - 620, linkOffsetY )
+    InfoBox:SetSize( 280, 200 )
+    function InfoBox:Paint( w, h)
+        draw.RoundedBox( 0, 0, 0, w, h, clrs.grey )
+    end
+
+    local InfoTitle = vgui.Create( "DLabel", self.TeamSelectFrame )
+    InfoTitle:SetContentAlignment( 5 )
+    InfoTitle:SetPos( ScrW() / 2 - 620, linkOffsetY )
+    InfoTitle:SetSize( 280, 40 )
+    InfoTitle:SetFont("robot_medium")
+    InfoTitle:SetText( "Easter Egg Hunt" )
+    InfoTitle:SetTextColor( clrs.lightgrey )
+
+    local InfoDescription = vgui.Create( "DTextEntry", self.TeamSelectFrame )
+    InfoDescription:SetPos( ScrW() / 2 - 620 + 2, linkOffsetY + 40 )
+    InfoDescription:SetSize( 276, 160 )
+    InfoDescription:SetText(
+        "The NPC easter bunny hid some easter eggs on the map. Find and collect them for a random reward.\n\n" ..
+        "The last updates also introduced 5 new abilities consult the changelog for more information.\n\n" ..
+        "Happy Easter!"
+    )
+    InfoDescription:SetPaintBackground(false)
+    InfoDescription:SetMultiline(true)
+    InfoDescription:SetFont("robot_small")
+    InfoDescription:SetTextColor(clrs.lightgrey)
+
     local controls = {}
     if input.LookupBinding( "duck" ) then table.insert( controls, { string.upper( input.LookupBinding( "duck" ) ), gwlang:translate( "teamselect_controls_sit" ) } ) end
     if input.LookupBinding( "attack2" ) then table.insert( controls, { string.upper( input.LookupBinding( "attack2" ) ), gwlang:translate( "teamselect_controls_ability" ) } ) end

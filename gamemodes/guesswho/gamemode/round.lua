@@ -39,9 +39,10 @@ function GM:RoundCreateWalkers()
     self:GetSpawnPoints()
 
     local wave = 1
+    local playerCount = #player.GetAll()
 
     self.WalkerCount = 0
-    self.MaxWalkers = self.BaseWalkers + ( #player.GetAll() * self.WalkerPerPly )
+    self.MaxWalkers = self.BaseWalkers + ( playerCount * self.WalkerPerPly )
 
     if #self.SpawnPoints > self.MaxWalkers then
         self:SpawnNPCWave()
@@ -89,6 +90,9 @@ function GM:RoundStart()
         v:SetAvoidPlayers( false )
         v:GodDisable()
     end
+
+    -- EASTER
+    self:SpawnEasterEggs(#player.GetAll() * 8)
 
     timer.Create( "RoundThink", 1, self.RoundDuration, function() self:RoundThink() end)
     self.RoundTime = 1
@@ -204,6 +208,24 @@ function GM:SpawnNPCWave()
 
     end
 
+end
+
+
+function GM:SpawnEasterEggs(eggCount)
+    local allNavs = navmesh.GetAllNavAreas()
+    for _, nav in RandomPairs(allNavs) do
+        local spots = nav:GetHidingSpots()
+        local spot = table.Random(spots)
+        if spot then
+            local egg = ents.Create("gw_easter_egg")
+            if !IsValid(egg) then break end
+            egg:SetPos(spot)
+            egg:Spawn()
+            egg:Activate()
+            eggCount = eggCount - 1
+        end
+        if eggCount == 0 then return end
+    end
 end
 
 function GM:UpdateSettings()

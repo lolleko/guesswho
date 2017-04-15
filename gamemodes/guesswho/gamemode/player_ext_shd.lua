@@ -2,7 +2,6 @@ local plymeta = FindMetaTable( "Player" )
 if ( !plymeta ) then return end
 
 AccessorFunc( plymeta, "iOldTeam", "PreviousTeam", FORCE_NUMBER )
-AccessorFunc( plymeta , "bStunned", "Stunned", FORCE_BOOL )
 
 function plymeta:SetSpeed( spd )
     self:SetWalkSpeed(spd)
@@ -17,28 +16,17 @@ function plymeta:IsHiding()
     return ( self:Team() == TEAM_HIDING )
 end
 
-function plymeta:ApplyStun( dur )
+function plymeta:SetStunned(state)
+    self:SetNWBool("gw_stunned", state)
+end
 
-    local ply = self
-
-    ply:SetStunned( true )
-
-    ply:Freeze( true )
-
-    local tname = ply:SteamID() .. ".Stunned"
-
-    if timer.Exists( tname ) then
-        timer.Adjust( tname, dur, 1, function() ply:Freeze( false ) ply:SetStunned( false ) end )
-    else
-        timer.Create( tname, dur, 1, function() ply:Freeze( false ) ply:SetStunned( false ) end )
-    end
-
+function plymeta:GetStunned(stae)
+    return self:GetNWBool("gw_stunned", false)
 end
 
 function plymeta:IsStunned()
     return self:GetStunned()
 end
-
 
 -- TOUCHES
 function plymeta:GetSeekerTouches()
@@ -62,6 +50,13 @@ function plymeta:AddSeekerTouch()
     if self:GetLastSeekerTouch() + 2 < CurTime() then
         self:SetSeekerTouches(self:GetSeekerTouches() + 1)
         self:SetLastSeekerTouch(CurTime())
+        if SERVER then
+            self:PlaySoundForPlayer("buttons/blip1.wav")
+        end
+
+        if self:GetSeekerTouches() >= GetConVar("gw_touches_required"):GetInt() then
+            self:ResetSeekerTouches()
+        end
     end
 end
 

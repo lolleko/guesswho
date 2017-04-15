@@ -1,5 +1,6 @@
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Vampirism"
+SWEP.AbilitySound = "HealthKit.Touch"
 
 function SWEP:Ability()
 

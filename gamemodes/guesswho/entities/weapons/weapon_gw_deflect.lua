@@ -1,5 +1,6 @@
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Deflect"
+SWEP.AbilitySound = "ambient/energy/zap1.wav"
 
 function SWEP:Ability()
 	local ply = self.Owner

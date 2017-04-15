@@ -123,8 +123,10 @@ function CHuntHUD()
     -- spectator
     if IsValid(LocalPlayer():GetObserverTarget()) then
         local specEnt = LocalPlayer():GetObserverTarget()
-        local nick = specEnt:Nick()
-        CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(nick, "robot_large") / 2), ScrH() - 40, nick, "robot_normal", clrs.white )
+        if IsValid(specEnt) and specEnt:IsPlayer() then
+            local nick = specEnt:Nick()
+            CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(nick, "robot_large") / 2), ScrH() - 40, nick, "robot_normal", clrs.white )
+        end
     end
 
     --Health
@@ -161,7 +163,7 @@ function CHuntHUD()
         end
     end
 
-    if ply:Team() == TEAM_SEEKING then CHHUD:Crosshair() end
+    if LocalPlayer():Alive() then CHHUD:Crosshair() end
 
     --Ammo
     if ply:Alive() and #ply:GetWeapons() > 0 and IsValid( ply:GetActiveWeapon() ) then
@@ -245,15 +247,16 @@ function GM:HUDDrawTargetID()
     if ( !trace.Hit ) then return end
     if ( !trace.HitNonWorld ) then return end
 
-    local text = "ERROR"
+    local text
     local font = "robot_medium"
 
     if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and LocalPlayer():IsHiding() ) then
         text = trace.Entity:Nick()
-    else
-        return
-        --text = trace.Entity:GetClass()
+    elseif trace.Entity:GetClass() == "gw_easter_egg" and trace.Entity:GetPos():Distance(LocalPlayer():GetPos()) < 100 then
+        text = "Press " .. string.upper(input.LookupBinding( "use")) .. " for a suprise!"
     end
+
+    if !text then return end
 
     surface.SetFont( font )
     local w, h = surface.GetTextSize( text )

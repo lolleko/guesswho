@@ -1,8 +1,6 @@
 local plymeta = FindMetaTable( "Player" )
 if ( !plymeta ) then return end
 
-AccessorFunc( plymeta , "bStunned", "Stunned", FORCE_BOOL )
-
 function plymeta:ApplyStun( dur )
 
     local ply = self
@@ -19,4 +17,8 @@ function plymeta:ApplyStun( dur )
         timer.Create( tname, dur, 1, function() ply:Freeze( false ) ply:SetStunned( false ) end )
     end
 
+end
+
+function plymeta:PlaySoundForPlayer(path)
+    self:SendLua("surface.PlaySound('" .. path .. "')")
 end
