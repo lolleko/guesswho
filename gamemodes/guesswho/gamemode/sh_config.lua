@@ -40,7 +40,10 @@ GM.Weapons = {
     "weapon_gw_ragdoll",
     "weapon_gw_superhot",
     "weapon_gw_dance_party",
-    "weapon_gw_blasting_off"
+    "weapon_gw_blasting_off",
+    "weapon_gw_decoy2",
+    "weapon_gw_teleport",
+    "weapon_gw_deflect"
 }
 
 GM.TeamSeekingColor = Color(138, 155, 15)

@@ -74,3 +74,16 @@ function plymeta:ResetSeekerTouches()
         self:Give( GAMEMODE.Weapons[ math.random( 1, #GAMEMODE.Weapons ) ] )
     end
 end
+
+function plymeta:SetDeflect(state)
+    self.deflect = state
+    if state then
+        self:SetMaterial("models/props_combine/portalball001_sheet")
+    else
+        self:SetMaterial("")
+    end
+end
+
+function plymeta:GetDeflect()
+    return self.deflect or false
+end

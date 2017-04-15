@@ -59,7 +59,7 @@ end
 --Take Damage if innocent NPC damaged
 function GM:EntityTakeDamage(target, dmginfo)
 
-    attacker = dmginfo:GetAttacker()
+    local attacker = dmginfo:GetAttacker()
 
     if self:GetRoundState() == ROUND_SEEK && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
 
