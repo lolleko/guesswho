@@ -45,16 +45,14 @@ function GM:ShowTeam()
     InfoTitle:SetPos( ScrW() / 2 - 620, linkOffsetY )
     InfoTitle:SetSize( 280, 40 )
     InfoTitle:SetFont("robot_medium")
-    InfoTitle:SetText( "Easter Egg Hunt" )
+    InfoTitle:SetText( "News" )
     InfoTitle:SetTextColor( clrs.lightgrey )
 
     local InfoDescription = vgui.Create( "DTextEntry", self.TeamSelectFrame )
     InfoDescription:SetPos( ScrW() / 2 - 620 + 2, linkOffsetY + 40 )
     InfoDescription:SetSize( 276, 160 )
     InfoDescription:SetText(
-        "The NPC easter bunny hid some easter eggs on the map. Find and collect them for a random reward.\n\n" ..
-        "The last updates also introduced 5 new abilities consult the changelog for more information.\n\n" ..
-        "Happy Easter!"
+        "The last updates introduced 5 new abilities consult the changelog for more information."
     )
     InfoDescription:SetPaintBackground(false)
     InfoDescription:SetMultiline(true)

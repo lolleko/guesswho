@@ -92,7 +92,9 @@ function GM:RoundStart()
     end
 
     -- EASTER
-    self:SpawnEasterEggs(#player.GetAll() * 8)
+    if GetConVar("gw_easter_egg_hunt_enabled"):GetBool() then
+        self:SpawnEasterEggs(#player.GetAll() * 8)
+    end
 
     timer.Create( "RoundThink", 1, self.RoundDuration, function() self:RoundThink() end)
     self.RoundTime = 1

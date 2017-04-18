@@ -183,5 +183,13 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
+		23
+		{
+			"name"		"gw_easter_egg_hunt_enabled"
+			"text"		"Enable Easter Event"
+			"help"		"Should easter eggs be spawned or not"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
 	}
 }
