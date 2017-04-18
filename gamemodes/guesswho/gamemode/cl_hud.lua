@@ -250,7 +250,7 @@ function GM:HUDDrawTargetID()
     local text
     local font = "robot_medium"
 
-    if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and LocalPlayer():IsHiding() ) then
+    if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() ) ) then
         text = trace.Entity:Nick()
     elseif trace.Entity:GetClass() == "gw_easter_egg" and trace.Entity:GetPos():Distance(LocalPlayer():GetPos()) < 100 then
         text = "Press " .. string.upper(input.LookupBinding( "use")) .. " for a suprise!"
