@@ -4,6 +4,7 @@ SWEP.Name = "Disguise"
 function SWEP:Ability()
     local ply = self.Owner
     timer.Create( "Ability.Effect." .. ply:SteamID(), 15, 1, function() self:OnRemove() end )
+    ply:SetDisguised(true)
     if SERVER then
         ply:SetModel( GAMEMODE.SeekerModels[ math.random( 1, #GAMEMODE.SeekerModels ) ] )
         ply:Give( "weapon_gw_smgdummy" )
@@ -14,6 +15,7 @@ end
 function SWEP:OnRemove()
     if !IsValid( self.Owner ) then return end
     local ply = self.Owner
+    ply:SetDisguised(false)
     timer.Remove( "Ability.Effect." .. ply:SteamID() )
     if SERVER then
         ply:StripWeapon( "weapon_gw_smgdummy" )

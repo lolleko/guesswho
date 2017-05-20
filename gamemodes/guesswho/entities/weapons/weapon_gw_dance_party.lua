@@ -6,7 +6,7 @@ SWEP.AbilitySound = {"vo/coast/odessa/female01/nlo_cheer01.wav", "vo/coast/odess
 function SWEP:Ability()
 	local ply = self.Owner
 
-	for _, ent in pairs( ents.FindInSphere(ply:GetPos(), 600) ) do
+	for _, ent in pairs( ents.FindInSphere(ply:GetPos(), 800) ) do
 		local effect = EffectData()
 		effect:SetStart(ent:GetPos())
 		effect:SetOrigin(ent:GetPos())
@@ -17,12 +17,16 @@ function SWEP:Ability()
 		effect2:SetOrigin(ent:GetPos())
 		util.Effect("cball_explode", effect2)
 		if SERVER and ent:GetClass() == "npc_walker" then
-			timer.Simple(math.random(0.1, 0.7), function() ent:Dance() end)
+			timer.Simple(math.random(0.1, 0.4), function() ent:Dance() end)
 		end
 
 		if ent:IsPlayer() and ent:IsSeeking() then
 			ent:ConCommand("act cheer")
-			ent:ApplyStun(2)
+			if SERVER then ent:ApplyStun(2) end
+		end
+
+		if ent:IsPlayer() and ent:IsHiding() then
+			ent:ConCommand("act dance")
 		end
 	end
 end

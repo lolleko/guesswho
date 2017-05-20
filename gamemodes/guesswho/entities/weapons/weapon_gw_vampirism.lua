@@ -20,7 +20,7 @@ function SWEP:Ability()
 
             util.Effect( "gw_vampirism", effectdata, true, true )
 
-            local dmg =  v:Health() / 3
+            local dmg =  v:Health() / 2.5
             v:TakeDamage(dmg, ply, self)
             timer.Create( "gw.vamp." .. ply:EntIndex() .. "." .. v:EntIndex(), 0.25, 4, function()
                 if IsValid(ply) and ply:Alive() then

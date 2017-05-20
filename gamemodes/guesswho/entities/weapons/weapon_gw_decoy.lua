@@ -26,7 +26,7 @@ function SWEP:Ability()
     local walkers = {}
 
     for _,v in pairs( locations ) do
-        if decoyCount == math.random( 1, 7 ) then break end
+        if decoyCount == math.random( 1, 6 ) then break end
 
         local location = self.Owner:GetPos() + v
 

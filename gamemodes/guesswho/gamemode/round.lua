@@ -144,6 +144,9 @@ function GM:RoundEnd( caught )
 
     if caught then
         PrintMessage( HUD_PRINTTALK, "The " .. team.GetName( TEAM_SEEKING ) .. " win." )
+        for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
+            v:ConCommand("act cheer")
+        end
         team.AddScore( TEAM_SEEKING, 1)
     else
         PrintMessage( HUD_PRINTTALK, "The " .. team.GetName( TEAM_HIDING ) .. " win." )

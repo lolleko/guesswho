@@ -250,7 +250,7 @@ function GM:HUDDrawTargetID()
     local text
     local font = "robot_medium"
 
-    if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() ) ) then
+    if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() or LocalPlayer():GetDisguised() ) ) then
         text = trace.Entity:Nick()
     elseif trace.Entity:GetClass() == "gw_easter_egg" and trace.Entity:GetPos():Distance(LocalPlayer():GetPos()) < 100 then
         text = "Press " .. string.upper(input.LookupBinding( "use")) .. " for a suprise!"
@@ -273,13 +273,16 @@ function GM:HUDDrawTargetID()
     local x = MouseX
     local y = MouseY
 
+    local teamColor = self:GetTeamColor( trace.Entity )
+    if trace.Entity:IsPlayer() and trace.Entity:GetDisguised() then teamColor = self:GetTeamColor(LocalPlayer()) end
+
     x = x - w / 2
     y = y + 30
 
     -- The fonts internal drop shadow looks lousy with AA on
     draw.SimpleText( text, font, x + 1, y + 1, Color( 0, 0, 0, 120 ) )
     draw.SimpleText( text, font, x + 2, y + 2, Color( 0, 0, 0, 50 ) )
-    draw.SimpleText( text, font, x, y, self:GetTeamColor( trace.Entity ) )
+    draw.SimpleText( text, font, x, y, teamColor)
 
     y = y + h + 5
 
@@ -292,7 +295,7 @@ function GM:HUDDrawTargetID()
 
     draw.SimpleText( text, font, x + 1, y + 1, Color( 0, 0, 0, 120 ) )
     draw.SimpleText( text, font, x + 2, y + 2, Color( 0, 0, 0, 50 ) )
-    draw.SimpleText( text, font, x, y, self:GetTeamColor( trace.Entity ) )
+    draw.SimpleText( text, font, x, y, teamColor )
 end
 
 function GM:HUDDrawPickupHistory()

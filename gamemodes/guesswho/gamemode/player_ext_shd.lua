@@ -82,3 +82,11 @@ end
 function plymeta:GetDeflect()
     return self.deflect or false
 end
+
+function plymeta:SetDisguised(state)
+    self.disguise = state
+end
+
+function plymeta:GetDisguised()
+    return self.disguise or false
+end

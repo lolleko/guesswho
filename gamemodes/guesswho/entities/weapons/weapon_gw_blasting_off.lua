@@ -4,13 +4,18 @@ SWEP.Name = "Blasting off (again)"
 function SWEP:Ability()
 	self.LaunchedEnts = {}
 
-	for _,v in pairs( player.GetAll() ) do
-		if v:IsSeeking() then
-			v:SetVelocity(Vector(0, 0, 5000))
-			table.insert(self.LaunchedEnts, v)
+	local loop = function()
+		for _,v in pairs(player.GetAll()) do
+			if v:IsSeeking() then
+				v:SetVelocity(Vector(0, 0, 5000))
+				table.insert(self.LaunchedEnts, v)
+			end
 		end
 	end
 
+	loop()
+
+	timer.Simple(0.5, loop)
 end
 
 if CLIENT then
@@ -32,7 +37,7 @@ if CLIENT then
 		self.SmokeTimer = self.SmokeTimer or 0
 		if ( self.SmokeTimer > CurTime() ) then return end
 
-		self.SmokeTimer = CurTime() + 0.015
+		self.SmokeTimer = CurTime() + 0.05
 
 		local vOffset = self:GetPos() + Vector( math.Rand( -3, 3 ), math.Rand( -3, 3 ), math.Rand( -3, 3 ) )
 		local vNormal = ( vOffset - self:GetPos() ):GetNormalized()

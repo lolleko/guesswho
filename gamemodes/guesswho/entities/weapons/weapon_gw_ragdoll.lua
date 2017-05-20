@@ -7,8 +7,15 @@ function SWEP:Ability()
 
     if SERVER then
 
-        net.Start( "PlayerKilledSelf" )
+        local hunters = team.GetPlayers(TEAM_SEEKING)
+        local hunter = hunters[math.random(#hunters)]
+
+        net.Start( "PlayerKilledByPlayer" )
+
             net.WriteEntity( ply )
+            net.WriteString( hunter:GetActiveWeapon():GetClass() )
+            net.WriteEntity( hunter )
+
         net.Broadcast()
 
         if ply:InVehicle() then

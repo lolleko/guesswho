@@ -14,7 +14,7 @@ function SWEP:Ability()
 	effect2:SetOrigin(ply:GetPos() + Vector(0, 0, 64))
 	util.Effect("cball_explode", effect2)
 
-	ply:ApplyStun(2)
+	if SERVER then ply:ApplyStun(2) end
 
 	timer.Simple(1.5, function() ply:SetPos(self:CalcTeleportDestination()) end)
 end
