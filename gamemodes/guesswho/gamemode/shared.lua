@@ -3,7 +3,7 @@ GM.Author = "Lolleko"
 GM.Email = "N/A"
 GM.Website = "https://github.com/lolleko/guesswho"
 
-GM.Version = "1.6.5 (59)"
+GM.Version = "1.6.5a (60)"
 
 GM.TeamBased = true
 
@@ -33,7 +33,7 @@ ROUND_NAV_GEN = 9
 
 --Shared CVars fallback
 CreateConVar("gw_target_finder_threshold", "700", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "The distance before the target finder will display nearby")
-CreateConVar("gw_target_finder_enabled", "1", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Wether target finder is enabled or not")
+CreateConVar("gw_target_finder_enabled", "0", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Wether target finder is enabled or not")
 CreateConVar("gw_abilities_enabled", "1", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Should hiding have abilities or not.")
 CreateConVar("gw_touches_enabled", "1", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Wether touching for weapons is enabled.")
 CreateConVar("gw_touches_required", "3", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "The amount of seeker touches that are required for a hider to receive a new weapon.")
