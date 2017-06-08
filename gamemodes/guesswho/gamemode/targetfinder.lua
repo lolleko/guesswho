@@ -1,4 +1,7 @@
 function GM:TargetFinderThink()
+	if not GetConVar( "gw_target_finder_enabled" ):GetBool() then
+		return
+	end
 	for _, ply in pairs(player.GetAll()) do
 		if ply:IsSeeking() then
 			local minDist = -1
