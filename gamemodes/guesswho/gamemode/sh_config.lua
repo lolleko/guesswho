@@ -15,15 +15,11 @@ GM.GWConfig.HidingModels = {
     "models/player/p2_chell.mdl",
     "models/player/mossman_arctic.mdl",
     --medics
-    "models/player/Group03m/Female_06.mdl",
-    "models/player/Group03m/Male_01.mdl",
     --rebels
-    "models/player/Group03/Female_06.mdl",
-    "models/player/Group03/Male_06.mdl",
     --Citiziens
-    "models/player/Group01/Male_08.mdl",
-    "models/player/Group01/Female_03.mdl",
 }
+
+
 
 GM.GWConfig.SeekerModels = {
     "models/player/combine_super_soldier.mdl"
@@ -60,7 +56,7 @@ GM.GWConfig.WalkerColors = {
     Color(241, 169, 101), --bright orange
     Color(75, 97, 34), --olive
     Color(157, 107, 0), --gold
-    Color(159, 205, 234 ), --light blue
+    Color(159, 205, 234), --light blue
     Color(94, 25, 34) --dark red
 }
 
@@ -69,7 +65,27 @@ if file.Exists("guesswho/config.txt", "DATA") then
     GM.GWConfig = util.JSONToTable(file.Read("guesswho/config.txt"))
 end
 
+if not file.Exists("guesswho", "DATA") then
+    file.CreateDir("guesswho")
+end
+
 file.Write("guesswho/config.txt", util.TableToJSON(GM.GWConfig))
 
-PrintTable(GM.GWConfig)
 --send config to clients on connect
+local function sendConfig(ply)
+    net.Start("gwSendConfig")
+        net.WriteTable(GAMEMODE.GWConfig)
+    net.Send(ply)
+end
+hook.Add("PlayerInitialSpawn", "gwInitialConfigSend", sendConfig)
+
+net.Receive("gwRequestUpdateConfig", function(len, ply)
+	if not ply:IsSuperAdmin() then return end
+    local config = net.ReadTable()
+    GAMEMODE.GWConfig = config
+    file.Write("guesswho/config.txt", util.TableToJSON(GAMEMODE.GWConfig))
+
+    net.Start("gwSendConfig")
+        net.WriteTable(GAMEMODE.GWConfig)
+    net.Broadcast(ply)
+end )

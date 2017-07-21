@@ -100,29 +100,16 @@ function SETTINGSPANEL:Tutorial()
 
 end
 
-function SETTINGSPANEL:Config()
-    function self.config:Paint(w, h)
-        return
-    end
+local MODELCATEGORY = {}
 
-    local configScroll = vgui.Create("DScrollPanel", self.config)
-    configScroll:Dock(FILL)
-
-    local modelCategory = vgui.Create( "DCollapsibleCategory", configScroll)
-    modelCategory:SetExpanded( 0 )
-    modelCategory:Dock(TOP)
-    modelCategory:SetLabel( "Models" )
-
-    local modelList = vgui.Create("DIconLayout", modelCategory)
+function MODELCATEGORY:SetModels(updateTable)
+    local modelList = vgui.Create("DIconLayout", self)
     modelList:Dock(FILL)
     modelList:SetSpaceY(2)
     modelList:SetSpaceX(2)
-    modelCategory:SetContents(modelList)
-
+    self:SetContents(modelList)
 
     for name, model in SortedPairs( player_manager.AllValidModels() ) do
-
-
         local modelIcon = vgui.Create( "SpawnIcon" )
         modelIcon:SetModel( model )
         modelIcon:SetSize( 80, 80 )
@@ -130,7 +117,7 @@ function SETTINGSPANEL:Config()
         modelIcon.playermodel = name
 
         modelIcon.PaintOver = function()
-            if table.HasValue(GAMEMODE.GWConfig.HidingModels, modelIcon:GetModelName()) then
+            if table.HasValue(updateTable, modelIcon:GetModelName()) then
                 surface.SetDrawColor(clrs.green)
             else
                 surface.SetDrawColor(clrs.red)
@@ -141,10 +128,12 @@ function SETTINGSPANEL:Config()
         end
 
         modelIcon.DoClick = function()
-            if table.HasValue(GAMEMODE.GWConfig.HidingModels, modelIcon:GetModelName()) then
-                table.RemoveByValue(GAMEMODE.GWConfig.HidingModels, modelIcon:GetModelName())
+            print(table.HasValue(updateTable, modelIcon:GetModelName()))
+            if table.HasValue(updateTable, modelIcon:GetModelName()) then
+                print("removing " .. modelIcon:GetModelName())
+                table.RemoveByValue(updateTable, modelIcon:GetModelName())
             else
-                table.insert(GAMEMODE.GWConfig.HidingModels, modelIcon:GetModelName())
+                table.insert(updateTable, modelIcon:GetModelName())
             end
         end
 
@@ -160,12 +149,36 @@ function SETTINGSPANEL:Config()
         modelList:Add(modelIcon)
 
     end
+end
+vgui.Register( "DGuessWhoConfigModelCategory", MODELCATEGORY, "DCollapsibleCategory")
 
 
-    local abilitiesCategory = vgui.Create( "DCollapsibleCategory", configScroll)
-    abilitiesCategory:SetExpanded( 0 )
-    abilitiesCategory:Dock(FILL)
-    abilitiesCategory:SetLabel( "Abilities" )
+function SETTINGSPANEL:Config()
+    function self.config:Paint(w, h)
+        return
+    end
+
+    local saveButton = vgui.Create("DButton", self.config)
+    saveButton:SetText("Save changes")
+    saveButton.DoClick = function()
+	    self:SendConfigUpdateRequest()
+    end
+    saveButton:Dock(BOTTOM)
+
+    local configScroll = vgui.Create("DScrollPanel", self.config)
+    configScroll:Dock(FILL)
+
+    local modelHidingCategory = vgui.Create( "DGuessWhoConfigModelCategory", configScroll)
+    modelHidingCategory:SetModels(GAMEMODE.GWConfig.HidingModels)
+    modelHidingCategory:SetExpanded( 0 )
+    modelHidingCategory:Dock(TOP)
+    modelHidingCategory:SetLabel( "Models Hiding" )
+
+    local modelSeekingCategory = vgui.Create( "DGuessWhoConfigModelCategory", configScroll)
+    modelSeekingCategory:SetModels(GAMEMODE.GWConfig.SeekerModels)
+    modelSeekingCategory:SetExpanded( 0 )
+    modelSeekingCategory:Dock(TOP)
+    modelSeekingCategory:SetLabel( "Models Seekers" )
 
 end
 
@@ -278,6 +291,12 @@ function SETTINGSPANEL:OnClose()
     gui.EnableScreenClicker( false )
 end
 
+function SETTINGSPANEL:SendConfigUpdateRequest()
+    net.Start("gwRequestUpdateConfig")
+        net.WriteTable(GAMEMODE.GWConfig)
+    net.SendToServer()
+end
+
 vgui.Register( "DGuessWhoSettingsPanel", SETTINGSPANEL, "DFrame")
 
 local function showSettings(ply, cmd, args)
@@ -301,3 +320,8 @@ local function showSettings(ply, cmd, args)
     end
 end
 concommand.Add("gw_settings", showSettings)
+
+net.Receive("gwSendConfig", function(len, ply)
+    local config = net.ReadTable()
+    GAMEMODE.GWConfig = config
+end)
