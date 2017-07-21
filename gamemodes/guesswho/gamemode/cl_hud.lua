@@ -17,7 +17,7 @@ function CHHUD:CreateHead()
 end
 
 function HideHUD(name) -- Removing the default HUD
-    for k, v in pairs({"CHudCrosshair","CHudHealth","CHudAmmo","CHudSecondaryAmmo"}) do
+    for k, v in pairs({"CHudCrosshair", "CHudHealth", "CHudAmmo", "CHudSecondaryAmmo"}) do
         if name == v then return false end
     end
 end
@@ -50,7 +50,7 @@ function CHHUD:DrawPanel( x, y, w, h, clrs, brdwidth)
         surface.SetDrawColor( color( clrs.border ) )
 
         for i = 0, b - 1 do
-            surface.DrawOutlinedRect( x + i - b, y + i - b , w + b * 2 - i * 2, h + b * 2 - i * 2 ) --What a mess (TIDY?)
+            surface.DrawOutlinedRect( x + i - b, y + i - b, w + b * 2 - i * 2, h + b * 2 - i * 2 ) --What a mess (TIDY?)
         end
 
     end
@@ -70,7 +70,7 @@ function CHHUD:DrawCircle( x, y, radius, seg, clr)
 
     table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
     for i = 0, seg do
-        local a = math.rad( ( i / seg ) * -360 )
+        local a = math.rad( ( i / seg ) * - 360 )
         table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
     end
 
@@ -85,7 +85,7 @@ function CHHUD:DrawAbilityIcon(ability, x, y, w, h)
         w = w or 128
         h = h or 128
         surface.SetDrawColor( 255, 255, 255, 255 )
-        surface.SetMaterial( self.AbilityIcons[ability]	)
+        surface.SetMaterial( self.AbilityIcons[ability] )
         surface.DrawTexturedRect( x, y, w, h )
     end
 end
@@ -118,7 +118,7 @@ function CHuntHUD()
     CHHUD:DrawPanel( ScrW() / 2 - 100, 0, 200, 50, {background = clrs.darkgreybg})
     CHHUD:DrawPanel( ScrW() / 2 - 100, 45, 200, 5, {background = teamColor})
     CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(time, "robot_normal") / 2), 5, time, "robot_normal", clrs.white )
-    CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize( label, "robot_small" ) / 2 ), 26, label , "robot_small", clrs.white )
+    CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize( label, "robot_small" ) / 2 ), 26, label, "robot_small", clrs.white )
 
     -- spectator
     if IsValid(LocalPlayer():GetObserverTarget()) then
@@ -158,7 +158,7 @@ function CHuntHUD()
             local headpos = CHHUD.HeadModel.Entity:GetBonePosition( CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
             if headpos then
                 CHHUD.HeadModel:SetLookAt( headpos )
-                CHHUD.HeadModel:SetCamPos( headpos-Vector( -15, 0, 0 ) )
+                CHHUD.HeadModel:SetCamPos( headpos - Vector( -15, 0, 0 ) )
             end
         end
     end
@@ -197,7 +197,7 @@ function CHuntHUD()
 
     --TargetFinder
     if ply:Alive() and ply:IsSeeking() and GetConVar("gw_target_finder_enabled"):GetBool() then
-        local distance = ply:GetNWFloat("gwClosestTargetDistance", -1)
+        local distance = ply:GetNWFloat("gwClosestTargetDistance", - 1)
 
         local distanceThreshold = GetConVar( "gw_target_finder_threshold" ):GetInt()
         local maxRadius = 50
@@ -250,7 +250,7 @@ function GM:HUDDrawTargetID()
     local text
     local font = "robot_medium"
 
-    if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() or LocalPlayer():GetDisguised() ) ) then
+    if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() or trace.Entity:GetDisguised() ) ) then
         text = trace.Entity:Nick()
     elseif trace.Entity:GetClass() == "gw_easter_egg" and trace.Entity:GetPos():Distance(LocalPlayer():GetPos()) < 100 then
         text = "Press " .. string.upper(input.LookupBinding( "use")) .. " for a suprise!"
@@ -300,46 +300,46 @@ end
 
 function GM:HUDDrawPickupHistory()
 
-	if ( self.PickupHistory == nil ) then return end
+    if ( self.PickupHistory == nil ) then return end
 
-	local x, y = ScrW() - self.PickupHistoryWide - 20, self.PickupHistoryTop
-	local tall = 0
-	local wide = 0
+    local x, y = ScrW() - self.PickupHistoryWide - 20, self.PickupHistoryTop
+    local tall = 0
+    local wide = 0
 
     local ply = LocalPlayer()
     local teamColor = team.GetColor(ply:Team())
 
-	if not IsValid(ply) then return end
-	for k, v in pairs( self.PickupHistory ) do
+    if not IsValid(ply) then return end
+    for k, v in pairs( self.PickupHistory ) do
 
-		if ( !istable( v ) ) then
+        if ( !istable( v ) ) then
 
-			Msg( tostring( v ) .. "\n" )
-			PrintTable( self.PickupHistory )
-			self.PickupHistory[ k ] = nil
-			return
-		end
+            Msg( tostring( v ) .. "\n" )
+            PrintTable( self.PickupHistory )
+            self.PickupHistory[ k ] = nil
+            return
+        end
 
-		if ( v.time < CurTime() ) then
+        if ( v.time < CurTime() ) then
 
-			if ( v.y == nil ) then v.y = y end
+            if ( v.y == nil ) then v.y = y end
 
-			v.y = ( v.y * 5 + y ) / 6
+            v.y = ( v.y * 5 + y ) / 6
 
-			local delta = ( v.time + v.holdtime ) - CurTime()
-			delta = delta / v.holdtime
+            local delta = ( v.time + v.holdtime ) - CurTime()
+            delta = delta / v.holdtime
 
-			local alpha = 255
-			local colordelta = math.Clamp( delta, 0.6, 0.7 )
+            local alpha = 255
+            local colordelta = math.Clamp( delta, 0.6, 0.7 )
 
-			-- Fade in/out
-			if ( delta > 1 - v.fadein ) then
-				alpha = math.Clamp( ( 1.0 - delta ) * ( 255 / v.fadein ), 0, 255 )
-			elseif ( delta < v.fadeout ) then
-				alpha = math.Clamp( delta * ( 255 / v.fadeout ), 0, 255 )
-			end
+            -- Fade in/out
+            if ( delta > 1 - v.fadein ) then
+                alpha = math.Clamp( ( 1.0 - delta ) * ( 255 / v.fadein ), 0, 255 )
+            elseif ( delta < v.fadeout ) then
+                alpha = math.Clamp( delta * ( 255 / v.fadeout ), 0, 255 )
+            end
 
-			v.x = x + self.PickupHistoryWide - (self.PickupHistoryWide * ( alpha / 255 ) )
+            v.x = x + self.PickupHistoryWide - (self.PickupHistoryWide * ( alpha / 255 ) )
 
             local pickupText
 
@@ -355,17 +355,17 @@ function GM:HUDDrawPickupHistory()
             CHHUD:DrawPanel( v.x + v.height + 8 - pickupTextSize / 2 - 5, v.y - ( v.height / 2 ) - 50, pickupTextSize + 10, 5, {background = teamColor})
             CHHUD:DrawText( v.x + v.height + 8 - (pickupTextSize / 2), v.y - ( v.height / 2 ) - 75, pickupText, "robot_normal", clrs.white )
 
-			y = y + ( v.height + 26 )
-			tall = tall + v.height + 18
-			wide = math.Max( wide, v.width + v.height + 24 )
+            y = y + ( v.height + 26 )
+            tall = tall + v.height + 18
+            wide = math.Max( wide, v.width + v.height + 24 )
 
-			if ( alpha == 0 ) then self.PickupHistory[ k ] = nil end
+            if ( alpha == 0 ) then self.PickupHistory[ k ] = nil end
 
-		end
+        end
 
-	end
+    end
 
-	self.PickupHistoryTop = ( self.PickupHistoryTop * 5 + ( ScrH() * 0.75 - tall ) / 2 ) / 6
-	self.PickupHistoryWide = ( self.PickupHistoryWide * 5 + wide ) / 6
+    self.PickupHistoryTop = ( self.PickupHistoryTop * 5 + ( ScrH() * 0.75 - tall ) / 2 ) / 6
+    self.PickupHistoryWide = ( self.PickupHistoryWide * 5 + wide ) / 6
 
 end

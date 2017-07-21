@@ -2,6 +2,8 @@ SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Vampirism"
 SWEP.AbilitySound = "HealthKit.Touch"
 
+SWEP.AbilityRange = 500
+
 function SWEP:Ability()
 
     if CLIENT then return end
@@ -9,7 +11,7 @@ function SWEP:Ability()
     local ply = self.Owner
 
     for _,v in pairs( player.GetAll() ) do
-        if v:Alive() and v:GetPos():Distance( ply:GetPos() ) < 350 and v:IsSeeking() then
+        if v:Alive() and v:GetPos():Distance( ply:GetPos() ) < self.AbilityRange and v:IsSeeking() then
 
             v:EmitSound("physics/flesh/flesh_bloody_impact_hard1.wav")
 

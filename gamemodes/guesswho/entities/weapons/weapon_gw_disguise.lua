@@ -6,7 +6,7 @@ function SWEP:Ability()
     timer.Create( "Ability.Effect." .. ply:SteamID(), 15, 1, function() self:OnRemove() end )
     ply:SetDisguised(true)
     if SERVER then
-        ply:SetModel( GAMEMODE.SeekerModels[ math.random( 1, #GAMEMODE.SeekerModels ) ] )
+        ply:SetModel( GAMEMODE.GWConfig.SeekerModels[ math.random( 1, #GAMEMODE.GWConfig.SeekerModels ) ] )
         ply:Give( "weapon_gw_smgdummy" )
         ply:SelectWeapon( "weapon_gw_smgdummy" )
     end
@@ -19,6 +19,6 @@ function SWEP:OnRemove()
     timer.Remove( "Ability.Effect." .. ply:SteamID() )
     if SERVER then
         ply:StripWeapon( "weapon_gw_smgdummy" )
-        ply:SetModel( GAMEMODE.Models[ math.random( 1, #GAMEMODE.Models ) ] )
+        ply:SetModel( GAMEMODE.GWConfig.HidingModels[ math.random( 1, #GAMEMODE.GWConfig.HidingModels ) ] )
     end
 end

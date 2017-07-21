@@ -66,17 +66,12 @@ function plymeta:ResetSeekerTouches()
     if SERVER then
         self:StripWeapons()
 
-        self:Give( GAMEMODE.Weapons[ math.random( 1, #GAMEMODE.Weapons ) ] )
+        self:Give( GAMEMODE.GWConfig.Weapons[ math.random( 1, #GAMEMODE.GWConfig.Weapons ) ] )
     end
 end
 
 function plymeta:SetDeflect(state)
     self.deflect = state
-    if state then
-        self:SetMaterial("models/props_combine/portalball001_sheet")
-    else
-        self:SetMaterial("")
-    end
 end
 
 function plymeta:GetDeflect()

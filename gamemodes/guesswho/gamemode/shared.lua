@@ -41,7 +41,7 @@ CreateConVar("gw_touches_required", "3", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "The
 
 function GM:CreateTeams()
 
-    team.SetUp( TEAM_HIDING, "Hiding", self.TeamHidingColor )
+    team.SetUp( TEAM_HIDING, "Hiding", self.GWConfig.TeamHidingColor )
     team.SetClass( TEAM_HIDING, { "player_hiding" } )
     team.SetSpawnPoint( TEAM_HIDING, "info_player_start" )
     team.SetSpawnPoint( TEAM_HIDING, "info_player_deathmatch" )
@@ -50,7 +50,7 @@ function GM:CreateTeams()
     team.SetSpawnPoint( TEAM_HIDING, "info_player_counterterrorist" )
     team.SetSpawnPoint( TEAM_HIDING, "info_player_terrorist" )
 
-    team.SetUp( TEAM_SEEKING, "Seekers", self.TeamSeekingColor )
+    team.SetUp( TEAM_SEEKING, "Seekers", self.GWConfig.TeamSeekingColor )
     team.SetClass( TEAM_SEEKING, { "player_seeker" } )
     team.SetSpawnPoint( TEAM_SEEKING, "info_player_start" )
     team.SetSpawnPoint( TEAM_SEEKING, "info_player_deathmatch" )

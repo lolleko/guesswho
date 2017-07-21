@@ -9,17 +9,17 @@ end
 
 function ENT:Initialize()
 
-    local models = GAMEMODE.Models
+    local models = GAMEMODE.GWConfig.HidingModels
 
     if SERVER then self:SetWalkerModelIndex( math.random( 1, #models ) ) end
 
     self:SetModel( models[ self:GetWalkerModelIndex() ] )
 
-    local walkerColors = GAMEMODE.WalkerColors
+    local walkerColors = GAMEMODE.GWConfig.WalkerColors
 
     if SERVER then self:SetWalkerColorIndex( math.random( 1, #walkerColors ) ) end
 
-    self.WalkerColor = Vector( walkerColors[ self:GetWalkerColorIndex() ].r/255, walkerColors[ self:GetWalkerColorIndex() ].g/255, walkerColors[ self:GetWalkerColorIndex() ].b/255 )
+    self.WalkerColor = Vector( walkerColors[ self:GetWalkerColorIndex() ].r / 255, walkerColors[ self:GetWalkerColorIndex() ].g/255, walkerColors[ self:GetWalkerColorIndex() ].b/255 )
 
     self.GetPlayerColor = function() return self.WalkerColor end
 

@@ -4,31 +4,40 @@ SWEP.Name = "Blasting off (again)"
 function SWEP:Ability()
 	self.LaunchedEnts = {}
 
-	local loop = function()
-		for _,v in pairs(player.GetAll()) do
-			if v:IsSeeking() then
-				v:SetVelocity(Vector(0, 0, 5000))
-				table.insert(self.LaunchedEnts, v)
+	for _,v in pairs(player.GetAll()) do
+		if v:IsSeeking() then
+			v:SetVelocity(Vector(0, 0, 5000))
+			table.insert(self.LaunchedEnts, v)
+			local tName = "gwLaunch" .. v:SteamID()
+			if timer.Exists(tName) then
+				timer.Remove(tName)
+				v:SetGravity(1)
 			end
+			timer.Create(tName, 0.1, 15, function()
+				if util.QuickTrace(v:EyePos(), Vector(0, 0, 30), v).HitWorld then
+					timer.Remove(tName)
+					v:SetGravity(-1)
+					timer.Simple(1.5, function() v:SetGravity(1) end)
+				end
+			end)
 		end
 	end
 
-	loop()
-
-	timer.Simple(0.5, loop)
 end
 
 if CLIENT then
-	local function GetEmitter(self, Pos, b3D)
+	local function GetEmitter(self, Pos)
 		if ( self.Emitter ) then
-			if ( self.EmitterIs3D == b3D and self.EmitterTime > CurTime() ) then
+			if self.EmitterTime > CurTime() then
 				return self.Emitter
+			else
+				self.Emitter:Finish()
+				self.Emitter = nil
 			end
 		end
 
-		self.Emitter = ParticleEmitter( Pos, b3D )
-		self.EmitterIs3D = b3D
-		self.EmitterTime = CurTime() + 2
+		self.Emitter = ParticleEmitter(Pos)
+		self.EmitterTime = CurTime() + 10
 		return self.Emitter
 
 	end
@@ -42,7 +51,7 @@ if CLIENT then
 		local vOffset = self:GetPos() + Vector( math.Rand( -3, 3 ), math.Rand( -3, 3 ), math.Rand( -3, 3 ) )
 		local vNormal = ( vOffset - self:GetPos() ):GetNormalized()
 
-		local emitter = GetEmitter( self, vOffset, false )
+		local emitter = GetEmitter( self, vOffset )
 
 		local particle = emitter:Add( "particles/smokey", vOffset )
 		if ( !particle ) then return end

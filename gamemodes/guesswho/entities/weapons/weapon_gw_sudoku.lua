@@ -21,7 +21,7 @@ function SWEP:Ability()
             if !IsValid( ply ) or !ply:Alive() then return end
             ply:SetColor( ColorRand() )
             ply:SetPlayerColor( Vector( math.Rand(0, 1), math.Rand(0, 1), math.Rand(0, 1) ) )
-            if SERVER then ply:SetModel( GAMEMODE.Models[ math.random( 1, #GAMEMODE.Models ) ] ) end
+            if SERVER then ply:SetModel( GAMEMODE.GWConfig.HidingModels[ math.random( 1, #GAMEMODE.GWConfig.HidingModels ) ] ) end
             ply:SetModelScale( ply:GetModelScale() + ply:GetModelScale() / 10, 0.1 )
         end )
         last = math.log( t )

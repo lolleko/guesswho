@@ -22,9 +22,11 @@ SWEP.Secondary.Automatic    = false
 SWEP.Secondary.Ammo         = "ability"
 
 SWEP.ViewModel = ""
-SWEP.WorldModel = ""
+SWEP.WorldModel = "models/brokenglass_piece.mdl"
 
 SWEP.HoldType = "normal"
+
+SWEP.AbilityRange = 0
 
 function SWEP:Initialize()
 
@@ -32,10 +34,33 @@ function SWEP:Initialize()
 
 end
 
+local CircleMat = Material( "SGM/playercircle" )
+
+function SWEP:DrawWorldModel()
+    if self:Clip2() > 0 and self.AbilityRange > 0 and self:IsCarriedByLocalPlayer() then
+        local ply = self.Owner
+    	local color = Color(0,0,0,128)
+    	local radius = self.AbilityRange
+
+        local trace = {}
+        trace.start = ply:GetPos() + Vector(0,0,50)
+        trace.endpos = trace.start + Vector(0,0,-300)
+        trace.filter = ply
+        local tr = util.TraceLine( trace )
+        if !tr.HitWorld then
+            tr.HitPos = ply:GetPos()
+        end
+        render.SetMaterial( CircleMat )
+        render.DrawQuadEasy( tr.HitPos + tr.HitNormal * 10, Vector(0, 0, 1), radius * 2, radius * 2, color )
+    end
+end
+
+function SWEP:DrawWorldModelTranslucent()
+end
 
 function SWEP:PrimaryAttack()
 
-    self.Weapon:SetNextPrimaryFire( CurTime() + 1.5 )
+    self:SetNextPrimaryFire( CurTime() + 1.5 )
 
     if self.Owner.LagCompensation then
         self.Owner:LagCompensation(true)

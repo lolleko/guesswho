@@ -4,7 +4,7 @@ local SETTINGSPANEL = {}
 
 function SETTINGSPANEL:Init()
     self:SetSize(ScrW() / 2, ScrH() / 2 )
-    self:SetPos(ScrW() / 2-self:GetWide() / 2, ScrH() / 2 - self:GetTall() / 2)
+    self:SetPos(ScrW() / 2 - self:GetWide() / 2, ScrH() / 2 - self:GetTall() / 2)
     self:SetTitle("")
 
     --hack for title
@@ -13,10 +13,16 @@ function SETTINGSPANEL:Init()
     title:SetWide(self:GetWide())
     title:SetFont("robot_small")
     title:SetTextColor(clrs.white)
-    title:SetText( "Client Settings" )
+    title:SetText( "Settings" )
 
     self.sheet = vgui.Create( "DPropertySheet", self )
     self.sheet:Dock( FILL )
+
+    if LocalPlayer():IsSuperAdmin() then
+        self.config = vgui.Create( "DPanel", self.sheet )
+        self:Config()
+        self.sheet:AddSheet( "Server Config", self.config, "icon16/cog.png" )
+    end
 
     self.tutorial = vgui.Create( "DPanel", self.sheet )
     self:Tutorial()
@@ -30,37 +36,37 @@ function SETTINGSPANEL:Init()
     self:General()
     self.sheet:AddSheet( "General", self.general, "icon16/wrench.png" )
 
-    function self.sheet:Paint(w,h)
-        draw.RoundedBox( 0, 8, 28, w-16, h-36, clrs.lightgrey )
-        draw.RoundedBox( 0, 8, 0, w-16, h-(h-28), clrs.grey )
-        draw.RoundedBox( 0, 8, 23, w-16, h-(h-5), clrs.redbg )
+    function self.sheet:Paint(w, h)
+        draw.RoundedBox( 0, 8, 28, w - 16, h - 36, clrs.lightgrey )
+        draw.RoundedBox( 0, 8, 0, w - 16, 28, clrs.grey )
+        draw.RoundedBox( 0, 8, 23, w - 16, 5, clrs.redbg )
         return
     end
 
     for k, v in pairs(self.sheet.Items) do
         if (!v.Tab) then continue end
         local left = 0
-        v.Tab.Paint = function(self, w, h)
+        v.Tab.Paint = function(self, w1, h1)
             if k == 1 then left = 8 end
             if v.Tab == g_Settings.sheet:GetActiveTab() then
-                draw.RoundedBox( 0, left, h-5, w-left , 5, clrs.red )
+                draw.RoundedBox( 0, left, h1 - 5, w1 - left, 5, clrs.red )
             end
         end
     end
 
 end
 
-function SETTINGSPANEL:Paint(w,h)
+function SETTINGSPANEL:Paint(w, h)
     draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg )
 end
 
 function SETTINGSPANEL:Tutorial()
-    function self.tutorial:Paint(w,h)
+    function self.tutorial:Paint(w, h)
         return
     end
 
     local introtext = vgui.Create( "DLabel", self.tutorial )
-    introtext:DockMargin(0,5,0,5)
+    introtext:DockMargin(0, 5, 0, 5)
     introtext:Dock( TOP )
     introtext:SetTall(32)
     introtext:SetFont("robot_medium")
@@ -69,7 +75,7 @@ function SETTINGSPANEL:Tutorial()
     introtext:SetText("It’s all about spotting the odd one out.")
 
     local maintext = vgui.Create( "RichText", self.tutorial )
-    maintext:DockMargin(10,5,10,5)
+    maintext:DockMargin(10, 5, 10, 5)
     maintext:Dock( FILL )
     maintext:SetWrap(true)
     maintext:SetContentAlignment( 5 )
@@ -84,7 +90,7 @@ function SETTINGSPANEL:Tutorial()
     end
 
     local outrotext = vgui.Create( "DLabel", self.tutorial )
-    outrotext:DockMargin(0,5,0,5)
+    outrotext:DockMargin(0, 5, 0, 5)
     outrotext:Dock( BOTTOM )
     outrotext:SetTall(32)
     outrotext:SetFont("robot_medium")
@@ -94,8 +100,77 @@ function SETTINGSPANEL:Tutorial()
 
 end
 
+function SETTINGSPANEL:Config()
+    function self.config:Paint(w, h)
+        return
+    end
+
+    local configScroll = vgui.Create("DScrollPanel", self.config)
+    configScroll:Dock(FILL)
+
+    local modelCategory = vgui.Create( "DCollapsibleCategory", configScroll)
+    modelCategory:SetExpanded( 0 )
+    modelCategory:Dock(TOP)
+    modelCategory:SetLabel( "Models" )
+
+    local modelList = vgui.Create("DIconLayout", modelCategory)
+    modelList:Dock(FILL)
+    modelList:SetSpaceY(2)
+    modelList:SetSpaceX(2)
+    modelCategory:SetContents(modelList)
+
+
+    for name, model in SortedPairs( player_manager.AllValidModels() ) do
+
+
+        local modelIcon = vgui.Create( "SpawnIcon" )
+        modelIcon:SetModel( model )
+        modelIcon:SetSize( 80, 80 )
+        modelIcon:SetTooltip( name )
+        modelIcon.playermodel = name
+
+        modelIcon.PaintOver = function()
+            if table.HasValue(GAMEMODE.GWConfig.HidingModels, modelIcon:GetModelName()) then
+                surface.SetDrawColor(clrs.green)
+            else
+                surface.SetDrawColor(clrs.red)
+            end
+            for i = 0, 1 do
+                surface.DrawOutlinedRect( i, i, modelIcon:GetWide() - i * 2, modelIcon:GetTall() - i * 2)
+            end
+        end
+
+        modelIcon.DoClick = function()
+            if table.HasValue(GAMEMODE.GWConfig.HidingModels, modelIcon:GetModelName()) then
+                table.RemoveByValue(GAMEMODE.GWConfig.HidingModels, modelIcon:GetModelName())
+            else
+                table.insert(GAMEMODE.GWConfig.HidingModels, modelIcon:GetModelName())
+            end
+        end
+
+        local modelLabel = vgui.Create("DLabel", modelIcon)
+        modelLabel:SetText(name)
+        modelLabel:SetFont("robot_smaller")
+        modelLabel:SetTextColor(clrs.lightgrey)
+        function modelLabel:Paint( w, h )
+            draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg)
+        end
+        modelLabel:Dock(BOTTOM)
+        modelLabel:SetContentAlignment(5)
+        modelList:Add(modelIcon)
+
+    end
+
+
+    local abilitiesCategory = vgui.Create( "DCollapsibleCategory", configScroll)
+    abilitiesCategory:SetExpanded( 0 )
+    abilitiesCategory:Dock(FILL)
+    abilitiesCategory:SetLabel( "Abilities" )
+
+end
+
 function SETTINGSPANEL:General()
-    function self.general:Paint(w,h)
+    function self.general:Paint(w, h)
         return
     end
 
@@ -139,22 +214,22 @@ end
 
 function SETTINGSPANEL:Taunts()
 
-    function self.taunts:Paint(w,h)
+    function self.taunts:Paint(w, h)
         return
     end
 
     local soundList = vgui.Create( "DListView", self.taunts )
     soundList:SetMultiSelect( false )
-    soundList:SetWidth(self:GetWide() -26)
-    soundList:DockMargin(0,0,0,25)
+    soundList:SetWidth(self:GetWide() - 26)
+    soundList:DockMargin(0, 0, 0, 25)
     soundList:Dock(RIGHT)
 
     soundList:AddColumn( "Sound" )
 
     local bindSound = vgui.Create( "DButton", self.taunts )
     bindSound:SetText("Bind sound")
-    bindSound:SetSize((self:GetWide() -26) / 2,25)
-    bindSound:SetPos(0,self:GetTall() - 95)
+    bindSound:SetSize((self:GetWide() - 26) / 2, 25)
+    bindSound:SetPos(0, self:GetTall() - 95)
     bindSound.DoClick = function()
         if soundList:GetLine(soundList:GetSelectedLine()) == nil then Derma_Message( "Please select an item from the list above!", "Alert", "OK" ) return end
         local sound = soundList:GetLine(soundList:GetSelectedLine()):GetValue(1)
@@ -181,13 +256,13 @@ function SETTINGSPANEL:Taunts()
     local helpBtn = vgui.Create( "DButton", self.taunts )
     helpBtn:SetText("Help")
     helpBtn:SetPos(0 + bindSound:GetWide(), self:GetTall() - 95)
-    helpBtn:SetSize((self:GetWide() -26) / 2,25)
+    helpBtn:SetSize((self:GetWide() - 26) / 2, 25)
     helpBtn.DoClick = function()
         Derma_Message( "NOTE: This is a temporary solution a easier voice taunt menu will be added soon.\nYou can preview voice taunts here. For that just select an item from the list.\nIf you decided which voice taunt you want to use select it from list and click the button below the list to generate a bind command.\nYou can use that command in the console to bind the taunt to a key.\nFor that you will need to have your console enabled. If you don't have your console enabled go to Options > Keyboard > Advanced and Check \"Enable developer console.\"", "Taunt Help", "OK, understood!" )
     end
 
     local files = file.Find( "sound/gwtaunts/*", "GAME" )
-    for _,sound in pairs(files) do
+    for _, sound in pairs(files) do
         soundList:AddLine(string.Explode(".", sound)[1])
     end
 

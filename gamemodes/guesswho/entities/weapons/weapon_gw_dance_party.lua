@@ -2,11 +2,12 @@ SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Dance Party"
 SWEP.AbilitySound = {"vo/coast/odessa/female01/nlo_cheer01.wav", "vo/coast/odessa/female01/nlo_cheer02.wav", "vo/coast/odessa/female01/nlo_cheer03.wav"}
 
+SWEP.AbilityRange = 800
 
 function SWEP:Ability()
 	local ply = self.Owner
 
-	for _, ent in pairs( ents.FindInSphere(ply:GetPos(), 800) ) do
+	for _, ent in pairs( ents.FindInSphere(ply:GetPos(), self.AbilityRange) ) do
 		local effect = EffectData()
 		effect:SetStart(ent:GetPos())
 		effect:SetOrigin(ent:GetPos())
@@ -22,7 +23,7 @@ function SWEP:Ability()
 
 		if ent:IsPlayer() and ent:IsSeeking() then
 			ent:ConCommand("act cheer")
-			if SERVER then ent:ApplyStun(2) end
+			if SERVER then ent:ApplyStun(2.5) end
 		end
 
 		if ent:IsPlayer() and ent:IsHiding() then

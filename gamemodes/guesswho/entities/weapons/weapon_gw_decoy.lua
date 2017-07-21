@@ -57,7 +57,7 @@ function SWEP:Ability()
         local spos = swap:GetPos() + Vector( 0, 0, 2 )
         swap:SetPos( self.Owner:GetPos() + Vector( 0, 0, 2 ) )
         self.Owner:SetPos( spos )
-        self.Owner:SetModel( GAMEMODE.Models[ math.random( 1, #GAMEMODE.Models ) ] )
+        self.Owner:SetModel( GAMEMODE.GWConfig.HidingModels[ math.random( 1, #GAMEMODE.GWConfig.HidingModels ) ] )
     else
         self.Owner:SetHealth( 100 )
     end

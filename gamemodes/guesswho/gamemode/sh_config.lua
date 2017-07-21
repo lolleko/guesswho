@@ -1,4 +1,7 @@
-GM.Models = {
+GM.GWConfig = {}
+
+-- define default config
+GM.GWConfig.HidingModels = {
     --Characters
     "models/player/alyx.mdl",
     "models/player/breen.mdl",
@@ -22,11 +25,11 @@ GM.Models = {
     "models/player/Group01/Female_03.mdl",
 }
 
-GM.SeekerModels = {
-  "models/player/combine_super_soldier.mdl"
+GM.GWConfig.SeekerModels = {
+    "models/player/combine_super_soldier.mdl"
 }
 
-GM.Weapons = {
+GM.GWConfig.Weapons = {
     "weapon_gw_prophunt",
     "weapon_gw_surge",
     "weapon_gw_shockwave",
@@ -46,10 +49,10 @@ GM.Weapons = {
     "weapon_gw_deflect"
 }
 
-GM.TeamSeekingColor = Color(138, 155, 15)
-GM.TeamHidingColor = Color(23, 89, 150)
+GM.GWConfig.TeamSeekingColor = Color(138, 155, 15)
+GM.GWConfig.TeamHidingColor = Color(23, 89, 150)
 
-GM.WalkerColors = {
+GM.GWConfig.WalkerColors = {
     Color(61, 87, 105), -- original blue
     Color(240, 240, 240), --Black/dark grey
     Color(50, 50, 50), -- white /lightgrey
@@ -60,3 +63,13 @@ GM.WalkerColors = {
     Color(159, 205, 234 ), --light blue
     Color(94, 25, 34) --dark red
 }
+
+--load config from disk if exists
+if file.Exists("guesswho/config.txt", "DATA") then
+    GM.GWConfig = util.JSONToTable(file.Read("guesswho/config.txt"))
+end
+
+file.Write("guesswho/config.txt", util.TableToJSON(GM.GWConfig))
+
+PrintTable(GM.GWConfig)
+--send config to clients on connect

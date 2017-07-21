@@ -47,6 +47,8 @@ end
 --NETWORK STRINGS
 util.AddNetworkString( "gwRoundState" )
 util.AddNetworkString( "gwPlayerHull" )
+util.AddNetworkString( "gwRequestConfig" )
+util.AddNetworkString( "gwUpdateConfig" )
 
 --[[
     GAMEMODE HOOKS
