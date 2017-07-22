@@ -20,7 +20,7 @@ function SWEP:Ability()
             effect:SetEntity( v )
             effect:SetMagnitude( stunDur )
             util.Effect( "gw_stunned", effect, true, true )
-            v:ApplyStun( stunDur )
+            if SERVER then v:ApplyStun( stunDur ) end
         end
     end
 end

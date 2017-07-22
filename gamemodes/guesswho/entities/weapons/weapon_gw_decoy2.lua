@@ -1,6 +1,8 @@
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Decoy 2.0"
 
+SWEP.DrawGWCrossHair = true
+
 function SWEP:Ability()
 	if SERVER then
 		local walker = ents.Create("npc_walker")

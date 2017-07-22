@@ -1,4 +1,5 @@
 GM.GWConfig = {}
+GM.GWConfigStatic = {}
 
 -- define default config
 GM.GWConfig.HidingModels = {
@@ -25,7 +26,26 @@ GM.GWConfig.SeekerModels = {
     "models/player/combine_super_soldier.mdl"
 }
 
-GM.GWConfig.Weapons = {
+GM.GWConfig.ActiveAbilities = {
+    "weapon_gw_prophunt",
+    "weapon_gw_surge",
+    "weapon_gw_shockwave",
+    "weapon_gw_cloak",
+    "weapon_gw_shrink",
+    "weapon_gw_decoy",
+    "weapon_gw_sudoku",
+    "weapon_gw_disguise",
+    "weapon_gw_vampirism",
+    "weapon_gw_ragdoll",
+    "weapon_gw_superhot",
+    "weapon_gw_dance_party",
+    "weapon_gw_blasting_off",
+    "weapon_gw_decoy2",
+    "weapon_gw_teleport",
+    "weapon_gw_deflect"
+}
+
+GM.GWConfigStatic.AllAbilities = {
     "weapon_gw_prophunt",
     "weapon_gw_surge",
     "weapon_gw_shockwave",
@@ -61,31 +81,33 @@ GM.GWConfig.WalkerColors = {
 }
 
 --load config from disk if exists
-if file.Exists("guesswho/config.txt", "DATA") then
-    GM.GWConfig = util.JSONToTable(file.Read("guesswho/config.txt"))
+if SERVER then
+    if file.Exists("guesswho/config.txt", "DATA") then
+        GM.GWConfig = util.JSONToTable(file.Read("guesswho/config.txt"))
+    end
+
+    if not file.Exists("guesswho", "DATA") then
+        file.CreateDir("guesswho")
+    end
+
+    file.Write("guesswho/config.txt", util.TableToJSON(GM.GWConfig))
+
+    --send config to clients on connect
+    local function sendConfig(ply)
+        net.Start("gwSendConfig")
+            net.WriteTable(GAMEMODE.GWConfig)
+        net.Send(ply)
+    end
+    hook.Add("PlayerInitialSpawn", "gwInitialConfigSend", sendConfig)
+
+    net.Receive("gwRequestUpdateConfig", function(len, ply)
+    	if not ply:IsSuperAdmin() then return end
+        local config = net.ReadTable()
+        GAMEMODE.GWConfig = config
+        file.Write("guesswho/config.txt", util.TableToJSON(GAMEMODE.GWConfig))
+
+        net.Start("gwSendConfig")
+            net.WriteTable(GAMEMODE.GWConfig)
+        net.Broadcast(ply)
+    end )
 end
-
-if not file.Exists("guesswho", "DATA") then
-    file.CreateDir("guesswho")
-end
-
-file.Write("guesswho/config.txt", util.TableToJSON(GM.GWConfig))
-
---send config to clients on connect
-local function sendConfig(ply)
-    net.Start("gwSendConfig")
-        net.WriteTable(GAMEMODE.GWConfig)
-    net.Send(ply)
-end
-hook.Add("PlayerInitialSpawn", "gwInitialConfigSend", sendConfig)
-
-net.Receive("gwRequestUpdateConfig", function(len, ply)
-	if not ply:IsSuperAdmin() then return end
-    local config = net.ReadTable()
-    GAMEMODE.GWConfig = config
-    file.Write("guesswho/config.txt", util.TableToJSON(GAMEMODE.GWConfig))
-
-    net.Start("gwSendConfig")
-        net.WriteTable(GAMEMODE.GWConfig)
-    net.Broadcast(ply)
-end )

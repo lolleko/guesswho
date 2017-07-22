@@ -1,5 +1,15 @@
 ## 2.0
 
+### GUI Config Editor
+
+Press F1 to modify the Server config.  
+
+Currently Supports:  
+
+* Hiding & Seeker models
+* Abilities
+* Team Colors
+
 ### Reworked Seeker Movement
 
 **Dash**
@@ -22,7 +32,12 @@ Seekers now walk and sprint at the same speed that the hiders walk/sprint.
 
 ### Abilities
 
-Added Range Indicator for some abilities.
+**General**
+
+* Added Range Indicator for some abilities
+* You can no longer suicide to reroll your ability
+* But you can reroll your ability once at the beginning (by pressing Reload)
+* Crosshair now only renders on certain abilities
 
 **Deflect**
 
@@ -44,7 +59,9 @@ Increased range `300 -> 350`
 
 **Shockwave**
 
-Stun duration increased `3.5 -> 4`
+Stun duration increased `3.5 -> 4`  
+
+Fixed a clientside Lua error.
 
 **Dance Party**
 
@@ -58,3 +75,14 @@ Slightly increased chance to get more decoys
 **Prophunt**
 
 Fixed a bug that caused, the player hull to be inaccurate when transformed into a prop.
+
+**Superhot**
+
+Increased caster speed `NormalSpeed * 4.5 * 0.3 -> NormalSpeed * 5 * 0.3`  
+Speed of other players remains at `NormalSpeed * 0.3`
+
+**Shrink**
+
+Increased player speed:  
+`Walk speed 150 -> 175`  
+`Run speed 300 -> 350`

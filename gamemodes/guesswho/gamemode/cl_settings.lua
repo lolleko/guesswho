@@ -113,7 +113,7 @@ function MODELCATEGORY:SetModels(updateTable)
         local modelIcon = vgui.Create( "SpawnIcon" )
         modelIcon:SetModel( model )
         modelIcon:SetSize( 80, 80 )
-        modelIcon:SetTooltip( name )
+        modelIcon:SetTooltip( modelIcon:GetModelName() )
         modelIcon.playermodel = name
 
         modelIcon.PaintOver = function()
@@ -128,9 +128,7 @@ function MODELCATEGORY:SetModels(updateTable)
         end
 
         modelIcon.DoClick = function()
-            print(table.HasValue(updateTable, modelIcon:GetModelName()))
             if table.HasValue(updateTable, modelIcon:GetModelName()) then
-                print("removing " .. modelIcon:GetModelName())
                 table.RemoveByValue(updateTable, modelIcon:GetModelName())
             else
                 table.insert(updateTable, modelIcon:GetModelName())
@@ -179,6 +177,95 @@ function SETTINGSPANEL:Config()
     modelSeekingCategory:SetExpanded( 0 )
     modelSeekingCategory:Dock(TOP)
     modelSeekingCategory:SetLabel( "Models Seekers" )
+
+    local abilitiesCategory = vgui.Create( "DCollapsibleCategory", configScroll)
+    abilitiesCategory:SetExpanded( 0 )
+    abilitiesCategory:Dock(TOP)
+    abilitiesCategory:SetLabel( "Abilities" )
+
+    local abilityList = vgui.Create("DIconLayout", abilitiesCategory)
+    abilityList:Dock(FILL)
+    abilityList:SetSpaceY(2)
+    abilityList:SetSpaceX(2)
+    abilitiesCategory:SetContents(abilityList)
+
+    for _, wepName in pairs(GAMEMODE.GWConfigStatic.AllAbilities) do
+        local abilityIcon = vgui.Create( "DImageButton" )
+        abilityIcon:SetImage("vgui/gw/abilityicons/" .. wepName .. ".png")
+        abilityIcon:SetSize( 80, 80 )
+        abilityIcon:SetTooltip( wepName )
+
+        abilityIcon.PaintOver = function()
+            if table.HasValue(GAMEMODE.GWConfig.ActiveAbilities, wepName) then
+                surface.SetDrawColor(clrs.green)
+            else
+                surface.SetDrawColor(clrs.red)
+            end
+            for i = 0, 1 do
+                surface.DrawOutlinedRect( i, i, abilityIcon:GetWide() - i * 2, abilityIcon:GetTall() - i * 2)
+            end
+        end
+
+        abilityIcon.DoClick = function()
+            if table.HasValue(GAMEMODE.GWConfig.ActiveAbilities, wepName) then
+                table.RemoveByValue(GAMEMODE.GWConfig.ActiveAbilities, wepName)
+            else
+                table.insert(GAMEMODE.GWConfig.ActiveAbilities, wepName)
+            end
+        end
+
+        local abilityLabel = vgui.Create("DLabel", abilityIcon)
+        abilityLabel:SetText(weapons.Get(wepName).Name)
+        abilityLabel:SetFont("robot_smaller")
+        abilityLabel:SetTextColor(clrs.lightgrey)
+        function abilityLabel:Paint( w, h )
+            draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg)
+        end
+        abilityLabel:Dock(BOTTOM)
+        abilityLabel:SetContentAlignment(5)
+
+        abilityList:Add(abilityIcon)
+
+    end
+
+    local colorsCategory = vgui.Create( "DCollapsibleCategory", configScroll)
+    colorsCategory:SetExpanded( 0 )
+    colorsCategory:Dock(TOP)
+    colorsCategory:SetLabel("Colors")
+
+    local seekerColorLabel = vgui.Create("DLabel", colorsCategory)
+    seekerColorLabel:SetText("Team Seeker Color")
+    seekerColorLabel:SetFont("robot_normal")
+    seekerColorLabel:Dock(TOP)
+    seekerColorLabel:SetContentAlignment(5)
+    seekerColorLabel:SetTall(24)
+    seekerColorLabel:SetTextColor(clrs.darkgrey)
+
+    local seekerColor = vgui.Create("DColorMixer", colorsCategory)
+    seekerColor:SetPalette(false)
+    seekerColor:Dock(TOP)
+    seekerColor:SetTall(100)
+    seekerColor:SetColor(GAMEMODE.GWConfig.TeamSeekingColor)
+    function seekerColor:ValueChanged(color)
+        GAMEMODE.GWConfig.TeamSeekingColor = color
+    end
+
+    local hidingColorLabel = vgui.Create("DLabel", colorsCategory)
+    hidingColorLabel:SetText("Team Hiding Color")
+    hidingColorLabel:SetFont("robot_normal")
+    hidingColorLabel:Dock(TOP)
+    hidingColorLabel:SetContentAlignment(5)
+    hidingColorLabel:SetTall(24)
+    hidingColorLabel:SetTextColor(clrs.darkgrey)
+
+    local hidingColor = vgui.Create("DColorMixer", colorsCategory)
+    hidingColor:SetPalette(false)
+    hidingColor:Dock(TOP)
+    hidingColor:SetTall(100)
+    hidingColor:SetColor(GAMEMODE.GWConfig.TeamHidingColor)
+    function hidingColor:ValueChanged(color)
+        GAMEMODE.GWConfig.TeamHidingColor = color
+    end
 
 end
 
@@ -324,4 +411,6 @@ concommand.Add("gw_settings", showSettings)
 net.Receive("gwSendConfig", function(len, ply)
     local config = net.ReadTable()
     GAMEMODE.GWConfig = config
+    team.SetColor(TEAM_HIDING, GAMEMODE.GWConfig.TeamHidingColor)
+    team.SetColor(TEAM_SEEKING, GAMEMODE.GWConfig.TeamSeekingColor)
 end)

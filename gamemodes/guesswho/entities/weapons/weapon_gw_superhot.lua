@@ -7,8 +7,8 @@ function SWEP:Ability()
         GAMEMODE.AbilitySuperHotMode = true
         GAMEMODE.AbilitySuperHotModePly = ply
         GAMEMODE.AbilitySuperHotModeEndTime = RealTime() + 6
-        ply:SetWalkSpeed(ply:GetWalkSpeed() * 4.5)
-        ply:SetRunSpeed(ply:GetRunSpeed() * 4.5)
+        ply:SetWalkSpeed(ply:GetWalkSpeed() * 5)
+        ply:SetRunSpeed(ply:GetRunSpeed() * 5)
         game.SetTimeScale(0.3)
     end
 end

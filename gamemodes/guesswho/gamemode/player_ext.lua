@@ -1,6 +1,10 @@
 local plymeta = FindMetaTable( "Player" )
 if ( !plymeta ) then return end
 
+AccessorFunc(plymeta, "gwReRolledAbility", "ReRolledAbility", FORCE_BOOL)
+AccessorFunc(plymeta, "gwDiedInPrep", "DiedInPrep", FORCE_BOOL)
+
+
 function plymeta:ApplyStun( dur )
 
     local ply = self
@@ -21,4 +25,10 @@ end
 
 function plymeta:PlaySoundForPlayer(path)
     self:SendLua("surface.PlaySound('" .. path .. "')")
+end
+
+function plymeta:GiveRandomAbility()
+    self:StripWeapons()
+
+    self:Give( GAMEMODE.GWConfig.ActiveAbilities[ math.random( 1, #GAMEMODE.GWConfig.ActiveAbilities ) ] )
 end

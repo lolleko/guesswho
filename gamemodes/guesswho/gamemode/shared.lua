@@ -3,7 +3,7 @@ GM.Author = "Lolleko"
 GM.Email = "N/A"
 GM.Website = "https://github.com/lolleko/guesswho"
 
-GM.Version = "1.6.5a (60)"
+GM.Version = "2.0 (61)"
 
 GM.TeamBased = true
 
@@ -38,6 +38,16 @@ CreateConVar("gw_abilities_enabled", "1", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Sh
 CreateConVar("gw_touches_enabled", "1", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Wether touching for weapons is enabled.")
 CreateConVar("gw_touches_required", "3", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "The amount of seeker touches that are required for a hider to receive a new weapon.")
 
+-- Ammo
+game.AddAmmoType( {
+	name = "gwAbility",
+	dmgtype = DMG_GENERIC
+} )
+
+game.AddAmmoType( {
+	name = "gwDashCharges",
+	dmgtype = DMG_GENERIC
+} )
 
 function GM:CreateTeams()
 

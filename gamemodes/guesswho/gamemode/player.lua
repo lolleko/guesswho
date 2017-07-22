@@ -35,8 +35,7 @@ function GM:PlayerDeathThink( ply )
 
     if ( ply.NextSpawnTime and ply.NextSpawnTime > CurTime() ) then return end
 
-    --give hiders a 2nd chance if they died in prep
-    if ply:Team() == TEAM_HIDING and GAMEMODE:GetRoundState() == ROUND_HIDE then
+    if ply:Team() == TEAM_HIDING and GAMEMODE:GetRoundState() == ROUND_HIDE and not ply:GetDiedInPrep() then
         ply:Spawn()
     end
 
@@ -58,6 +57,10 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 
     -- reset touches
     ply:SetSeekerTouches(0)
+
+    if ply:Team() == TEAM_HIDING and GAMEMODE:GetRoundState() == ROUND_HIDE then
+        ply:SetDiedInPrep(true)
+    end
 
     ---spectate first alive player in team
     ply:Spectate(OBS_MODE_CHASE)

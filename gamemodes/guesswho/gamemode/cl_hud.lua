@@ -163,7 +163,9 @@ function CHuntHUD()
         end
     end
 
-    if LocalPlayer():Alive() then CHHUD:Crosshair() end
+    if LocalPlayer():Alive() and (LocalPlayer():IsSeeking() or IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().DrawGWCrossHair) then
+        CHHUD:Crosshair()
+    end
 
     --Ammo
     if ply:Alive() and #ply:GetWeapons() > 0 and IsValid( ply:GetActiveWeapon() ) then
@@ -235,6 +237,11 @@ function CHuntHUD()
         end
 
 
+    end
+
+    --draw weapon hud if spectating
+    if LocalPlayer() != ply and IsValid( ply:GetActiveWeapon() ) then
+        ply:GetActiveWeapon():DrawHUD()
     end
 
 end

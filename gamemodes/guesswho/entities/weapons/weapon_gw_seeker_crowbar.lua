@@ -2,8 +2,6 @@ SWEP.PrintName = "Crowbar"
 
 if (CLIENT) then
 	SWEP.ViewModelFlip = false
-	SWEP.Slot = 1
-	SWEP.SlotPos = 1
 	SWEP.IconLetter = "y"
 end
 SWEP.Base = "weapon_base"
@@ -32,11 +30,15 @@ SWEP.Kind = WEAPON_MELEE
 SWEP.HoldType = "melee"
 
 SWEP.Delay = 0.7
-SWEP.Range = 75
+SWEP.Range = 85
 SWEP.Damage = 20
 SWEP.AutoSpawnable = false
 
 SWEP.DashRestoreDelay = 3
+
+if CLIENT then
+	killicon.AddAlias("weapon_gw_seeker_crowbar", "weapon_crowbar")
+end
 
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
@@ -68,6 +70,9 @@ end
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Delay)
 
+	if self.Owner.LagCompensation then
+        self.Owner:LagCompensation(true)
+    end
 	local trace = {}
 	trace.start = self.Owner:GetShootPos()
 	trace.endpos = trace.start + (self.Owner:GetAimVector() * self.Range)
@@ -75,6 +80,8 @@ function SWEP:PrimaryAttack()
 	trace.mins = Vector(1, 1, 1) * - 10
 	trace.maxs = Vector(1, 1, 1) * 10
 	trace = util.TraceLine(trace)
+	self.Owner:LagCompensation(false)
+
 	if SERVER then self.Owner:EmitSound(self.SwingSound) end
 
 	if trace.Fraction < 1 and trace.HitNonWorld and trace.Entity:IsPlayer() then

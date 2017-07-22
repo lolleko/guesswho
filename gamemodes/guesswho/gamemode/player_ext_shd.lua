@@ -64,9 +64,7 @@ function plymeta:ResetSeekerTouches()
     self:SetSeekerTouches(0)
 
     if SERVER then
-        self:StripWeapons()
-
-        self:Give( GAMEMODE.GWConfig.Weapons[ math.random( 1, #GAMEMODE.GWConfig.Weapons ) ] )
+        self:GiveRandomAbility()
     end
 end
 

@@ -52,7 +52,7 @@ function GM:ShowTeam()
     InfoDescription:SetPos( ScrW() / 2 - 620 + 2, linkOffsetY + 40 )
     InfoDescription:SetSize( 276, 160 )
     InfoDescription:SetText(
-        "1.6.5(latest):\nBalancing check the changelog.\n\n1.6.4:\nIntroduced 5 new abilities consult the changelog for more information."
+        "2.0\n\nAdded GUI Config Editor (Press F1 as admin)\nReworked Seeker Movement\nTons of Gameplay changes and Bug Fixes\n\n READ the full changelog for mor information."
     )
     InfoDescription:SetPaintBackground(false)
     InfoDescription:SetMultiline(true)
@@ -100,6 +100,22 @@ function GM:ShowTeam()
     HeaderImage:SetPos( 0, 60 )
     HeaderImage:SetImage( "vgui/gw/logo_main.png" )
     HeaderImage:CenterHorizontal()
+
+    local HeaderTwoZeroLabel = vgui.Create("DLabel", self.TeamSelectFrame)
+    HeaderTwoZeroLabel:SetFont( "robot_large" )
+    HeaderTwoZeroLabel:SetPos( 0, 52 )
+    HeaderTwoZeroLabel:SetTextColor(Color(255, 255, 255))
+    HeaderTwoZeroLabel:SetText("2.0")
+    HeaderTwoZeroLabel:SizeToContents()
+    HeaderTwoZeroLabel:SetWide(64)
+    HeaderTwoZeroLabel:SetContentAlignment(5)
+    HeaderTwoZeroLabel:CenterHorizontal()
+    local twoZeroPosX, twoZeroPosY  = HeaderTwoZeroLabel:GetPos()
+    HeaderTwoZeroLabel:SetPos(twoZeroPosX + 148, twoZeroPosY)
+    function HeaderTwoZeroLabel:Paint( w, h )
+        draw.RoundedBox( 0, -2, -2, w + 2, h + 2, clrs.red )
+        draw.RoundedBox( 0, 2, 2, w - 4, h - 4, clrs.darkgreybg )
+    end
 
     --Hiding Button
     local TeamHidingPanel = vgui.Create( "DPanel", self.TeamSelectFrame )

@@ -1,6 +1,8 @@
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Teleport"
 
+SWEP.DrawGWCrossHair = true
+
 function SWEP:Ability()
 	local ply = self.Owner
 

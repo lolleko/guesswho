@@ -19,7 +19,7 @@ SWEP.Primary.NumShots       = 1
 SWEP.Secondary.ClipSize     = 1
 SWEP.Secondary.DefaultClip  = 1
 SWEP.Secondary.Automatic    = false
-SWEP.Secondary.Ammo         = "ability"
+SWEP.Secondary.Ammo         = "gwAbility"
 
 SWEP.ViewModel = ""
 SWEP.WorldModel = "models/brokenglass_piece.mdl"
@@ -56,6 +56,19 @@ function SWEP:DrawWorldModel()
 end
 
 function SWEP:DrawWorldModelTranslucent()
+end
+
+function SWEP:Equip()
+    if SERVER and GAMEMODE:GetRoundState() == ROUND_HIDE and not self.Owner:GetReRolledAbility() then
+        self.Owner:ChatPrint("Press Reload during hiding phase to reroll your ability. You can only do this once per round.")
+    end
+end
+
+function SWEP:Reload()
+    if SERVER and GAMEMODE:GetRoundState() == ROUND_HIDE and self:Clip2() == 1 and not self.Owner:GetReRolledAbility() then
+        self.Owner:GiveRandomAbility()
+        self.Owner:SetReRolledAbility(true)
+    end
 end
 
 function SWEP:PrimaryAttack()
@@ -99,6 +112,6 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:GiveSecondaryAmmo(amount)
-    self.Owner:GiveAmmo(amount, "ability", true)
+    self.Owner:GiveAmmo(amount, "gwAbility", true)
     self:SetClip2( self:Clip2() + amount )
 end
