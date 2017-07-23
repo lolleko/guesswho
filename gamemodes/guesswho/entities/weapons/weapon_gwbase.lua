@@ -66,8 +66,8 @@ end
 
 function SWEP:Reload()
     if SERVER and GAMEMODE:GetRoundState() == ROUND_HIDE and self:Clip2() == 1 and not self.Owner:GetReRolledAbility() then
-        self.Owner:GiveRandomAbility()
         self.Owner:SetReRolledAbility(true)
+        self.Owner:GiveRandomAbility()
     end
 end
 

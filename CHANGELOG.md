@@ -1,3 +1,12 @@
+## 2.0a
+
+Added Ability that was supposed to be in 2.0
+
+**Timelapse**
+
+Travel `9` seconds back in time.  
+
+
 ## 2.0
 
 ### GUI Config Editor
@@ -17,7 +26,7 @@ Currently Supports:
 Seekers can now dash with the crowbar equipped.
 The Dash will launch the seeker in the direction he is looking.
 
-The crowbar `3` Dash charges.
+The crowbar has `3` Dash charges.
 A new charge is granted every `3` seconds.
 
 increased damage to `40`

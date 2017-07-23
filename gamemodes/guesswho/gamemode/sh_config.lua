@@ -42,7 +42,8 @@ GM.GWConfig.ActiveAbilities = {
     "weapon_gw_blasting_off",
     "weapon_gw_decoy2",
     "weapon_gw_teleport",
-    "weapon_gw_deflect"
+    "weapon_gw_deflect",
+    "weapon_gw_timelapse"
 }
 
 GM.GWConfigStatic.AllAbilities = {
@@ -62,7 +63,8 @@ GM.GWConfigStatic.AllAbilities = {
     "weapon_gw_blasting_off",
     "weapon_gw_decoy2",
     "weapon_gw_teleport",
-    "weapon_gw_deflect"
+    "weapon_gw_deflect",
+    "weapon_gw_timelapse"
 }
 
 GM.GWConfig.TeamSeekingColor = Color(138, 155, 15)
