@@ -1,4 +1,8 @@
-## 2.0ab
+## 2.0c
+
+Fixed Timelapse sound not playing.
+
+## 2.0b
 
 Fixed a bug related to weapon HUDs.
 
