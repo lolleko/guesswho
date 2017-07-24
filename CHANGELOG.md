@@ -1,3 +1,8 @@
+## 2.0ab
+
+Fixed a bug related to weapon HUDs.
+
+
 ## 2.0a
 
 Added Ability that was supposed to be in 2.0

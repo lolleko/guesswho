@@ -240,7 +240,7 @@ function CHuntHUD()
     end
 
     --draw weapon hud if spectating
-    if LocalPlayer() != ply and IsValid( ply:GetActiveWeapon() ) then
+    if LocalPlayer() != ply and IsValid( ply:GetActiveWeapon() ) and ply:GetActiveWeapon().DrawHUD then
         ply:GetActiveWeapon():DrawHUD()
     end
 
