@@ -1,6 +1,6 @@
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Timelapse"
-SWEP.AbilitySound = "gwabilities/timelapse.wav"
+SWEP.AbilitySound = "gwabilities/timelapse.mp3"
 
 SWEP.AbilityDuration = 9
 
@@ -51,7 +51,7 @@ function SWEP:Ability()
 				table.remove(self.TimelapseData, 1)
 
 				if #self.TimelapseData <= 18 then
-					--ang:RotateAroundAxis(Vector(0, 0, 1), (18 - #self.TimelapseData) * 10)
+					ang:RotateAroundAxis(Vector(0, 0, 1), (18 - #self.TimelapseData) * 10)
 					self.Owner:SetEyeAngles(ang)
 				end
 
