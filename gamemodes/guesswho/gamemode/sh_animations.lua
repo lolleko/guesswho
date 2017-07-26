@@ -1,46 +1,46 @@
 function GM:HandlePlayerDucking( ply, velocity )
 
-    if ( !ply:Crouching() ) then return false end
+	if ( !ply:Crouching() ) then return false end
 
-    if ply:Team() == TEAM_SEEKING then
+	if ply:Team() == TEAM_SEEKING then
 
-        if ( velocity:Length2D() > 0.5 ) then
-            ply.CalcIdeal = ACT_MP_CROUCHWALK
-        else
-            ply.CalcIdeal = ACT_MP_CROUCH_IDLE
-        end
+		if ( velocity:Length2D() > 0.5 ) then
+			ply.CalcIdeal = ACT_MP_CROUCHWALK
+		else
+			ply.CalcIdeal = ACT_MP_CROUCH_IDLE
+		end
 
-    else
+	else
 
-        ply:AddVCDSequenceToGestureSlot(GESTURE_SLOT_CUSTOM, ply:LookupSequence("sit_zen"),0.9, true) -- true = autokill
-        ply:AnimSetGestureWeight(GESTURE_SLOT_CUSTOM, 1)
+		ply:AddVCDSequenceToGestureSlot(GESTURE_SLOT_CUSTOM, ply:LookupSequence("sit_zen"),0.9, true) -- true = autokill
+		ply:AnimSetGestureWeight(GESTURE_SLOT_CUSTOM, 1)
 
-    end
+	end
 
-    return true
+	return true
 
 end
 
 function GM:GrabEarAnimation( ply )
 
-    ply.ChatGestureWeight = ply.ChatGestureWeight or 0
+	ply.ChatGestureWeight = ply.ChatGestureWeight or 0
 
-    -- Don't show this when we're playing a taunt!
-    if ( ply:IsPlayingTaunt() ) then return end
+	-- Don't show this when we're playing a taunt!
+	if ( ply:IsPlayingTaunt() ) then return end
 
-    if ply:IsHiding() then return end
+	if ply:IsHiding() then return end
 
-    if ( ply:IsTyping() ) then
-        ply.ChatGestureWeight = math.Approach( ply.ChatGestureWeight, 1, FrameTime() * 5.0 )
-    else
-        ply.ChatGestureWeight = math.Approach( ply.ChatGestureWeight, 0, FrameTime() * 5.0 )
-    end
+	if ( ply:IsTyping() ) then
+		ply.ChatGestureWeight = math.Approach( ply.ChatGestureWeight, 1, FrameTime() * 5.0 )
+	else
+		ply.ChatGestureWeight = math.Approach( ply.ChatGestureWeight, 0, FrameTime() * 5.0 )
+	end
 
-    if ( ply.ChatGestureWeight > 0 ) then
+	if ( ply.ChatGestureWeight > 0 ) then
 
-        ply:AnimRestartGesture( GESTURE_SLOT_VCD, ACT_GMOD_IN_CHAT, true )
-        ply:AnimSetGestureWeight( GESTURE_SLOT_VCD, ply.ChatGestureWeight )
+		ply:AnimRestartGesture( GESTURE_SLOT_VCD, ACT_GMOD_IN_CHAT, true )
+		ply:AnimSetGestureWeight( GESTURE_SLOT_VCD, ply.ChatGestureWeight )
 
-    end
+	end
 
 end

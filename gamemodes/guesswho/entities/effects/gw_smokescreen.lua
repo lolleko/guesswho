@@ -12,25 +12,25 @@ function EFFECT:Init( data )
 		for i=0, 100 do
 			local p = em:Add( table.Random( self.Mat ), pos )
 			if p then
-		        local gray = math.random(20, 50)
-		        p:SetColor(gray, gray, gray)
-		        p:SetStartAlpha(255)
-		        p:SetEndAlpha(255)
-		        p:SetVelocity(VectorRand() * math.Rand(2000, 2300))
-		        p:SetLifeTime(0)
+				local gray = math.random(20, 50)
+				p:SetColor(gray, gray, gray)
+				p:SetStartAlpha(255)
+				p:SetEndAlpha(255)
+				p:SetVelocity(VectorRand() * math.Rand(2000, 2300))
+				p:SetLifeTime(0)
 
-		        p:SetDieTime(math.Rand(9, 15))
+				p:SetDieTime(math.Rand(9, 15))
 
-		        p:SetStartSize(math.random(250, 350))
-		        p:SetEndSize(math.random(1, 20))
-		        p:SetRoll(math.random(-180, 180))
-		        p:SetRollDelta(math.Rand(-0.1, 0.1))
-		        p:SetAirResistance(100)
+				p:SetStartSize(math.random(250, 350))
+				p:SetEndSize(math.random(1, 20))
+				p:SetRoll(math.random(-180, 180))
+				p:SetRollDelta(math.Rand(-0.1, 0.1))
+				p:SetAirResistance(100)
 
-		        p:SetCollide(true)
-		        p:SetBounce(0.4)
+				p:SetCollide(true)
+				p:SetBounce(0.4)
 
-		        p:SetLighting(false)
+				p:SetLighting(false)
 			end
 		end
 	em:Finish()

@@ -9,30 +9,30 @@ PLAYER.CanUseFlashlight = true
 
 function PLAYER:SetModel()
 
-    local model = GAMEMODE.SeekerModel
+	local model = GAMEMODE.SeekerModel
 
-    if GetConVar( "gw_disguise_seeker" ):GetBool() then
-        local models = GAMEMODE.GWConfig.HidingModels
+	if GetConVar( "gw_disguise_seeker" ):GetBool() then
+		local models = GAMEMODE.GWConfig.HidingModels
 
-        local rand = math.random(1, #models)
+		local rand = math.random(1, #models)
 
-        model = models[rand]
-    else
+		model = models[rand]
+	else
 
-        model = GAMEMODE.GWConfig.SeekerModels[ math.random( 1, #GAMEMODE.GWConfig.SeekerModels ) ]
+		model = GAMEMODE.GWConfig.SeekerModels[ math.random( 1, #GAMEMODE.GWConfig.SeekerModels ) ]
 
-    end
+	end
 
-    util.PrecacheModel( model )
-    self.Player:SetModel( model )
+	util.PrecacheModel( model )
+	self.Player:SetModel( model )
 
 end
 
 function PLAYER:Loadout()
-    self.Player:Give( "weapon_gw_seeker_crowbar" )
-    self.Player:Give( "weapon_smg1" )
-    self.Player:GiveAmmo( 200, "smg1", true )
-    self.Player:GiveAmmo( 1, "smg1_grenade", true )
+	self.Player:Give( "weapon_gw_seeker_crowbar" )
+	self.Player:Give( "weapon_smg1" )
+	self.Player:GiveAmmo( 200, "smg1", true )
+	self.Player:GiveAmmo( 1, "smg1_grenade", true )
 end
 
 --Double jump script originally created by Willox (unlicensed) modified by me
@@ -43,65 +43,65 @@ AccessorFunc(plyMeta, "gwDoubleJump", "DoubleJumped", FORCE_BOOL)
 
 local function GetMoveVector( mv )
 
-    local ang = mv:GetAngles()
+	local ang = mv:GetAngles()
 
-    local max_speed = mv:GetMaxSpeed() * 2
+	local max_speed = mv:GetMaxSpeed() * 2
 
-    local forward = math.Clamp( mv:GetForwardSpeed(), - max_speed, max_speed )
-    local side = math.Clamp( mv:GetSideSpeed(), - max_speed, max_speed )
+	local forward = math.Clamp( mv:GetForwardSpeed(), - max_speed, max_speed )
+	local side = math.Clamp( mv:GetSideSpeed(), - max_speed, max_speed )
 
-    local abs_xy_move = math.abs( forward ) + math.abs( side )
+	local abs_xy_move = math.abs( forward ) + math.abs( side )
 
-    if abs_xy_move == 0 then
+	if abs_xy_move == 0 then
 
-        return Vector( 0, 0, 0 )
+		return Vector( 0, 0, 0 )
 
-    end
+	end
 
-    local mul = max_speed / abs_xy_move
+	local mul = max_speed / abs_xy_move
 
-    local vec = Vector()
+	local vec = Vector()
 
-    vec:Add( ang:Forward() * forward )
-    vec:Add( ang:Right() * side )
+	vec:Add( ang:Forward() * forward )
+	vec:Add( ang:Right() * side )
 
-    vec:Mul( mul )
+	vec:Mul( mul )
 
-    return vec
+	return vec
 
 end
 
 function PLAYER:StartMove( mv, cmd )
 
-    if self.Player:OnGround() then
+	if self.Player:OnGround() then
 
-        self.Player:SetDoubleJumped( false )
+		self.Player:SetDoubleJumped( false )
 
-        return
+		return
 
-    end
+	end
 
-    if not mv:KeyPressed( IN_JUMP ) then
+	if not mv:KeyPressed( IN_JUMP ) then
 
-        return
+		return
 
-    end
+	end
 
-    if self.Player:GetDoubleJumped() then
+	if self.Player:GetDoubleJumped() then
 
-        return
+		return
 
-    end
+	end
 
-    self.Player:SetDoubleJumped( true )
+	self.Player:SetDoubleJumped( true )
 
-    local vel = GetMoveVector( mv )
+	local vel = GetMoveVector( mv )
 
-    vel.z = self.Player:GetJumpPower()
+	vel.z = self.Player:GetJumpPower()
 
-    mv:SetVelocity( vel )
+	mv:SetVelocity( vel )
 
-    self.Player:DoCustomAnimEvent( PLAYERANIMEVENT_JUMP, - 1 )
+	self.Player:DoCustomAnimEvent( PLAYERANIMEVENT_JUMP, - 1 )
 
 end--]]
 

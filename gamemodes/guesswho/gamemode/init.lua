@@ -10,7 +10,7 @@ AddCSLuaFile( "sh_config.lua")
 AddCSLuaFile( "sh_taunts.lua")
 --translations
 for _,locale in pairs( file.Find( "gamemodes/guesswho/gamemode/lang/*", "GAME" ) ) do
-    AddCSLuaFile( "lang/" .. locale )
+	AddCSLuaFile( "lang/" .. locale )
 end
 AddCSLuaFile( "cl_hud.lua" )
 AddCSLuaFile( "cl_pickteam.lua" )
@@ -33,15 +33,15 @@ resource.AddFile( "materials/vgui/gw/logo_main.png" )
 
 local icons = file.Find("materials/vgui/gw/abilityicons/*.png", "GAME")
 for _, icon in pairs(icons) do
-    resource.AddFile( icon )
+	resource.AddFile( icon )
 end
 
 for _,sound in pairs( file.Find( "sound/gwtaunts/*", "GAME" ) ) do
-    resource.AddFile( "sound/gwtaunts/" .. sound )
+	resource.AddFile( "sound/gwtaunts/" .. sound )
 end
 
 for _,sound in pairs( file.Find( "sound/gwabilities/*", "GAME" ) ) do
-    resource.AddFile( "sound/gwabilities/" .. sound )
+	resource.AddFile( "sound/gwabilities/" .. sound )
 end
 
 --NETWORK STRINGS
@@ -51,111 +51,111 @@ util.AddNetworkString( "gwSendConfig" )
 util.AddNetworkString( "gwRequestUpdateConfig" )
 
 --[[
-    GAMEMODE HOOKS
+	GAMEMODE HOOKS
 ]]--
 
 function GM:Initialize()
-    timer.Create( "gw.player.distance.update.think", 0.1, 0, self.TargetFinderThink)
+	timer.Create( "gw.player.distance.update.think", 0.1, 0, self.TargetFinderThink)
 end
 
 --Take Damage if innocent NPC damaged
 function GM:EntityTakeDamage(target, dmginfo)
 
-    local attacker = dmginfo:GetAttacker()
+	local attacker = dmginfo:GetAttacker()
 
-    if self:GetRoundState() == ROUND_SEEK && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
+	if self:GetRoundState() == ROUND_SEEK && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
 
-        attacker:TakeDamage( GetConVar( "gw_damageonfailguess" ):GetInt() , target, attacker:GetActiveWeapon())
+		attacker:TakeDamage( GetConVar( "gw_damageonfailguess" ):GetInt() , target, attacker:GetActiveWeapon())
 
-    end
+	end
 
 end
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
-    ply:CreateRagdoll()
+	ply:CreateRagdoll()
 
-    ply:AddDeaths( 1 )
+	ply:AddDeaths( 1 )
 
-    if ( attacker:IsValid() && attacker:IsPlayer() ) then
+	if ( attacker:IsValid() && attacker:IsPlayer() ) then
 
-        if attacker == ply then
-            return
-        end
+		if attacker == ply then
+			return
+		end
 
-        if attacker:Team() == TEAM_SEEKING then
-            attacker:AddFrags( 1 )
-            if attacker:Health() + GetConVar( "gw_damageonfailguess" ):GetInt() * 2 > 100 then
-                attacker:Health(100)
-            else
-                attacker:SetHealth(attacker:Health() + GetConVar( "gw_damageonfailguess" ):GetInt() * 2)
-            end
-        end
+		if attacker:Team() == TEAM_SEEKING then
+			attacker:AddFrags( 1 )
+			if attacker:Health() + GetConVar( "gw_damageonfailguess" ):GetInt() * 2 > 100 then
+				attacker:Health(100)
+			else
+				attacker:SetHealth(attacker:Health() + GetConVar( "gw_damageonfailguess" ):GetInt() * 2)
+			end
+		end
 
-    end
+	end
 
 end
 
 function GM:OnNPCKilled( ent, attacker, inflictor )
 
-    -- Don't spam the killfeed with scripted stuff
-    if ( ent:GetClass() == "npc_bullseye" || ent:GetClass() == "npc_launcher" ) then return end
+	-- Don't spam the killfeed with scripted stuff
+	if ( ent:GetClass() == "npc_bullseye" || ent:GetClass() == "npc_launcher" ) then return end
 
-    if ( IsValid( attacker ) && attacker:GetClass() == "trigger_hurt" ) then attacker = ent end
+	if ( IsValid( attacker ) && attacker:GetClass() == "trigger_hurt" ) then attacker = ent end
 
-    if ( IsValid( attacker ) && attacker:IsVehicle() && IsValid( attacker:GetDriver() ) ) then
-        attacker = attacker:GetDriver()
-    end
+	if ( IsValid( attacker ) && attacker:IsVehicle() && IsValid( attacker:GetDriver() ) ) then
+		attacker = attacker:GetDriver()
+	end
 
-    if ( !IsValid( inflictor ) && IsValid( attacker ) ) then
-        inflictor = attacker
-    end
+	if ( !IsValid( inflictor ) && IsValid( attacker ) ) then
+		inflictor = attacker
+	end
 
-    -- Convert the inflictor to the weapon that they're holding if we can.
-    if ( IsValid( inflictor ) && attacker == inflictor && ( inflictor:IsPlayer() || inflictor:IsNPC() ) ) then
+	-- Convert the inflictor to the weapon that they're holding if we can.
+	if ( IsValid( inflictor ) && attacker == inflictor && ( inflictor:IsPlayer() || inflictor:IsNPC() ) ) then
 
-        inflictor = inflictor:GetActiveWeapon()
-        if ( !IsValid( attacker ) ) then inflictor = attacker end
+		inflictor = inflictor:GetActiveWeapon()
+		if ( !IsValid( attacker ) ) then inflictor = attacker end
 
-    end
+	end
 
-    local InflictorClass = "worldspawn"
-    local AttackerClass = "worldspawn"
+	local InflictorClass = "worldspawn"
+	local AttackerClass = "worldspawn"
 
-    if ( IsValid( inflictor ) ) then InflictorClass = inflictor:GetClass() end
-    if ( IsValid( attacker ) ) then
+	if ( IsValid( inflictor ) ) then InflictorClass = inflictor:GetClass() end
+	if ( IsValid( attacker ) ) then
 
-        AttackerClass = attacker:GetClass()
+		AttackerClass = attacker:GetClass()
 
-        if ( attacker:IsPlayer() ) then
+		if ( attacker:IsPlayer() ) then
 
-            if ent:GetClass() == "npc_walker" then
+			if ent:GetClass() == "npc_walker" then
 
-                attacker:TakeDamage( GetConVar( "gw_damageonfailguess" ):GetInt() * 2, ent, attacker:GetActiveWeapon())
+				attacker:TakeDamage( GetConVar( "gw_damageonfailguess" ):GetInt() * 2, ent, attacker:GetActiveWeapon())
 
-            end
+			end
 
-            net.Start( "PlayerKilledNPC" )
+			net.Start( "PlayerKilledNPC" )
 
-                net.WriteString( ent:GetClass() )
-                net.WriteString( InflictorClass )
-                net.WriteEntity( attacker )
+				net.WriteString( ent:GetClass() )
+				net.WriteString( InflictorClass )
+				net.WriteEntity( attacker )
 
-            net.Broadcast()
+			net.Broadcast()
 
-            return
-        end
+			return
+		end
 
-    end
+	end
 
-    if ( ent:GetClass() == "npc_turret_floor" ) then AttackerClass = ent:GetClass() end
+	if ( ent:GetClass() == "npc_turret_floor" ) then AttackerClass = ent:GetClass() end
 
-    net.Start( "NPCKilledNPC" )
+	net.Start( "NPCKilledNPC" )
 
-        net.WriteString( ent:GetClass() )
-        net.WriteString( InflictorClass )
-        net.WriteString( AttackerClass )
+		net.WriteString( ent:GetClass() )
+		net.WriteString( InflictorClass )
+		net.WriteString( AttackerClass )
 
-    net.Broadcast()
+	net.Broadcast()
 
 end

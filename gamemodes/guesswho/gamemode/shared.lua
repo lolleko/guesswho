@@ -51,69 +51,69 @@ game.AddAmmoType( {
 
 function GM:CreateTeams()
 
-    team.SetUp( TEAM_HIDING, "Hiding", self.GWConfig.TeamHidingColor )
-    team.SetClass( TEAM_HIDING, { "player_hiding" } )
-    team.SetSpawnPoint( TEAM_HIDING, "info_player_start" )
-    team.SetSpawnPoint( TEAM_HIDING, "info_player_deathmatch" )
-    team.SetSpawnPoint( TEAM_HIDING, "info_player_rebel" )
-    team.SetSpawnPoint( TEAM_HIDING, "info_player_combine" )
-    team.SetSpawnPoint( TEAM_HIDING, "info_player_counterterrorist" )
-    team.SetSpawnPoint( TEAM_HIDING, "info_player_terrorist" )
+	team.SetUp( TEAM_HIDING, "Hiding", self.GWConfig.TeamHidingColor )
+	team.SetClass( TEAM_HIDING, { "player_hiding" } )
+	team.SetSpawnPoint( TEAM_HIDING, "info_player_start" )
+	team.SetSpawnPoint( TEAM_HIDING, "info_player_deathmatch" )
+	team.SetSpawnPoint( TEAM_HIDING, "info_player_rebel" )
+	team.SetSpawnPoint( TEAM_HIDING, "info_player_combine" )
+	team.SetSpawnPoint( TEAM_HIDING, "info_player_counterterrorist" )
+	team.SetSpawnPoint( TEAM_HIDING, "info_player_terrorist" )
 
-    team.SetUp( TEAM_SEEKING, "Seekers", self.GWConfig.TeamSeekingColor )
-    team.SetClass( TEAM_SEEKING, { "player_seeker" } )
-    team.SetSpawnPoint( TEAM_SEEKING, "info_player_start" )
-    team.SetSpawnPoint( TEAM_SEEKING, "info_player_deathmatch" )
-    team.SetSpawnPoint( TEAM_SEEKING, "info_player_rebel" )
-    team.SetSpawnPoint( TEAM_SEEKING, "info_player_combine" )
-    team.SetSpawnPoint( TEAM_SEEKING, "info_player_counterterrorist" )
-    team.SetSpawnPoint( TEAM_SEEKING, "info_player_terrorist" )
+	team.SetUp( TEAM_SEEKING, "Seekers", self.GWConfig.TeamSeekingColor )
+	team.SetClass( TEAM_SEEKING, { "player_seeker" } )
+	team.SetSpawnPoint( TEAM_SEEKING, "info_player_start" )
+	team.SetSpawnPoint( TEAM_SEEKING, "info_player_deathmatch" )
+	team.SetSpawnPoint( TEAM_SEEKING, "info_player_rebel" )
+	team.SetSpawnPoint( TEAM_SEEKING, "info_player_combine" )
+	team.SetSpawnPoint( TEAM_SEEKING, "info_player_counterterrorist" )
+	team.SetSpawnPoint( TEAM_SEEKING, "info_player_terrorist" )
 
-    team.SetSpawnPoint( TEAM_SPECTATOR, "worldspawn" )
+	team.SetSpawnPoint( TEAM_SPECTATOR, "worldspawn" )
 end
 
 function GM:PlayerShouldTakeDamage( ply, victim )
-    if ply:IsPlayer() and victim:IsPlayer() then
-        if ply:Team() == victim:Team() then
-            return false
-        end
-    end
+	if ply:IsPlayer() and victim:IsPlayer() then
+		if ply:Team() == victim:Team() then
+			return false
+		end
+	end
 
-    return true
+	return true
 end
 
 function GM:ShouldCollide( ent1, ent2 )
 
-    if ( (!ent1:IsPlayer() and ent1:IsPlayerHolding()) or (!ent1:IsPlayer() and ent2:IsPlayerHolding() )) then
-        return false
-    end
+	if ( (!ent1:IsPlayer() and ent1:IsPlayerHolding()) or (!ent1:IsPlayer() and ent2:IsPlayerHolding() )) then
+		return false
+	end
 
-    if GetConVar( "gw_abilities_enabled" ):GetBool() and GetConVar("gw_touches_enabled"):GetBool() and self:GetRoundState() == ROUND_SEEK then
-        local hider, seeker
-        if ent1:IsPlayer() and ent2:IsPlayer() then
-            if ent1:IsHiding() and ent2:IsSeeking() then
-                hider = ent1
-                seeker = ent2
-            elseif ent2:IsHiding() and ent1:IsSeeking()  then
-                hider = ent2
-                seeker = ent1
-            end
+	if GetConVar( "gw_abilities_enabled" ):GetBool() and GetConVar("gw_touches_enabled"):GetBool() and self:GetRoundState() == ROUND_SEEK then
+		local hider, seeker
+		if ent1:IsPlayer() and ent2:IsPlayer() then
+			if ent1:IsHiding() and ent2:IsSeeking() then
+				hider = ent1
+				seeker = ent2
+			elseif ent2:IsHiding() and ent1:IsSeeking()	 then
+				hider = ent2
+				seeker = ent1
+			end
 
-            if hider and hider:GetLastSeekerTouch() + 3 < CurTime() and hider:GetPos():Distance(seeker:GetPos()) < 40  then
-                hider:AddSeekerTouch()
-            end
-        end
-    end
+			if hider and hider:GetLastSeekerTouch() + 3 < CurTime() and hider:GetPos():Distance(seeker:GetPos()) < 40  then
+				hider:AddSeekerTouch()
+			end
+		end
+	end
 
-    return true
+	return true
 end
 
 function GM:PlayerFootstep( ply, vPos, iFoot, strSoundName, fVolume, pFilter )
 
-    if ply:IsHiding() then
+	if ply:IsHiding() then
 
-        return true
+		return true
 
-    end
+	end
 
 end

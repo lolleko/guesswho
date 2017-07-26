@@ -49,7 +49,7 @@ function SWEP:CalcTeleportDestination()
 	forwardWithoutZ.z = 0
 	local eyeTrace = util.TraceLine( {
 		start = self.Owner:GetPos() + Vector(0, 0, 100),
-		endpos = self.Owner:GetPos() + Vector(0, 0, 100) +  forwardWithoutZ * 1500
+		endpos = self.Owner:GetPos() + Vector(0, 0, 100) +	forwardWithoutZ * 1500
 	} )
 
 	local tpDistance = 1500

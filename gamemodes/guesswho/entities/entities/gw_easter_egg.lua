@@ -44,24 +44,24 @@ ENT.EggEventsAll = {
 			explode:SetKeyValue( "iMagnitude", "" .. math.random(40, 70) )
 			explode:Fire( "Explode", 0, 0 )
 			explode:EmitSound( "BaseExplosionEffect.Sound", 100, 100 )
-	    end
+		end
 	end,
 	function(egg, ply)
 		if SERVER then
 			egg:EmitSound("vo/npc/vortigaunt/surge.wav")
 
 			local gren = ents.Create("gw_surge_grenade")
-		    if not IsValid(gren) then return end
+			if not IsValid(gren) then return end
 
-		    gren:SetPos(egg:GetPos())
+			gren:SetPos(egg:GetPos())
 
-		    gren:SetOwner(ply)
-		    gren:SetThrower(ply)
+			gren:SetOwner(ply)
+			gren:SetThrower(ply)
 
-		    gren:Spawn()
+			gren:Spawn()
 
-		    gren:PhysWake()
-		    gren:SetDetonateExact(CurTime() + 2.5)
+			gren:PhysWake()
+			gren:SetDetonateExact(CurTime() + 2.5)
 		end
 	end,
 }

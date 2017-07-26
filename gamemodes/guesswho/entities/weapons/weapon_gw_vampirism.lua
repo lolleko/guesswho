@@ -6,29 +6,29 @@ SWEP.AbilityRange = 500
 
 function SWEP:Ability()
 
-    if CLIENT then return end
+	if CLIENT then return end
 
-    local ply = self.Owner
+	local ply = self.Owner
 
-    for _,v in pairs( player.GetAll() ) do
-        if v:Alive() and v:GetPos():Distance( ply:GetPos() ) < self.AbilityRange and v:IsSeeking() then
+	for _,v in pairs( player.GetAll() ) do
+		if v:Alive() and v:GetPos():Distance( ply:GetPos() ) < self.AbilityRange and v:IsSeeking() then
 
-            v:EmitSound("physics/flesh/flesh_bloody_impact_hard1.wav")
+			v:EmitSound("physics/flesh/flesh_bloody_impact_hard1.wav")
 
-            local effectdata = EffectData()
-            effectdata:SetEntity( ply )
-            effectdata:SetOrigin(v:GetPos() + v:OBBCenter() + Vector(0, 0, 10))
-            effectdata:SetRadius( 10 )
+			local effectdata = EffectData()
+			effectdata:SetEntity( ply )
+			effectdata:SetOrigin(v:GetPos() + v:OBBCenter() + Vector(0, 0, 10))
+			effectdata:SetRadius( 10 )
 
-            util.Effect( "gw_vampirism", effectdata, true, true )
+			util.Effect( "gw_vampirism", effectdata, true, true )
 
-            local dmg =  v:Health() / 2.5
-            v:TakeDamage(dmg, ply, self)
-            timer.Create( "gw.vamp." .. ply:EntIndex() .. "." .. v:EntIndex(), 0.25, 4, function()
-                if IsValid(ply) and ply:Alive() then
-                    ply:SetHealth(ply:Health() + dmg / 4)
-                end
-            end)
-        end
-    end
+			local dmg =	 v:Health() / 2.5
+			v:TakeDamage(dmg, ply, self)
+			timer.Create( "gw.vamp." .. ply:EntIndex() .. "." .. v:EntIndex(), 0.25, 4, function()
+				if IsValid(ply) and ply:Alive() then
+					ply:SetHealth(ply:Health() + dmg / 4)
+				end
+			end)
+		end
+	end
 end

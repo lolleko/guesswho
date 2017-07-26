@@ -71,8 +71,8 @@ function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Delay)
 
 	if self.Owner.LagCompensation then
-        self.Owner:LagCompensation(true)
-    end
+		self.Owner:LagCompensation(true)
+	end
 	local trace = {}
 	trace.start = self.Owner:GetShootPos()
 	trace.endpos = trace.start + (self.Owner:GetAimVector() * self.Range)

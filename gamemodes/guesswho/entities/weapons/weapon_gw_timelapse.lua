@@ -7,9 +7,9 @@ SWEP.AbilityDuration = 9
 function SWEP:Deploy()
 	local timerName = "gwAbilityTimelapseThink" .. self:EntIndex()
 	self.TimelapseData = {}
-    if not timer.Exists(timerName) then
+	if not timer.Exists(timerName) then
 		timer.Create(timerName, 0.2, 0, function() if IsValid(self) then self:TimelapseThink() end end)
-    end
+	end
 end
 
 function SWEP:TimelapseThink()
@@ -65,7 +65,7 @@ end
 
 function SWEP:OnRemove()
 	if SERVER then
-	    SafeRemoveEntity(self.TimeLapseTrail)
+		SafeRemoveEntity(self.TimeLapseTrail)
 		timer.Remove("gwAbilityTimelapseThink" .. self:EntIndex())
 		timer.Remove("gwAbilityTimelapseActive" .. self:EntIndex())
 	end
