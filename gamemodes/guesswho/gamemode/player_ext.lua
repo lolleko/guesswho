@@ -3,7 +3,7 @@ if ( !plymeta ) then return end
 
 AccessorFunc(plymeta, "gwReRolledAbility", "ReRolledAbility", FORCE_BOOL)
 AccessorFunc(plymeta, "gwDiedInPrep", "DiedInPrep", FORCE_BOOL)
-
+AccessorFunc(plymeta, "gwPrepAbility", "PrepAbility", FORCE_STRING)
 
 function plymeta:ApplyStun( dur )
 

@@ -35,7 +35,7 @@ function GM:PlayerDeathThink( ply )
 
     if ( ply.NextSpawnTime and ply.NextSpawnTime > CurTime() ) then return end
 
-    if ply:Team() == TEAM_HIDING and GAMEMODE:GetRoundState() == ROUND_HIDE and not ply:GetDiedInPrep() then
+    if ply:Team() == TEAM_HIDING and GAMEMODE:GetRoundState() == ROUND_HIDE then
         ply:Spawn()
     end
 

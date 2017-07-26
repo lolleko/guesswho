@@ -105,8 +105,8 @@ local MODELCATEGORY = {}
 function MODELCATEGORY:SetModels(updateTable)
     local modelList = vgui.Create("DIconLayout", self)
     modelList:Dock(FILL)
-    modelList:SetSpaceY(2)
-    modelList:SetSpaceX(2)
+    modelList:SetSpaceY(3)
+    modelList:SetSpaceX(3)
     self:SetContents(modelList)
 
     for name, model in SortedPairs( player_manager.AllValidModels() ) do
@@ -119,11 +119,14 @@ function MODELCATEGORY:SetModels(updateTable)
         modelIcon.PaintOver = function()
             if table.HasValue(updateTable, modelIcon:GetModelName()) then
                 surface.SetDrawColor(clrs.green)
+                for i = 0, 2 do
+                    surface.DrawOutlinedRect( i, i, modelIcon:GetWide() - i * 2, modelIcon:GetTall() - i * 2)
+                end
             else
                 surface.SetDrawColor(clrs.red)
-            end
-            for i = 0, 1 do
-                surface.DrawOutlinedRect( i, i, modelIcon:GetWide() - i * 2, modelIcon:GetTall() - i * 2)
+                for i = 0, 1 do
+                    surface.DrawOutlinedRect( i, i, modelIcon:GetWide() - i * 2, modelIcon:GetTall() - i * 2)
+                end
             end
         end
 
@@ -157,7 +160,7 @@ function SETTINGSPANEL:Config()
     end
 
     local saveButton = vgui.Create("DButton", self.config)
-    saveButton:SetText("Save changes")
+    saveButton:SetText("Save changes (may require map change/restart)")
     saveButton.DoClick = function()
 	    self:SendConfigUpdateRequest()
     end
@@ -185,8 +188,8 @@ function SETTINGSPANEL:Config()
 
     local abilityList = vgui.Create("DIconLayout", abilitiesCategory)
     abilityList:Dock(FILL)
-    abilityList:SetSpaceY(2)
-    abilityList:SetSpaceX(2)
+    abilityList:SetSpaceY(3)
+    abilityList:SetSpaceX(3)
     abilitiesCategory:SetContents(abilityList)
 
     for _, wepName in pairs(GAMEMODE.GWConfigStatic.AllAbilities) do
@@ -198,11 +201,14 @@ function SETTINGSPANEL:Config()
         abilityIcon.PaintOver = function()
             if table.HasValue(GAMEMODE.GWConfig.ActiveAbilities, wepName) then
                 surface.SetDrawColor(clrs.green)
+                for i = 0, 2 do
+                    surface.DrawOutlinedRect( i, i, abilityIcon:GetWide() - i * 2, abilityIcon:GetTall() - i * 2)
+                end
             else
                 surface.SetDrawColor(clrs.red)
-            end
-            for i = 0, 1 do
-                surface.DrawOutlinedRect( i, i, abilityIcon:GetWide() - i * 2, abilityIcon:GetTall() - i * 2)
+                for i = 0, 1 do
+                    surface.DrawOutlinedRect( i, i, abilityIcon:GetWide() - i * 2, abilityIcon:GetTall() - i * 2)
+                end
             end
         end
 
@@ -407,10 +413,3 @@ local function showSettings(ply, cmd, args)
     end
 end
 concommand.Add("gw_settings", showSettings)
-
-net.Receive("gwSendConfig", function(len, ply)
-    local config = net.ReadTable()
-    GAMEMODE.GWConfig = config
-    team.SetColor(TEAM_HIDING, GAMEMODE.GWConfig.TeamHidingColor)
-    team.SetColor(TEAM_SEEKING, GAMEMODE.GWConfig.TeamSeekingColor)
-end)

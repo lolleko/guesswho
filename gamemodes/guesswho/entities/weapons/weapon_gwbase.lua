@@ -59,8 +59,13 @@ function SWEP:DrawWorldModelTranslucent()
 end
 
 function SWEP:Equip()
-    if SERVER and GAMEMODE:GetRoundState() == ROUND_HIDE and not self.Owner:GetReRolledAbility() then
-        self.Owner:ChatPrint("Press Reload during hiding phase to reroll your ability. You can only do this once per round.")
+    if SERVER then
+        if GAMEMODE:GetRoundState() == ROUND_HIDE then
+            self.Owner:SetPrepAbility(self:GetClass())
+            if not self.Owner:GetReRolledAbility() then
+                self.Owner:ChatPrint("Press Reload during hiding phase to reroll your ability. You can only do this once per round.")
+            end
+        end
     end
 end
 

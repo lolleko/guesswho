@@ -20,7 +20,11 @@ end
 
 function PLAYER:Loadout()
     if GetConVar( "gw_abilities_enabled" ):GetBool() then
-        self.Player:Give( GAMEMODE.GWConfig.ActiveAbilities[ math.random( 1, #GAMEMODE.GWConfig.ActiveAbilities ) ] )
+        if self.Player:GetDiedInPrep() then
+            self.Player:Give(self.Player:GetPrepAbility())
+        else
+            self.Player:Give( GAMEMODE.GWConfig.ActiveAbilities[ math.random( 1, #GAMEMODE.GWConfig.ActiveAbilities ) ] )
+        end
     else
         self.Player:Give( "weapon_gw_default" )
     end

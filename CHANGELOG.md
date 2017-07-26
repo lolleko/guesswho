@@ -1,3 +1,7 @@
+## 2.0d
+
+Hiders will respawn during prep again. But they will keep the ability they had before death.
+
 ## 2.0c
 
 Fixed Timelapse sound not playing.
@@ -5,7 +9,6 @@ Fixed Timelapse sound not playing.
 ## 2.0b
 
 Fixed a bug related to weapon HUDs.
-
 
 ## 2.0a
 

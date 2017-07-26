@@ -113,3 +113,12 @@ if SERVER then
         net.Broadcast(ply)
     end )
 end
+
+if CLIENT then
+    net.Receive("gwSendConfig", function(len, ply)
+        local config = net.ReadTable()
+        GAMEMODE.GWConfig = config
+        team.SetColor(TEAM_HIDING, GAMEMODE.GWConfig.TeamHidingColor)
+        team.SetColor(TEAM_SEEKING, GAMEMODE.GWConfig.TeamSeekingColor)
+    end)
+end
