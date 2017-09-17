@@ -1,21 +1,9 @@
 function GM:ScoreboardShow()
-    if ( !IsValid( g_Scoreboard ) ) then
         g_Scoreboard = vgui.Create( "DScoreboard" )
-    end
-
-    if ( IsValid( g_Scoreboard ) ) then
-        g_Scoreboard:Show()
-        g_Scoreboard:MakePopup()
-        g_Scoreboard:SetKeyboardInputEnabled( false )
-    end
 end
 
 function GM:ScoreboardHide()
-
-    if ( IsValid( g_Scoreboard ) ) then
-        g_Scoreboard:Hide()
-    end
-
+        g_Scoreboard:Remove()
 end
 
 local SB = {}
