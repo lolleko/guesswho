@@ -43,7 +43,10 @@ GM.GWConfig.ActiveAbilities = {
     "weapon_gw_decoy2",
     "weapon_gw_teleport",
     "weapon_gw_deflect",
-    "weapon_gw_timelapse"
+    "weapon_gw_timelapse",
+    "weapon_gw_solarflare",
+    "weapon_gw_mind_control",
+    "weapon_gw_ant"
 }
 
 GM.GWConfigStatic.AllAbilities = {
@@ -64,7 +67,10 @@ GM.GWConfigStatic.AllAbilities = {
     "weapon_gw_decoy2",
     "weapon_gw_teleport",
     "weapon_gw_deflect",
-    "weapon_gw_timelapse"
+    "weapon_gw_timelapse",
+    "weapon_gw_solarflare",
+    "weapon_gw_mind_control",
+    "weapon_gw_ant"
 }
 
 GM.GWConfig.TeamSeekingColor = Color(138, 155, 15)
@@ -97,19 +103,19 @@ if SERVER then
     --send config to clients on connect
     local function sendConfig(ply)
         net.Start("gwSendConfig")
-            net.WriteTable(GAMEMODE.GWConfig)
+        net.WriteTable(GAMEMODE.GWConfig)
         net.Send(ply)
     end
     hook.Add("PlayerInitialSpawn", "gwInitialConfigSend", sendConfig)
 
     net.Receive("gwRequestUpdateConfig", function(len, ply)
-    	if not ply:IsSuperAdmin() then return end
+        if not ply:IsSuperAdmin() then return end
         local config = net.ReadTable()
         GAMEMODE.GWConfig = config
         file.Write("guesswho/config.txt", util.TableToJSON(GAMEMODE.GWConfig))
 
         net.Start("gwSendConfig")
-            net.WriteTable(GAMEMODE.GWConfig)
+        net.WriteTable(GAMEMODE.GWConfig)
         net.Broadcast(ply)
     end )
 end

@@ -13,7 +13,7 @@ end
 function SWEP:OnRemove()
     if !IsValid( self.Owner ) then return end
     timer.Remove( "Ability.Effect." .. self.Owner:SteamID() )
-    self.Owner:SetRunSpeed( 200 )
-    self.Owner:SetWalkSpeed( 100 )
+    self.Owner:SetRunSpeed(GetConVar("gw_hiding_run_speed"):GetFloat())
+    self.Owner:SetWalkSpeed(GetConVar("gw_hiding_walk_speed"):GetFloat())
     self.Owner:SetModelScale( 1, 1 )
 end

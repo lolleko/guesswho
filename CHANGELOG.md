@@ -1,3 +1,31 @@
+## 2.1
+
+**Disguise**
+
+Duration from `15 -> 25`
+
+**Timelapse**
+
+Duration from `9->15`
+
+**Mind Control**
+
+Added Mind Control allows you to control an NPC for `10` seconds.
+Your main body will stay behind, if your main body dies you die.
+Once you leave the NPCs mind you will return to your own body.
+
+**Solar Flare**
+
+Blinds seekers in a `400` radius for `7` seconds.
+
+**Touch The Ant**
+
+Shrinks all hunters for `8` seconds.
+Their size will be reduced to `10%`.
+Their damage will be reduced to `10%`.
+Their speed will be reduced to `10%`.
+They will also get damage if a hider steps on them.
+
 ## 2.0d
 
 Hiders will respawn during prep again. But they will keep the ability they had before death.

@@ -8,14 +8,14 @@ function GM:ShowTeam()
 
     -- Simple team selection box
     self.TeamSelectFrame = vgui.Create( "DPanel" )
-    self.TeamSelectFrame:SetPos(0,0)
+    self.TeamSelectFrame:SetPos(0, 0)
     self.TeamSelectFrame:SetSize( ScrW(), ScrH() )
 
     local links = { { gwlang:translate( "teamselect_workshop_ref" ), "http://steamcommunity.com/sharedfiles/filedetails/?id=480998235" },
-                    { gwlang:translate( "teamselect_workshop_changelog" ), "http://steamcommunity.com/sharedfiles/filedetails/changelog/480998235" },
-                    { gwlang:translate( "teamselect_workshop_bug" ), "http://steamcommunity.com/workshop/filedetails/discussion/480998235/523897653307060068/" },
-                    --{ gwlang:translate( "teamselect_workshop_contact" ), "http://steamcommunity.com/id/lolleko/" }
-                  }
+        { gwlang:translate( "teamselect_workshop_changelog" ), "http://steamcommunity.com/sharedfiles/filedetails/changelog/480998235" },
+        { gwlang:translate( "teamselect_workshop_bug" ), "http://steamcommunity.com/workshop/filedetails/discussion/480998235/523897653307060068/" },
+        --{ gwlang:translate( "teamselect_workshop_contact" ), "http://steamcommunity.com/id/lolleko/" }
+    }
 
     local linkOffsetY = 180
 
@@ -52,7 +52,7 @@ function GM:ShowTeam()
     InfoDescription:SetPos( ScrW() / 2 - 620 + 2, linkOffsetY + 40 )
     InfoDescription:SetSize( 276, 160 )
     InfoDescription:SetText(
-        "2.0\n\nAdded GUI Config Editor (Press F1 as admin)\nReworked Seeker Movement\nTons of Gameplay changes and Bug Fixes\n\n READ the full changelog for mor information."
+        "2.1\n\nAdded 3 new Abilities\n\n READ the full changelog for mor information."
     )
     InfoDescription:SetPaintBackground(false)
     InfoDescription:SetMultiline(true)
@@ -110,10 +110,10 @@ function GM:ShowTeam()
     HeaderTwoZeroLabel:SetWide(64)
     HeaderTwoZeroLabel:SetContentAlignment(5)
     HeaderTwoZeroLabel:CenterHorizontal()
-    local twoZeroPosX, twoZeroPosY  = HeaderTwoZeroLabel:GetPos()
+    local twoZeroPosX, twoZeroPosY = HeaderTwoZeroLabel:GetPos()
     HeaderTwoZeroLabel:SetPos(twoZeroPosX + 148, twoZeroPosY)
     function HeaderTwoZeroLabel:Paint( w, h )
-        draw.RoundedBox( 0, -2, -2, w + 2, h + 2, clrs.red )
+        draw.RoundedBox( 0, - 2, - 2, w + 2, h + 2, clrs.red )
         draw.RoundedBox( 0, 2, 2, w - 4, h - 4, clrs.darkgreybg )
     end
 
@@ -127,12 +127,12 @@ function GM:ShowTeam()
 
     local TeamHidingModel = vgui.Create( "DModelPanel", TeamHidingPanel )
     TeamHidingModel:SetSize( 280, 280 )
-    TeamHidingModel:SetModel( GAMEMODE.GWConfig.HidingModels[math.random(1,#GAMEMODE.GWConfig.HidingModels)] )
+    TeamHidingModel:SetModel( GAMEMODE.GWConfig.HidingModels[math.random(1, #GAMEMODE.GWConfig.HidingModels)] )
     local seq, dur = TeamHidingModel.Entity:LookupSequence("gesture_wave")
     TeamHidingModel.Entity:SetSequence(seq)
     TeamHidingModel.Entity:SetAngles( Angle( 0, 70, 0 ) )
     TeamHidingModel.Entity:DrawShadow(true)
-    timer.Simple(dur-0.2,function() if !TeamHidingModel.Entity then return end TeamHidingModel.Entity:SetSequence("idle_all_01") TeamHidingModel.Entity:SetAngles( Angle( 0, 0, 0 ) ) end)
+    timer.Simple(dur - 0.2, function() if !TeamHidingModel.Entity then return end TeamHidingModel.Entity:SetSequence("idle_all_01") TeamHidingModel.Entity:SetAngles( Angle( 0, 0, 0 ) ) end)
     function TeamHidingModel:LayoutEntity( ent )
         self:RunAnimation()
     end
@@ -216,7 +216,7 @@ function GM:ShowTeam()
     CloseButton:SetFont("robot_medium")
     CloseButton:SetText( "X" )
     CloseButton:SetTextColor( clrs.lightgrey )
-    function CloseButton.DoClick()  self.TeamSelectFrame:Remove() end
+    function CloseButton.DoClick() self.TeamSelectFrame:Remove() end
     function CloseButton:Paint( w, h)
         draw.RoundedBox( 0, 0, 0, w, h, clrs.grey )
     end
@@ -226,7 +226,7 @@ function GM:ShowTeam()
     self.TeamSelectFrame:MakePopup()
     self.TeamSelectFrame:SetKeyboardInputEnabled( false )
 
-    function self.TeamSelectFrame:Paint(w,h)
+    function self.TeamSelectFrame:Paint(w, h)
         return
     end
 

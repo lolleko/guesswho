@@ -2,8 +2,8 @@ DEFINE_BASECLASS( "player_default" )
 
 local PLAYER = {}
 
-PLAYER.WalkSpeed = 100
-PLAYER.RunSpeed = 200
+PLAYER.WalkSpeed = GetConVar("gw_seeker_walk_speed"):GetFloat()
+PLAYER.RunSpeed = GetConVar("gw_seeker_run_speed"):GetFloat()
 PLAYER.JumpPower = 250
 PLAYER.CanUseFlashlight = true
 

@@ -2,16 +2,16 @@ DEFINE_BASECLASS( "player_default" )
 
 local PLAYER = {}
 
-PLAYER.WalkSpeed            = 100
-PLAYER.RunSpeed             = 200
-PLAYER.JumpPower            = 200
-PLAYER.CanUseFlashlight     = false
+PLAYER.WalkSpeed = GetConVar("gw_hiding_walk_speed"):GetFloat()
+PLAYER.RunSpeed = GetConVar("gw_hiding_run_speed"):GetFloat()
+PLAYER.JumpPower = 200
+PLAYER.CanUseFlashlight = false
 
 function PLAYER:SetModel()
 
     local models = GAMEMODE.GWConfig.HidingModels
 
-    local rand = math.random(1,#models)
+    local rand = math.random(1, #models)
 
     util.PrecacheModel( models[rand] )
     self.Player:SetModel( models[rand] )
@@ -33,7 +33,7 @@ end
 function PLAYER:ShouldDrawLocal() return true end
 
 function PLAYER:Spawn()
-    local clr = GAMEMODE.GWConfig.WalkerColors[math.random(1,#GAMEMODE.GWConfig.WalkerColors)]
+    local clr = GAMEMODE.GWConfig.WalkerColors[math.random(1, #GAMEMODE.GWConfig.WalkerColors)]
     self.Player:SetPlayerColor(Vector(clr.r / 255, clr.g / 255, clr.b / 255))
     self.Player:SetCustomCollisionCheck(true)
 end

@@ -3,7 +3,7 @@ SWEP.Name = "Ragdoll"
 
 function SWEP:Ability()
     local ply = self.Owner
-    timer.Create( "Ability.Effect." .. ply:SteamID(), 8, 1, function() self:OnRemove() end )
+    timer.Create( "Ability.Effect.Prophunt" .. ply:SteamID(), 8, 1, function() self:OnRemove() end )
 
     if SERVER then
 
@@ -12,9 +12,9 @@ function SWEP:Ability()
 
         net.Start( "PlayerKilledByPlayer" )
 
-            net.WriteEntity( ply )
-            net.WriteString( hunter:GetActiveWeapon():GetClass() )
-            net.WriteEntity( hunter )
+        net.WriteEntity( ply )
+        net.WriteString( hunter:GetActiveWeapon():GetClass() )
+        net.WriteEntity( hunter )
 
         net.Broadcast()
 
@@ -26,7 +26,7 @@ function SWEP:Ability()
         ragdoll:SetAngles( ply:GetAngles() )
         ragdoll:SetModel( ply:GetModel() )
         ragdoll:SetPos( ply:GetPos() )
-        function ragdoll:GetPlayerColor() return Vector(0,0.5,0) end
+        function ragdoll:GetPlayerColor() return Vector(0, 0.5, 0) end
         ragdoll:Spawn()
         ragdoll:Activate()
         ply:SetParent( ragdoll ) -- So their player ent will match up (position-wise) with where their ragdoll is.
@@ -53,9 +53,9 @@ end
 
 function SWEP:OnRemove()
     if SERVER then
-        if  not IsValid( self.Owner ) then return end
+        if not IsValid( self.Owner ) then return end
         local ply = self.Owner
-        timer.Remove( "Ability.Effect." .. ply:SteamID() )
+        timer.Remove( "Ability.Effect.Prophunt" .. ply:SteamID() )
         ply:SetParent()
         ply:UnSpectate()
 

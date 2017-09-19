@@ -77,9 +77,9 @@ function plymeta:GetDeflect()
 end
 
 function plymeta:SetDisguised(state)
-    self.disguise = state
+    self:SetNWBool("ability_disguised", state)
 end
 
 function plymeta:GetDisguised()
-    return self.disguise or false
+    return self:GetNWBool("ability_disguised")
 end

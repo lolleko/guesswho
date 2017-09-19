@@ -17,8 +17,8 @@ local function endSuperHotMode()
     if SERVER then
         local ply = GAMEMODE.AbilitySuperHotModePly
         game.SetTimeScale(1)
-        ply:SetWalkSpeed(ply:GetWalkSpeed() / 4.5)
-        ply:SetRunSpeed(ply:GetRunSpeed() / 4.5)
+        ply:SetWalkSpeed(ply:GetWalkSpeed() / 5)
+        ply:SetRunSpeed(ply:GetRunSpeed() / 5)
 
         GAMEMODE.AbilitySuperHotMode = false
         GAMEMODE.AbilitySuperHotModePly = nill
@@ -56,16 +56,16 @@ hook.Add( "EntityEmitSound", "", function( t )
 
     local p = t.Pitch
 
-    if game.GetTimeScale() != 1 then
+    if game.GetTimeScale() ~= 1 then
         p = p * game.GetTimeScale()
     end
 
-    if p != t.Pitch then
+    if p ~= t.Pitch then
         t.Pitch = math.Clamp( p, 0, 255 )
         return true
     end
 
-    if CLIENT and engine.GetDemoPlaybackTimeScale() != 1 then
+    if CLIENT and engine.GetDemoPlaybackTimeScale() ~= 1 then
         t.Pitch = math.Clamp( t.Pitch * engine.GetDemoPlaybackTimeScale(), 0, 255 )
         return true
     end

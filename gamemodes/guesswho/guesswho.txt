@@ -191,5 +191,37 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
+		24
+		{
+			"name"		"gw_hiding_walk_speed"
+			"text"		"Hiding Walk Speed"
+			"help"		"Hiding Walk Speed"
+			"type"		"Numeric"
+			"default"	"100"
+		}
+		25
+		{
+			"name"		"gw_hiding_run_speed"
+			"text"		"Hiding Run Speed"
+			"help"		"Hiding Run Speed"
+			"type"		"Numeric"
+			"default"	"200"
+		}
+		26
+		{
+			"name"		"gw_seeker_walk_speed"
+			"text"		"Seeker Walk Speed"
+			"help"		"Seeker Walk Speed"
+			"type"		"Numeric"
+			"default"	"100"
+		}
+		27
+		{
+			"name"		"gw_seeker_run_speed"
+			"text"		"Seeker Run Speed"
+			"help"		"Seeker Run Speed"
+			"type"		"Numeric"
+			"default"	"200"
+		}
 	}
 }

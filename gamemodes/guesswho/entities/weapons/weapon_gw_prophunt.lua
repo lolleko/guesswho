@@ -3,12 +3,12 @@ SWEP.Name = "Prophunt"
 SWEP.AbilitySound = "physics/metal/metal_barrel_impact_hard1.wav"
 
 function SWEP:Ability()
-    timer.Create( "Ability.Effect." .. self.Owner:SteamID(), 7, 1, function() self:OnRemove() end )
+    timer.Create( "Ability.Effect.Prophunt" .. self.Owner:SteamID(), 7, 1, function() self:OnRemove() end )
 
     if CLIENT then return end
 
-	local health = 10
-	local volume = 1
+    local health = 10
+    local volume = 1
     local ply = self.Owner
 
     local models = {
@@ -31,7 +31,7 @@ function SWEP:Ability()
     tempEnt:Spawn()
     tempEnt:SetOwner( ply )
     tempEnt:SetMoveType( MOVETYPE_NONE )
-	tempEnt:SetSolid( SOLID_NONE )
+    tempEnt:SetSolid( SOLID_NONE )
     tempEnt:SetPos( ply:GetPos() )
     --tempEnt:DropToFloor()
 
@@ -62,17 +62,17 @@ function SWEP:Ability()
     ply:SetRenderMode(RENDERMODE_NONE)
     ply:SetModel( tempEnt:GetModel() )
 
-    ply:SetHull(Vector(-xy, -xy, 0), Vector(xy, xy, z))
-    ply:SetHullDuck(Vector(-xy, -xy, 0), Vector(xy, xy, z))
+    ply:SetHull(Vector(-xy, - xy, 0), Vector(xy, xy, z))
+    ply:SetHullDuck(Vector(-xy, - xy, 0), Vector(xy, xy, z))
 
     net.Start( "gwPlayerHull" )
-        net.WriteFloat( xy )
-        net.WriteFloat( z )
+    net.WriteFloat( xy )
+    net.WriteFloat( z )
     net.Send( ply )
 
     ply:SetNoDraw(false)
     ply:DrawShadow(false)
-	ply:SetHealth( health )
+    ply:SetHealth( health )
 
     ply:SetRunSpeed( spd )
     ply:SetWalkSpeed( spd )
@@ -83,10 +83,10 @@ function SWEP:OnRemove()
 
     if !IsValid( self.Owner ) then return end
     local ply = self.Owner
-    timer.Remove( "Ability.Effect." .. ply:SteamID() )
+    timer.Remove( "Ability.Effect.Prophunt" .. ply:SteamID() )
     ply:ResetHull()
-    ply:SetRunSpeed( 200 )
-    ply:SetWalkSpeed( 100 )
+    ply:SetRunSpeed( GetConVar("gw_hiding_run_speed"):GetFloat() )
+    ply:SetWalkSpeed( GetConVar("gw_hiding_walk_speed"):GetFloat() )
     if SERVER then player_manager.RunClass( ply, "SetModel" ) end
     ply:SetRenderMode(RENDERMODE_NORMAL)
     ply:DrawShadow(true)
