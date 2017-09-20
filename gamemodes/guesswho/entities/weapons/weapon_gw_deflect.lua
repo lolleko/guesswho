@@ -2,11 +2,13 @@ SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Deflect"
 SWEP.AbilitySound = "ambient/energy/zap1.wav"
 
+SWEP.AbilityDuration = 10
+
 function SWEP:Ability()
 	local ply = self.Owner
 
 	ply:SetDeflect(true)
-	timer.Simple(5, function() ply:SetDeflect(false) end)
+	timer.Simple(self.AbilityDuration, function() ply:SetDeflect(false) end)
 end
 
 hook.Add("ScalePlayerDamage", "gw_deflect_damage", function(target, hitgroup, dmgInfo)

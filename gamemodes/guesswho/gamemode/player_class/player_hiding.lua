@@ -1,4 +1,6 @@
-DEFINE_BASECLASS( "player_default" )
+AddCSLuaFile()
+
+DEFINE_BASECLASS( "player_guess_who" )
 
 local PLAYER = {}
 
@@ -39,4 +41,4 @@ function PLAYER:Spawn()
 end
 
 
-player_manager.RegisterClass( "player_hiding", PLAYER, "player_default" )
+player_manager.RegisterClass( "player_hiding", PLAYER, "player_guess_who" )

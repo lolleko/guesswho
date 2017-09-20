@@ -223,5 +223,13 @@
 			"type"		"Numeric"
 			"default"	"200"
 		}
+		28
+		{
+			"name"		"gw_double_jump_enabled"
+			"text"		"Double Jump"
+			"help"		"Wether Double Jumps are enabled or not"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
 	}
 }

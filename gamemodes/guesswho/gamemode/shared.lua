@@ -3,7 +3,7 @@ GM.Author = "Lolleko"
 GM.Email = "N/A"
 GM.Website = "https://github.com/lolleko/guesswho"
 
-GM.Version = "2.1 (67)"
+GM.Version = "2.1a (68)"
 
 GM.TeamBased = true
 
@@ -12,6 +12,7 @@ DeriveGamemode( "base" )
 include("player_ext_shd.lua")
 include("sh_config.lua")
 include("sh_taunts.lua")
+include("player_class/player_guess_who.lua")
 include("player_class/player_hiding.lua")
 include("player_class/player_seeker.lua")
 include("sh_animations.lua")
@@ -41,6 +42,8 @@ CreateConVar("gw_seeker_walk_speed", "100", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "
 CreateConVar("gw_seeker_run_speed", "200", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Seeker Run Speed")
 CreateConVar("gw_hiding_walk_speed", "100", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Hiding Walk Speed")
 CreateConVar("gw_hiding_run_speed", "200", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Hiding Run Speed")
+CreateConVar("gw_double_jump_enabled", "0", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Wether Double Jumps are enabled or not")
+
 
 -- Ammo
 game.AddAmmoType( {

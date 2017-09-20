@@ -1,6 +1,8 @@
 GM.GWConfig = {}
 GM.GWConfigStatic = {}
 
+GM.GWConfig.Version = GM.Version
+
 -- define default config
 GM.GWConfig.HidingModels = {
     --Characters
@@ -91,7 +93,13 @@ GM.GWConfig.WalkerColors = {
 --load config from disk if exists
 if SERVER then
     if file.Exists("guesswho/config.txt", "DATA") then
-        GM.GWConfig = util.JSONToTable(file.Read("guesswho/config.txt"))
+        local configData = util.JSONToTable(file.Read("guesswho/config.txt"))
+        -- dont laod outdated configs
+        if configData.Version and configData.Version == GM.Version then
+            GM.GWConfig = configData
+        else
+            print("regenerating config")
+        end
     end
 
     if not file.Exists("guesswho", "DATA") then

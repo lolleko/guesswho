@@ -1,3 +1,15 @@
+## 2.1a
+
+**Deflect**
+
+Duration from `5 -> 10`
+
+**Added double jump option**
+
+`gw_double_jump_enabled` default is `0` (disabled)
+
+**Fixed configs being incorrect after a gamemode update**
+
 ## 2.1
 
 **Disguise**
