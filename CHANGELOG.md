@@ -1,3 +1,7 @@
+## 2.1b
+
+**Fixed ConVar Initialization order**
+
 ## 2.1a
 
 **Deflect**
