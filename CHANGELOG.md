@@ -1,3 +1,25 @@
+## 2.1c
+
+**Blasting off**
+
+Increased duration seekers air stuck in the air from `1.5->3`
+
+**Vampirism**
+
+Now `doubles` your speed for each hunter hit this speed boost will last `3.5` seconds.
+
+**Touch the ant**
+
+Increased speed of hunters affected.
+
+Increased damage hunters receive if trampled on.
+
+Fixed ant mode not resetting correctly
+
+**Fixed shrink ability**
+
+**Added new ability icons (created Jack)**
+
 ## 2.1b
 
 **Fixed ConVar Initialization order**

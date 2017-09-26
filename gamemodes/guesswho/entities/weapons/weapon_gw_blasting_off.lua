@@ -17,7 +17,7 @@ function SWEP:Ability()
 				if util.QuickTrace(v:EyePos(), Vector(0, 0, 30), v).HitWorld then
 					timer.Remove(tName)
 					v:SetGravity(-1)
-					timer.Simple(1.5, function() v:SetGravity(1) end)
+					timer.Simple(3, function() v:SetGravity(1) end)
 				end
 			end)
 		end
@@ -54,7 +54,7 @@ if CLIENT then
 		local emitter = GetEmitter( self, vOffset )
 
 		local particle = emitter:Add( "particles/smokey", vOffset )
-		if ( !particle ) then return end
+		if ( not particle ) then return end
 
 		particle:SetVelocity( vNormal * math.Rand( 10, 30 ) )
 		particle:SetDieTime( 3.0 )
