@@ -18,7 +18,7 @@ Fixed ant mode not resetting correctly
 
 **Fixed shrink ability**
 
-**Added new ability icons (created Jack)**
+**Added new ability icons (created by Jack)**
 
 ## 2.1b
 
