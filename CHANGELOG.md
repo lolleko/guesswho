@@ -16,15 +16,15 @@ Abilities that have an AOE will now render a halo (glow) around seekers that are
 
 **Blasting off**
 
-Increased duration seekers air stuck in the air from `1.5->3`
+Increased duration seekers are stuck in the air from `1.5->3`
 
 **Vampirism**
 
-Now `doubles` your speed for each hunter hit this speed boost will last `3.5` seconds.
+Now `doubles` your speed for each hunter hit, this speed boost will last `3.5` seconds.
 
 **Touch the ant**
 
-Increased speed of hunters affected.
+Increased speed of affected hunters.
 
 Increased damage hunters receive if trampled on.
 
@@ -32,7 +32,7 @@ Fixed ant mode not resetting correctly
 
 **Fixed shrink ability**
 
-**Added new ability icons (created Jack)**
+**Added new ability icons (created by Jack)**
 
 ## 2.1b
 
