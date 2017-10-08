@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 SWEP.PrintName = "Crowbar"
 
 if (CLIENT) then

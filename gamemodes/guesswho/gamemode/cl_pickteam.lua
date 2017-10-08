@@ -52,7 +52,7 @@ function GM:ShowTeam()
     InfoDescription:SetPos( ScrW() / 2 - 620 + 2, linkOffsetY + 40 )
     InfoDescription:SetSize( 276, 160 )
     InfoDescription:SetText(
-        "2.1\n\nAdded 3 new Abilities\n\n READ the full changelog for mor information."
+        "2.1d\n\nFixed Abilities Added in 2.1\n\n2.1\n\nAdded 3 new Abilities\n\nREAD the changelog for more information."
     )
     InfoDescription:SetPaintBackground(false)
     InfoDescription:SetMultiline(true)

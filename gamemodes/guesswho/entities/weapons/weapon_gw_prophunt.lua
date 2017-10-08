@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Prophunt"
 SWEP.AbilitySound = "physics/metal/metal_barrel_impact_hard1.wav"

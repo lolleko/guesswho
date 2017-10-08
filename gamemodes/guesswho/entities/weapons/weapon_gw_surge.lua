@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Graviton Surge"
 SWEP.AbilitySound = "vo/npc/vortigaunt/surge.wav"

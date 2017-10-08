@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Timelapse"
 SWEP.AbilitySound = "gwabilities/timelapse.mp3"

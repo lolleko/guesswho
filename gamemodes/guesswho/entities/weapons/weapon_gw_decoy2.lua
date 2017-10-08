@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Decoy 2.0"
 

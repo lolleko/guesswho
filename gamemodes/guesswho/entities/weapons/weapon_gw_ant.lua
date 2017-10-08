@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Touch The Ant"
 SWEP.AbilitySound = "gwabilities/smb2_shrink.wav"

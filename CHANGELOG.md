@@ -1,3 +1,17 @@
+## 2.1d
+
+**Solarflare**
+
+Fixed a bug that caused onyl the local palyer to be blinded.
+
+**Mind Control** -> **Mind Transfer**
+
+Will now only transfer your mind to the npc.
+
+**HUD**
+
+Abilities that have an AOE will now render a halo (glow) around seekers that are in range.
+
 ## 2.1c
 
 **Blasting off**

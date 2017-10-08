@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Solarflare"
 SWEP.AbilitySound = "ambient/energy/zap1.wav"
@@ -16,22 +18,28 @@ function SWEP:Ability()
 	util.Effect( "gw_solarflare", effectdata, true, true )
 	for _, v in pairs( player.GetAll() ) do
 		if v:GetPos():Distance( ply:GetPos() ) < self.AbilityRange and v:IsSeeking() then
-			timer.Simple(0.25, function() if IsValid(v) then v:SetNWFloat("gw_ability_solarflare_endtime", CurTime() + self.AbilityDuration) end end)
+			timer.Simple(0.25, function()
+				if IsValid(v) then
+					v:SetNWFloat("gw_ability_solarflare_endtime", CurTime() + self.AbilityDuration)
+					v:SetNWFloat("gw_ability_solarflare_druation", self.AbilityDuration)
+				end
+			end)
 		end
 	end
 end
 
-function SWEP:DrawHUD()
-	local ply = LocalPlayer()
-	local endTime = ply:GetNWFloat("gw_ability_solarflare_endtime")
-	if endTime > CurTime() then
-		local alpha = 255
-		local durationRemaining = endTime - CurTime()
-		-- leniar fade out
-		if durationRemaining <= self.AbilityDuration / 2 then
-			alpha = durationRemaining * 110
+if CLIENT then
+	hook.Add( "HUDPaint", "gw_solarflare_hud", function()
+		local endTime = LocalPlayer():GetNWFloat("gw_ability_solarflare_endtime")
+		if endTime > CurTime() then
+			local alpha = 255
+			local durationRemaining = endTime - CurTime()
+			-- leniar fade out
+			if durationRemaining <= LocalPlayer():GetNWFloat("gw_ability_solarflare_druation") / 2 then
+				alpha = durationRemaining * 110
+			end
+			surface.SetDrawColor(255, 255, 255, math.Clamp(alpha, 0, 255))
+			surface.DrawRect(0, 0, ScrW(), ScrH())
 		end
-		surface.SetDrawColor(255, 255, 255, math.Clamp(alpha, 0, 255))
-		surface.DrawRect(0, 0, ScrW(), ScrH())
-	end
+	end )
 end

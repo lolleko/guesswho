@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Decoy"
 SWEP.AbilitySound = "vo/canals/matt_goodluck.wav"

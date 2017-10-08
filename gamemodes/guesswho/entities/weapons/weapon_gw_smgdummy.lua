@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 SWEP.Base = "weapon_gw_default"
 
 SWEP.WorldModel = "models/weapons/w_smg1.mdl"

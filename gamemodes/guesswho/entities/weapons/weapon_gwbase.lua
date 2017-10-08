@@ -39,19 +39,11 @@ local CircleMat = Material( "SGM/playercircle" )
 function SWEP:DrawWorldModel()
     if self:Clip2() > 0 and self.AbilityRange > 0 and self:IsCarriedByLocalPlayer() then
         local ply = self.Owner
-        local color = Color(0, 0, 0, 128)
-        local radius = self.AbilityRange
-
-        local trace = {}
-        trace.start = ply:GetPos() + Vector(0, 0, 50)
-        trace.endpos = trace.start + Vector(0, 0, - 300)
-        trace.filter = ply
-        local tr = util.TraceLine( trace )
-        if !tr.HitWorld then
-            tr.HitPos = ply:GetPos()
+        for _, v in pairs( player.GetAll() ) do
+          if v:GetPos():Distance( ply:GetPos() ) < self.AbilityRange and v:IsAlive() and v:IsSeeking() then
+            halo.Add( {v}, Color(255, 0, 0), 3, 3, 5)
+          end
         end
-        render.SetMaterial( CircleMat )
-        render.DrawQuadEasy( tr.HitPos + tr.HitNormal * 10, Vector(0, 0, 1), radius * 2, radius * 2, color )
     end
 end
 

@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Shockwave"
 SWEP.AbilitySound = "ambient/energy/zap1.wav"
