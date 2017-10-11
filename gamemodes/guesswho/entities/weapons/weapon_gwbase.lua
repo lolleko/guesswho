@@ -40,7 +40,7 @@ function SWEP:DrawWorldModel()
     if self:Clip2() > 0 and self.AbilityRange > 0 and self:IsCarriedByLocalPlayer() then
         local ply = self.Owner
         for _, v in pairs( player.GetAll() ) do
-          if v:GetPos():Distance( ply:GetPos() ) < self.AbilityRange and v:IsAlive() and v:IsSeeking() then
+          if v:GetPos():Distance( ply:GetPos() ) < self.AbilityRange and v:Alive() and v:IsSeeking() then
             halo.Add( {v}, Color(255, 0, 0), 3, 3, 5)
           end
         end

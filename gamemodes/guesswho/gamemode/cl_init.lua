@@ -77,6 +77,39 @@ include( "cl_settings.lua")
 include( "cl_acts.lua")
 include( "cl_round.lua" )
 
+if GM.HalloweenEvent then
+  local eyeglow =  Material( "sprites/redglow1" )
+  local white = Color( 255, 255, 255, 255 )
+  hook.Add("PostPlayerDraw", "gwHalloweenRedEyes", function(ply)
+    if ply:IsSeeking() then return end
+  	local lefteye = ply:GetAttachment(ply:LookupAttachment("lefteye"))
+  	local righteye = ply:GetAttachment(ply:LookupAttachment("righteye"))
+
+  	if not lefteye then lefteye = ply:GetAttachment(ply:LookupAttachment("left_eye")) end
+  	if not righteye then righteye = ply:GetAttachment(ply:LookupAttachment("right_eye")) end
+
+  	local righteyepos
+  	local lefteyepos
+
+  	if lefteye and righteye then
+  		lefteyepos = lefteye.Pos + ply:GetForward()
+  		righteyepos = righteye.Pos + ply:GetForward()
+  	else
+  		local eyes = ply:GetAttachment(ply:LookupAttachment("eyes"))
+  		if eyes then
+  			lefteyepos = eyes.Pos + ply:GetRight() * -1.5 + ply:GetForward() * 0.5
+  			righteyepos = eyes.Pos + ply:GetRight() * 1.5 + ply:GetForward() * 0.5
+  		end
+  	end
+
+  	if lefteyepos and righteyepos then
+  		render.SetMaterial( eyeglow )
+  		render.DrawSprite( lefteyepos, 4, 4, white)
+  		render.DrawSprite( righteyepos, 4, 4, white)
+  	end
+  end)
+end
+
 --Thirdpersoon + blinding
 function GM:CalcView(ply, pos, angles, fov)
 

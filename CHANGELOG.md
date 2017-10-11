@@ -1,3 +1,11 @@
+## 2.1e
+
+**Halloween Update**
+
+Added small halloween gimmicks.
+
+**Bug fixes**
+
 ## 2.1d
 
 **Solarflare**

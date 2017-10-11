@@ -155,7 +155,13 @@ function CHuntHUD()
         function CHHUD.HeadModel.Entity:GetPlayerColor() return LocalPlayer():GetPlayerColor() end
 
         if CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) then
-            local headpos = CHHUD.HeadModel.Entity:GetBonePosition( CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
+            local headBone = CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" )
+            local headpos = CHHUD.HeadModel.Entity:GetBonePosition(headBone)
+            if ply:Team() == TEAM_SEEKING then
+              CHHUD.HeadModel.Entity:ManipulateBoneScale(headBone, Vector(0, 0, 0))
+            else
+              CHHUD.HeadModel.Entity:ManipulateBoneScale(headBone, Vector(1, 1, 1))
+            end
             if headpos then
                 CHHUD.HeadModel:SetLookAt( headpos )
                 CHHUD.HeadModel:SetCamPos( headpos - Vector( -15, 0, 0 ) )

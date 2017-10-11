@@ -3,11 +3,12 @@ GM.Author = "Lolleko"
 GM.Email = "N/A"
 GM.Website = "https://github.com/lolleko/guesswho"
 
-GM.Version = "2.1d (71)"
+GM.Version = "2.1e (72 HALLOWEEN)"
 
 GM.TeamBased = true
 
 --Globals
+GM.HalloweenEvent = true
 
 --Teams
 TEAM_HIDING = 1
