@@ -10,11 +10,11 @@ Added small halloween gimmicks.
 
 **Solarflare**
 
-Fixed a bug that caused onyl the local palyer to be blinded.
+Fixed a bug that caused only the local player to be blinded.
 
 **Mind Control** -> **Mind Transfer**
 
-Will now only transfer your mind to the npc.
+Now only transfers your mind to the npc.
 
 **HUD**
 
