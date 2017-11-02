@@ -1,4 +1,4 @@
-## 2.1f
+## 2.1f / 2.1g
 
 **Disabled Halloween features**
 
