@@ -1,3 +1,7 @@
+## 2.1f
+
+**Disabled Halloween features**
+
 ## 2.1e
 
 **Halloween Update**

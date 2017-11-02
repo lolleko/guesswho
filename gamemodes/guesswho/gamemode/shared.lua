@@ -8,7 +8,7 @@ GM.Version = "2.1e (72 HALLOWEEN)"
 GM.TeamBased = true
 
 --Globals
-GM.HalloweenEvent = true
+GM.HalloweenEvent = false
 
 --Teams
 TEAM_HIDING = 1
