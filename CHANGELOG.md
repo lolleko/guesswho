@@ -1,3 +1,7 @@
+## 2.1h
+
+Added Discord Link to team select screen
+
 ## 2.1f / 2.1g
 
 **Disabled Halloween features**
