@@ -14,7 +14,7 @@ function GM:ShowTeam()
     local links = { { gwlang:translate( "teamselect_workshop_ref" ), "http://steamcommunity.com/sharedfiles/filedetails/?id=480998235" },
         { gwlang:translate( "teamselect_workshop_changelog" ), "http://steamcommunity.com/sharedfiles/filedetails/changelog/480998235" },
         { gwlang:translate( "teamselect_workshop_bug" ), "http://steamcommunity.com/workshop/filedetails/discussion/480998235/523897653307060068/" },
-        --{ gwlang:translate( "teamselect_workshop_contact" ), "http://steamcommunity.com/id/lolleko/" }
+        { gwlang:translate( "teamselect_discord" ), "https://discord.gg/DbwJuk3" }
     }
 
     local linkOffsetY = 180
@@ -52,7 +52,7 @@ function GM:ShowTeam()
     InfoDescription:SetPos( ScrW() / 2 - 620 + 2, linkOffsetY + 40 )
     InfoDescription:SetSize( 276, 160 )
     InfoDescription:SetText(
-        "2.1e\n\nAdded really small Halloween Event\n\n2.1d\n\nFixed Abilities Added in 2.1\n\nREAD the changelog for more information."
+        "2.1h\n\nAdded Discord Link\n\n2.1g\n\nDisabled Halloween Event\n\nREAD the changelog for more information."
     )
     InfoDescription:SetPaintBackground(false)
     InfoDescription:SetMultiline(true)
