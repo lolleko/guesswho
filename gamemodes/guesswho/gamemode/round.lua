@@ -39,7 +39,7 @@ function GM:RoundCreateWalkers()
     self:GetSpawnPoints()
 
     local wave = 1
-    local playerCount = #player.GetAll()
+    local playerCount = player.GetCount()
 
     self.WalkerCount = 0
     self.MaxWalkers = self.BaseWalkers + ( playerCount * self.WalkerPerPly )
@@ -93,7 +93,7 @@ function GM:RoundStart()
 
     -- EASTER
     if GetConVar("gw_easter_egg_hunt_enabled"):GetBool() then
-        self:SpawnEasterEggs(#player.GetAll() * 8)
+        self:SpawnEasterEggs(player.GetCount() * 8)
     end
 
     timer.Create( "RoundThink", 1, self.RoundDuration, function() self:RoundThink() end)
