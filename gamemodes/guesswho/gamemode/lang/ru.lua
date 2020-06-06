@@ -21,7 +21,6 @@ local ru = {
     teamselect_workshop_changelog = "Список изменений",
     teamselect_workshop_bug = "Сообщить о ошибке",
     teamselect_workshop_contact = "Связаться",
-    teamselect_discord = "Discord",
     --Controls ( limited space keep it short )
     teamselect_controls_sit = "Сесть",
     teamselect_controls_ability = "Способность (Прячущиеся)",

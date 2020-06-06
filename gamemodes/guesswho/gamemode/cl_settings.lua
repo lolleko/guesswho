@@ -48,7 +48,7 @@ function SETTINGSPANEL:Init()
         local left = 0
         v.Tab.Paint = function(self, w1, h1)
             if k == 1 then left = 8 end
-            if v.Tab == g_Settings.sheet:GetActiveTab() then
+            if v.Tab == GW_SETTINGS_PANEL.sheet:GetActiveTab() then
                 draw.RoundedBox( 0, left, h1 - 5, w1 - left, 5, clrs.red )
             end
         end
@@ -237,7 +237,7 @@ function SETTINGSPANEL:Config()
     local colorsCategory = vgui.Create( "DCollapsibleCategory", configScroll)
     colorsCategory:SetExpanded( 0 )
     colorsCategory:Dock(TOP)
-    colorsCategory:SetLabel("Colors")
+    colorsCategory:SetLabel("Team Colors")
 
     local seekerColorLabel = vgui.Create("DLabel", colorsCategory)
     seekerColorLabel:SetText("Team Seeker Color")
@@ -271,6 +271,63 @@ function SETTINGSPANEL:Config()
     hidingColor:SetColor(GAMEMODE.GWConfig.TeamHidingColor)
     function hidingColor:ValueChanged(color)
         GAMEMODE.GWConfig.TeamHidingColor = color
+    end
+
+    local serverCategory = vgui.Create( "DCollapsibleCategory", configScroll)
+    serverCategory:SetExpanded( 0 )
+    serverCategory:Dock(TOP)
+    serverCategory:SetLabel("Team select screen (F2) customization")
+
+    local pickScreenLink = vgui.Create("DLabel", serverCategory)
+    pickScreenLink:SetText("Custom team select server link")
+    pickScreenLink:SetFont("robot_small")
+    pickScreenLink:Dock(TOP)
+    pickScreenLink:SetContentAlignment(4)
+    pickScreenLink:SetTall(24)
+    pickScreenLink:SetTextColor(clrs.darkgrey)
+
+    local pickScreenLinkInput = vgui.Create("DTextEntry", serverCategory)
+    pickScreenLinkInput:Dock(TOP)
+    pickScreenLinkInput:SetContentAlignment(4)
+    pickScreenLinkInput:SetTall(24)
+    pickScreenLinkInput:SetValue(GAMEMODE.GWConfig.ServerUrl)
+    function pickScreenLinkInput:OnValueChange(text)
+        GAMEMODE.GWConfig.ServerUrl = text
+    end
+
+    local pickScreenLinkLabel = vgui.Create("DLabel", serverCategory)
+    pickScreenLinkLabel:SetText("Custom team select server label")
+    pickScreenLinkLabel:SetFont("robot_small")
+    pickScreenLinkLabel:Dock(TOP)
+    pickScreenLinkLabel:SetContentAlignment(4)
+    pickScreenLinkLabel:SetTall(24)
+    pickScreenLinkLabel:SetTextColor(clrs.darkgrey)
+
+    local pickScreenLinkLabelInput = vgui.Create("DTextEntry", serverCategory)
+    pickScreenLinkLabelInput:Dock(TOP)
+    pickScreenLinkLabelInput:SetContentAlignment(4)
+    pickScreenLinkLabelInput:SetTall(24)
+    pickScreenLinkLabelInput:SetValue(GAMEMODE.GWConfig.ServerName)
+    function pickScreenLinkLabelInput:OnValueChange(text)
+        GAMEMODE.GWConfig.ServerName = text
+    end
+
+    local pickScreenNewsLabel = vgui.Create("DLabel", serverCategory)
+    pickScreenNewsLabel:SetText("Custom team select news message")
+    pickScreenNewsLabel:SetFont("robot_small")
+    pickScreenNewsLabel:Dock(TOP)
+    pickScreenNewsLabel:SetContentAlignment(4)
+    pickScreenNewsLabel:SetTall(24)
+    pickScreenNewsLabel:SetTextColor(clrs.darkgrey)
+
+    local pickScreenNewsLabelInput = vgui.Create("DTextEntry", serverCategory)
+    pickScreenNewsLabelInput:Dock(TOP)
+    pickScreenNewsLabelInput:SetContentAlignment(4)
+    pickScreenNewsLabelInput:SetTall(48)
+    pickScreenNewsLabelInput:SetMultiline(true)
+    pickScreenNewsLabelInput:SetValue(GAMEMODE.GWConfig.News)
+    function pickScreenNewsLabelInput:OnValueChange(text)
+        GAMEMODE.GWConfig.News = text
     end
 
 end
@@ -393,23 +450,17 @@ end
 vgui.Register( "DGuessWhoSettingsPanel", SETTINGSPANEL, "DFrame")
 
 local function showSettings(ply, cmd, args)
+    print("yolo?")
     -- Is it better resource wise to destroy the panel on close since it wont be used that much?
-    if ( not IsValid( g_Settings ) ) then
-        g_Settings = vgui.Create("DGuessWhoSettingsPanel")
-        g_Settings:SetVisible(false) -- use the visible bool as toggle indicator
-    end
-
-    if ( IsValid( g_Settings ) ) then
-        if g_Settings:IsVisible() then
-            g_Settings:Hide()
-            gui.EnableScreenClicker( false )
-            g_Settings:SetVisible(false)
-            g_Settings:Remove()
-        else
-            g_Settings:Show()
-            gui.EnableScreenClicker( true )
-            g_Settings:SetVisible(true)
-        end
+    if (not IsValid(GW_SETTINGS_PANEL)) then
+        GW_SETTINGS_PANEL = vgui.Create("DGuessWhoSettingsPanel")
+        GW_SETTINGS_PANEL:Show()
+        GW_SETTINGS_PANEL:MakePopup()
+        gui.EnableScreenClicker(true)
+    else
+        gui.EnableScreenClicker( false )
+        GW_SETTINGS_PANEL:Remove()
+        GW_SETTINGS_PANEL = nil
     end
 end
 concommand.Add("gw_settings", showSettings)

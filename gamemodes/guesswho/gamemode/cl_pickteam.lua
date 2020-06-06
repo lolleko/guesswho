@@ -34,7 +34,7 @@ function GM:ShowTeam()
             GWLANG:Translate("teamselect_workshop_bug"),
             "http://steamcommunity.com/workshop/filedetails/discussion/480998235/523897653307060068/"
         },
-        {GWLANG:Translate("teamselect_discord"), "https://discord.gg/DbwJuk3"}
+        {GAMEMODE.GWConfig.ServerName, GAMEMODE.GWConfig.ServerUrl}
     }
 
     local linkOffsetY = 180
@@ -55,7 +55,7 @@ function GM:ShowTeam()
 
     local InfoBox = vgui.Create("DPanel", TeamSelectFrame)
     InfoBox:SetPos(ScrW() / 2 - 620, linkOffsetY)
-    InfoBox:SetSize(280, 200)
+    InfoBox:SetSize(280, 120)
     function InfoBox:Paint(w, h) draw.RoundedBox(0, 0, 0, w, h, clrs.grey) end
 
     local InfoTitle = vgui.Create("DLabel", TeamSelectFrame)
@@ -67,10 +67,10 @@ function GM:ShowTeam()
     InfoTitle:SetTextColor(clrs.lightgrey)
 
     local InfoDescription = vgui.Create("DTextEntry", TeamSelectFrame)
-    InfoDescription:SetPos(ScrW() / 2 - 620 + 2, linkOffsetY + 40)
-    InfoDescription:SetSize(276, 160)
-    InfoDescription:SetText(
-        "2.2 The Final Guess Who update has been released. Packing a lot of bug fixes and a bit new content.")
+    InfoDescription:SetPos(ScrW() / 2 - 620 + 4, linkOffsetY + 40)
+    InfoDescription:SetSize(272, 160)
+    InfoDescription:SetContentAlignment(5)
+    InfoDescription:SetText(GAMEMODE.GWConfig.News)
     InfoDescription:SetPaintBackground(false)
     InfoDescription:SetMultiline(true)
     InfoDescription:SetFont("robot_small")

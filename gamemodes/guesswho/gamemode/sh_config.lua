@@ -90,6 +90,11 @@ GM.GWConfig.WalkerColors = {
     Color(94, 25, 34) --dark red
 }
 
+GM.GWConfig.ServerName = "Official Guess Who Discord"
+GM.GWConfig.ServerUrl = "https://discord.gg/3Pb6hcJ"
+
+GM.GWConfig.News = "2.2 The Final Guess Who update has been released. Packing a lot of bug fixes and new content."
+
 --load config from disk if exists
 if SERVER then
     if file.Exists("guesswho/config.txt", "DATA") then
