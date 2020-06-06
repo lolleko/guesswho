@@ -2,9 +2,6 @@ AddCSLuaFile()
 
 EFFECT.Mat = Material( "sprites/physbeama" )
 
---[[---------------------------------------------------------
-   Init( data table )
------------------------------------------------------------]]
 function EFFECT:Init( data )
 
     self.Entity = data:GetEntity()
@@ -52,10 +49,6 @@ function EFFECT:GenerateArc(startPos, endPos, branchChance, detail)
     return points
 end
 
-
---[[---------------------------------------------------------
-   THINK
------------------------------------------------------------]]
 function EFFECT:Think()
 
     self:SetPos( self.Entity:GetPos() + self.Entity:OBBCenter() + Vector(0, 0, 10) )
@@ -64,9 +57,6 @@ function EFFECT:Think()
 
 end
 
---[[---------------------------------------------------------
-   Draw the effect
------------------------------------------------------------]]
 function EFFECT:Render()
 
     render.SetMaterial( self.Mat )
