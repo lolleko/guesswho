@@ -145,7 +145,7 @@ function CHuntHUD()
         CHHUD.HeadModel:Remove()
         CHHUD.HeadModel = nil
 
-    elseif GetConVar("gw_hud_showhead"):GetInt() == 1 and (ply:Team() == TEAM_HIDING or ply:Team() == TEAM_SEEKING) and ply:Alive() then
+    elseif GetConVar("gw_hud_showhead"):GetInt() == 1 and (ply:Team() == GW_TEAM_HIDING or ply:Team() == GW_TEAM_SEEKING) and ply:Alive() then
 
         if not CHHUD.HeadModel then
             CHHUD:CreateHead()
@@ -157,7 +157,7 @@ function CHuntHUD()
         if CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) then
             local headBone = CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" )
             local headpos = CHHUD.HeadModel.Entity:GetBonePosition(headBone)
-            if ply:Team() == TEAM_SEEKING then
+            if ply:Team() == GW_TEAM_SEEKING then
               CHHUD.HeadModel.Entity:ManipulateBoneScale(headBone, Vector(0, 0, 0))
             else
               CHHUD.HeadModel.Entity:ManipulateBoneScale(headBone, Vector(1, 1, 1))

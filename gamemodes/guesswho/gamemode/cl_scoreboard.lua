@@ -93,7 +93,7 @@ function SB:Init()
 
     local HidingList = vgui.Create("DTeamPanel", HidingPanel)
     HidingList:SetSize( 470, 580 )
-    HidingList:SetTeam( TEAM_HIDING )
+    HidingList:SetTeam( GW_TEAM_HIDING )
 
     self.SeekingHeader = vgui.Create("DLabel", self)
     self.SeekingHeader:SetPos( 880, 90 )
@@ -109,7 +109,7 @@ function SB:Init()
 
     local SeekingList = vgui.Create("DTeamPanel", SeekingPanel)
     SeekingList:SetSize( 470, 580 )
-    SeekingList:SetTeam( TEAM_SEEKING )
+    SeekingList:SetTeam( GW_TEAM_SEEKING )
 end
 
 function SB:Paint( w, h )
@@ -118,9 +118,9 @@ function SB:Paint( w, h )
 end
 
 function SB:Think()
-    self.HidingHeader:SetText( gwlang:translate( "team_hiding" ) .. " " .. team.GetScore( TEAM_HIDING ))
+    self.HidingHeader:SetText( gwlang:translate( "team_hiding" ) .. " " .. team.GetScore( GW_TEAM_HIDING ))
     self.HidingHeader:SizeToContents()
-    self.SeekingHeader:SetText( gwlang:translate( "team_seeking" ) .. " "  .. team.GetScore( TEAM_SEEKING ))
+    self.SeekingHeader:SetText( gwlang:translate( "team_seeking" ) .. " "  .. team.GetScore( GW_TEAM_SEEKING ))
     self.SeekingHeader:SizeToContents()
 end
 

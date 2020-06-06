@@ -6,7 +6,7 @@ hook.Add("InitPostEntity", "gw_InitPostEntity", function()
 end)
 
 function GWRound:RoundPreGame()
-    self:SetRoundState(ROUND_PRE_GAME)
+    self:SetRoundState(GW_ROUND_PRE_GAME)
     hook.Call("GWPreGame", GAMEMODE)
     self:SetEndTime(CurTime() + self.PreGameDuration)
     timer.Create("gwPreGameTimer", self.PreGameDuration, 1,
@@ -16,14 +16,14 @@ end
 
 function GWRound:RoundWaitForPlayers()
     -- do not start round without players or at least one player in each team
-    if team.NumPlayers(TEAM_HIDING) < self.MinHiding or
-        team.NumPlayers(TEAM_SEEKING) < self.MinSeeking then
+    if team.NumPlayers(GW_TEAM_HIDING) < self.MinHiding or
+        team.NumPlayers(GW_TEAM_SEEKING) < self.MinSeeking then
         -- check again after half a second second
         timer.Simple(0.5, function() self:RoundWaitForPlayers() end)
         -- clear remaning npcs to save recources
         for k, v in pairs(ents.FindByClass("npc_walker")) do v:Remove() end
         self:SetEndTime(CurTime() + 1)
-        self:SetRoundState(ROUND_WAITING_PLAYERS)
+        self:SetRoundState(GW_ROUND_WAITING_PLAYERS)
         return
     end
 
@@ -33,7 +33,7 @@ end
 
 function GWRound:RoundCreateWalkers()
 
-    self:SetRoundState(ROUND_CREATING)
+    self:SetRoundState(GW_ROUND_CREATING_NPCS)
     hook.Call("GWCreating", GAMEMODE)
 
     self:GetSpawnPoints()
@@ -62,13 +62,13 @@ function GWRound:RoundCreateWalkers()
     end
 
     timer.Simple(5 * wave, function()
-        self:SetRoundState(ROUND_HIDE)
+        self:SetRoundState(GW_ROUND_HIDE)
         hook.Call("GWHide", GAMEMODE)
-        for k, v in pairs(team.GetPlayers(TEAM_HIDING)) do v:Spawn() end
+        for k, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do v:Spawn() end
     end)
 
     timer.Simple(5 + (5 * wave), function()
-        for k, v in pairs(team.GetPlayers(TEAM_SEEKING)) do
+        for k, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
             v:Spawn()
             v:SetPos(v:GetPos() + Vector(2, 2, 2)) -- move them a little bit to make avoid players work
             v:Freeze(true)
@@ -86,7 +86,7 @@ function GWRound:RoundCreateWalkers()
 end
 
 function GWRound:RoundStart()
-    for k, v in pairs(team.GetPlayers(TEAM_SEEKING)) do
+    for k, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
         v:Freeze(false)
         v:SetAvoidPlayers(false)
         v:GodDisable()
@@ -103,7 +103,7 @@ function GWRound:RoundStart()
     self:SetEndTime(CurTime() + self.RoundDuration)
     SetGlobalInt("RoundNumber", GetGlobalInt("RoundNumber", 0) + 1)
 
-    self:SetRoundState(ROUND_SEEK)
+    self:SetRoundState(GW_ROUND_SEEK)
     hook.Call("GWSeek", GAMEMODE)
 end
 
@@ -114,16 +114,16 @@ function GWRound:RoundThink()
 
     if self.RoundTime == self.RoundDuration then self:RoundEnd(false) end
 
-    if team.NumPlayers(TEAM_HIDING) < self.MinHiding or
-        team.NumPlayers(TEAM_SEEKING) < self.MinSeeking then self:RoundEnd() end
+    if team.NumPlayers(GW_TEAM_HIDING) < self.MinHiding or
+        team.NumPlayers(GW_TEAM_SEEKING) < self.MinSeeking then self:RoundEnd() end
 
     local seekersWin = true
-    for k, v in pairs(team.GetPlayers(TEAM_HIDING)) do
+    for k, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do
         if v:Alive() then seekersWin = false end
     end
 
     local hidingWin = true
-    for k, v in pairs(team.GetPlayers(TEAM_SEEKING)) do
+    for k, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
         if v:Alive() then hidingWin = false end
     end
 
@@ -140,22 +140,22 @@ function GWRound:RoundEnd(caught)
 
     if caught then
         PrintMessage(HUD_PRINTTALK,
-                     "The " .. team.GetName(TEAM_SEEKING) .. " win.")
-        for k, v in pairs(team.GetPlayers(TEAM_SEEKING)) do
+                     "The " .. team.GetName(GW_TEAM_SEEKING) .. " win.")
+        for k, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
             v:ConCommand("act cheer")
         end
-        team.AddScore(TEAM_SEEKING, 1)
+        team.AddScore(GW_TEAM_SEEKING, 1)
     else
         PrintMessage(HUD_PRINTTALK,
-                     "The " .. team.GetName(TEAM_HIDING) .. " win.")
-        for k, v in pairs(team.GetPlayers(TEAM_HIDING)) do
+                     "The " .. team.GetName(GW_TEAM_HIDING) .. " win.")
+        for k, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do
             v:ConCommand("act cheer")
             -- reset reroll protections and funcs
             v:SetDiedInPrep(false)
             v:SetReRolledAbility(false)
             if v:Alive() then v:AddFrags(1) end -- if still alive as hiding after round give them one point (frag)
         end
-        team.AddScore(TEAM_HIDING, 1)
+        team.AddScore(GW_TEAM_HIDING, 1)
     end
     timer.Simple(5, function() self:PostRound() end)
 end
@@ -179,17 +179,17 @@ function GWRound:PostRound()
     timer.Simple(self.PostRoundDuration,
                  function() self:RoundWaitForPlayers() end)
     self:SetEndTime(CurTime() + self.PostRoundDuration)
-    self:SetRoundState(ROUND_POST)
+    self:SetRoundState(GW_ROUND_POST)
     hook.Call("GWPostRound", GAMEMODE)
 
     self:UpdateSettings()
 
     -- teamswap
     for k, v in pairs(player.GetAll()) do
-        if v:Team() == TEAM_SEEKING then
-            v:SetTeam(TEAM_HIDING)
-        elseif v:Team() == TEAM_HIDING then
-            v:SetTeam(TEAM_SEEKING)
+        if v:Team() == GW_TEAM_SEEKING then
+            v:SetTeam(GW_TEAM_HIDING)
+        elseif v:Team() == GW_TEAM_HIDING then
+            v:SetTeam(GW_TEAM_SEEKING)
         end
         v:KillSilent()
     end
@@ -255,7 +255,7 @@ function GWRound:MeshController()
     if navmesh.IsLoaded() then
         MsgN("GW Navmesh loaded waiting for game to start.")
     else
-        self:SetRoundState(ROUND_NAV_GEN)
+        self:SetRoundState(GW_ROUND_NAV_GEN)
         timer.Pause("gwPreGameTimer")
         navmesh.BeginGeneration()
         -- force generate

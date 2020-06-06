@@ -9,11 +9,11 @@ function plymeta:SetSpeed( spd )
 end
 
 function plymeta:IsSeeking()
-    return ( self:Team() == TEAM_SEEKING )
+    return ( self:Team() == GW_TEAM_SEEKING )
 end
 
 function plymeta:IsHiding()
-    return ( self:Team() == TEAM_HIDING )
+    return ( self:Team() == GW_TEAM_HIDING )
 end
 
 function plymeta:SetStunned(state)

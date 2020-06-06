@@ -5,7 +5,7 @@ function GM:TargetFinderThink()
 	for _, ply in pairs(player.GetAll()) do
 		if ply:IsSeeking() then
 			local minDist = -1
-			for _, target in pairs( team.GetPlayers(TEAM_HIDING) ) do
+			for _, target in pairs( team.GetPlayers(GW_TEAM_HIDING) ) do
 				if target:Alive() then
 					local dist = ply:GetPos():Distance(target:GetPos())
 					if minDist == -1 or dist < minDist then

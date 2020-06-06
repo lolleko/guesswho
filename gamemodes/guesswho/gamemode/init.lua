@@ -63,7 +63,7 @@ function GM:EntityTakeDamage(target, dmginfo)
 
     local attacker = dmginfo:GetAttacker()
 
-    if GWRound:IsCurrentState(ROUND_SEEK) and target and target:GetClass() == "npc_walker" and not target:IsPlayer() and attacker and attacker:IsPlayer() and attacker:Team() == TEAM_SEEKING and attacker:Alive() then
+    if GWRound:IsCurrentState(GW_ROUND_SEEK) and target and target:GetClass() == "npc_walker" and not target:IsPlayer() and attacker and attacker:IsPlayer() and attacker:Team() == GW_TEAM_SEEKING and attacker:Alive() then
 
         attacker:TakeDamage( GetConVar( "gw_damageonfailguess" ):GetInt() , target, attacker:GetActiveWeapon())
 
@@ -83,7 +83,7 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
             return
         end
 
-        if attacker:Team() == TEAM_SEEKING then
+        if attacker:Team() == GW_TEAM_SEEKING then
             attacker:AddFrags( 1 )
             if attacker:Health() + GetConVar( "gw_damageonfailguess" ):GetInt() * 2 > 100 then
                 attacker:Health(100)

@@ -143,7 +143,7 @@ function SWEP:DrawHUD()
 		offset2 = offset2 - 50
 	end
 
-	surface.SetDrawColor( team.GetColor(TEAM_SEEKING) )
+	surface.SetDrawColor( team.GetColor(GW_TEAM_SEEKING) )
 	local offset1 = bottom
 	for i = 1, self:Clip2() do
 		surface.DrawPoly( translate(arrow, left, offset1) )

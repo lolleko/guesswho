@@ -2,7 +2,7 @@ function GM:PlayerDeathThink( ply )
 
     local spectargets = team.GetPlayers( ply:Team() )
 
-    if GWRound:IsCurrentState(ROUND_SEEK) then
+    if GWRound:IsCurrentState(GW_ROUND_SEEK) then
         if not ply.SpecID then
             ply:Spectate(OBS_MODE_CHASE)
             if spectargets ~= nil then
@@ -35,11 +35,11 @@ function GM:PlayerDeathThink( ply )
 
     if ( ply.NextSpawnTime and ply.NextSpawnTime > CurTime() ) then return end
 
-    if ply:Team() == TEAM_HIDING and GWRound:IsCurrentState(ROUND_HIDE) then
+    if ply:Team() == GW_TEAM_HIDING and GWRound:IsCurrentState(GW_ROUND_HIDE) then
         ply:Spawn()
     end
 
-    if ply:Team() == TEAM_SEEKING or ply:Team() == TEAM_HIDING then return end
+    if ply:Team() == GW_TEAM_SEEKING or ply:Team() == GW_TEAM_HIDING then return end
 
     if ( ply:IsBot() or ply:KeyPressed( IN_ATTACK ) or ply:KeyPressed( IN_ATTACK2 ) or ply:KeyPressed( IN_JUMP ) ) then
 
@@ -58,7 +58,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
     -- reset touches
     ply:SetSeekerTouches(0)
 
-    if ply:Team() == TEAM_HIDING and GWRound:IsCurrentState(ROUND_HIDE) then
+    if ply:Team() == GW_TEAM_HIDING and GWRound:IsCurrentState(GW_ROUND_HIDE) then
         ply:SetDiedInPrep(true)
     end
 
@@ -140,9 +140,9 @@ function GM:PlayerSpawn( pl )
 
     end
 
-    if pl:Team() == TEAM_SEEKING then
+    if pl:Team() == GW_TEAM_SEEKING then
         player_manager.SetPlayerClass( pl, "player_seeker")
-    elseif pl:Team() == TEAM_HIDING then
+    elseif pl:Team() == GW_TEAM_HIDING then
         player_manager.SetPlayerClass( pl, "player_hiding")
     end
 
@@ -200,11 +200,11 @@ function GM:OnPlayerChangedTeam( ply, oldteam, newteam )
         -- If we're changing from spectator, join the game
         --disabled ply:Spawn()
 
-    elseif newteam == TEAM_SEEKING then
+    elseif newteam == GW_TEAM_SEEKING then
 
         player_manager.SetPlayerClass( ply, "player_seeker")
 
-    elseif newteam == TEAM_HIDING then
+    elseif newteam == GW_TEAM_HIDING then
 
         player_manager.SetPlayerClass( ply, "player_hiding")
 
@@ -265,12 +265,12 @@ function GM:PlayerCanJoinTeam( ply, teamid )
         return false
     end
 
-    if teamid == TEAM_SEEKING then
-        if team.NumPlayers( TEAM_SEEKING ) > team.NumPlayers( TEAM_HIDING ) or (ply:Team() == TEAM_HIDING and team.NumPlayers( TEAM_SEEKING ) == team.NumPlayers( TEAM_HIDING )) then
+    if teamid == GW_TEAM_SEEKING then
+        if team.NumPlayers( GW_TEAM_SEEKING ) > team.NumPlayers( GW_TEAM_HIDING ) or (ply:Team() == GW_TEAM_HIDING and team.NumPlayers( GW_TEAM_SEEKING ) == team.NumPlayers( GW_TEAM_HIDING )) then
             return false
         end
-    elseif teamid == TEAM_HIDING then
-        if team.NumPlayers( TEAM_HIDING ) > team.NumPlayers( TEAM_SEEKING ) or (ply:Team() == TEAM_SEEKING and team.NumPlayers( TEAM_SEEKING ) == team.NumPlayers( TEAM_HIDING )) then
+    elseif teamid == GW_TEAM_HIDING then
+        if team.NumPlayers( GW_TEAM_HIDING ) > team.NumPlayers( GW_TEAM_SEEKING ) or (ply:Team() == GW_TEAM_SEEKING and team.NumPlayers( GW_TEAM_SEEKING ) == team.NumPlayers( GW_TEAM_HIDING )) then
             return false
         end
     end

@@ -17,7 +17,7 @@ function GM:ShowTeam()
     end
 
     function TeamSelectFrame:Think()
-        if GWRound:IsCurrentState(ROUND_NAV_GEN) then
+        if GWRound:IsCurrentState(GW_ROUND_NAV_GEN) then
             self:Remove()
             GAMEMODE.TeamSelectFrame = nil
         end
@@ -154,7 +154,7 @@ function GM:ShowTeam()
     TeamHidingPanel:SetPos(ScrW() / 2 - 300, 180)
     TeamHidingPanel:SetSize(280, 280)
     function TeamHidingPanel:Paint(w, h)
-        draw.RoundedBox(0, 0, 0, w, h, team.GetColor(TEAM_HIDING))
+        draw.RoundedBox(0, 0, 0, w, h, team.GetColor(GW_TEAM_HIDING))
     end
 
     local TeamHidingModel = vgui.Create("DModelPanel", TeamHidingPanel)
@@ -175,20 +175,20 @@ function GM:ShowTeam()
 
     local TeamHidingButton = vgui.Create("DButton", TeamHidingPanel)
     function TeamHidingButton.DoClick()
-        if self:IsBalancedToJoin(TEAM_HIDING) then
+        if self:IsBalancedToJoin(GW_TEAM_HIDING) then
             self:HideTeam()
-            RunConsoleCommand("changeteam", TEAM_HIDING)
+            RunConsoleCommand("changeteam", GW_TEAM_HIDING)
         end
     end
     TeamHidingButton:SetFont("robot_normal")
     TeamHidingButton:SetTextColor(clrs.lightgrey)
     TeamHidingButton:SetText(gwlang:translate("team_hiding") .. "(" ..
-                                 team.NumPlayers(TEAM_HIDING) .. ")")
+                                 team.NumPlayers(GW_TEAM_HIDING) .. ")")
     TeamHidingButton:SetSize(280, 280)
     function TeamHidingButton:Paint(w, h) return end
     function TeamHidingButton:Think()
         self:SetText(gwlang:translate("team_hiding") .. "(" ..
-                         team.NumPlayers(TEAM_HIDING) .. ")")
+                         team.NumPlayers(GW_TEAM_HIDING) .. ")")
     end
 
     -- Seeking Button
@@ -196,7 +196,7 @@ function GM:ShowTeam()
     TeamSeekingPanel:SetPos(ScrW() / 2 + 20, 180)
     TeamSeekingPanel:SetSize(280, 280)
     function TeamSeekingPanel:Paint(w, h)
-        draw.RoundedBox(0, 0, 0, w, h, team.GetColor(TEAM_SEEKING))
+        draw.RoundedBox(0, 0, 0, w, h, team.GetColor(GW_TEAM_SEEKING))
     end
 
     local TeamSeekingModel = vgui.Create("DModelPanel", TeamSeekingPanel)
@@ -208,20 +208,20 @@ function GM:ShowTeam()
 
     local TeamSeekingButton = vgui.Create("DButton", TeamSeekingPanel)
     function TeamSeekingButton.DoClick()
-        if self:IsBalancedToJoin(TEAM_SEEKING) then
+        if self:IsBalancedToJoin(GW_TEAM_SEEKING) then
             self:HideTeam()
-            RunConsoleCommand("changeteam", TEAM_SEEKING)
+            RunConsoleCommand("changeteam", GW_TEAM_SEEKING)
         end
     end
     TeamSeekingButton:SetFont("robot_normal")
     TeamSeekingButton:SetTextColor(clrs.lightgrey)
     TeamSeekingButton:SetText(gwlang:translate("team_seeking") .. "(" ..
-                                  team.NumPlayers(TEAM_SEEKING) .. ")")
+                                  team.NumPlayers(GW_TEAM_SEEKING) .. ")")
     TeamSeekingButton:SetSize(280, 280)
     function TeamSeekingButton:Paint(w, h) return end
     function TeamSeekingButton:Think()
         self:SetText(gwlang:translate("team_seeking") .. "(" ..
-                         team.NumPlayers(TEAM_SEEKING) .. ")")
+                         team.NumPlayers(GW_TEAM_SEEKING) .. ")")
     end
 
     -- spectate and auto buttons
@@ -279,16 +279,16 @@ function GM:IsBalancedToJoin(teamid)
 
     if LocalPlayer():Team() == teamid then return true end
 
-    if teamid == TEAM_SEEKING then
-        if team.NumPlayers(TEAM_SEEKING) > team.NumPlayers(TEAM_HIDING) or
-            (LocalPlayer():Team() == TEAM_HIDING and
-                team.NumPlayers(TEAM_SEEKING) == team.NumPlayers(TEAM_HIDING)) then
+    if teamid == GW_TEAM_SEEKING then
+        if team.NumPlayers(GW_TEAM_SEEKING) > team.NumPlayers(GW_TEAM_HIDING) or
+            (LocalPlayer():Team() == GW_TEAM_HIDING and
+                team.NumPlayers(GW_TEAM_SEEKING) == team.NumPlayers(GW_TEAM_HIDING)) then
             return false
         end
-    elseif teamid == TEAM_HIDING then
-        if team.NumPlayers(TEAM_HIDING) > team.NumPlayers(TEAM_SEEKING) or
-            (LocalPlayer():Team() == TEAM_SEEKING and
-                team.NumPlayers(TEAM_SEEKING) == team.NumPlayers(TEAM_HIDING)) then
+    elseif teamid == GW_TEAM_HIDING then
+        if team.NumPlayers(GW_TEAM_HIDING) > team.NumPlayers(GW_TEAM_SEEKING) or
+            (LocalPlayer():Team() == GW_TEAM_SEEKING and
+                team.NumPlayers(GW_TEAM_SEEKING) == team.NumPlayers(GW_TEAM_HIDING)) then
             return false
         end
     end

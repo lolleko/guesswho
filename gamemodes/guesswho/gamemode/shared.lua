@@ -11,17 +11,17 @@ GM.TeamBased = true
 GM.HalloweenEvent = false
 
 --Teams
-TEAM_HIDING = 1
-TEAM_SEEKING = 2
+GW_TEAM_HIDING = 1
+GW_TEAM_SEEKING = 2
 
 --Round states
-ROUND_PRE_GAME = 1
-ROUND_WAITING_PLAYERS = 2
-ROUND_CREATING = 3
-ROUND_HIDE = 4
-ROUND_SEEK = 5
-ROUND_POST = 6
-ROUND_NAV_GEN = 9
+GW_ROUND_PRE_GAME = 1
+GW_ROUND_WAITING_PLAYERS = 2
+GW_ROUND_CREATING_NPCS = 3
+GW_ROUND_HIDE = 4
+GW_ROUND_SEEK = 5
+GW_ROUND_POST = 6
+GW_ROUND_NAV_GEN = 9
 
 --Shared CVars fallback
 CreateConVar("gw_target_finder_threshold", "700", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "The distance before the target finder will display nearby")
@@ -58,23 +58,23 @@ include("player_class/player_seeker.lua")
 include("sh_animations.lua")
 
 function GM:CreateTeams()
-	team.SetUp( TEAM_HIDING, "Hiding", self.GWConfig.TeamHidingColor )
-	team.SetClass( TEAM_HIDING, { "player_hiding" } )
-	team.SetSpawnPoint( TEAM_HIDING, "info_player_start" )
-	team.SetSpawnPoint( TEAM_HIDING, "info_player_deathmatch" )
-	team.SetSpawnPoint( TEAM_HIDING, "info_player_rebel" )
-	team.SetSpawnPoint( TEAM_HIDING, "info_player_combine" )
-	team.SetSpawnPoint( TEAM_HIDING, "info_player_counterterrorist" )
-	team.SetSpawnPoint( TEAM_HIDING, "info_player_terrorist" )
+	team.SetUp( GW_TEAM_HIDING, "Hiding", self.GWConfig.TeamHidingColor )
+	team.SetClass( GW_TEAM_HIDING, { "player_hiding" } )
+	team.SetSpawnPoint( GW_TEAM_HIDING, "info_player_start" )
+	team.SetSpawnPoint( GW_TEAM_HIDING, "info_player_deathmatch" )
+	team.SetSpawnPoint( GW_TEAM_HIDING, "info_player_rebel" )
+	team.SetSpawnPoint( GW_TEAM_HIDING, "info_player_combine" )
+	team.SetSpawnPoint( GW_TEAM_HIDING, "info_player_counterterrorist" )
+	team.SetSpawnPoint( GW_TEAM_HIDING, "info_player_terrorist" )
 
-	team.SetUp( TEAM_SEEKING, "Seekers", self.GWConfig.TeamSeekingColor )
-	team.SetClass( TEAM_SEEKING, { "player_seeker" } )
-	team.SetSpawnPoint( TEAM_SEEKING, "info_player_start" )
-	team.SetSpawnPoint( TEAM_SEEKING, "info_player_deathmatch" )
-	team.SetSpawnPoint( TEAM_SEEKING, "info_player_rebel" )
-	team.SetSpawnPoint( TEAM_SEEKING, "info_player_combine" )
-	team.SetSpawnPoint( TEAM_SEEKING, "info_player_counterterrorist" )
-	team.SetSpawnPoint( TEAM_SEEKING, "info_player_terrorist" )
+	team.SetUp( GW_TEAM_SEEKING, "Seekers", self.GWConfig.TeamSeekingColor )
+	team.SetClass( GW_TEAM_SEEKING, { "player_seeker" } )
+	team.SetSpawnPoint( GW_TEAM_SEEKING, "info_player_start" )
+	team.SetSpawnPoint( GW_TEAM_SEEKING, "info_player_deathmatch" )
+	team.SetSpawnPoint( GW_TEAM_SEEKING, "info_player_rebel" )
+	team.SetSpawnPoint( GW_TEAM_SEEKING, "info_player_combine" )
+	team.SetSpawnPoint( GW_TEAM_SEEKING, "info_player_counterterrorist" )
+	team.SetSpawnPoint( GW_TEAM_SEEKING, "info_player_terrorist" )
 
 	team.SetSpawnPoint( TEAM_SPECTATOR, "worldspawn" )
 end
@@ -95,7 +95,7 @@ function GM:ShouldCollide( ent1, ent2 )
 		return false
 	end
 
-	if GetConVar( "gw_abilities_enabled" ):GetBool() and GetConVar("gw_touches_enabled"):GetBool() and GWRound:IsCurrentState(ROUND_SEEK) then
+	if GetConVar( "gw_abilities_enabled" ):GetBool() and GetConVar("gw_touches_enabled"):GetBool() and GWRound:IsCurrentState(GW_ROUND_SEEK) then
 		local hider, seeker
 		if ent1:IsPlayer() and ent2:IsPlayer() then
 			if ent1:IsHiding() and ent2:IsSeeking() then

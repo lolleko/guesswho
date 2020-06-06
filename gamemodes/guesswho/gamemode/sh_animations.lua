@@ -2,7 +2,7 @@ function GM:HandlePlayerDucking( ply, velocity )
 
     if ( not ply:Crouching() ) then return false end
 
-    if ply:Team() == TEAM_SEEKING then
+    if ply:Team() == GW_TEAM_SEEKING then
 
         if ( velocity:Length2D() > 0.5 ) then
             ply.CalcIdeal = ACT_MP_CROUCHWALK

@@ -52,7 +52,7 @@ end
 
 function SWEP:Equip()
     if SERVER then
-        if GWRound:IsCurrentState(ROUND_HIDE) then
+        if GWRound:IsCurrentState(GW_ROUND_HIDE) then
             self.Owner:SetPrepAbility(self:GetClass())
             if not self.Owner:GetReRolledAbility() then
                 self.Owner:ChatPrint("Press Reload during hiding phase to reroll your ability. You can only do this once per round.")
@@ -62,7 +62,7 @@ function SWEP:Equip()
 end
 
 function SWEP:Reload()
-    if SERVER and GWRound:IsCurrentState(ROUND_HIDE) and self:Clip2() == 1 and not self.Owner:GetReRolledAbility() then
+    if SERVER and GWRound:IsCurrentState(GW_ROUND_HIDE) and self:Clip2() == 1 and not self.Owner:GetReRolledAbility() then
         self.Owner:SetReRolledAbility(true)
         self.Owner:GiveRandomAbility()
     end
