@@ -201,7 +201,7 @@ function PLAYERINFO:Setup( ply, teamid )
 end
 
 function PLAYERINFO:Think()
-    if !IsValid(self.Player) or self.Player:Team() != self.TeamID then
+    if !IsValid(self.Player) or self.Player:Team() ~= self.TeamID then
         self:Remove()
         return
     end
@@ -209,7 +209,7 @@ function PLAYERINFO:Think()
     local txtClr = clrs.grey
     if self.Player:Alive() then txtClr = clrs.lightgrey end
 
-    if ( self.NumPing == nil || self.NumPing != self.Player:Ping() ) then
+    if ( self.NumPing == nil || self.NumPing ~= self.Player:Ping() ) then
 	self.NumPing = self.Player:Ping()
 	self.Ping:SetText( self.NumPing )
     end
@@ -223,7 +223,7 @@ function PLAYERINFO:Think()
     self.Score:SetTextColor( txtClr )
     self.Ping:SetTextColor( txtClr )
 
-    if ( self.Muted == nil or self.Muted != self.Player:IsMuted() ) then
+    if ( self.Muted == nil or self.Muted ~= self.Player:IsMuted() ) then
 
         self.Muted = self.Player:IsMuted()
         if ( self.Muted ) then

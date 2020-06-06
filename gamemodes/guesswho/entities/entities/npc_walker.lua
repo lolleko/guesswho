@@ -90,7 +90,7 @@ function ENT:Think()
         if !self.IsJumping && self:GetSolidMask() == MASK_NPCSOLID_BRUSHONLY then
             local occupied = false
             for _,ent in pairs(ents.FindInBox(self:GetPos() + Vector( -16, -16, 0 ), self:GetPos() + Vector( 16, 16, 70 ))) do
-                if ent:GetClass() == "npc_walker" && ent != self then occupied = true end
+                if ent:GetClass() == "npc_walker" && ent ~= self then occupied = true end
             end
             if !occupied then self:SetSolidMask(MASK_NPCSOLID) end
         end
@@ -313,7 +313,7 @@ function ENT:BodyUpdate()
     --
     --
 
-    --if act != self:GetLastAct() then act = self:GetLastAct() self:StartActivity(act) end
+    --if act ~= self:GetLastAct() then act = self:GetLastAct() self:StartActivity(act) end
 
     local velocity = self:GetVelocity()
 
@@ -325,7 +325,7 @@ function ENT:BodyUpdate()
         self.CalcIdeal = ACT_HL2MP_JUMP_SLAM
     end
 
-    if self:GetActivity() != self.CalcIdeal && !self.Siting && !self.Dancing then self:StartActivity(self.CalcIdeal) end
+    if self:GetActivity() ~= self.CalcIdeal && !self.Siting && !self.Dancing then self:StartActivity(self.CalcIdeal) end
 
     if ( self.CalcIdeal == ACT_HL2MP_RUN || self.CalcIdeal == ACT_HL2MP_WALK ) then
 

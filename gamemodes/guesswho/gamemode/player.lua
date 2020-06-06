@@ -5,7 +5,7 @@ function GM:PlayerDeathThink( ply )
     if GWRound:IsCurrentState(ROUND_SEEK) then
         if !ply.SpecID then
             ply:Spectate(OBS_MODE_CHASE)
-            if spectargets != nil then
+            if spectargets ~= nil then
                 for k,v in pairs(spectargets) do
                     if v:Alive() then ply.SpecID = k ply:SpectateEntity(v)  break end
                 end
@@ -65,7 +65,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
     ---spectate first alive player in team
     ply:Spectate(OBS_MODE_CHASE)
     local spectargets = team.GetPlayers( ply:Team() )
-    if spectargets != nil then
+    if spectargets ~= nil then
         for k,v in pairs(spectargets) do
             if v:Alive() then ply.SpecID = k ply:SpectateEntity(v)  break end
         end
@@ -234,7 +234,7 @@ function GM:IsSpawnpointSuitable( pl, spawnpointent, bMakeSuitable )
     local Blockers = 0
 
     for k, v in pairs( Ents ) do
-        if ( IsValid( v ) and (v != pl and v:GetClass() == "player" and v:Alive()) or v:GetClass() == "npc_walker" ) then
+        if ( IsValid( v ) and (v ~= pl and v:GetClass() == "player" and v:Alive()) or v:GetClass() == "npc_walker" ) then
 
             Blockers = Blockers + 1
 
@@ -304,7 +304,7 @@ function GM:PlayerCanSeePlayersChat( text, teamonly, listenply, speakply )
     if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false end
 
     if ( teamonly ) then
-        if ( listenply:Team() != speakply:Team() ) then return false end
+        if ( listenply:Team() ~= speakply:Team() ) then return false end
     end
 
     if listenply:Alive() and !speakply:Alive() then return false end

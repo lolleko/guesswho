@@ -182,7 +182,7 @@ function CHuntHUD()
 
         if ply:IsSeeking() then
 
-            if clipLeft != -1 then
+            if clipLeft ~= -1 then
                 CHHUD:DrawPanel( ScrW() - 220, ScrH() - 80, 200, 60, {background = clrs.darkgreybg})
                 CHHUD:DrawPanel( ScrW() - 220, ScrH() - 25, 200, 5, {background = teamColor})
                 CHHUD:DrawText( ScrW() - 120 - (CHHUD:TextSize(clipLeft.. "/" .. clipExtra, "robot_large") / 2), ScrH() - 75, clipLeft .. "/" .. clipExtra, "robot_large", clrs.white )
@@ -221,7 +221,7 @@ function CHuntHUD()
         CHHUD:DrawCircle( ScrW() / 2, ScrH() - 75, circleRadius, 32, teamColor )
 
         local distanceText = "No Target"
-        if distance != -1 then
+        if distance ~= -1 then
             if distance == 0 then
                 distanceText = "Nearby"
             else
@@ -246,7 +246,7 @@ function CHuntHUD()
     end
 
     --draw weapon hud if spectating
-    if LocalPlayer() != ply and IsValid( ply:GetActiveWeapon() ) and ply:GetActiveWeapon().DrawHUD then
+    if LocalPlayer() ~= ply and IsValid( ply:GetActiveWeapon() ) and ply:GetActiveWeapon().DrawHUD then
         ply:GetActiveWeapon():DrawHUD()
     end
 
@@ -356,7 +356,7 @@ function GM:HUDDrawPickupHistory()
 
             local pickupText
 
-            if ply:IsHiding() and IsValid( ply:GetActiveWeapon() ) and ply:GetActiveWeapon():GetClass() != "weapon_gw_smgdummy" then
+            if ply:IsHiding() and IsValid( ply:GetActiveWeapon() ) and ply:GetActiveWeapon():GetClass() ~= "weapon_gw_smgdummy" then
                 pickupText = gwlang:translate("hud_ability_pickup")
             else
                 pickupText = v.name

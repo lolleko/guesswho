@@ -16,7 +16,7 @@ function EFFECT:GenerateArc(startPos, endPos, branchChance, detail)
     local points = {}
     local maxPoints = 2^detail
 
-    if maxPoints % 2 != 0 then
+    if maxPoints % 2 ~= 0 then
         maxPoints = maxPoints + 1
     end
 

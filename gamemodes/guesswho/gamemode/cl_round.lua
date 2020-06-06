@@ -46,7 +46,7 @@ local function ReceiveRoundState()
     local old = GWRound:GetRoundState()
 	GWRound.RoundState = net.ReadUInt( 3 )
 
-	if old != GWRound.RoundState then
+	if old ~= GWRound.RoundState then
         GWRound:RoundStateChange( old, GWRound.RoundState )
 	end
 

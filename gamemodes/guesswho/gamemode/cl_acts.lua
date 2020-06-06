@@ -96,7 +96,7 @@ function GM:ActMenuOneOpen()
         g_Acts = vgui.Create("DActFrame")
     end
 
-    if ( IsValid( g_Acts ) and LocalPlayer():Alive() and LocalPlayer():Team() != TEAM_SPECTATOR ) then
+    if ( IsValid( g_Acts ) and LocalPlayer():Alive() and LocalPlayer():Team() ~= TEAM_SPECTATOR ) then
         g_Acts:Clear()
         g_Acts:SetActs(1)
         g_Acts:Show()
@@ -110,7 +110,7 @@ function GM:ActMenuTwoOpen()
         g_Acts = vgui.Create("DActFrame")
     end
 
-    if ( IsValid( g_Acts) and LocalPlayer():Alive() and LocalPlayer():Team() != TEAM_SPECTATOR ) then
+    if ( IsValid( g_Acts) and LocalPlayer():Alive() and LocalPlayer():Team() ~= TEAM_SPECTATOR ) then
         g_Acts:Clear()
         g_Acts:SetActs(2)
         g_Acts:Show()
