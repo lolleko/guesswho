@@ -3,7 +3,7 @@ GM.Author = "Lolleko"
 GM.Email = "N/A"
 GM.Website = "https://github.com/lolleko/guesswho"
 
-GM.Version = "2.1h (75)"
+GM.Version = "2.2 (76)"
 
 GM.TeamBased = true
 
@@ -58,7 +58,6 @@ include("player_class/player_seeker.lua")
 include("sh_animations.lua")
 
 function GM:CreateTeams()
-
 	team.SetUp( TEAM_HIDING, "Hiding", self.GWConfig.TeamHidingColor )
 	team.SetClass( TEAM_HIDING, { "player_hiding" } )
 	team.SetSpawnPoint( TEAM_HIDING, "info_player_start" )
