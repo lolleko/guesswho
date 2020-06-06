@@ -1,16 +1,20 @@
-function GM:GetRoundState() return GAMEMODE.RoundState end
+GWRound = {}
 
-function GM:GetRoundLabel() return GAMEMODE.RoundLabel end
+function GWRound:GetRoundState() return self.RoundState end
 
-function GM:SetRoundLabel( lbl )
+function GWRound:IsCurrentState(state) return self.RoundState == state end
+
+function GWRound:GetRoundLabel() return self.RoundLabel end
+
+function GWRound:SetRoundLabel( lbl )
     self.RoundLabel = lbl
 end
 
-function GM:GetEndTime()
+function GWRound:GetEndTime()
 	return GetGlobalFloat( "gwEndTime", 0 )
 end
 
-function GM:RoundStateChange( old, new )
+function GWRound:RoundStateChange( old, new )
 
     if ROUND_PRE_GAME == new then
         self:SetRoundLabel( gwlang:translate( "round_pre_game" ) )
@@ -39,11 +43,11 @@ end
 
 local function ReceiveRoundState()
 
-    local old = GAMEMODE:GetRoundState()
-	GAMEMODE.RoundState = net.ReadUInt( 3 )
+    local old = GWRound:GetRoundState()
+	GWRound.RoundState = net.ReadUInt( 3 )
 
-	if old != GAMEMODE.RoundState then
-	  GAMEMODE:RoundStateChange( old, GAMEMODE.RoundState )
+	if old != GWRound.RoundState then
+        GWRound:RoundStateChange( old, GWRound.RoundState )
 	end
 
 end

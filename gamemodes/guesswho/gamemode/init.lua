@@ -63,7 +63,7 @@ function GM:EntityTakeDamage(target, dmginfo)
 
     local attacker = dmginfo:GetAttacker()
 
-    if self:GetRoundState() == ROUND_SEEK && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
+    if GWRound:IsCurrentState(ROUND_SEEK) && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
 
         attacker:TakeDamage( GetConVar( "gw_damageonfailguess" ):GetInt() , target, attacker:GetActiveWeapon())
 

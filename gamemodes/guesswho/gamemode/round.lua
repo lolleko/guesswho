@@ -1,29 +1,29 @@
-function GM:InitPostEntity()
+GWRound = {}
 
-    self:UpdateSettings()
-	self:RoundPreGame()
+hook.Add("InitPostEntity", "gw_InitPostEntity", function()
+    GWRound:UpdateSettings()
+    GWRound:RoundPreGame()
+end)
 
+function GWRound:RoundPreGame()
+    self:SetRoundState(ROUND_PRE_GAME)
+    hook.Call("GWPreGame", GAMEMODE)
+    self:SetEndTime(CurTime() + self.PreGameDuration)
+    timer.Create("gwPreGameTimer", self.PreGameDuration, 1,
+                 function() self:RoundWaitForPlayers() end)
+    timer.Simple(1, function() self:MeshController() end)
 end
 
-function GM:RoundPreGame()
-    self:SetRoundState( ROUND_PRE_GAME )
-    hook.Call( "GWPreGame", GAMEMODE )
-    self:SetEndTime( CurTime() + self.PreGameDuration )
-    timer.Create( "gwPreGameTimer", self.PreGameDuration, 1, function() self:RoundWaitForPlayers() end )
-    timer.Simple( 1, function() self:MeshController() end )
-end
-
-function GM:RoundWaitForPlayers()
-    --do not start round without players or at least one player in each team
-    if team.NumPlayers( TEAM_HIDING ) < self.MinHiding or team.NumPlayers( TEAM_SEEKING ) < self.MinSeeking then
-        --check again after half a second second
-        timer.Simple(0.5, function() self:RoundWaitForPlayers() end )
-        --clear remaning npcs to save recources
-        for k,v in pairs( ents.FindByClass( "npc_walker" ) ) do
-            v:Remove()
-        end
-        self:SetEndTime( CurTime() + 1 )
-        self:SetRoundState( ROUND_WAITING_PLAYERS )
+function GWRound:RoundWaitForPlayers()
+    -- do not start round without players or at least one player in each team
+    if team.NumPlayers(TEAM_HIDING) < self.MinHiding or
+        team.NumPlayers(TEAM_SEEKING) < self.MinSeeking then
+        -- check again after half a second second
+        timer.Simple(0.5, function() self:RoundWaitForPlayers() end)
+        -- clear remaning npcs to save recources
+        for k, v in pairs(ents.FindByClass("npc_walker")) do v:Remove() end
+        self:SetEndTime(CurTime() + 1)
+        self:SetRoundState(ROUND_WAITING_PLAYERS)
         return
     end
 
@@ -31,10 +31,10 @@ function GM:RoundWaitForPlayers()
 
 end
 
-function GM:RoundCreateWalkers()
+function GWRound:RoundCreateWalkers()
 
-    self:SetRoundState( ROUND_CREATING )
-    hook.Call( "GWCreating", GAMEMODE  )
+    self:SetRoundState(ROUND_CREATING)
+    hook.Call("GWCreating", GAMEMODE)
 
     self:GetSpawnPoints()
 
@@ -42,52 +42,53 @@ function GM:RoundCreateWalkers()
     local playerCount = player.GetCount()
 
     self.WalkerCount = 0
-    self.MaxWalkers = self.BaseWalkers + ( playerCount * self.WalkerPerPly )
+    self.MaxWalkers = self.BaseWalkers + (playerCount * self.WalkerPerPly)
 
     if #self.SpawnPoints > self.MaxWalkers then
         self:SpawnNPCWave()
-        MsgN("GW Spawned ",self.WalkerCount," NPCs in 1 wave.")
+        MsgN("GW Spawned ", self.WalkerCount, " NPCs in 1 wave.")
     else
         local wpw
-        for w = 0,math.floor(self.MaxWalkers / #self.SpawnPoints) - 1,1 do
+        for w = 0, math.floor(self.MaxWalkers / #self.SpawnPoints) - 1, 1 do
             wave = wave + 1
             timer.Simple(w * 5, function()
                 wpw = self.WalkerCount
                 self:SpawnNPCWave()
-                MsgN("GW Spawned ",self.WalkerCount - wpw," NPCs in wave ", w + 1, ".")
+                MsgN("GW Spawned ", self.WalkerCount - wpw, " NPCs in wave ",
+                     w + 1, ".")
             end)
         end
         wave = wave - 1
     end
 
     timer.Simple(5 * wave, function()
-        self:SetRoundState( ROUND_HIDE )
-        hook.Call( "GWHide", GAMEMODE  )
-        for k,v in pairs(team.GetPlayers( TEAM_HIDING )) do
+        self:SetRoundState(ROUND_HIDE)
+        hook.Call("GWHide", GAMEMODE)
+        for k, v in pairs(team.GetPlayers(TEAM_HIDING)) do v:Spawn() end
+    end)
+
+    timer.Simple(5 + (5 * wave), function()
+        for k, v in pairs(team.GetPlayers(TEAM_SEEKING)) do
             v:Spawn()
+            v:SetPos(v:GetPos() + Vector(2, 2, 2)) -- move them a little bit to make avoid players work
+            v:Freeze(true)
+            v:GodEnable()
+            v:SetAvoidPlayers(true)
         end
     end)
+    timer.Simple(self.HideDuration + (5 * wave),
+                 function() self:RoundStart() end)
+    self:SetEndTime(CurTime() + self.HideDuration + (5 * wave))
 
-    timer.Simple( 5 + (5 * wave), function() for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
-        v:Spawn()
-        v:SetPos(v:GetPos() + Vector(2,2,2)) --move them a little bit to make avoid players work
-        v:Freeze( true )
-        v:GodEnable()
-        v:SetAvoidPlayers( true )
-        end
-    end)
-    timer.Simple( self.HideDuration + (5 * wave), function() self:RoundStart() end )
-    self:SetEndTime( CurTime() + self.HideDuration + (5 * wave) )
-
-    PrintMessage( HUD_PRINTTALK, "Map will change in " .. self.MaxRounds - GetGlobalInt("RoundNumber", 0) .. " rounds." )
-
+    PrintMessage(HUD_PRINTTALK,
+                 "Map will change in " .. self.MaxRounds -
+                     GetGlobalInt("RoundNumber", 0) .. " rounds.")
 end
 
-function GM:RoundStart()
-
-    for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
-        v:Freeze( false )
-        v:SetAvoidPlayers( false )
+function GWRound:RoundStart()
+    for k, v in pairs(team.GetPlayers(TEAM_SEEKING)) do
+        v:Freeze(false)
+        v:SetAvoidPlayers(false)
         v:GodDisable()
     end
 
@@ -96,95 +97,95 @@ function GM:RoundStart()
         self:SpawnEasterEggs(player.GetCount() * 8)
     end
 
-    timer.Create( "RoundThink", 1, self.RoundDuration, function() self:RoundThink() end)
+    timer.Create("RoundThink", 1, self.RoundDuration,
+                 function() self:RoundThink() end)
     self.RoundTime = 1
-    self:SetEndTime( CurTime() + self.RoundDuration )
-    SetGlobalInt( "RoundNumber", GetGlobalInt("RoundNumber", 0 ) + 1 )
+    self:SetEndTime(CurTime() + self.RoundDuration)
+    SetGlobalInt("RoundNumber", GetGlobalInt("RoundNumber", 0) + 1)
 
-    self:SetRoundState( ROUND_SEEK )
-    hook.Call( "GWSeek", GAMEMODE  )
-
+    self:SetRoundState(ROUND_SEEK)
+    hook.Call("GWSeek", GAMEMODE)
 end
 
---will be called every second
-function GM:RoundThink()
-    --end conditions
+-- will be called every second
+function GWRound:RoundThink()
+    -- end conditions
     self.RoundTime = self.RoundTime + 1
 
-    if self.RoundTime == self.RoundDuration then self:RoundEnd( false ) end
+    if self.RoundTime == self.RoundDuration then self:RoundEnd(false) end
 
-    if team.NumPlayers( TEAM_HIDING ) < self.MinHiding or team.NumPlayers( TEAM_SEEKING ) < self.MinSeeking then
-        self:RoundEnd()
-    end
+    if team.NumPlayers(TEAM_HIDING) < self.MinHiding or
+        team.NumPlayers(TEAM_SEEKING) < self.MinSeeking then self:RoundEnd() end
 
     local seekersWin = true
-    for k,v in pairs( team.GetPlayers( TEAM_HIDING ) ) do
+    for k, v in pairs(team.GetPlayers(TEAM_HIDING)) do
         if v:Alive() then seekersWin = false end
     end
 
     local hidingWin = true
-    for k,v in pairs( team.GetPlayers( TEAM_SEEKING ) ) do
+    for k, v in pairs(team.GetPlayers(TEAM_SEEKING)) do
         if v:Alive() then hidingWin = false end
     end
 
-    if seekersWin then
-        self:RoundEnd( true )
-    end
+    if seekersWin then self:RoundEnd(true) end
 
-    if hidingWin then
-        self:RoundEnd( false )
-    end
+    if hidingWin then self:RoundEnd(false) end
 end
 
-function GM:RoundEnd( caught )
-    hook.Call( "GWOnRoundEnd", GAMEMODE, caught )
+function GWRound:RoundEnd(caught)
+    hook.Call("GWOnRoundEnd", GAMEMODE, caught)
 
     if timer.Exists("RoundThink") then timer.Remove("RoundThink") end
-    --choose winner and stuff
+    -- choose winner and stuff
 
     if caught then
-        PrintMessage( HUD_PRINTTALK, "The " .. team.GetName( TEAM_SEEKING ) .. " win." )
-        for k,v in pairs(team.GetPlayers( TEAM_SEEKING )) do
+        PrintMessage(HUD_PRINTTALK,
+                     "The " .. team.GetName(TEAM_SEEKING) .. " win.")
+        for k, v in pairs(team.GetPlayers(TEAM_SEEKING)) do
             v:ConCommand("act cheer")
         end
-        team.AddScore( TEAM_SEEKING, 1)
+        team.AddScore(TEAM_SEEKING, 1)
     else
-        PrintMessage( HUD_PRINTTALK, "The " .. team.GetName( TEAM_HIDING ) .. " win." )
-        for k,v in pairs(team.GetPlayers( TEAM_HIDING )) do
+        PrintMessage(HUD_PRINTTALK,
+                     "The " .. team.GetName(TEAM_HIDING) .. " win.")
+        for k, v in pairs(team.GetPlayers(TEAM_HIDING)) do
             v:ConCommand("act cheer")
             -- reset reroll protections and funcs
             v:SetDiedInPrep(false)
             v:SetReRolledAbility(false)
-            if v:Alive() then v:AddFrags( 1 ) end --if still alive as hiding after round give them one point (frag)
+            if v:Alive() then v:AddFrags(1) end -- if still alive as hiding after round give them one point (frag)
         end
-        team.AddScore( TEAM_HIDING, 1)
+        team.AddScore(TEAM_HIDING, 1)
     end
     timer.Simple(5, function() self:PostRound() end)
 end
 
-function GM:PostRound()
+function GWRound:PostRound()
 
     if GetGlobalInt("RoundNumber", 0) >= self.MaxRounds then
         MsgN("GW Round cap reached changing map..")
-        if MapVote then MsgN("GW Mapvote detected starting vote!") MapVote.Start() return end
+        if MapVote then
+            MsgN("GW Mapvote detected starting vote!")
+            MapVote.Start()
+            return
+        end
         game.LoadNextMap()
     end
 
     game.CleanUpMap()
 
-    for k,v in pairs( ents.FindByClass( "npc_walker" ) ) do
-        v:Remove()
-    end
+    for k, v in pairs(ents.FindByClass("npc_walker")) do v:Remove() end
 
-    timer.Simple( self.PostRoundDuration, function() self:RoundWaitForPlayers() end)
-    self:SetEndTime( CurTime() + self.PostRoundDuration )
-    self:SetRoundState( ROUND_POST )
-    hook.Call( "GWPostRound", GAMEMODE  )
+    timer.Simple(self.PostRoundDuration,
+                 function() self:RoundWaitForPlayers() end)
+    self:SetEndTime(CurTime() + self.PostRoundDuration)
+    self:SetRoundState(ROUND_POST)
+    hook.Call("GWPostRound", GAMEMODE)
 
     self:UpdateSettings()
 
-    --teamswap
-    for k,v in pairs(player.GetAll()) do
+    -- teamswap
+    for k, v in pairs(player.GetAll()) do
         if v:Team() == TEAM_SEEKING then
             v:SetTeam(TEAM_HIDING)
         elseif v:Team() == TEAM_HIDING then
@@ -195,20 +196,21 @@ function GM:PostRound()
 
 end
 
-function GM:SpawnNPCWave()
+function GWRound:SpawnNPCWave()
 
-    for k,v in pairs( self.SpawnPoints ) do
+    for k, v in pairs(self.SpawnPoints) do
         if self.WalkerCount == self.MaxWalkers then break end
 
         local occupied = false
-        for _,ent in pairs(ents.FindInBox(v:GetPos() + Vector( -16, -16, 0 ), v:GetPos() + Vector( 16, 16, 64 ))) do
+        for _, ent in pairs(ents.FindInBox(v:GetPos() + Vector(-16, -16, 0),
+                                           v:GetPos() + Vector(16, 16, 64))) do
             if ent:GetClass() == "npc_walker" then occupied = true end
         end
 
-        if !occupied then
+        if not occupied then
             local walker = ents.Create("npc_walker")
-            if !IsValid( walker ) then break end
-            walker:SetPos( v:GetPos() )
+            if not IsValid(walker) then break end
+            walker:SetPos(v:GetPos())
             walker:Spawn()
             walker:Activate()
             self.WalkerCount = self.WalkerCount + 1
@@ -218,15 +220,14 @@ function GM:SpawnNPCWave()
 
 end
 
-
-function GM:SpawnEasterEggs(eggCount)
+function GWRound:SpawnEasterEggs(eggCount)
     local allNavs = navmesh.GetAllNavAreas()
     for _, nav in RandomPairs(allNavs) do
         local spots = nav:GetHidingSpots()
         local spot = table.Random(spots)
         if spot then
             local egg = ents.Create("gw_easter_egg")
-            if !IsValid(egg) then break end
+            if not IsValid(egg) then break end
             egg:SetPos(spot)
             egg:Spawn()
             egg:Activate()
@@ -236,106 +237,134 @@ function GM:SpawnEasterEggs(eggCount)
     end
 end
 
-function GM:UpdateSettings()
+function GWRound:UpdateSettings()
 
-    self.BaseWalkers = GetConVar( "gw_basewalkeramount" ):GetInt()
-    self.WalkerPerPly = GetConVar( "gw_walkerperplayer" ):GetInt()
-    self.PreGameDuration = GetConVar( "gw_pregameduration" ):GetInt()
-    self.RoundDuration = GetConVar( "gw_roundduration" ):GetInt()
-    self.HideDuration = GetConVar( "gw_hideduration" ):GetInt()
-    self.PostRoundDuration = GetConVar( "gw_postroundduration" ):GetInt()
-    self.MaxRounds = GetConVar( "gw_maxrounds" ):GetInt()
-    self.MinHiding = GetConVar( "gw_minhiding" ):GetInt()
-    self.MinSeeking = GetConVar( "gw_minseeking" ):GetInt()
+    self.BaseWalkers = GetConVar("gw_basewalkeramount"):GetInt()
+    self.WalkerPerPly = GetConVar("gw_walkerperplayer"):GetInt()
+    self.PreGameDuration = GetConVar("gw_pregameduration"):GetInt()
+    self.RoundDuration = GetConVar("gw_roundduration"):GetInt()
+    self.HideDuration = GetConVar("gw_hideduration"):GetInt()
+    self.PostRoundDuration = GetConVar("gw_postroundduration"):GetInt()
+    self.MaxRounds = GetConVar("gw_maxrounds"):GetInt()
+    self.MinHiding = GetConVar("gw_minhiding"):GetInt()
+    self.MinSeeking = GetConVar("gw_minseeking"):GetInt()
 
 end
 
-function GM:MeshController()
+function GWRound:MeshController()
     if navmesh.IsLoaded() then
-        MsgN( "GW Navmesh loaded waiting for game to start." )
+        MsgN("GW Navmesh loaded waiting for game to start.")
     else
-        self:SetRoundState( ROUND_NAV_GEN )
-        timer.Pause( "gwPreGameTimer" )
+        self:SetRoundState(ROUND_NAV_GEN)
+        timer.Pause("gwPreGameTimer")
         navmesh.BeginGeneration()
-        --force generate
-        if !navmesh.IsGenerating() then
+        -- force generate
+        if not navmesh.IsGenerating() then
             self:GetSpawnPoints()
 
-            local tr = util.TraceLine( {
+            local tr = util.TraceLine({
                 start = self.SpawnPoints[1]:GetPos(),
-                endpos = self.SpawnPoints[1]:GetPos() - Vector( 0, 0, 100),
+                endpos = self.SpawnPoints[1]:GetPos() - Vector(0, 0, 100),
                 filter = self.SpawnPoints[1]
-            } )
+            })
 
             local ent = ents.Create("info_player_start")
-            ent:SetPos( tr.HitPos )
+            ent:SetPos(tr.HitPos)
             ent:Spawn()
             navmesh.BeginGeneration()
         end
 
-        if !navmesh.IsGenerating() then
-            PrintMessage( HUD_PRINTCENTER, " GW Navmesh generation failed, try to reload the map a few times.\nIf it still fails try a diffrent map!" )
+        if not navmesh.IsGenerating() then
+            PrintMessage(HUD_PRINTCENTER,
+                         " GW Navmesh generation failed, try to reload the map a few times.\nIf it still fails try a diffrent map!")
         else
-            timer.Create( "gwNavmeshGen", 1, 0, function() PrintMessage( HUD_PRINTCENTER, "Generating navmesh, this will take some time!\nUp to 20min (worst case) depending on map size and your system.\nYou will only need to do this once.\nOn auto generated navs the ai pathing will fail a lot.\nUse a custom navmesh if available!" ) end)
+            timer.Create("gwNavmeshGen", 1, 0, function()
+                PrintMessage(HUD_PRINTCENTER,
+                             "Generating navmesh, this will take some time!\nUp to 20min (worst case) depending on map size and your system.\nYou will only need to do this once.\nOn auto generated navs the ai pathing will fail a lot.\nUse a custom navmesh if available!")
+            end)
         end
     end
 end
 
-function GM:GetSpawnPoints()
-    if ( !IsTableOfEntitiesValid( self.SpawnPoints ) ) then
+function GWRound:GetSpawnPoints()
+    if (not self.SpawnPoints or not IsTableOfEntitiesValid(self.SpawnPoints)) then
 
         self.LastSpawnPoint = 0
-        self.SpawnPoints = ents.FindByClass( "info_player_start" )
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_deathmatch" ) )
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_combine" ) )
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_rebel" ) )
+        self.SpawnPoints = ents.FindByClass("info_player_start")
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_deathmatch"))
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_combine"))
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_rebel"))
 
         -- CS Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_counterterrorist" ) )
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_terrorist" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints, ents.FindByClass(
+                                         "info_player_counterterrorist"))
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_terrorist"))
 
         -- DOD Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_axis" ) )
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_allies" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_axis"))
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_allies"))
 
         -- (Old) GMod Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "gmod_player_start" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("gmod_player_start"))
 
         -- TF Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_teamspawn" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_teamspawn"))
 
         -- INS Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "ins_spawnpoint" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("ins_spawnpoint"))
 
         -- AOC Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "aoc_spawnpoint" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("aoc_spawnpoint"))
 
         -- Dystopia Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "dys_spawn_point" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("dys_spawn_point"))
 
         -- PVKII Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_pirate" ) )
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_viking" ) )
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_knight" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_pirate"))
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_viking"))
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_knight"))
 
         -- DIPRIP Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "diprip_start_team_blue" ) )
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "diprip_start_team_red" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("diprip_start_team_blue"))
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("diprip_start_team_red"))
 
         -- OB Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_red" ) )
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_blue" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_red"))
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_blue"))
 
         -- SYN Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_coop" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_coop"))
 
         -- ZPS Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_human" ) )
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_zombie" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_human"))
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_zombie"))
 
         -- ZM Maps
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_deathmatch" ) )
-        self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_zombiemaster" ) )
+        self.SpawnPoints = table.Add(self.SpawnPoints,
+                                     ents.FindByClass("info_player_deathmatch"))
+        self.SpawnPoints = table.Add(self.SpawnPoints, ents.FindByClass(
+                                         "info_player_zombiemaster"))
 
     end
 
@@ -346,36 +375,30 @@ function GM:GetSpawnPoints()
 
         local k = rand(n) -- 1 <= k <= n
 
-        self.SpawnPoints[n], self.SpawnPoints[k] = self.SpawnPoints[k], self.SpawnPoints[n]
+        self.SpawnPoints[n], self.SpawnPoints[k] = self.SpawnPoints[k],
+                                                   self.SpawnPoints[n]
         n = n - 1
     end
+end
+
+function GWRound:SetRoundState(state)
+
+    self.RoundState = state
+
+    self:SendRoundState(state)
 
 end
 
-function GM:SetRoundState( state )
+function GWRound:GetRoundState() return self.RoundState end
 
-	self.RoundState = state
+function GWRound:IsCurrentState(state) return self.RoundState == state end
 
-	self:SendRoundState( state )
+function GWRound:SendRoundState(state, ply)
 
-end
-
-function GM:GetRoundState()
-
-	return self.RoundState
+    net.Start("gwRoundState")
+    net.WriteUInt(state, 3)
+    return ply and net.Send(ply) or net.Broadcast()
 
 end
 
-function GM:SendRoundState( state, ply )
-
-	net.Start( "gwRoundState" )
-		net.WriteUInt( state, 3 )
-	return ply and net.Send( ply ) or net.Broadcast()
-
-end
-
-function GM:SetEndTime( time )
-
-	SetGlobalFloat( "gwEndTime", time)
-
-end
+function GWRound:SetEndTime(time) SetGlobalFloat("gwEndTime", time) end

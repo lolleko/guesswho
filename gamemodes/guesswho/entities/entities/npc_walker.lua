@@ -82,7 +82,7 @@ function ENT:Think()
             end
         end
         if self.Stucked && CurTime() > self.Stucked + 20 && self.StuckAt:Distance(self:GetPos()) < 5 then
-            self:SetPos(GAMEMODE.SpawnPoints[math.random(1,#GAMEMODE.SpawnPoints)]:GetPos())
+            self:SetPos(GWRound.SpawnPoints[math.random(1,#GWRound.SpawnPoints)]:GetPos())
             self.Stucked = nil
             if SERVER && !self.IsJumping then MsgN("Nextbot [",tostring(self:EntIndex()),"][",self:GetClass(),"] Got Stuck for over 20 seconds and will be repositioned, if this error gets spammed you might want to consider the following: Edit the navmesh or lower the walker amount.") end
         end

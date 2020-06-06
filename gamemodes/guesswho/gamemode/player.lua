@@ -2,7 +2,7 @@ function GM:PlayerDeathThink( ply )
 
     local spectargets = team.GetPlayers( ply:Team() )
 
-    if GAMEMODE:GetRoundState() == ROUND_SEEK then
+    if GWRound:IsCurrentState(ROUND_SEEK) then
         if !ply.SpecID then
             ply:Spectate(OBS_MODE_CHASE)
             if spectargets != nil then
@@ -35,7 +35,7 @@ function GM:PlayerDeathThink( ply )
 
     if ( ply.NextSpawnTime and ply.NextSpawnTime > CurTime() ) then return end
 
-    if ply:Team() == TEAM_HIDING and GAMEMODE:GetRoundState() == ROUND_HIDE then
+    if ply:Team() == TEAM_HIDING and GWRound:IsCurrentState(ROUND_HIDE) then
         ply:Spawn()
     end
 
@@ -58,7 +58,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
     -- reset touches
     ply:SetSeekerTouches(0)
 
-    if ply:Team() == TEAM_HIDING and GAMEMODE:GetRoundState() == ROUND_HIDE then
+    if ply:Team() == TEAM_HIDING and GWRound:IsCurrentState(ROUND_HIDE) then
         ply:SetDiedInPrep(true)
     end
 
@@ -337,8 +337,8 @@ function GM:PlayerInitialSpawn( pl )
     end
 
     --sync endtime with clients that connected
-    if self:GetRoundState() then
-        self:SendRoundState( self:GetRoundState(), pl )
+    if GWRound:GetRoundState() then
+        GWRound:SendRoundState(GWRound:GetRoundState(), pl)
     end
 
 end

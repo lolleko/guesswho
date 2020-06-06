@@ -111,9 +111,9 @@ function CHuntHUD()
     if !ply:Alive() and IsValid(ply:GetObserverTarget()) then
         ply = ply:GetObserverTarget()
     end
-    local time = string.ToMinutesSeconds( GAMEMODE:GetEndTime() - CurTime())
+    local time = string.ToMinutesSeconds( GWRound:GetEndTime() - CurTime())
     local teamColor = team.GetColor(ply:Team())
-    local label = GAMEMODE:GetRoundLabel() or "ERROR"
+    local label = GWRound:GetRoundLabel() or "ERROR"
 
     CHHUD:DrawPanel( ScrW() / 2 - 100, 0, 200, 50, {background = clrs.darkgreybg})
     CHHUD:DrawPanel( ScrW() / 2 - 100, 45, 200, 5, {background = teamColor})

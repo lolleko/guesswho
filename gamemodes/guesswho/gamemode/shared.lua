@@ -95,7 +95,7 @@ function GM:ShouldCollide( ent1, ent2 )
 		return false
 	end
 
-	if GetConVar( "gw_abilities_enabled" ):GetBool() and GetConVar("gw_touches_enabled"):GetBool() and self:GetRoundState() == ROUND_SEEK then
+	if GetConVar( "gw_abilities_enabled" ):GetBool() and GetConVar("gw_touches_enabled"):GetBool() and GWRound:IsCurrentState(ROUND_SEEK) then
 		local hider, seeker
 		if ent1:IsPlayer() and ent2:IsPlayer() then
 			if ent1:IsHiding() and ent2:IsSeeking() then
