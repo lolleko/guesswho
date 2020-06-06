@@ -1,6 +1,6 @@
 function GM:HandlePlayerDucking( ply, velocity )
 
-    if ( !ply:Crouching() ) then return false end
+    if ( not ply:Crouching() ) then return false end
 
     if ply:Team() == TEAM_SEEKING then
 

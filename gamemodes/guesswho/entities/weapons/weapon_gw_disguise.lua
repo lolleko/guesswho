@@ -15,7 +15,7 @@ function SWEP:Ability()
 end
 
 function SWEP:OnRemove()
-    if !IsValid( self.Owner ) then return end
+    if not IsValid( self.Owner ) then return end
     local ply = self.Owner
     ply:SetDisguised(false)
     timer.Remove( "Ability.Effect.Disguise" .. ply:SteamID() )

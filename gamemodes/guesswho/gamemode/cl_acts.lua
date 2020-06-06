@@ -92,7 +92,7 @@ end
 vgui.Register("DActFrame", ActsFrame, "DForm")
 
 function GM:ActMenuOneOpen()
-    if ( !IsValid( g_Acts ) ) then
+    if ( not IsValid( g_Acts ) ) then
         g_Acts = vgui.Create("DActFrame")
     end
 
@@ -106,7 +106,7 @@ function GM:ActMenuOneOpen()
 end
 
 function GM:ActMenuTwoOpen()
-    if ( !IsValid( g_Acts ) ) then
+    if ( not IsValid( g_Acts ) ) then
         g_Acts = vgui.Create("DActFrame")
     end
 

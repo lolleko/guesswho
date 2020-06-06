@@ -44,7 +44,7 @@ function SETTINGSPANEL:Init()
     end
 
     for k, v in pairs(self.sheet.Items) do
-        if (!v.Tab) then continue end
+        if (not v.Tab) then continue end
         local left = 0
         v.Tab.Paint = function(self, w1, h1)
             if k == 1 then left = 8 end
@@ -394,7 +394,7 @@ vgui.Register( "DGuessWhoSettingsPanel", SETTINGSPANEL, "DFrame")
 
 local function showSettings(ply, cmd, args)
     -- Is it better resource wise to destroy the panel on close since it wont be used that much?
-    if ( !IsValid( g_Settings ) ) then
+    if ( not IsValid( g_Settings ) ) then
         g_Settings = vgui.Create("DGuessWhoSettingsPanel")
         g_Settings:SetVisible(false) -- use the visible bool as toggle indicator
     end

@@ -83,7 +83,7 @@ end
 
 function SWEP:OnRemove()
 
-    if !IsValid( self.Owner ) then return end
+    if not IsValid( self.Owner ) then return end
     local ply = self.Owner
     timer.Remove( "Ability.Effect.Prophunt" .. ply:SteamID() )
     ply:ResetHull()

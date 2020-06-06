@@ -7,7 +7,7 @@ for _, icon in pairs(icons) do
 end
 
 function CHHUD:CreateHead()
-    if !self.HeadModel and !IsValid(self.HeadModel) and GetConVar("gw_hud_showhead"):GetInt() == 1 then
+    if not self.HeadModel and not IsValid(self.HeadModel) and GetConVar("gw_hud_showhead"):GetInt() == 1 then
         self.HeadModel = vgui.Create( "DModelPanel" )
         self.HeadModel:SetPos( 22, ScrH() - 180 )
         self.HeadModel:SetSize( 96, 100 )
@@ -44,7 +44,7 @@ function CHHUD:DrawPanel( x, y, w, h, clrs, brdwidth)
 
     local b
 
-    if !brdwidth then b = 1 else b = brdwidth end
+    if not brdwidth then b = 1 else b = brdwidth end
 
     if clrs.border then
         surface.SetDrawColor( color( clrs.border ) )
@@ -108,7 +108,7 @@ function CHuntHUD()
         return
     end
     local ply = LocalPlayer()
-    if !ply:Alive() and IsValid(ply:GetObserverTarget()) then
+    if not ply:Alive() and IsValid(ply:GetObserverTarget()) then
         ply = ply:GetObserverTarget()
     end
     local time = string.ToMinutesSeconds( GWRound:GetEndTime() - CurTime())
@@ -140,14 +140,14 @@ function CHuntHUD()
 
     end
 
-    if (GetConVar("gw_hud_showhead"):GetInt() == 0 or ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_UNASSIGNED or !ply:Alive()) and CHHUD.HeadModel then
+    if (GetConVar("gw_hud_showhead"):GetInt() == 0 or ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_UNASSIGNED or not ply:Alive()) and CHHUD.HeadModel then
 
         CHHUD.HeadModel:Remove()
         CHHUD.HeadModel = nil
 
     elseif GetConVar("gw_hud_showhead"):GetInt() == 1 and (ply:Team() == TEAM_HIDING or ply:Team() == TEAM_SEEKING) and ply:Alive() then
 
-        if !CHHUD.HeadModel then
+        if not CHHUD.HeadModel then
             CHHUD:CreateHead()
         end
 
@@ -257,8 +257,8 @@ function GM:HUDDrawTargetID()
 
     local tr = util.GetPlayerTrace( LocalPlayer() )
     local trace = util.TraceLine( tr )
-    if ( !trace.Hit ) then return end
-    if ( !trace.HitNonWorld ) then return end
+    if ( not trace.Hit ) then return end
+    if ( not trace.HitNonWorld ) then return end
 
     local text
     local font = "robot_medium"
@@ -269,7 +269,7 @@ function GM:HUDDrawTargetID()
         text = "Press " .. string.upper(input.LookupBinding( "use")) .. " for a suprise!"
     end
 
-    if !text then return end
+    if not text then return end
 
     surface.SetFont( font )
     local w, h = surface.GetTextSize( text )
@@ -325,7 +325,7 @@ function GM:HUDDrawPickupHistory()
     if not IsValid(ply) then return end
     for k, v in pairs( self.PickupHistory ) do
 
-        if ( !istable( v ) ) then
+        if ( not istable( v ) ) then
 
             Msg( tostring( v ) .. "\n" )
             PrintTable( self.PickupHistory )

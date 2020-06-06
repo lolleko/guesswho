@@ -91,7 +91,7 @@ end
 
 function GM:ShouldCollide( ent1, ent2 )
 
-	if ( (!ent1:IsPlayer() and ent1:IsPlayerHolding()) or (!ent1:IsPlayer() and ent2:IsPlayerHolding() )) then
+	if ( (not ent1:IsPlayer() and ent1:IsPlayerHolding()) or (not ent1:IsPlayer() and ent2:IsPlayerHolding() )) then
 		return false
 	end
 

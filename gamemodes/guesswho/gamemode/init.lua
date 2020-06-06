@@ -63,7 +63,7 @@ function GM:EntityTakeDamage(target, dmginfo)
 
     local attacker = dmginfo:GetAttacker()
 
-    if GWRound:IsCurrentState(ROUND_SEEK) && target && target:GetClass() == "npc_walker" && !target:IsPlayer() && attacker && attacker:IsPlayer() && attacker:Team() == TEAM_SEEKING && attacker:Alive() then
+    if GWRound:IsCurrentState(ROUND_SEEK) and target and target:GetClass() == "npc_walker" and not target:IsPlayer() and attacker and attacker:IsPlayer() and attacker:Team() == TEAM_SEEKING and attacker:Alive() then
 
         attacker:TakeDamage( GetConVar( "gw_damageonfailguess" ):GetInt() , target, attacker:GetActiveWeapon())
 
@@ -77,7 +77,7 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
     ply:AddDeaths( 1 )
 
-    if ( attacker:IsValid() && attacker:IsPlayer() ) then
+    if ( attacker:IsValid() and attacker:IsPlayer() ) then
 
         if attacker == ply then
             return
@@ -101,21 +101,21 @@ function GM:OnNPCKilled( ent, attacker, inflictor )
     -- Don't spam the killfeed with scripted stuff
     if ( ent:GetClass() == "npc_bullseye" || ent:GetClass() == "npc_launcher" ) then return end
 
-    if ( IsValid( attacker ) && attacker:GetClass() == "trigger_hurt" ) then attacker = ent end
+    if ( IsValid( attacker ) and attacker:GetClass() == "trigger_hurt" ) then attacker = ent end
 
-    if ( IsValid( attacker ) && attacker:IsVehicle() && IsValid( attacker:GetDriver() ) ) then
+    if ( IsValid( attacker ) and attacker:IsVehicle() and IsValid( attacker:GetDriver() ) ) then
         attacker = attacker:GetDriver()
     end
 
-    if ( !IsValid( inflictor ) && IsValid( attacker ) ) then
+    if ( not IsValid( inflictor ) and IsValid( attacker ) ) then
         inflictor = attacker
     end
 
     -- Convert the inflictor to the weapon that they're holding if we can.
-    if ( IsValid( inflictor ) && attacker == inflictor && ( inflictor:IsPlayer() || inflictor:IsNPC() ) ) then
+    if ( IsValid( inflictor ) and attacker == inflictor and ( inflictor:IsPlayer() || inflictor:IsNPC() ) ) then
 
         inflictor = inflictor:GetActiveWeapon()
-        if ( !IsValid( attacker ) ) then inflictor = attacker end
+        if ( not IsValid( attacker ) ) then inflictor = attacker end
 
     end
 

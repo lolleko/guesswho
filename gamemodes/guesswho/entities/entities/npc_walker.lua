@@ -81,18 +81,18 @@ function ENT:Think()
                 end
             end
         end
-        if self.Stucked && CurTime() > self.Stucked + 20 && self.StuckAt:Distance(self:GetPos()) < 5 then
+        if self.Stucked and CurTime() > self.Stucked + 20 and self.StuckAt:Distance(self:GetPos()) < 5 then
             self:SetPos(GWRound.SpawnPoints[math.random(1,#GWRound.SpawnPoints)]:GetPos())
             self.Stucked = nil
-            if SERVER && !self.IsJumping then MsgN("Nextbot [",tostring(self:EntIndex()),"][",self:GetClass(),"] Got Stuck for over 20 seconds and will be repositioned, if this error gets spammed you might want to consider the following: Edit the navmesh or lower the walker amount.") end
+            if SERVER and not self.IsJumping then MsgN("Nextbot [",tostring(self:EntIndex()),"][",self:GetClass(),"] Got Stuck for over 20 seconds and will be repositioned, if this error gets spammed you might want to consider the following: Edit the navmesh or lower the walker amount.") end
         end
-        if self.Stucked && self.StuckAt:Distance(self:GetPos()) > 10 then self.Stucked = nil end --Reset stuck state when moved
-        if !self.IsJumping && self:GetSolidMask() == MASK_NPCSOLID_BRUSHONLY then
+        if self.Stucked and self.StuckAt:Distance(self:GetPos()) > 10 then self.Stucked = nil end --Reset stuck state when moved
+        if not self.IsJumping and self:GetSolidMask() == MASK_NPCSOLID_BRUSHONLY then
             local occupied = false
             for _,ent in pairs(ents.FindInBox(self:GetPos() + Vector( -16, -16, 0 ), self:GetPos() + Vector( 16, 16, 70 ))) do
-                if ent:GetClass() == "npc_walker" && ent ~= self then occupied = true end
+                if ent:GetClass() == "npc_walker" and ent ~= self then occupied = true end
             end
-            if !occupied then self:SetSolidMask(MASK_NPCSOLID) end
+            if not occupied then self:SetSolidMask(MASK_NPCSOLID) end
         end
     end
 
@@ -103,10 +103,10 @@ function ENT:RunBehaviour()
     self:MoveSomeWhere(10000)
     while ( true ) do
         local rand = math.random(1,100)
-        if rand > 0 && rand < 10 then
+        if rand > 0 and rand < 10 then
             self:MoveToSpot( "hiding" )
             coroutine.wait(math.random(1,10))
-        elseif rand > 10 && rand < 15 then
+        elseif rand > 10 and rand < 15 then
             self:Sit()
             coroutine.wait(1)
         else
@@ -122,7 +122,7 @@ function ENT:MoveSomeWhere(distance)
     self.loco:SetDesiredSpeed( 100 )
     local navs = navmesh.Find(self:GetPos(), distance, 120, 120)
     local nav = navs[math.random(1,#navs)]
-    if !IsValid(nav) then return end
+    if not IsValid(nav) then return end
     if nav:IsUnderwater() then return end -- we dont want them to go into water
     local pos = nav:GetRandomPoint()
     local maxAge = math.Clamp(pos:Distance(self:GetPos()) / 120, 0.1,10)
@@ -133,8 +133,8 @@ function ENT:MoveToSpot( type )
     local pos = self:FindSpot( "random", { type = type, radius = 5000 } )
     if ( pos ) then
         local nav = navmesh.GetNavArea(pos, 20)
-        if !IsValid(nav) then return end
-        if !nav:IsUnderwater() then
+        if not IsValid(nav) then return end
+        if not nav:IsUnderwater() then
             self.loco:SetDesiredSpeed( 200 )
             self:MoveToPos( pos, { tolerance = 30, lookahead = 10, repath = 2 } )
         end
@@ -159,7 +159,7 @@ end
 
 function ENT:OnStuck()
     --debugoverlay.Cross( self:GetPos() + Vector(0,0,70), 10, 20, Color(0,255,255), true )
-    if !self.Stucked then self.Stucked = CurTime() end
+    if not self.Stucked then self.Stucked = CurTime() end
     self.StuckAt = self:GetPos()
 end
 
@@ -178,7 +178,7 @@ function ENT:OnNavAreaChanged( old, new)
     --    self:Jump()
     --end
     if new:HasAttributes( NAV_MESH_CROUCH ) then self:Duck(true) end
-    if self.IsDuck and !new:HasAttributes( NAV_MESH_CROUCH ) then self:Duck(false) end
+    if self.IsDuck and not new:HasAttributes( NAV_MESH_CROUCH ) then self:Duck(false) end
 end
 
 function ENT:OnContact( ent )
@@ -189,7 +189,7 @@ function ENT:OnContact( ent )
     if  ( ent:GetClass() == "prop_physics_multiplayer" or ent:GetClass() == "prop_physics" ) and ent:IsOnGround() and not GetConvar("gw_propfreeze_enabled"):GetBool() then
         --self.loco:Approach( self:GetPos() + Vector( math.Rand( -1, 1 ), math.Rand( -1, 1 ), 0 ) * 2000,1000)
         local phys = ent:GetPhysicsObject()
-        if !IsValid(phys) then return end
+        if not IsValid(phys) then return end
         phys:ApplyForceCenter( self:GetPos() - ent:GetPos() * 1.2 )
         DropEntityIfHeld( ent )
     end
@@ -217,7 +217,7 @@ function ENT:MoveToPos( pos, options )
     path:SetGoalTolerance( options.tolerance or 20 )
     path:Compute( self, pos )
 
-    if ( !path:IsValid() ) then return "failed" end
+    if ( not path:IsValid() ) then return "failed" end
 
     while ( path:IsValid() ) do
 
@@ -286,7 +286,7 @@ end
 --we do our own jump since the loco one is a bit weird.
 function ENT:Jump(goal, scanDist)
     if CurTime() < self.Jumped + 1 or navmesh.GetNavArea(self:GetPos(), 50):HasAttributes( NAV_MESH_NO_JUMP ) then return end
-    if !self:IsOnGround() then return end
+    if not self:IsOnGround() then return end
     self.loco:SetDesiredSpeed( 450 )
     self.loco:SetAcceleration( 5000 )
     self:SetLastAct(self:GetActivity())
@@ -321,11 +321,11 @@ function ENT:BodyUpdate()
 
     if ( len2d > 150 ) then self.CalcIdeal = ACT_HL2MP_RUN elseif ( len2d > 10 ) then self.CalcIdeal = ACT_HL2MP_WALK end
 
-    if ( self.IsJumping && self:WaterLevel() <= 0 && (self.Jumped < CurTime() && self.Jumped + 1 > CurTime()) ) then
+    if ( self.IsJumping and self:WaterLevel() <= 0 and (self.Jumped < CurTime() and self.Jumped + 1 > CurTime()) ) then
         self.CalcIdeal = ACT_HL2MP_JUMP_SLAM
     end
 
-    if self:GetActivity() ~= self.CalcIdeal && !self.Siting && !self.Dancing then self:StartActivity(self.CalcIdeal) end
+    if self:GetActivity() ~= self.CalcIdeal and not self.Siting and not self.Dancing then self:StartActivity(self.CalcIdeal) end
 
     if ( self.CalcIdeal == ACT_HL2MP_RUN || self.CalcIdeal == ACT_HL2MP_WALK ) then
 

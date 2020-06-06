@@ -91,7 +91,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-    if ( !self:CanSecondaryAttack() ) then return end
+    if ( not self:CanSecondaryAttack() ) then return end
 
     local abilityNotCompleted = self:Ability()
 

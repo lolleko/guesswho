@@ -3,21 +3,21 @@ function GM:PlayerDeathThink( ply )
     local spectargets = team.GetPlayers( ply:Team() )
 
     if GWRound:IsCurrentState(ROUND_SEEK) then
-        if !ply.SpecID then
+        if not ply.SpecID then
             ply:Spectate(OBS_MODE_CHASE)
             if spectargets ~= nil then
                 for k,v in pairs(spectargets) do
                     if v:Alive() then ply.SpecID = k ply:SpectateEntity(v)  break end
                 end
             end
-            if !ply.SpecID then ply.SpecID = 1 end
+            if not ply.SpecID then ply.SpecID = 1 end
         end
         if ply:KeyPressed( IN_ATTACK ) then
             ply.SpecID = ply.SpecID + 1
             if ply.SpecID > #spectargets then
                 ply.SpecID = 1
             end
-            while !spectargets[ply.SpecID]:Alive() do ply.SpecID = ply.SpecID + 1 if spectargets[ply.SpecID] == nil then break end end -- if player not alive find next alive
+            while not spectargets[ply.SpecID]:Alive() do ply.SpecID = ply.SpecID + 1 if spectargets[ply.SpecID] == nil then break end end -- if player not alive find next alive
             if IsValid(spectargets[ply.SpecID]) then
                 ply:SpectateEntity(spectargets[ply.SpecID])
             end
@@ -26,7 +26,7 @@ function GM:PlayerDeathThink( ply )
             if ply.SpecID < 1 then
                 ply.SpecID = #spectargets
             end
-            while !spectargets[ply.SpecID]:Alive() do ply.SpecID = ply.SpecID - 1 if spectargets[ply.SpecID] == nil then break end end -- if player not alive find next alive
+            while not spectargets[ply.SpecID]:Alive() do ply.SpecID = ply.SpecID - 1 if spectargets[ply.SpecID] == nil then break end end -- if player not alive find next alive
             if IsValid(spectargets[ply.SpecID]) then
                 ply:SpectateEntity(spectargets[ply.SpecID])
             end
@@ -77,7 +77,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
         attacker = attacker:GetDriver()
     end
 
-    if ( !IsValid( inflictor ) and IsValid( attacker ) ) then
+    if ( not IsValid( inflictor ) and IsValid( attacker ) ) then
         inflictor = attacker
     end
 
@@ -87,7 +87,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
     if ( IsValid( inflictor ) and inflictor == attacker and ( inflictor:IsPlayer() or inflictor:IsNPC() ) ) then
 
         inflictor = inflictor:GetActiveWeapon()
-        if ( !IsValid( inflictor ) ) then inflictor = attacker end
+        if ( not IsValid( inflictor ) ) then inflictor = attacker end
 
     end
 
@@ -97,7 +97,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
             net.WriteEntity( ply )
         net.Broadcast()
 
-        MsgAll( attacker:Nick() .. " suicided!\n" )
+        MsgAll( attacker:Nick() .. " suicidednot \n" )
 
     return end
 
@@ -171,7 +171,7 @@ end
 function GM:PlayerSetHandsModel( pl, ent )
 
     local info = player_manager.RunClass( pl, "GetHandsModel" )
-    if ( !info ) then
+    if ( not info ) then
         local playermodel = player_manager.TranslateToPlayerModelName( pl:GetModel() )
         info = player_manager.TranslatePlayerHands( playermodel )
     end
@@ -259,7 +259,7 @@ function GM:PlayerCanJoinTeam( ply, teamid )
         return false
     end
 
-    -- Already on this team!
+    -- Already on this teamnot 
     if ( ply:Team() == teamid ) then
         ply:ChatPrint( "You're already on that team" )
         return false
@@ -301,13 +301,13 @@ end
 
 function GM:PlayerCanSeePlayersChat( text, teamonly, listenply, speakply )
 
-    if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false end
+    if ( not IsValid( speakply ) or not IsValid( listenply ) ) then return false end
 
     if ( teamonly ) then
         if ( listenply:Team() ~= speakply:Team() ) then return false end
     end
 
-    if listenply:Alive() and !speakply:Alive() then return false end
+    if listenply:Alive() and not speakply:Alive() then return false end
 
     return true
 
@@ -317,9 +317,9 @@ local sv_alltalk = GetConVar( "sv_alltalk" )
 
 function GM:PlayerCanHearPlayersVoice( listenply, speakply )
 
-    if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false, false end
+    if ( not IsValid( speakply ) or not IsValid( listenply ) ) then return false, false end
 
-	if listenply:Alive() and !speakply:Alive() then return false, false end
+	if listenply:Alive() and not speakply:Alive() then return false, false end
 
     local alltalk = sv_alltalk:GetInt()
     if ( alltalk >= 1 ) then return true, alltalk == 2 end
@@ -345,7 +345,7 @@ end
 
 function GM:AllowPlayerPickup( ply, ent )
 
-    if !ply:Alive() then return false end
+    if not ply:Alive() then return false end
 
     return true
 

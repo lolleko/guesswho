@@ -20,7 +20,7 @@ function SWEP:Ability()
     0.3 + 0 = 0.3--]]
     for t = 10, 1, -1 do
         timer.Simple( math.log( t ), function()
-            if !IsValid( ply ) or !ply:Alive() then return end
+            if not IsValid( ply ) or not ply:Alive() then return end
             ply:SetColor( ColorRand() )
             ply:SetPlayerColor( Vector( math.Rand(0, 1), math.Rand(0, 1), math.Rand(0, 1) ) )
             if SERVER then ply:SetModel( GAMEMODE.GWConfig.HidingModels[ math.random( 1, #GAMEMODE.GWConfig.HidingModels ) ] ) end
@@ -30,7 +30,7 @@ function SWEP:Ability()
     end
 
     timer.Simple( 2, function()
-        if !IsValid( ply ) or !ply:Alive() then return end
+        if not IsValid( ply ) or not ply:Alive() then return end
         if SERVER then
             ply:Kill()
             local explode = ents.Create( "env_explosion" )

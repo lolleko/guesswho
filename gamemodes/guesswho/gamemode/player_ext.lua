@@ -1,5 +1,5 @@
 local plymeta = FindMetaTable( "Player" )
-if ( !plymeta ) then return end
+if ( not plymeta ) then return end
 
 AccessorFunc(plymeta, "gwReRolledAbility", "ReRolledAbility", FORCE_BOOL)
 AccessorFunc(plymeta, "gwDiedInPrep", "DiedInPrep", FORCE_BOOL)

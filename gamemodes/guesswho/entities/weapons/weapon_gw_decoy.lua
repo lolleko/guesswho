@@ -41,9 +41,9 @@ function SWEP:Ability()
 
         --debugoverlay.Box( location, Vector( -16, -16, 0 ), Vector( 16, 16, 70 ), 5, Color( 255, 0, 0 ) )
 
-        if !tr.Hit then
+        if not tr.Hit then
             local walker = ents.Create("npc_walker")
-            if !IsValid( walker ) then break end
+            if not IsValid( walker ) then break end
             walker:SetPos( location )
             walker:Spawn()
             walker:Activate()

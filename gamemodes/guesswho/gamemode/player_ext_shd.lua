@@ -1,5 +1,5 @@
 local plymeta = FindMetaTable( "Player" )
-if ( !plymeta ) then return end
+if ( not plymeta ) then return end
 
 AccessorFunc( plymeta, "iOldTeam", "PreviousTeam", FORCE_NUMBER )
 

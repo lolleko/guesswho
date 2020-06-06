@@ -1,5 +1,5 @@
 function GM:ScoreboardShow()
-    if ( !IsValid( g_Scoreboard ) ) then
+    if ( not IsValid( g_Scoreboard ) ) then
         g_Scoreboard = vgui.Create( "DScoreboard" )
     end
 
@@ -201,7 +201,7 @@ function PLAYERINFO:Setup( ply, teamid )
 end
 
 function PLAYERINFO:Think()
-    if !IsValid(self.Player) or self.Player:Team() ~= self.TeamID then
+    if not IsValid(self.Player) or self.Player:Team() ~= self.TeamID then
         self:Remove()
         return
     end
@@ -232,7 +232,7 @@ function PLAYERINFO:Think()
             self.Mute:SetImage( "icon32/unmuted.png" )
         end
 
-        self.Mute.DoClick = function() self.Player:SetMuted( !self.Muted ) end
+        self.Mute.DoClick = function() self.Player:SetMuted( not self.Muted ) end
 
     end
 end
