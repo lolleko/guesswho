@@ -44,4 +44,4 @@ local ru = {
 
 }
 
-gwlang:addLangguage( ru, "ru" )
+GWLANG:AddLangguage( ru, "ru" )

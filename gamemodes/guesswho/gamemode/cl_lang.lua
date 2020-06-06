@@ -1,38 +1,38 @@
-gwlang = {}
+GWLANG = {}
 
-gwlang.defaultLocale = "en"
-gwlang.currentLocale = gwlang.defaultLocale
-gwlang.locales = {}
+GWLANG.defaultLocale = "en"
+GWLANG.currentLocale = GWLANG.defaultLocale
+GWLANG.locales = {}
 
-function gwlang:translate( token )
+function GWLANG:Translate( token )
     return self.locales[ self.currentLocale ][ token ] or self.locales[ self.defaultLocale ][ token ] or "MISSING TRANSLATION"
 end
 
-function gwlang:setLocale( locale )
-    if self:isLocale( locale ) then
+function GWLANG:SetLocale( locale )
+    if self:IsLocale( locale ) then
         self.currentLocale = locale
         return true
     end
     return false
 end
 
-function gwlang:getLocale()
+function GWLANG:GetLocale()
     return self.currentLocale
 end
 
-function gwlang:getLanguageName( locale )
+function GWLANG:GetLanguageName( locale )
     return self.locales[ locale ].language_name or "MISSING NAME"
 end
 
-function gwlang:addLangguage( langTbl, locale )
+function GWLANG:AddLangguage( langTbl, locale )
     self.locales[ locale ] = langTbl
 end
 
-function gwlang:isLocale( locale )
+function GWLANG:IsLocale( locale )
     return self.locales[ locale ] ~= nil
 end
 
-function gwlang:getLocaleList()
+function GWLANG:GetLocaleList()
     return table.GetKeys( self.locales )
 end
 
@@ -41,23 +41,23 @@ for _,locale in pairs( file.Find( "guesswho/gamemode/lang/*", "LUA" ) ) do
 end
 
 if GetConVar( "gw_language" ):GetString() ~= "auto" then
-    if not gwlang:setLocale( GetConVar( "gw_language" ):GetString() ) then
-        MsgN( "GW gw_language holds invalid value, falling back to default [" .. gwlang:getLocale() .. "].")
+    if not GWLANG:SetLocale( GetConVar( "gw_language" ):GetString() ) then
+        MsgN( "GW gw_language holds invalid value, falling back to default [" .. GWLANG:GetLocale() .. "].")
     end
 else
-    if not gwlang:setLocale( GetConVar( "gmod_language" ):GetString() ) then
-        MsgN( "GW gmod_language holds invalid value, automatic language detection failed, falling back to default [" .. gwlang:getLocale() .. "].")
+    if not GWLANG:SetLocale( GetConVar( "gmod_language" ):GetString() ) then
+        MsgN( "GW gmod_language holds invalid value, automatic language detection failed, falling back to default [" .. GWLANG:GetLocale() .. "].")
     else
-        MsgN( "GW Language auto detected, language set to " .. gwlang:getLocale() .. "." )
+        MsgN( "GW Language auto detected, language set to " .. GWLANG:GetLocale() .. "." )
     end
 end
 
 local function setLang( ply, cmd, args )
 
-    if not gwlang:setLocale( args[1] ) then
+    if not GWLANG:SetLocale( args[1] ) then
         MsgN( "GW Could not set language to: " .. args[1] .. "." )
     else
-        MsgN( "GW Language set to " .. gwlang:getLocale() .. "." )
+        MsgN( "GW Language set to " .. GWLANG:GetLocale() .. "." )
         RunConsoleCommand( "gw_language", args[1] )
         GWRound:RoundStateChange( GWRound:GetRoundState(), GWRound:GetRoundState() )
     end

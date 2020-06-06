@@ -40,4 +40,4 @@ local nl = {
 
 }
 
-gwlang:addLangguage( nl, "nl" )
+GWLANG:AddLangguage( nl, "nl" )

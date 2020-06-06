@@ -46,8 +46,8 @@ function SB:Init()
     Header2Label:SetPos( 20, 15 )
     Header2Label:SetFont("robot_small")
     Header2Label:SetTextColor( clrs.lightgrey )
-    Header2Label:SetText( gwlang:translate( "scoreboard_server" ) .. ": " .. GetHostName() )
-    function Header2Label:Think() self:SetText( gwlang:translate( "scoreboard_server" ) .. ": " .. GetHostName() ) end
+    Header2Label:SetText( GWLANG:Translate( "scoreboard_server" ) .. ": " .. GetHostName() )
+    function Header2Label:Think() self:SetText( GWLANG:Translate( "scoreboard_server" ) .. ": " .. GetHostName() ) end
     Header2Label:CenterHorizontal()
 
     local Header3Label = vgui.Create("DLabel", self)
@@ -55,8 +55,8 @@ function SB:Init()
     Header3Label:SetPos( 20, 35 )
     Header3Label:SetFont("robot_small")
     Header3Label:SetTextColor( clrs.lightgrey )
-    Header3Label:SetText( gwlang:translate( "scoreboard_map" ) .. ": " .. game.GetMap())
-    function Header3Label:Think() self:SetText( gwlang:translate( "scoreboard_map" ) .. ": " .. game.GetMap() ) end
+    Header3Label:SetText( GWLANG:Translate( "scoreboard_map" ) .. ": " .. game.GetMap())
+    function Header3Label:Think() self:SetText( GWLANG:Translate( "scoreboard_map" ) .. ": " .. game.GetMap() ) end
     Header3Label:CenterHorizontal()
 
     local Header4Label = vgui.Create("DLabel", self)
@@ -64,8 +64,8 @@ function SB:Init()
     Header4Label:SetPos( 20, 15 )
     Header4Label:SetFont("robot_small")
     Header4Label:SetTextColor( clrs.lightgrey )
-    Header4Label:SetText( gwlang:translate( "scoreboard_online" ) .. ": " .. #player.GetHumans() ..  "/" .. game.MaxPlayers())
-    function Header4Label:Think() self:SetText( gwlang:translate( "scoreboard_online" ) .. ": " .. #player.GetHumans() ..  "/" .. game.MaxPlayers()) end
+    Header4Label:SetText( GWLANG:Translate( "scoreboard_online" ) .. ": " .. #player.GetHumans() ..  "/" .. game.MaxPlayers())
+    function Header4Label:Think() self:SetText( GWLANG:Translate( "scoreboard_online" ) .. ": " .. #player.GetHumans() ..  "/" .. game.MaxPlayers()) end
     Header4Label:CenterHorizontal()
     Header4Label:SetContentAlignment(6)
 
@@ -74,8 +74,8 @@ function SB:Init()
     Header5Label:SetPos( 20, 35 )
     Header5Label:SetFont("robot_small")
     Header5Label:SetTextColor( clrs.lightgrey )
-    Header5Label:SetText( gwlang:translate( "scoreboard_spectators" ) .. ": " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR))
-    function Header5Label:Think() self:SetText( gwlang:translate( "scoreboard_spectators" ) .. ": " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR)) end
+    Header5Label:SetText( GWLANG:Translate( "scoreboard_spectators" ) .. ": " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR))
+    function Header5Label:Think() self:SetText( GWLANG:Translate( "scoreboard_spectators" ) .. ": " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR)) end
     Header5Label:CenterHorizontal()
     Header5Label:SetContentAlignment(6)
 
@@ -118,9 +118,9 @@ function SB:Paint( w, h )
 end
 
 function SB:Think()
-    self.HidingHeader:SetText( gwlang:translate( "team_hiding" ) .. " " .. team.GetScore( GW_TEAM_HIDING ))
+    self.HidingHeader:SetText( GWLANG:Translate( "team_hiding" ) .. " " .. team.GetScore( GW_TEAM_HIDING ))
     self.HidingHeader:SizeToContents()
-    self.SeekingHeader:SetText( gwlang:translate( "team_seeking" ) .. " "  .. team.GetScore( GW_TEAM_SEEKING ))
+    self.SeekingHeader:SetText( GWLANG:Translate( "team_seeking" ) .. " "  .. team.GetScore( GW_TEAM_SEEKING ))
     self.SeekingHeader:SizeToContents()
 end
 

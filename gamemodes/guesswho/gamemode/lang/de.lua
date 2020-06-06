@@ -40,4 +40,4 @@ local de = {
 
 }
 
-gwlang:addLangguage( de, "de" )
+GWLANG:AddLangguage( de, "de" )

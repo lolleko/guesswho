@@ -17,24 +17,24 @@ end
 function GWRound:RoundStateChange( old, new )
 
     if GW_ROUND_PRE_GAME == new then
-        self:SetRoundLabel( gwlang:translate( "round_pre_game" ) )
+        self:SetRoundLabel( GWLANG:Translate( "round_pre_game" ) )
         hook.Call( "GWPreGame", GAMEMODE  )
     elseif GW_ROUND_WAITING_PLAYERS == new then
-        self:SetRoundLabel( gwlang:translate( "round_waiting_players" ) )
+        self:SetRoundLabel( GWLANG:Translate( "round_waiting_players" ) )
     elseif GW_ROUND_CREATING_NPCS == new then
-        self:SetRoundLabel( gwlang:translate( "round_creating" ) )
+        self:SetRoundLabel( GWLANG:Translate( "round_creating" ) )
         hook.Call( "GWCreating", GAMEMODE  )
     elseif GW_ROUND_HIDE == new then
-        self:SetRoundLabel( gwlang:translate( "round_hide" ) )
+        self:SetRoundLabel( GWLANG:Translate( "round_hide" ) )
         hook.Call( "GWHide", GAMEMODE  )
     elseif GW_ROUND_SEEK == new then
-        self:SetRoundLabel( gwlang:translate( "round_seek" ) )
+        self:SetRoundLabel( GWLANG:Translate( "round_seek" ) )
         hook.Call( "GWSeek", GAMEMODE  )
     elseif GW_ROUND_POST == new then
-        self:SetRoundLabel( gwlang:translate( "round_post" ) )
+        self:SetRoundLabel( GWLANG:Translate( "round_post" ) )
         hook.Call( "GWPostRound", GAMEMODE  )
     elseif GW_ROUND_NAV_GEN == new then
-        self:SetRoundLabel( gwlang:translate( "round_nav_gen" ) )
+        self:SetRoundLabel( GWLANG:Translate( "round_nav_gen" ) )
     else
         self:SetRoundLabel( "ERROR!" )
     end

@@ -40,4 +40,4 @@ local tr = {
 
 }
 
-gwlang:addLangguage( tr, "tr" )
+GWLANG:AddLangguage( tr, "tr" )

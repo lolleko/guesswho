@@ -44,4 +44,4 @@ local en = {
 
 }
 
-gwlang:addLangguage( en, "en" )
+GWLANG:AddLangguage( en, "en" )

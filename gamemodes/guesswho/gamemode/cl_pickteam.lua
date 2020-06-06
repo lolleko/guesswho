@@ -25,16 +25,16 @@ function GM:ShowTeam()
 
     local links = {
         {
-            gwlang:translate("teamselect_workshop_ref"),
+            GWLANG:Translate("teamselect_workshop_ref"),
             "http://steamcommunity.com/sharedfiles/filedetails/?id=480998235"
         }, {
-            gwlang:translate("teamselect_workshop_changelog"),
+            GWLANG:Translate("teamselect_workshop_changelog"),
             "http://steamcommunity.com/sharedfiles/filedetails/changelog/480998235"
         }, {
-            gwlang:translate("teamselect_workshop_bug"),
+            GWLANG:Translate("teamselect_workshop_bug"),
             "http://steamcommunity.com/workshop/filedetails/discussion/480998235/523897653307060068/"
         },
-        {gwlang:translate("teamselect_discord"), "https://discord.gg/DbwJuk3"}
+        {GWLANG:Translate("teamselect_discord"), "https://discord.gg/DbwJuk3"}
     }
 
     local linkOffsetY = 180
@@ -80,38 +80,38 @@ function GM:ShowTeam()
     if input.LookupBinding("duck") then
         table.insert(controls, {
             string.upper(input.LookupBinding("duck")),
-            gwlang:translate("teamselect_controls_sit")
+            GWLANG:Translate("teamselect_controls_sit")
         })
     end
     if input.LookupBinding("attack2") then
         table.insert(controls, {
             string.upper(input.LookupBinding("attack2")),
-            gwlang:translate("teamselect_controls_ability")
+            GWLANG:Translate("teamselect_controls_ability")
         })
     end
     if input.LookupBinding("gm_showhelp") then
         table.insert(controls, {
             string.upper(input.LookupBinding("gm_showhelp")),
-            gwlang:translate("teamselect_controls_settings")
+            GWLANG:Translate("teamselect_controls_settings")
         })
     end
     if input.LookupBinding("gm_showteam") then
         table.insert(controls, {
             string.upper(input.LookupBinding("gm_showteam")),
-            gwlang:translate("teamselect_controls_team")
+            GWLANG:Translate("teamselect_controls_team")
         })
     end
     if input.LookupBinding("gm_showspare2") then
         table.insert(controls, {
             string.upper(input.LookupBinding("gm_showspare2")),
-            gwlang:translate("teamselect_controls_random")
+            GWLANG:Translate("teamselect_controls_random")
         })
     end
     if input.LookupBinding("menu") and input.LookupBinding("menu_context") then
         table.insert(controls, {
             string.upper(input.LookupBinding("menu")) .. " + " ..
                 string.upper(input.LookupBinding("menu_context")),
-            gwlang:translate("teamselect_controls_taunts")
+            GWLANG:Translate("teamselect_controls_taunts")
         })
     end
 
@@ -182,12 +182,12 @@ function GM:ShowTeam()
     end
     TeamHidingButton:SetFont("robot_normal")
     TeamHidingButton:SetTextColor(clrs.lightgrey)
-    TeamHidingButton:SetText(gwlang:translate("team_hiding") .. "(" ..
+    TeamHidingButton:SetText(GWLANG:Translate("team_hiding") .. "(" ..
                                  team.NumPlayers(GW_TEAM_HIDING) .. ")")
     TeamHidingButton:SetSize(280, 280)
     function TeamHidingButton:Paint(w, h) return end
     function TeamHidingButton:Think()
-        self:SetText(gwlang:translate("team_hiding") .. "(" ..
+        self:SetText(GWLANG:Translate("team_hiding") .. "(" ..
                          team.NumPlayers(GW_TEAM_HIDING) .. ")")
     end
 
@@ -215,12 +215,12 @@ function GM:ShowTeam()
     end
     TeamSeekingButton:SetFont("robot_normal")
     TeamSeekingButton:SetTextColor(clrs.lightgrey)
-    TeamSeekingButton:SetText(gwlang:translate("team_seeking") .. "(" ..
+    TeamSeekingButton:SetText(GWLANG:Translate("team_seeking") .. "(" ..
                                   team.NumPlayers(GW_TEAM_SEEKING) .. ")")
     TeamSeekingButton:SetSize(280, 280)
     function TeamSeekingButton:Paint(w, h) return end
     function TeamSeekingButton:Think()
-        self:SetText(gwlang:translate("team_seeking") .. "(" ..
+        self:SetText(GWLANG:Translate("team_seeking") .. "(" ..
                          team.NumPlayers(GW_TEAM_SEEKING) .. ")")
     end
 
@@ -229,7 +229,7 @@ function GM:ShowTeam()
     TeamSpectateButton:SetPos(ScrW() / 2 - 300, 500)
     TeamSpectateButton:SetSize(600, 40)
     TeamSpectateButton:SetFont("robot_small")
-    TeamSpectateButton:SetText(gwlang:translate("teamselect_buttons_spectate"))
+    TeamSpectateButton:SetText(GWLANG:Translate("teamselect_buttons_spectate"))
     TeamSpectateButton:SetTextColor(clrs.lightgrey)
     function TeamSpectateButton.DoClick()
         self:HideTeam()
@@ -243,7 +243,7 @@ function GM:ShowTeam()
     TeamAutoButton:SetPos(ScrW() / 2 - 300, 580)
     TeamAutoButton:SetSize(600, 40)
     TeamAutoButton:SetFont("robot_small")
-    TeamAutoButton:SetText(gwlang:translate("teamselect_buttons_auto"))
+    TeamAutoButton:SetText(GWLANG:Translate("teamselect_buttons_auto"))
     TeamAutoButton:SetTextColor(clrs.lightgrey)
     function TeamAutoButton.DoClick()
         self:HideTeam()
