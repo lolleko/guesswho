@@ -63,7 +63,7 @@ function GM:EntityTakeDamage(target, dmginfo)
 
     local attacker = dmginfo:GetAttacker()
 
-    if GWRound:IsCurrentState(GW_ROUND_SEEK) and target and target:GetClass() == "npc_walker" and not target:IsPlayer() and attacker and attacker:IsPlayer() and attacker:Team() == GW_TEAM_SEEKING and attacker:Alive() then
+    if GWRound:IsCurrentState(GW_ROUND_SEEK) and target and target:GetClass() == GW_WALKER_CLASS and not target:IsPlayer() and attacker and attacker:IsPlayer() and attacker:Team() == GW_TEAM_SEEKING and attacker:Alive() then
 
         attacker:TakeDamage( GetConVar( "gw_damageonfailguess" ):GetInt() , target, attacker:GetActiveWeapon())
 
@@ -129,7 +129,7 @@ function GM:OnNPCKilled( ent, attacker, inflictor )
 
         if ( attacker:IsPlayer() ) then
 
-            if ent:GetClass() == "npc_walker" then
+            if ent:GetClass() == GW_WALKER_CLASS then
 
                 attacker:TakeDamage( GetConVar( "gw_damageonfailguess" ):GetInt() * 2, ent, attacker:GetActiveWeapon())
 

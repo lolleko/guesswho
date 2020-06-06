@@ -12,13 +12,15 @@ function SWEP:Ability()
         local hunters = team.GetPlayers(GW_TEAM_SEEKING)
         local hunter = hunters[math.random(#hunters)]
 
-        net.Start( "PlayerKilledByPlayer" )
+        if (hunter) then
+            net.Start( "PlayerKilledByPlayer" )
 
-        net.WriteEntity( ply )
-        net.WriteString( hunter:GetActiveWeapon():GetClass() )
-        net.WriteEntity( hunter )
+            net.WriteEntity( ply )
+            net.WriteString( hunter:GetActiveWeapon():GetClass() )
+            net.WriteEntity( hunter )
 
-        net.Broadcast()
+            net.Broadcast()
+        end
 
         if ply:InVehicle() then
             ply:ExitVehicle()

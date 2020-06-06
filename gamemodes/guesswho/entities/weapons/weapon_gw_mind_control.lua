@@ -10,7 +10,7 @@ function SWEP:Ability()
 	local ply = self.Owner
 	local tr = ply:GetEyeTrace()
 	local hitEnt = tr.Entity
-	if IsValid(hitEnt) and hitEnt:GetClass() == "npc_walker" then
+	if IsValid(hitEnt) and hitEnt:GetClass() == GW_WALKER_CLASS then
 		if SERVER then
 			local oldModel = ply:GetModel()
 			local oldPos = ply:GetPos()
@@ -24,7 +24,6 @@ function SWEP:Ability()
 			fake:Spawn()
 			fake:Activate()
 			fake:SetPos(oldPos)
-			fake:SetAngles(oldAngles)
 			fake:SetPlayer(ply)
 			ply:SetPlayerColor(oldColor)
 			timer.Simple(0.01, function()
@@ -41,7 +40,7 @@ function SWEP:DrawHUD()
 	if self:Clip2() == 0 then self.DrawGWCrossHair = false return end
 	local tr = LocalPlayer():GetEyeTrace()
 	local hitEnt = tr.Entity
-	if IsValid(hitEnt) and hitEnt:GetClass() == "npc_walker" then
+	if IsValid(hitEnt) and hitEnt:GetClass() == GW_WALKER_CLASS then
 		halo.Add( {hitEnt}, Color(255, 0, 0), 3, 3, 5)
 	end
 end

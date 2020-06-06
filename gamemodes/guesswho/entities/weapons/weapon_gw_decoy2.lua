@@ -7,7 +7,7 @@ SWEP.DrawGWCrossHair = true
 
 function SWEP:Ability()
 	if SERVER then
-		local walker = ents.Create("npc_walker")
+		local walker = ents.Create(GW_WALKER_CLASS)
 		if not IsValid( walker ) then return end
 		walker:SetPos( self.Owner:GetEyeTrace().HitPos )
 		walker:Spawn()

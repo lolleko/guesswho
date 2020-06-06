@@ -19,7 +19,7 @@ function SWEP:Ability()
 		local effect2 = EffectData()
 		effect2:SetOrigin(ent:GetPos())
 		util.Effect("cball_explode", effect2)
-		if SERVER and ent:GetClass() == "npc_walker" then
+		if SERVER and ent:GetClass() == GW_WALKER_CLASS then
 			timer.Simple(math.random(0.1, 0.4), function() ent:Dance() end)
 		end
 

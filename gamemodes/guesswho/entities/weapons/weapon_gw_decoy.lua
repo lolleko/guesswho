@@ -42,7 +42,7 @@ function SWEP:Ability()
         --debugoverlay.Box( location, Vector( -16, -16, 0 ), Vector( 16, 16, 70 ), 5, Color( 255, 0, 0 ) )
 
         if not tr.Hit then
-            local walker = ents.Create("npc_walker")
+            local walker = ents.Create(GW_WALKER_CLASS)
             if not IsValid( walker ) then break end
             walker:SetPos( location )
             walker:Spawn()

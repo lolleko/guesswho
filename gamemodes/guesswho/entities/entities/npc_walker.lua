@@ -63,7 +63,7 @@ function ENT:Think()
         if not self.IsJumping and self:GetSolidMask() == MASK_NPCSOLID_BRUSHONLY then
             local occupied = false
             for _,ent in pairs(ents.FindInBox(self:GetPos() + Vector( -16, -16, 0 ), self:GetPos() + Vector( 16, 16, 70 ))) do
-                if ent:GetClass() == "npc_walker" and ent ~= self then occupied = true end
+                if ent:GetClass() == GW_WALKER_CLASS and ent ~= self then occupied = true end
             end
             if not occupied then self:SetSolidMask(MASK_NPCSOLID) end
         end

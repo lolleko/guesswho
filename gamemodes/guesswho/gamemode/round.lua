@@ -21,7 +21,7 @@ function GWRound:RoundWaitForPlayers()
         -- check again after half a second second
         timer.Simple(0.5, function() self:RoundWaitForPlayers() end)
         -- clear remaning npcs to save recources
-        for k, v in pairs(ents.FindByClass("npc_walker")) do v:Remove() end
+        for k, v in pairs(ents.FindByClass(GW_WALKER_CLASS)) do v:Remove() end
         self:SetEndTime(CurTime() + 1)
         self:SetRoundState(GW_ROUND_WAITING_PLAYERS)
         return
@@ -174,7 +174,7 @@ function GWRound:PostRound()
 
     game.CleanUpMap()
 
-    for k, v in pairs(ents.FindByClass("npc_walker")) do v:Remove() end
+    for k, v in pairs(ents.FindByClass(GW_WALKER_CLASS)) do v:Remove() end
 
     timer.Simple(self.PostRoundDuration,
                  function() self:RoundWaitForPlayers() end)
@@ -204,11 +204,11 @@ function GWRound:SpawnNPCWave()
         local occupied = false
         for _, ent in pairs(ents.FindInBox(v:GetPos() + Vector(-16, -16, 0),
                                            v:GetPos() + Vector(16, 16, 64))) do
-            if ent:GetClass() == "npc_walker" then occupied = true end
+            if ent:GetClass() == GW_WALKER_CLASS then occupied = true end
         end
 
         if not occupied then
-            local walker = ents.Create("npc_walker")
+            local walker = ents.Create(GW_WALKER_CLASS)
             if not IsValid(walker) then break end
             walker:SetPos(v:GetPos())
             walker:Spawn()

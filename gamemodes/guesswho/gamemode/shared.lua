@@ -20,6 +20,8 @@ GW_ROUND_SEEK = 5
 GW_ROUND_POST = 6
 GW_ROUND_NAV_GEN = 9
 
+GW_WALKER_CLASS = "gw_npc_walker"
+
 --Shared CVars fallback
 CreateConVar("gw_target_finder_threshold", "700", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "The distance before the target finder will display nearby")
 CreateConVar("gw_target_finder_enabled", "0", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Wether target finder is enabled or not")

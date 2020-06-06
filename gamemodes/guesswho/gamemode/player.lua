@@ -234,7 +234,7 @@ function GM:IsSpawnpointSuitable( pl, spawnpointent, bMakeSuitable )
     local Blockers = 0
 
     for k, v in pairs( Ents ) do
-        if ( IsValid( v ) and (v ~= pl and v:GetClass() == "player" and v:Alive()) or v:GetClass() == "npc_walker" ) then
+        if ( IsValid( v ) and (v ~= pl and v:GetClass() == "player" and v:Alive()) or v:GetClass() == GW_WALKER_CLASS ) then
 
             Blockers = Blockers + 1
 
