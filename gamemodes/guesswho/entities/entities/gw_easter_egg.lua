@@ -39,7 +39,7 @@ ENT.EggEventsAll = {
 		if SERVER then
 			local explode = ents.Create("env_explosion")
 			explode:SetPos(egg:GetPos())
-			explode:SetOwner(egg:GetPos())
+			explode:SetOwner(egg)
 			explode:Spawn()
 			explode:SetKeyValue( "iMagnitude", "" .. math.random(40, 70) )
 			explode:Fire( "Explode", 0, 0 )
