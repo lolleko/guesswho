@@ -40,33 +40,6 @@ local eyeglow =  Material( "sprites/redglow1" )
 local white = Color( 255, 255, 255, 255 )
 function ENT:Draw()
   self:DrawModel()
-  if GAMEMODE.HalloweenEvent then
-    local lefteye = self:GetAttachment(self:LookupAttachment("lefteye"))
-    local righteye = self:GetAttachment(self:LookupAttachment("righteye"))
-
-    if not lefteye then lefteye = self:GetAttachment(self:LookupAttachment("left_eye")) end
-    if not righteye then righteye = self:GetAttachment(self:LookupAttachment("right_eye")) end
-
-    local righteyepos
-    local lefteyepos
-
-    if lefteye and righteye then
-      lefteyepos = lefteye.Pos + self:GetForward()
-      righteyepos = righteye.Pos + self:GetForward()
-    else
-      local eyes = self:GetAttachment(self:LookupAttachment("eyes"))
-      if eyes then
-        lefteyepos = eyes.Pos + self:GetRight() * -1.5 + self:GetForward() * 0.5
-        righteyepos = eyes.Pos + self:GetRight() * 1.5 + self:GetForward() * 0.5
-      end
-    end
-
-    if lefteyepos and righteyepos then
-      render.SetMaterial( eyeglow )
-      render.DrawSprite( lefteyepos, 4, 4, white)
-      render.DrawSprite( righteyepos, 4, 4, white)
-    end
-  end
 end
 
 function ENT:Think()

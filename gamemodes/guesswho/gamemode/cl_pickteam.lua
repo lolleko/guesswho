@@ -70,7 +70,7 @@ function GM:ShowTeam()
     InfoDescription:SetPos(ScrW() / 2 - 620 + 2, linkOffsetY + 40)
     InfoDescription:SetSize(276, 160)
     InfoDescription:SetText(
-        "2.1h\n\nAdded Discord Link\n\n2.1g\n\nDisabled Halloween Event\n\nREAD the changelog for more information.")
+        "2.2 The Final Guess Who update has been released. Packing a lot of bug fixes and a bit new content.")
     InfoDescription:SetPaintBackground(false)
     InfoDescription:SetMultiline(true)
     InfoDescription:SetFont("robot_small")

@@ -7,9 +7,6 @@ GM.Version = "2.2 (76)"
 
 GM.TeamBased = true
 
---Globals
-GM.HalloweenEvent = false
-
 --Teams
 GW_TEAM_HIDING = 1
 GW_TEAM_SEEKING = 2
