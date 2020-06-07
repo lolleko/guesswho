@@ -44,15 +44,17 @@ for _,sound in pairs( file.Find( "sound/gwabilities/*", "GAME" ) ) do
     resource.AddFile( "sound/gwabilities/" .. sound )
 end
 
---NETWORK STRINGS
 util.AddNetworkString( "gwRoundState" )
 util.AddNetworkString( "gwPlayerHull" )
 util.AddNetworkString( "gwSendConfig" )
 util.AddNetworkString( "gwRequestUpdateConfig" )
 
---[[
-    GAMEMODE HOOKS
-]]--
+
+-- Disable Enhanced playermodel selector
+if GetConVar("sv_playermodel_selector_force") and GetConVar("sv_playermodel_selector_force"):GetBool() then
+    print("[Warning] Enhanced Playermodel Selector has been partially disabled, because it conflicts with Guess Who.")
+    GetConVar("sv_playermodel_selector_force"):SetBool(false)
+end
 
 function GM:Initialize()
     timer.Create( "gw.player.distance.update.think", 0.1, 0, self.TargetFinderThink)
