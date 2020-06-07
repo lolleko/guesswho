@@ -458,7 +458,7 @@ end
 
 function ENT:Use(activator, caller, useType, value)
     if caller:IsHiding() and GetConVar("gw_changemodel_hiding"):GetBool() then
-        self:SetModel(self:GetModel())
+        caller:SetModel(self:GetModel())
     end
 end
 
