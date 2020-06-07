@@ -92,11 +92,6 @@ function GWRound:RoundStart()
         v:GodDisable()
     end
 
-    -- EASTER
-    if GetConVar("gw_easter_egg_hunt_enabled"):GetBool() then
-        self:SpawnEasterEggs(player.GetCount() * 8)
-    end
-
     timer.Create("RoundThink", 1, self.RoundDuration,
                  function() self:RoundThink() end)
     self.RoundTime = 1
@@ -218,23 +213,6 @@ function GWRound:SpawnNPCWave()
 
     end
 
-end
-
-function GWRound:SpawnEasterEggs(eggCount)
-    local allNavs = navmesh.GetAllNavAreas()
-    for _, nav in RandomPairs(allNavs) do
-        local spots = nav:GetHidingSpots()
-        local spot = table.Random(spots)
-        if spot then
-            local egg = ents.Create("gw_easter_egg")
-            if not IsValid(egg) then break end
-            egg:SetPos(spot)
-            egg:Spawn()
-            egg:Activate()
-            eggCount = eggCount - 1
-        end
-        if eggCount == 0 then return end
-    end
 end
 
 function GWRound:UpdateSettings()

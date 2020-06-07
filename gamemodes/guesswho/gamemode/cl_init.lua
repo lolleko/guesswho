@@ -2,7 +2,6 @@ CreateClientConVar("gw_hud_showhead", "1", true, false)
 CreateClientConVar("gw_language", "auto", true, false)
 
 language.Add(GW_WALKER_CLASS, "Walker")
-language.Add("gw_easter_egg", "Easter Egg")
 language.Add("gw_ability_wall", "Graviton Surge")
 language.Add("gw_mind_control_fake", "Mind Control Remnant")
 
