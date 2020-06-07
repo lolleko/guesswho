@@ -5,7 +5,11 @@ SWEP.Name = "Ragdoll"
 
 function SWEP:Ability()
     local ply = self.Owner
-    timer.Create( "Ability.Effect.Prophunt" .. ply:SteamID(), 8, 1, function() self:OnRemove() end )
+    timer.Create( "Ability.Effect.Ragdoll" .. ply:SteamID(), 8, 1, function()
+        if IsValid(self) then
+            self:OnRemove()
+        end
+    end)
 
     if SERVER then
 
@@ -59,7 +63,7 @@ function SWEP:OnRemove()
     if SERVER then
         if not IsValid( self.Owner ) then return end
         local ply = self.Owner
-        timer.Remove( "Ability.Effect.Prophunt" .. ply:SteamID() )
+        timer.Remove( "Ability.Effect.Ragdoll" .. ply:SteamID() )
         ply:SetParent()
         ply:UnSpectate()
 
