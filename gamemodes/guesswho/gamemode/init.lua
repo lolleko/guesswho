@@ -1,6 +1,5 @@
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
---AddCSLuaFile( "lua/includes/modules/GWLANG.lua")
 AddCSLuaFile( "cl_lang.lua" )
 AddCSLuaFile( "player_ext_shd.lua")
 AddCSLuaFile( "player_class/player_hiding.lua")
