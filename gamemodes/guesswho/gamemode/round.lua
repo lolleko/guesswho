@@ -7,7 +7,7 @@ end)
 
 function GWRound:RoundPreGame()
     self:SetRoundState(GW_ROUND_PRE_GAME)
-    hook.Call("GWPreGame", GAMEMODE)
+    hook.Run("GWPreGame")
     self:SetEndTime(CurTime() + self.PreGameDuration)
     timer.Create("gwPreGameTimer", self.PreGameDuration, 1,
                  function() self:RoundWaitForPlayers() end)
@@ -34,7 +34,7 @@ end
 function GWRound:RoundCreateWalkers()
 
     self:SetRoundState(GW_ROUND_CREATING_NPCS)
-    hook.Call("GWCreating", GAMEMODE)
+    hook.Run("GWCreating")
 
     self:GetSpawnPoints()
 
@@ -63,7 +63,7 @@ function GWRound:RoundCreateWalkers()
 
     timer.Simple(5 * wave, function()
         self:SetRoundState(GW_ROUND_HIDE)
-        hook.Call("GWHide", GAMEMODE)
+        hook.Run("GWHide")
         for k, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do v:Spawn() end
     end)
 
@@ -104,7 +104,7 @@ function GWRound:RoundStart()
     SetGlobalInt("RoundNumber", GetGlobalInt("RoundNumber", 0) + 1)
 
     self:SetRoundState(GW_ROUND_SEEK)
-    hook.Call("GWSeek", GAMEMODE)
+    hook.Run("GWSeek")
 end
 
 -- will be called every second
@@ -133,7 +133,7 @@ function GWRound:RoundThink()
 end
 
 function GWRound:RoundEnd(caught)
-    hook.Call("GWOnRoundEnd", GAMEMODE, caught)
+    hook.Run("GWOnRoundEnd", caught)
 
     if timer.Exists("RoundThink") then timer.Remove("RoundThink") end
     -- choose winner and stuff
@@ -180,7 +180,7 @@ function GWRound:PostRound()
                  function() self:RoundWaitForPlayers() end)
     self:SetEndTime(CurTime() + self.PostRoundDuration)
     self:SetRoundState(GW_ROUND_POST)
-    hook.Call("GWPostRound", GAMEMODE)
+    hook.Run("GWPostRound")
 
     self:UpdateSettings()
 
