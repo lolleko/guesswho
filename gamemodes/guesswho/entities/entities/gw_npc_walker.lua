@@ -10,6 +10,8 @@ function ENT:SetupDataTables()
     self:NetworkVar("Int", 1, "WalkerColorIndex")
     self:NetworkVar("Int", 2, "WalkerModelIndex")
 
+    self:NetworkVar("Bool", 3, "isDoging")
+
 end
 
 function ENT:SetupColorAndModel()
@@ -57,7 +59,7 @@ function ENT:Initialize()
         self.nextPossibleSettingsChange = CurTime() + 10
         self.isDoging = false
         self.dogeUntil = CurTime()
-        self.dogePos = CurTime()
+        self.dogePos = Vector()
         self.isJumping = false
         self.shouldCrouch = false
         self.isFirstPath = true
@@ -142,10 +144,9 @@ function ENT:Think()
             self:SetPos(spawnPoint)
             self.isStuck = false
             MsgN(
-                ((("Nextbot [" .. (tostring(tostring(nil, self:EntIndex())) .. "][")) ..
-                    (tostring(self:GetClass()) .. "]")) ..
-                    "Got Stuck for over 15 seconds and will be repositioned, if this error gets spammed") ..
-                    "you might want to consider the following: Edit the navmesh or lower the walker amount."
+                "Nextbot [" .. self:EntIndex() .. "][" .. self:GetClass() .. "]" ..
+                "Got Stuck for over 15 seconds and will be repositioned, if this error gets spammed" ..
+                "you might want to consider the following: Edit the navmesh or lower the walker amount."
             )
         end
 
@@ -161,12 +162,13 @@ function ENT:Think()
                               )
             local occupied = false
             for _, entInBox in pairs(entsInBox) do
-                if (entInBox:GetClass() == GW_WALKER_CLASS) and (entInBox ~= self) then
+                if (entInBox:GetClass() == GW_WALKER_CLASS) and (entInBox ~= self) or entInBox:IsPlayer() then
                     occupied = true
                 end
             end
             if not occupied then
                 self:SetSolidMask(MASK_NPCSOLID)
+                self:SetCollisionGroup(COLLISION_GROUP_NPC)
             end
         end
     end
@@ -254,7 +256,7 @@ function ENT:RunBehaviour()
 
             self.targetPos = nav:GetRandomPoint()
             self.currentPath = Path("Follow")
-            self.currentPath:SetMinLookAheadDistance(5)
+            self.currentPath:SetMinLookAheadDistance(10)
             self.currentPath:SetGoalTolerance(30)
             self.currentPath:Compute(self, self.targetPos)
 
@@ -293,7 +295,6 @@ function ENT:RunBehaviour()
                 (self.dogePos:DistToSqr(self:GetPos()) > 100) then
                 local dogeDirection = (self.dogePos - self:GetPos()):GetNormalized()
                 self.loco:FaceTowards(self.dogePos)
-                self.loco:SetVelocity(dogeDirection * 50)
                 self.loco:Approach(self.dogePos, 1)
                 return Behaviour.Status.Running
             else
@@ -376,23 +377,30 @@ function ENT:OnLeaveGround(ent)
     self:SetCrouchCollision(true)
 end
 
+local gwWalkerDogeAngle = 1 / math.sqrt(2)
+
 function ENT:OnContact(ent)
 
     if (ent:GetClass() == self:GetClass()) or ent:IsPlayer() then
-        if math.abs(self:GetPos().z - ent:GetPos().z) > 20 then
-            self:SetSolidMask(MASK_NPCSOLID_BRUSHONLY)
-        elseif not self.isDoging then
-            local dogeDirection = self:GetForward()
-            dogeDirection:Rotate(Angle(0, math.random(85, 95), 0))
-            dogeDirection.z = 0
+        if not self.isDoging and not self.isSitting then
+            local dogeDirection = (ent:GetPos() - self:GetPos()):GetNormalized()
 
-            local dogeTarget = self:GetPos() + (dogeDirection * 200)
+            local directionForwardDot = self:GetForward():Dot(dogeDirection)
 
-            local navAreaInDogeDir = navmesh.GetNearestNavArea(dogeTarget, false, 400, true)
-            local dogeTargetOnNavArea = navAreaInDogeDir:GetClosestPointOnArea(dogeTarget)
+            local isEntInFront = directionForwardDot > gwWalkerDogeAngle
 
-            if dogeTargetOnNavArea then
-                self:Doge(dogeTargetOnNavArea, math.random(0.5, 0.8))
+            if isEntInFront then
+                dogeDirection:Rotate(Angle(0, math.random(70, 80), 0))
+                dogeDirection.z = 0
+
+                local dogeTarget = self:GetPos() + (dogeDirection * 200)
+
+                local navAreaInDogeDir = navmesh.GetNearestNavArea(dogeTarget, false, 400, true)
+                local dogeTargetOnNavArea = navAreaInDogeDir:GetClosestPointOnArea(dogeTarget)
+
+                if dogeTargetOnNavArea then
+                    self:Doge(dogeTargetOnNavArea, math.random(0.5, 0.8))
+                end
             end
         end
     end
@@ -419,6 +427,7 @@ function ENT:OnContact(ent)
         local entMax = ent:OBBMaxs() + ent:GetPos()
         if not ((((thisMax.x < entMin.x) or (thisMin.x > entMax.x)) or (thisMax.y < entMin.y)) or (thisMin.y > entMax.y)) then
             self:SetSolidMask(MASK_NPCSOLID_BRUSHONLY)
+            self:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
         end
     end
 
@@ -448,7 +457,7 @@ function ENT:OnUnStuck()
 end
 
 function ENT:Use(activator, caller, useType, value)
-    if (caller):IsHider() and GetConVar("gw_changemodel_hiding"):GetBool() then
+    if caller:IsHiding() and GetConVar("gw_changemodel_hiding"):GetBool() then
         self:SetModel(self:GetModel())
     end
 end
