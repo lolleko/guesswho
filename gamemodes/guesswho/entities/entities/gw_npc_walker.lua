@@ -52,10 +52,10 @@ function ENT:Initialize()
             Vector(-self.boundsSize, -self.boundsSize, 0),
             Vector(self.boundsSize, self.boundsSize, self.boundsHeight)
         )
-        self.loco:SetStepHeight(20)
-        self.loco:SetJumpHeight(68)
+        self.loco:SetStepHeight(18)
+        self.loco:SetJumpHeight(82)
         self.loco:SetDesiredSpeed(100)
-        self.nextPossibleJump = CurTime() + 8
+        self.nextPossibleJump = CurTime() + math.random(2, 3)
         self.nextPossibleSettingsChange = CurTime() + 10
         self.isDoging = false
         self.dogeUntil = CurTime()
@@ -311,10 +311,26 @@ function ENT:RunBehaviour()
                 if (goal.type == 2) and (distToGoal < 30) then
                     self:Jump()
                 else
-                    local scanDist = 25
-                    local scanPoint = self.currentPath:GetClosestPosition(self:EyePos() + (self.loco:GetGroundMotionVector() * scanDist))
-                    if (self:GetPos().z < scanPoint.z && math.abs(self:GetPos().z - scanPoint.z) > self.loco:GetStepHeight()) and
-                        (distToGoal < 300) then
+                    local scanDist = 25 * self.loco:GetVelocity():Length2D() / 100
+                    local scanPoint = self:EyePos() + (self.loco:GetGroundMotionVector() * scanDist)
+
+                    local scanPointOnPath = self.currentPath:GetClosestPosition(self:EyePos() + (self.loco:GetGroundMotionVector() * scanDist))
+                    debugoverlay.Sphere(scanPointOnPath, 10, 0.1, Color(0, 255, 0))
+
+                    local jumpBasedOnPathScan = math.abs(self:GetPos().z - scanPointOnPath.z) > self.loco:GetStepHeight() and (distToGoal < 300)
+
+                    local jumpBasedOnNavScan = false
+
+                    local scanNavArea = navmesh.GetNearestNavArea(scanPoint, false, scanDist * 2, true)
+                    if scanNavArea then
+                        local scanPointOnNav = scanNavArea:GetClosestPointOnArea(scanPoint)
+                        if scanPointOnNav then
+                            debugoverlay.Sphere(scanPointOnNav, 10, 0.1, Color(255, 0, 0))
+                            jumpBasedOnNavScan = math.abs(self:GetPos().z - scanPointOnNav.z) > self.loco:GetStepHeight()
+                        end
+                    end
+
+                    if self:GetPos().z < scanPoint.z and (jumpBasedOnPath or jumpBasedOnNavScan)  then
                         self:Jump()
                     end
                 end

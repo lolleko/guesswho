@@ -23,6 +23,8 @@ function GM:ShowTeam()
         end
     end
 
+    local topOffset = 240
+
     local links = {
         {
             GWLANG:Translate("teamselect_workshop_ref"),
@@ -37,7 +39,7 @@ function GM:ShowTeam()
         {GAMEMODE.GWConfig.ServerName, GAMEMODE.GWConfig.ServerUrl}
     }
 
-    local linkOffsetY = 180
+    local linkOffsetY = topOffset
 
     for _, v in pairs(links) do
         local LinkButton = vgui.Create("DButton", TeamSelectFrame)
@@ -115,11 +117,11 @@ function GM:ShowTeam()
         })
     end
 
-    local controlsOffsetY = 180
+    local controlsOffsetY = topOffset
 
     for _, v in pairs(controls) do
         local ControlKey = vgui.Create("DLabel", TeamSelectFrame)
-        ControlKey:SetPos(ScrW() / 2 + 340, controlsOffsetY)
+        ControlKey:SetPos(ScrW() / 2 + 540, controlsOffsetY)
         ControlKey:SetSize(80, 40)
         ControlKey:SetFont("robot_smaller")
         ControlKey:SetText(v[1])
@@ -130,7 +132,7 @@ function GM:ShowTeam()
         end
 
         local ControlDesc = vgui.Create("DLabel", TeamSelectFrame)
-        ControlDesc:SetPos(ScrW() / 2 + 420, controlsOffsetY)
+        ControlDesc:SetPos(ScrW() / 2 + 340, controlsOffsetY)
         ControlDesc:SetSize(200, 40)
         ControlDesc:SetFont("robot_small")
         ControlDesc:SetText(v[2])
@@ -144,14 +146,14 @@ function GM:ShowTeam()
     end
 
     local HeaderImage = vgui.Create("DImage", TeamSelectFrame)
-    HeaderImage:SetSize(285, 96)
+    HeaderImage:SetSize(600, 100)
     HeaderImage:SetPos(0, 60)
     HeaderImage:SetMaterial(Material("vgui/gw/logo_main.png", "smooth"))
     HeaderImage:CenterHorizontal()
 
     -- Hiding Button
     local TeamHidingPanel = vgui.Create("DPanel", TeamSelectFrame)
-    TeamHidingPanel:SetPos(ScrW() / 2 - 300, 180)
+    TeamHidingPanel:SetPos(ScrW() / 2 - 300, topOffset)
     TeamHidingPanel:SetSize(280, 280)
     function TeamHidingPanel:Paint(w, h)
         draw.RoundedBox(0, 0, 0, w, h, team.GetColor(GW_TEAM_HIDING))
@@ -193,7 +195,7 @@ function GM:ShowTeam()
 
     -- Seeking Button
     local TeamSeekingPanel = vgui.Create("DPanel", TeamSelectFrame)
-    TeamSeekingPanel:SetPos(ScrW() / 2 + 20, 180)
+    TeamSeekingPanel:SetPos(ScrW() / 2 + 20, topOffset)
     TeamSeekingPanel:SetSize(280, 280)
     function TeamSeekingPanel:Paint(w, h)
         draw.RoundedBox(0, 0, 0, w, h, team.GetColor(GW_TEAM_SEEKING))
@@ -226,7 +228,7 @@ function GM:ShowTeam()
 
     -- spectate and auto buttons
     local TeamSpectateButton = vgui.Create("DButton", TeamSelectFrame)
-    TeamSpectateButton:SetPos(ScrW() / 2 - 300, 500)
+    TeamSpectateButton:SetPos(ScrW() / 2 - 300, topOffset + 320)
     TeamSpectateButton:SetSize(600, 40)
     TeamSpectateButton:SetFont("robot_small")
     TeamSpectateButton:SetText(GWLANG:Translate("teamselect_buttons_spectate"))
@@ -240,7 +242,7 @@ function GM:ShowTeam()
     end
 
     local TeamAutoButton = vgui.Create("DButton", TeamSelectFrame)
-    TeamAutoButton:SetPos(ScrW() / 2 - 300, 580)
+    TeamAutoButton:SetPos(ScrW() / 2 - 300, topOffset + 320 + 80)
     TeamAutoButton:SetSize(600, 40)
     TeamAutoButton:SetFont("robot_small")
     TeamAutoButton:SetText(GWLANG:Translate("teamselect_buttons_auto"))

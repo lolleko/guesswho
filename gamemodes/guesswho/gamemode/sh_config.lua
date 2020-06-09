@@ -75,8 +75,8 @@ GM.GWConfigStatic.AllAbilities = {
     "weapon_gw_ant"
 }
 
-GM.GWConfig.TeamSeekingColor = Color(138, 155, 15)
-GM.GWConfig.TeamHidingColor = Color(23, 89, 150)
+GM.GWConfig.TeamSeekingColor = Color(155, 143, 48)
+GM.GWConfig.TeamHidingColor = Color(48, 96, 155)
 
 GM.GWConfig.WalkerColors = {
     Color(61, 87, 105), -- original blue

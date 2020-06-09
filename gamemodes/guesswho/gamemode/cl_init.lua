@@ -44,7 +44,7 @@ surface.CreateFont("robot_smaller", {
 })
 
 clrs = {
-    red = Color(231, 77, 60),
+    red = Color(158, 49, 74),
     blue = Color(53, 152, 219),
     green = Color(45, 204, 113),
     purple = Color(108, 113, 196),
@@ -55,7 +55,7 @@ clrs = {
     black = Color(0, 0, 0),
     darkgreybg = Color(26, 26, 26, 245),
     greybg = Color(42, 42, 42, 200),
-    redbg = Color(231, 77, 60, 50),
+    redbg = Color(158, 49, 74, 50),
     white = Color(255, 255, 255)
 }
 
