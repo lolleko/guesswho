@@ -27,14 +27,21 @@ SWEP.WorldModel = "models/brokenglass_piece.mdl"
 SWEP.HoldType = "normal"
 
 SWEP.AbilityRange = 0
+SWEP.AbilityDuration = 0
+SWEP.AbilityStartTime = 0
 
 function SWEP:Initialize()
-
     self:SetHoldType( self.HoldType )
 
+    self.currentTimerID = 0
+    self.activeTimers = {}
+
+    self:AbilityCreated()
 end
 
-local CircleMat = Material( "SGM/playercircle" )
+function SWEP:AbilityCreated()
+
+end
 
 function SWEP:DrawWorldModel()
     if self:Clip2() > 0 and self.AbilityRange > 0 and self:IsCarriedByLocalPlayer() then
@@ -80,8 +87,6 @@ function SWEP:PrimaryAttack()
     local tr = util.TraceLine( {start = spos, endpos = sdest, filter = self.Owner, mask = MASK_SHOT_HULL} )
     self.Owner:LagCompensation(false)
 
-    --print(tr.Entity)
-
     if tr.Hit and IsValid(tr.Entity) and (tr.Entity:GetClass() == "func_breakable" or tr.Entity:GetClass() == "func_breakable_surf") then
 
         if SERVER then tr.Entity:Fire("shatter") end
@@ -92,6 +97,8 @@ end
 
 function SWEP:SecondaryAttack()
     if ( not self:CanSecondaryAttack() ) then return end
+
+    self.AbilityStartTime = CurTime()
 
     local abilityNotCompleted = self:Ability()
 
@@ -114,4 +121,55 @@ end
 function SWEP:GiveSecondaryAmmo(amount)
     self.Owner:GiveAmmo(amount, "gwAbility", true)
     self:SetClip2( self:Clip2() + amount )
+end
+
+function SWEP:OnRemove()
+    for timerName, shouldRemove in pairs(self.activeTimers) do 
+        if (shouldRemove) then
+            timer.Remove(timerName)
+        end
+    end
+    if (self.AbilityStartTime + self.AbilityDuration > CurTime()) then
+        self:AbilityCancelled()
+    end
+
+    self:AbilityCleanup()
+end
+
+function SWEP:AbilityCancelled()
+
+end
+
+function SWEP:AbilityCleanup()
+
+end
+
+function SWEP:AbilityTimer(dur, reps, remove, fn)
+    local timerName = "gwAbility" .. "." .. self:EntIndex() .. "." .. self.currentTimerID
+    self.currentTimerID = self.currentTimerID + 1
+
+    timer.Create(timerName, dur, reps, fn)
+
+    self.activeTimers[timerName] = remove
+end
+
+function SWEP:AbilityTimerIfValidSWEP(dur, reps, removeTimerWithSwep, fn)
+    self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
+        if not IsValid(self) then return end
+        fn()
+    end)
+end
+
+function SWEP:AbilityTimerIfValidPlayer(dur, reps, remove, fn)
+    self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
+        if not IsValid(self) or not IsValid(self.Owner) then return end
+        fn()
+    end)
+end
+
+function SWEP:AbilityTimerIfValidPlayerAndAlive(dur, reps, removeTimerWithSwep, fn)
+    self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
+        if not IsValid(self) or not IsValid(self.Owner) or !self.Owner:Alive() then return end
+        fn()
+    end)
 end
