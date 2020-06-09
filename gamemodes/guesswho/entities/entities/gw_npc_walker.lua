@@ -38,6 +38,8 @@ function ENT:SetupColorAndModel()
     self.GetPlayerColor = function()
         return self.walkerColor
     end
+
+    self.lerpedAnimationVelocity = 0
 end
 
 function ENT:Initialize()
@@ -315,18 +317,19 @@ function ENT:RunBehaviour()
                     local scanPoint = self:EyePos() + (self.loco:GetGroundMotionVector() * scanDist)
 
                     local scanPointOnPath = self.currentPath:GetClosestPosition(self:EyePos() + (self.loco:GetGroundMotionVector() * scanDist))
-                    debugoverlay.Sphere(scanPointOnPath, 10, 0.1, Color(0, 255, 0))
+                    --debugoverlay.Sphere(scanPointOnPath, 10, 0.1, Color(0, 255, 0))
 
                     local jumpBasedOnPathScan = math.abs(self:GetPos().z - scanPointOnPath.z) > self.loco:GetStepHeight() and (distToGoal < 300)
 
                     local jumpBasedOnNavScan = false
 
-                    local scanNavArea = navmesh.GetNearestNavArea(scanPoint, false, scanDist * 2, true)
+                    local scanNavArea = navmesh.GetNearestNavArea(scanPoint, false, scanDist * 2)
                     if scanNavArea then
                         local scanPointOnNav = scanNavArea:GetClosestPointOnArea(scanPoint)
                         if scanPointOnNav then
-                            debugoverlay.Sphere(scanPointOnNav, 10, 0.1, Color(255, 0, 0))
-                            jumpBasedOnNavScan = math.abs(self:GetPos().z - scanPointOnNav.z) > self.loco:GetStepHeight()
+                            -- debugoverlay.Sphere(scanPointOnNav, 10, 0.1, Color(255, 0, 0))
+                            -- double threshold for navareaBasejumps
+                            jumpBasedOnNavScan = math.abs(self:GetPos().z - scanPointOnNav.z) > self.loco:GetStepHeight() * 2
                         end
                     end
 
@@ -360,11 +363,11 @@ end
 function ENT:BodyUpdate()
     local idealAct = ACT_HL2MP_IDLE
     local velocity = self:GetVelocity()
-    local len2d = velocity:Length2D()
+    self.lerpedAnimationVelocity = Lerp(0.2, self.lerpedAnimationVelocity, velocity:Length2D())
 
-    if len2d > 150 then
+    if self.lerpedAnimationVelocity > 150 then
         idealAct = ACT_HL2MP_RUN
-    elseif len2d > 10 then
+    elseif self.lerpedAnimationVelocity > 5 then
         idealAct = ACT_HL2MP_WALK
     end
 
@@ -415,7 +418,7 @@ function ENT:OnContact(ent)
                 local dogeTargetOnNavArea = navAreaInDogeDir:GetClosestPointOnArea(dogeTarget)
 
                 if dogeTargetOnNavArea then
-                    self:Doge(dogeTargetOnNavArea, math.random(0.5, 0.8))
+                    self:Doge(dogeTargetOnNavArea, math.random(0.4, 0.7))
                 end
             end
         end
@@ -478,6 +481,7 @@ function ENT:Use(activator, caller, useType, value)
     end
 end
 
+-- unused
 function ENT:PathGenerator()
     return function(area, fromArea, ladder, elevator, length)
         if not IsValid(fromArea) then
