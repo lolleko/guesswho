@@ -5,8 +5,9 @@ local matRefract = Material( "models/spawn_effect" )
 function EFFECT:Init( data )
 	-- This is how long the spawn effect
 	-- takes from start to finish.
-	self.Time = data:GetMagnitude()
-	self.LifeTime = CurTime() + self.Time
+    self.Duration = data:GetMagnitude()
+    self.PlayBackwards = data:GetScale() < 0
+	self.EndTime = CurTime() + self.Duration
 
 	local ent = data:GetEntity()
 
@@ -32,7 +33,7 @@ function EFFECT:Think()
 	local PPos = self.ParentEntity:GetPos()
 	self:SetPos( PPos + ( EyePos() - PPos ):GetNormal() )
 
-	if ( self.LifeTime > CurTime() ) then
+	if ( self.EndTime > CurTime() ) then
 		return true
 	end
 
@@ -48,14 +49,13 @@ end
 
 function EFFECT:RenderOverlay( entity )
 
-	local Fraction = ( self.LifeTime - CurTime() ) / self.Time
-	local ColFrac = ( Fraction - 0.5 ) * 2
+	local Fraction = ( self.EndTime - CurTime() ) / self.Duration
+
+    if (self.PlayBackwards) then
+        Fraction = -(self.EndTime - CurTime() - self.Duration) / self.Duration
+    end
 
 	Fraction = math.Clamp( Fraction, 0, 1 )
-	ColFrac = math.Clamp( ColFrac, 0, 1 )
-
-	-- Change our model's alpha so the texture will fade out
-	--entity:SetColor( 255, 255, 255, 1 + 254 * (ColFrac) )
 
 	-- Place the camera a tiny bit closer to the entity.
 	-- It will draw a big bigger and we will skip any z buffer problems
@@ -110,7 +110,12 @@ function EFFECT:StartClip( model, spd )
 	local Bottom = model:GetPos() + mn
 	local Top = model:GetPos() + mx
 
-	local Fraction = (self.LifeTime - CurTime()) / self.Time
+    local Fraction = (self.EndTime - CurTime()) / self.Duration
+    
+    if (self.PlayBackwards) then
+        Fraction = -(self.EndTime - CurTime() - self.Duration) / self.Duration
+    end
+
 	Fraction = math.Clamp( Fraction / spd, 0, 1 )
 
 	local Lerped = LerpVector( Fraction, Bottom, Top )
