@@ -20,7 +20,13 @@ function SWEP:Ability()
 
 	if SERVER then ply:ApplyStun(2) end
 
-	timer.Simple(1.5, function() ply:SetPos(self:CalcTeleportDestination()) end)
+	timer.Simple(1.5, function()
+		local effect3 = EffectData()
+		effect3:SetEntity(ply)
+		effect3:SetMagnitude(1)
+		util.Effect("gw_spawn", effect3)
+		ply:SetPos(self:CalcTeleportDestination())
+	end)
 end
 
 function SWEP:DrawHUD()

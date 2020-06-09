@@ -34,7 +34,7 @@ function SWEP:Ability()
         ragdoll:SetAngles( ply:GetAngles() )
         ragdoll:SetModel( ply:GetModel() )
         ragdoll:SetPos( ply:GetPos() )
-        function ragdoll:GetPlayerColor() return Vector(0, 0.5, 0) end
+        ragdoll:SetOwner(ply)
         ragdoll:Spawn()
         ragdoll:Activate()
         ply:SetParent( ragdoll ) -- So their player ent will match up (position-wise) with where their ragdoll is.
@@ -55,7 +55,7 @@ function SWEP:Ability()
         ply:Spectate( OBS_MODE_CHASE )
         ply:SpectateEntity( ragdoll )
 
-        ply.ragdoll = ragdoll
+        ply.gwRagdoll = ragdoll
     end
 end
 
@@ -67,8 +67,8 @@ function SWEP:OnRemove()
         ply:SetParent()
         ply:UnSpectate()
 
-        local ragdoll = ply.ragdoll
-        ply.ragdoll = nil -- Gotta do this before spawn or our hook catches it
+        local ragdoll = ply.gwRagdoll
+        ply.gwRagdoll = nil -- Gotta do this before spawn or our hook catches it
 
         if not IsValid(ragdoll) or not ragdoll:IsValid() then -- Something must have removed it, just spawn
             return
