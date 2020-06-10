@@ -5,7 +5,7 @@ language.Add(GW_WALKER_CLASS, "Walker")
 language.Add("gw_ability_wall", "Graviton Surge")
 language.Add("gw_mind_control_fake", "Mind Control Remnant")
 
-surface.CreateFont("robot_medium", {
+surface.CreateFont("gw_font_medium", {
     font = "Roboto",
     size = 32,
     weight = 400,
@@ -13,31 +13,31 @@ surface.CreateFont("robot_medium", {
     shadow = false
 })
 
-surface.CreateFont("robot_large", {
-    font = "Roboto",
+surface.CreateFont("gw_font_large", {
+    font = "Inter",
     size = 48,
     weight = 400,
     antialias = true,
     shadow = false
 })
 
-surface.CreateFont("robot_normal", {
-    font = "Roboto",
+surface.CreateFont("gw_font_normal", {
+    font = "Inter",
     size = 24,
     weight = 400,
     antialias = true,
     shadow = false
 })
-surface.CreateFont("robot_small", {
-    font = "Roboto",
-    size = 16,
+surface.CreateFont("gw_font_small", {
+    font = "Inter",
+    size = 17,
     weight = 400,
     antialias = true,
     shadow = false
 })
-surface.CreateFont("robot_smaller", {
-    font = "Roboto",
-    size = 12,
+surface.CreateFont("gw_font_smaller", {
+    font = "Inter",
+    size = 13,
     weight = 400,
     antialias = true,
     shadow = false
@@ -55,6 +55,7 @@ clrs = {
     black = Color(0, 0, 0),
     darkgreybg = Color(26, 26, 26, 245),
     greybg = Color(42, 42, 42, 200),
+    abilitybg = Color(42, 42, 42, 150),
     redbg = Color(158, 49, 74, 50),
     white = Color(255, 255, 255)
 }

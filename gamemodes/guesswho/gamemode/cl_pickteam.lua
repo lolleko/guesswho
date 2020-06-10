@@ -1,3 +1,62 @@
+local logoMaterial = Material("vgui/gw/logo_main.png", "smooth")
+
+local function CreateTeamJoinButton(teamID, teamLangKey, parent, offsetX, offsetY, modelTable)
+    local TeamPanel = vgui.Create("DPanel", parent)
+    TeamPanel:SetPos(offsetX, offsetY)
+    TeamPanel:SetSize(280, 280)
+    function TeamPanel:Paint(w, h)
+        draw.RoundedBox(0, 0, 0, w, h, team.GetColor(teamID))
+    end
+
+    local TeamModel = vgui.Create("DModelPanel", TeamPanel)
+    TeamModel:SetSize(280, 240)
+    TeamModel:SetModel(modelTable[math.random(1,#modelTable)])
+   
+    if teamID == GW_TEAM_HIDING then
+        TeamModel.Entity:SetAngles(Angle(0, 70, 0))
+        local seq, dur = TeamModel.Entity:LookupSequence("gesture_wave")
+        TeamModel.Entity:SetSequence(seq)
+        timer.Simple(dur - 0.15, function()
+            if not TeamModel.Entity then return end
+            TeamModel.Entity:SetSequence("idle_all_01")
+            TeamModel.Entity:SetAngles(Angle(0, 0, 0))
+        end)
+    else
+        TeamModel.Entity:SetAngles(Angle(0, 40, 0))
+    end
+
+    function TeamModel:LayoutEntity(ent)
+        self:RunAnimation()
+    end
+
+    local TeamButton = vgui.Create("DButton", TeamPanel)
+    function TeamButton.DoClick()
+        if GAMEMODE:IsBalancedToJoin(teamID) then
+            GAMEMODE:HideTeam()
+            RunConsoleCommand("changeteam", teamID)
+        end
+    end
+    TeamButton:SetText("")
+    TeamButton:SetSize(280, 280)
+    function TeamButton:Paint(w, h) return end
+
+    local TeamName = vgui.Create("DLabel", TeamPanel)
+    TeamName:SetSize(280, 40)
+    TeamName:AlignBottom()
+    TeamName:SetContentAlignment(5)
+    function TeamName:Paint(w, h)
+        draw.RoundedBox(0, 0, 0, w, h, clrs.grey)
+    end
+    TeamName:SetFont("gw_font_small")
+    TeamName:SetTextColor(clrs.lightgrey)
+    TeamName:SetText(GWLANG:Translate(teamLangKey) .. "(" ..
+                                 team.NumPlayers(teamID) .. ")")
+    function TeamName:Think()
+        self:SetText(GWLANG:Translate(teamLangKey) .. "(" ..
+                            team.NumPlayers(teamID) .. ")")
+    end
+end
+
 function GM:ShowTeam()
 
     if (IsValid(self.TeamSelectFrame)) then return end
@@ -45,7 +104,7 @@ function GM:ShowTeam()
         local LinkButton = vgui.Create("DButton", TeamSelectFrame)
         LinkButton:SetPos(ScrW() / 2 - 620, linkOffsetY)
         LinkButton:SetSize(280, 40)
-        LinkButton:SetFont("robot_small")
+        LinkButton:SetFont("gw_font_small")
         LinkButton:SetText(v[1])
         LinkButton:SetTextColor(clrs.lightgrey)
         function LinkButton.DoClick() gui.OpenURL(v[2]) end
@@ -64,7 +123,7 @@ function GM:ShowTeam()
     InfoTitle:SetContentAlignment(5)
     InfoTitle:SetPos(ScrW() / 2 - 620, linkOffsetY)
     InfoTitle:SetSize(280, 40)
-    InfoTitle:SetFont("robot_medium")
+    InfoTitle:SetFont("gw_font_medium")
     InfoTitle:SetText("News")
     InfoTitle:SetTextColor(clrs.lightgrey)
 
@@ -75,7 +134,7 @@ function GM:ShowTeam()
     InfoDescription:SetText(GAMEMODE.GWConfig.News)
     InfoDescription:SetPaintBackground(false)
     InfoDescription:SetMultiline(true)
-    InfoDescription:SetFont("robot_small")
+    InfoDescription:SetFont("gw_font_small")
     InfoDescription:SetTextColor(clrs.lightgrey)
 
     local controls = {}
@@ -123,7 +182,7 @@ function GM:ShowTeam()
         local ControlKey = vgui.Create("DLabel", TeamSelectFrame)
         ControlKey:SetPos(ScrW() / 2 + 540, controlsOffsetY)
         ControlKey:SetSize(80, 40)
-        ControlKey:SetFont("robot_smaller")
+        ControlKey:SetFont("gw_font_smaller")
         ControlKey:SetText(v[1])
         ControlKey:SetTextColor(clrs.lightgrey)
         ControlKey:SetContentAlignment(5)
@@ -134,7 +193,7 @@ function GM:ShowTeam()
         local ControlDesc = vgui.Create("DLabel", TeamSelectFrame)
         ControlDesc:SetPos(ScrW() / 2 + 340, controlsOffsetY)
         ControlDesc:SetSize(200, 40)
-        ControlDesc:SetFont("robot_small")
+        ControlDesc:SetFont("gw_font_small")
         ControlDesc:SetText(v[2])
         ControlDesc:SetTextColor(clrs.lightgrey)
         ControlDesc:SetContentAlignment(5)
@@ -148,89 +207,20 @@ function GM:ShowTeam()
     local HeaderImage = vgui.Create("DImage", TeamSelectFrame)
     HeaderImage:SetSize(600, 100)
     HeaderImage:SetPos(0, 60)
-    HeaderImage:SetMaterial(Material("vgui/gw/logo_main.png", "smooth"))
+    HeaderImage:SetMaterial(logoMaterial)
     HeaderImage:CenterHorizontal()
 
     -- Hiding Button
-    local TeamHidingPanel = vgui.Create("DPanel", TeamSelectFrame)
-    TeamHidingPanel:SetPos(ScrW() / 2 - 300, topOffset)
-    TeamHidingPanel:SetSize(280, 280)
-    function TeamHidingPanel:Paint(w, h)
-        draw.RoundedBox(0, 0, 0, w, h, team.GetColor(GW_TEAM_HIDING))
-    end
-
-    local TeamHidingModel = vgui.Create("DModelPanel", TeamHidingPanel)
-    TeamHidingModel:SetSize(280, 280)
-    TeamHidingModel:SetModel(GAMEMODE.GWConfig.HidingModels[math.random(1,
-                                                                        #GAMEMODE.GWConfig
-                                                                            .HidingModels)])
-    local seq, dur = TeamHidingModel.Entity:LookupSequence("gesture_wave")
-    TeamHidingModel.Entity:SetSequence(seq)
-    TeamHidingModel.Entity:SetAngles(Angle(0, 70, 0))
-    TeamHidingModel.Entity:DrawShadow(true)
-    timer.Simple(dur - 0.2, function()
-        if not TeamHidingModel.Entity then return end
-        TeamHidingModel.Entity:SetSequence("idle_all_01")
-        TeamHidingModel.Entity:SetAngles(Angle(0, 0, 0))
-    end)
-    function TeamHidingModel:LayoutEntity(ent) self:RunAnimation() end
-
-    local TeamHidingButton = vgui.Create("DButton", TeamHidingPanel)
-    function TeamHidingButton.DoClick()
-        if self:IsBalancedToJoin(GW_TEAM_HIDING) then
-            self:HideTeam()
-            RunConsoleCommand("changeteam", GW_TEAM_HIDING)
-        end
-    end
-    TeamHidingButton:SetFont("robot_normal")
-    TeamHidingButton:SetTextColor(clrs.lightgrey)
-    TeamHidingButton:SetText(GWLANG:Translate("team_hiding") .. "(" ..
-                                 team.NumPlayers(GW_TEAM_HIDING) .. ")")
-    TeamHidingButton:SetSize(280, 280)
-    function TeamHidingButton:Paint(w, h) return end
-    function TeamHidingButton:Think()
-        self:SetText(GWLANG:Translate("team_hiding") .. "(" ..
-                         team.NumPlayers(GW_TEAM_HIDING) .. ")")
-    end
+    CreateTeamJoinButton(GW_TEAM_HIDING, "team_hiding", TeamSelectFrame, ScrW() / 2 - 300, topOffset, GAMEMODE.GWConfig.HidingModels)
 
     -- Seeking Button
-    local TeamSeekingPanel = vgui.Create("DPanel", TeamSelectFrame)
-    TeamSeekingPanel:SetPos(ScrW() / 2 + 20, topOffset)
-    TeamSeekingPanel:SetSize(280, 280)
-    function TeamSeekingPanel:Paint(w, h)
-        draw.RoundedBox(0, 0, 0, w, h, team.GetColor(GW_TEAM_SEEKING))
-    end
-
-    local TeamSeekingModel = vgui.Create("DModelPanel", TeamSeekingPanel)
-    TeamSeekingModel:SetSize(280, 280)
-    TeamSeekingModel:SetModel("models/player/combine_super_soldier.mdl")
-    function TeamSeekingModel:LayoutEntity(ent)
-        ent:SetAngles(Angle(0, 30, 0))
-    end
-
-    local TeamSeekingButton = vgui.Create("DButton", TeamSeekingPanel)
-    function TeamSeekingButton.DoClick()
-        if self:IsBalancedToJoin(GW_TEAM_SEEKING) then
-            self:HideTeam()
-            RunConsoleCommand("changeteam", GW_TEAM_SEEKING)
-        end
-    end
-    TeamSeekingButton:SetFont("robot_normal")
-    TeamSeekingButton:SetTextColor(clrs.lightgrey)
-    TeamSeekingButton:SetText(GWLANG:Translate("team_seeking") .. "(" ..
-                                  team.NumPlayers(GW_TEAM_SEEKING) .. ")")
-    TeamSeekingButton:SetSize(280, 280)
-    function TeamSeekingButton:Paint(w, h) return end
-    function TeamSeekingButton:Think()
-        self:SetText(GWLANG:Translate("team_seeking") .. "(" ..
-                         team.NumPlayers(GW_TEAM_SEEKING) .. ")")
-    end
+    CreateTeamJoinButton(GW_TEAM_SEEKING, "team_seeking", TeamSelectFrame, ScrW() / 2 + 20, topOffset, GAMEMODE.GWConfig.SeekerModels)
 
     -- spectate and auto buttons
     local TeamSpectateButton = vgui.Create("DButton", TeamSelectFrame)
     TeamSpectateButton:SetPos(ScrW() / 2 - 300, topOffset + 320)
     TeamSpectateButton:SetSize(600, 40)
-    TeamSpectateButton:SetFont("robot_small")
+    TeamSpectateButton:SetFont("gw_font_small")
     TeamSpectateButton:SetText(GWLANG:Translate("teamselect_buttons_spectate"))
     TeamSpectateButton:SetTextColor(clrs.lightgrey)
     function TeamSpectateButton.DoClick()
@@ -244,7 +234,7 @@ function GM:ShowTeam()
     local TeamAutoButton = vgui.Create("DButton", TeamSelectFrame)
     TeamAutoButton:SetPos(ScrW() / 2 - 300, topOffset + 320 + 80)
     TeamAutoButton:SetSize(600, 40)
-    TeamAutoButton:SetFont("robot_small")
+    TeamAutoButton:SetFont("gw_font_small")
     TeamAutoButton:SetText(GWLANG:Translate("teamselect_buttons_auto"))
     TeamAutoButton:SetTextColor(clrs.lightgrey)
     function TeamAutoButton.DoClick()
@@ -258,7 +248,7 @@ function GM:ShowTeam()
     local CloseButton = vgui.Create("DButton", TeamSelectFrame)
     CloseButton:SetPos(ScrW() - 80, 40)
     CloseButton:SetSize(40, 40)
-    CloseButton:SetFont("robot_medium")
+    CloseButton:SetFont("gw_font_medium")
     CloseButton:SetText("X")
     CloseButton:SetTextColor(clrs.lightgrey)
     function CloseButton.DoClick() TeamSelectFrame:Remove() end
@@ -269,7 +259,7 @@ function GM:ShowTeam()
     local GMVersion = vgui.Create("DLabel", TeamSelectFrame)
     GMVersion:SetPos(ScrW() - 400, ScrH() - 40)
     GMVersion:SetSize(400, 40)
-    GMVersion:SetFont("robot_medium")
+    GMVersion:SetFont("gw_font_medium")
     GMVersion:SetText("Version " .. GAMEMODE.Version)
     GMVersion:SetTextColor(clrs.lightgrey)
     GMVersion:SetContentAlignment(6)

@@ -1,9 +1,12 @@
 CHHUD = {}
 CHHUD.AbilityIcons = {}
 
-local icons = file.Find("materials/vgui/gw/abilityicons/*.png", "GAME")
+local iconDir = "materials/vgui/gw/abilityicons/"
+local icons = file.Find(iconDir .. "*.png", "GAME")
 for _, icon in pairs(icons) do
-    CHHUD.AbilityIcons[string.StripExtension(icon)] = Material("materials/vgui/gw/abilityicons/" .. icon, "noclamp smooth")
+    local iconPath = "vgui/gw/abilityicons/" .. icon
+    local abilityName = string.StripExtension(icon)
+    CHHUD.AbilityIcons[abilityName] = Material(iconPath, "noclamp smooth")
 end
 
 function CHHUD:CreateHead()
@@ -80,10 +83,14 @@ function CHHUD:DrawCircle( x, y, radius, seg, clr)
     surface.DrawPoly( cir )
 end
 
-function CHHUD:DrawAbilityIcon(ability, x, y, w, h)
+function CHHUD:DrawAbilityIcon(ability, x, y)
     if self.AbilityIcons[ability] then
-        w = w or 128
-        h = h or 128
+        if team.Valid(GW_TEAM_HIDING) then
+            local hidingColor = team.GetColor(GW_TEAM_HIDING)
+            self.AbilityIcons[ability]:SetVector("$color", Vector(hidingColor.r / 255, hidingColor.g / 255, hidingColor.b / 255))
+        end
+        local w = 128
+        local h = 128
         surface.SetDrawColor( 255, 255, 255, 255 )
         surface.SetMaterial( self.AbilityIcons[ability] )
         surface.DrawTexturedRect( x, y, w, h )
@@ -117,15 +124,15 @@ function CHuntHUD()
 
     CHHUD:DrawPanel( ScrW() / 2 - 100, 0, 200, 50, {background = clrs.darkgreybg})
     CHHUD:DrawPanel( ScrW() / 2 - 100, 45, 200, 5, {background = teamColor})
-    CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(time, "robot_normal") / 2), 5, time, "robot_normal", clrs.white )
-    CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize( label, "robot_small" ) / 2 ), 26, label, "robot_small", clrs.white )
+    CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(time, "gw_font_normal") / 2), 5, time, "gw_font_normal", clrs.white )
+    CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize( label, "gw_font_small" ) / 2 ), 26, label, "gw_font_small", clrs.white )
 
     -- spectator
     if IsValid(LocalPlayer():GetObserverTarget()) then
         local specEnt = LocalPlayer():GetObserverTarget()
         if IsValid(specEnt) and specEnt:IsPlayer() then
             local nick = specEnt:Nick()
-            CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(nick, "robot_large") / 2), ScrH() - 40, nick, "robot_normal", clrs.white )
+            CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(nick, "gw_font_large") / 2), ScrH() - 40, nick, "gw_font_normal", clrs.white )
         end
     end
 
@@ -136,7 +143,7 @@ function CHuntHUD()
 
         CHHUD:DrawPanel( 20, ScrH() - 80, 100, 60, {background = clrs.darkgreybg})
         CHHUD:DrawPanel( 20, ScrH() - 25, 100, 5, {background = teamColor})
-        CHHUD:DrawText( 70 - (CHHUD:TextSize(health, "robot_large") / 2), ScrH() - 75, health, "robot_large", clrs.white )
+        CHHUD:DrawText( 70 - (CHHUD:TextSize(health, "gw_font_large") / 2), ScrH() - 75, health, "gw_font_large", clrs.white )
 
     end
 
@@ -164,7 +171,7 @@ function CHuntHUD()
             end
             if headpos then
                 CHHUD.HeadModel:SetLookAt( headpos )
-                CHHUD.HeadModel:SetCamPos( headpos - Vector( -15, 0, 0 ) )
+                CHHUD.HeadModel:SetCamPos( headpos - Vector( -18, 0, 0 ) )
             end
         end
     end
@@ -185,20 +192,21 @@ function CHuntHUD()
             if clipLeft ~= -1 then
                 CHHUD:DrawPanel( ScrW() - 220, ScrH() - 80, 200, 60, {background = clrs.darkgreybg})
                 CHHUD:DrawPanel( ScrW() - 220, ScrH() - 25, 200, 5, {background = teamColor})
-                CHHUD:DrawText( ScrW() - 120 - (CHHUD:TextSize(clipLeft.. "/" .. clipExtra, "robot_large") / 2), ScrH() - 75, clipLeft .. "/" .. clipExtra, "robot_large", clrs.white )
+                CHHUD:DrawText( ScrW() - 120 - (CHHUD:TextSize(clipLeft.. "/" .. clipExtra, "gw_font_large") / 2), ScrH() - 75, clipLeft .. "/" .. clipExtra, "gw_font_large", clrs.white )
             end
 
             if secondaryAmmo > 0 then
                 CHHUD:DrawPanel( ScrW() - 310, ScrH() - 40, 80, 20, {background = teamColor})
-                CHHUD:DrawText( ScrW() - 305, ScrH() - 38, "Nuke ready!", "robot_small", clrs.white )
+                CHHUD:DrawText( ScrW() - 305, ScrH() - 38, "Nuke ready!", "gw_font_small", clrs.white )
             end
 
         end
 
         if ply:IsHiding() and ply:GetActiveWeapon():Clip2() > 0 then
+            draw.RoundedBoxEx(64, ScrW() - 148, ScrH() - 168, 128, 128, clrs.abilitybg, true, true)
             CHHUD:DrawPanel( ScrW() - 148, ScrH() - 40, 128, 20, {background = clrs.darkgreybg})
             CHHUD:DrawAbilityIcon(ply:GetActiveWeapon():GetClass(), ScrW() - 148, ScrH() - 168)
-            CHHUD:DrawText( ScrW() - ( 84 + CHHUD:TextSize( ply:GetActiveWeapon().Name, "robot_small" ) / 2 ), ScrH() - 38, ply:GetActiveWeapon().Name, "robot_small", clrs.white )
+            CHHUD:DrawText( ScrW() - ( 84 + CHHUD:TextSize( ply:GetActiveWeapon().Name, "gw_font_small" ) / 2 ), ScrH() - 38, ply:GetActiveWeapon().Name, "gw_font_small", clrs.white )
         end
 
     end
@@ -228,7 +236,7 @@ function CHuntHUD()
                 distanceText = math.ceil(distance)
             end
         end
-        CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize( distanceText, "robot_small" ) / 2), ScrH() - 83, distanceText, "robot_small", clrs.white )
+        CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize( distanceText, "gw_font_small" ) / 2), ScrH() - 83, distanceText, "gw_font_small", clrs.white )
     end
 
     -- TOUCHES
@@ -261,12 +269,10 @@ function GM:HUDDrawTargetID()
     if ( not trace.HitNonWorld ) then return end
 
     local text
-    local font = "robot_medium"
+    local font = "gw_font_medium"
 
     if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() or trace.Entity:GetDisguised() ) ) then
         text = trace.Entity:Nick()
-    elseif trace.Entity:GetClass() == "gw_easter_egg" and trace.Entity:GetPos():Distance(LocalPlayer():GetPos()) < 100 then
-        text = "Press " .. string.upper(input.LookupBinding( "use")) .. " for a suprise!"
     end
 
     if not text then return end
@@ -300,7 +306,7 @@ function GM:HUDDrawTargetID()
     y = y + h + 5
 
     text = trace.Entity:Health() .. "%"
-    font = "robot_small"
+    font = "gw_font_small"
 
     surface.SetFont( font )
     local w, h = surface.GetTextSize( text )
@@ -362,11 +368,11 @@ function GM:HUDDrawPickupHistory()
                 pickupText = v.name
             end
 
-            local pickupTextSize = CHHUD:TextSize(pickupText, "robot_normal")
+            local pickupTextSize = CHHUD:TextSize(pickupText, "gw_font_normal")
 
             CHHUD:DrawPanel( v.x + v.height + 8 - pickupTextSize / 2 - 5, v.y - ( v.height / 2 ) - 80, pickupTextSize + 10, 35, {background = clrs.darkgreybg})
             CHHUD:DrawPanel( v.x + v.height + 8 - pickupTextSize / 2 - 5, v.y - ( v.height / 2 ) - 50, pickupTextSize + 10, 5, {background = teamColor})
-            CHHUD:DrawText( v.x + v.height + 8 - (pickupTextSize / 2), v.y - ( v.height / 2 ) - 75, pickupText, "robot_normal", clrs.white )
+            CHHUD:DrawText( v.x + v.height + 8 - (pickupTextSize / 2), v.y - ( v.height / 2 ) - 75, pickupText, "gw_font_normal", clrs.white )
 
             y = y + ( v.height + 26 )
             tall = tall + v.height + 18
