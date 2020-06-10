@@ -6,7 +6,8 @@ function EFFECT:Init( data )
 	-- This is how long the spawn effect
 	-- takes from start to finish.
     self.Duration = data:GetMagnitude()
-    self.PlayBackwards = data:GetScale() < 0
+	self.PlayBackwards = data:GetScale() < 0
+	self.DontRemoveOverride = data:GetSurfaceProp() == -1
 	self.EndTime = CurTime() + self.Duration
 
 	local ent = data:GetEntity()
@@ -37,8 +38,13 @@ function EFFECT:Think()
 		return true
 	end
 
-	self.ParentEntity.RenderOverride = nil
 	self.ParentEntity.SpawnEffect = nil
+
+	if self.DontRemoveOverride then
+		self.ParentEntity.RenderOverride = function() end
+	else
+		self.ParentEntity.RenderOverride = nil
+	end
 
 	return false
 
