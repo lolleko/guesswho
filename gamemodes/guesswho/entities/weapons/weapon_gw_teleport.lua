@@ -69,7 +69,7 @@ end
 
 function SWEP:DrawHUD()
 	if self:Clip2() <= 0 then
-		self:AbilityCleanup()
+		self:RemoveDestinationModel()
 		return
 	end
 
@@ -126,10 +126,17 @@ function SWEP:CalcTeleportDestination()
 	return false, trace.HitPos
 end
 
-function SWEP:AbilityCleanup()
+function SWEP:RemoveDestinationModel()
 	if self.destinationModel then
 		hook.Remove("PreDrawHalos", self.haloHookName)
 		SafeRemoveEntity(self.destinationModel)
 		self.destinationModel = nil
 	end
+end
+
+function SWEP:AbilityCleanup()
+	if IsValid(self.Owner) then
+		self.Owner.RenderOverride = nil
+	end
+	self:RemoveDestinationModel()
 end

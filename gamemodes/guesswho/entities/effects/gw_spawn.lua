@@ -41,7 +41,7 @@ function EFFECT:Think()
 	self.ParentEntity.SpawnEffect = nil
 
 	if self.DontRemoveOverride then
-		self.ParentEntity.RenderOverride = function() end
+		self.ParentEntity.RenderOverride = self.DontDraw
 	else
 		self.ParentEntity.RenderOverride = nil
 	end
@@ -51,6 +51,9 @@ function EFFECT:Think()
 end
 
 function EFFECT:Render()
+end
+
+function EFFECT:DontDraw()
 end
 
 function EFFECT:RenderOverlay( entity )
