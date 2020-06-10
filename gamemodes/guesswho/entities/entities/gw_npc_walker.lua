@@ -123,7 +123,7 @@ function ENT:Jump()
 
     self.loco:Jump()
     self.isJumping = true
-    self.nextPossibleJump = CurTime() + 3
+    self.nextPossibleJump = CurTime() + 1.5
 end
 
 function ENT:Think()

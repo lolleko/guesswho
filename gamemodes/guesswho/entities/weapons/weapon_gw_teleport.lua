@@ -40,7 +40,7 @@ function SWEP:Ability()
 		fadeOut:SetMagnitude(self.AbilityDuration)
 		fadeOut:SetScale(-1)
 		fadeOut:SetSurfaceProp(-1)
-		util.Effect("gw_spawn", fadeOut)
+		util.Effect("gw_teleport_fade", fadeOut)
 	
 		self:AbilityTimerIfValidPlayerAndAlive(self.AbilityDuration + FrameTime() * 2, 1, true, function()
 				local fadeIn = EffectData()
@@ -48,7 +48,7 @@ function SWEP:Ability()
 				fadeIn:SetMagnitude(self.AbilityDuration)
 				fadeIn:SetScale(1)
 				fadeIn:SetSurfaceProp(1)
-				util.Effect("gw_spawn", fadeIn)
+				util.Effect("gw_teleport_fade", fadeIn)
 				if SERVER then
 					ply:SetPos(self:GetCalculatedTeleportDestination())
 				end
