@@ -306,35 +306,38 @@ function ENT:RunBehaviour()
             local goal = self.currentPath:GetCurrentGoal()
             local distToGoal = self:GetPos():Distance(goal.pos)
 
-            if goal.type == 3 then
-                self.isJumping = true
-                self.loco:JumpAcrossGap(goal.pos, goal.forward)
-            elseif not goal.area:HasAttributes(bit.bor(NAV_MESH_NO_JUMP, NAV_MESH_STAIRS)) then
-                if (goal.type == 2) and (distToGoal < 30) then
-                    self:Jump()
-                else
-                    local scanDist = 25 * self.loco:GetVelocity():Length2D() / 100
-                    local scanPoint = self:EyePos() + (self.loco:GetGroundMotionVector() * scanDist)
-
-                    local scanPointOnPath = self.currentPath:GetClosestPosition(self:EyePos() + (self.loco:GetGroundMotionVector() * scanDist))
-                    --debugoverlay.Sphere(scanPointOnPath, 10, 0.1, Color(0, 255, 0))
-
-                    local jumpBasedOnPathScan = math.abs(self:GetPos().z - scanPointOnPath.z) > self.loco:GetStepHeight() and (distToGoal < 300)
-
-                    local jumpBasedOnNavScan = false
-
-                    local scanNavArea = navmesh.GetNearestNavArea(scanPoint, false, scanDist * 2)
-                    if scanNavArea then
-                        local scanPointOnNav = scanNavArea:GetClosestPointOnArea(scanPoint)
-                        if scanPointOnNav then
-                            -- debugoverlay.Sphere(scanPointOnNav, 10, 0.1, Color(255, 0, 0))
-                            -- double threshold for navareaBasejumps
-                            jumpBasedOnNavScan = math.abs(self:GetPos().z - scanPointOnNav.z) > self.loco:GetStepHeight() * 2
-                        end
-                    end
-
-                    if self:GetPos().z < scanPoint.z and (jumpBasedOnPath or jumpBasedOnNavScan)  then
+            if not self.isJumping then
+                if goal.type == 3 then
+                    self.isJumping = true
+                    self.loco:JumpAcrossGap(goal.pos, goal.forward)
+                elseif not goal.area:HasAttributes(bit.bor(NAV_MESH_NO_JUMP, NAV_MESH_STAIRS)) then
+                    if (goal.type == 2) and (distToGoal < 30) then
                         self:Jump()
+                    else
+                        local scanDist = 25 * self.loco:GetVelocity():Length2D() / 100
+                        local scanPointPath = self:EyePos() + (self.loco:GetGroundMotionVector() * scanDist)
+
+                        local scanPointOnPath = self.currentPath:GetClosestPosition(scanPointPath)
+                        debugoverlay.Sphere(scanPointOnPath, 10, 0.1, Color(0, 255, 0))
+
+                        local jumpBasedOnPathScan = self:GetPos().z < scanPointOnPath.z and math.abs(self:GetPos().z - scanPointOnPath.z) > self.loco:GetStepHeight() and (distToGoal < 300)
+
+                        local jumpBasedOnNavScan = false
+                        local scanPointNav = self:GetPos() + (self.loco:GetGroundMotionVector() * scanDist) + Vector(0, 0, self.loco:GetStepHeight() * 1.5)
+
+                        local scanNavArea = navmesh.GetNearestNavArea(scanPointNav, false, scanDist * 2)
+                        if scanNavArea then
+                            local scanPointOnNav = scanNavArea:GetClosestPointOnArea(scanPointNav)
+                            if scanPointOnNav then
+                                debugoverlay.Sphere(scanPointOnNav, 10, 0.1, Color(255, 0, 0))
+                                -- double threshold for navareaBasejumps
+                                jumpBasedOnNavScan = self:GetPos().z < scanPointOnNav.z and math.abs(self:GetPos().z - scanPointOnNav.z) > self.loco:GetStepHeight() * 2
+                            end
+                        end
+
+                        if (jumpBasedOnPath or jumpBasedOnNavScan)  then
+                            self:Jump()
+                        end
                     end
                 end
             end
