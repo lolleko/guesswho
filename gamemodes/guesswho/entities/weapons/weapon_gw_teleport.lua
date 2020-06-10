@@ -4,6 +4,7 @@ SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Teleport"
 
 SWEP.AbilityDuration = 1.5
+SWEP.AbilityRange = 1500
 
 function SWEP:SetupDataTables()
 	self:NetworkVar("Vector", 0, "CalculatedTeleportDestination")
@@ -16,13 +17,13 @@ function SWEP:AbilityCreated()
 	if CLIENT then
 		self.destinationModel = ClientsideModel(self.Owner:GetModel(), RENDERGROUP_TRANSLUCENT)
 		self.destinationModel:SetupBones()
-		self.destinationModel:SetColor(Color( 255, 255, 255, 180))
+		self.destinationModel:SetColor(Color( 255, 255, 255, 220))
 		self.destinationModel:SetRenderMode(RENDERMODE_TRANSALPHA)
 
 		self.haloHookName = "gwTeleportHalo" .. self:EntIndex()
 		hook.Add("PreDrawHalos", self.haloHookName, function()
 			if self:GetCalculatedTeleportDestinationValid() then
-				halo.Add({self.destinationModel}, Color(200, 200, 200), 5, 5, 2 )
+				halo.Add({self.destinationModel}, Color(0, 255, 0), 2, 2, 3, true, true)
 			end
 		end)
 	end
@@ -38,13 +39,15 @@ function SWEP:Ability()
 		fadeOut:SetEntity(ply)
 		fadeOut:SetMagnitude(self.AbilityDuration)
 		fadeOut:SetScale(-1)
+		fadeOut:SetSurfaceProp(-1)
 		util.Effect("gw_spawn", fadeOut)
 	
-		self:AbilityTimerIfValidPlayerAndAlive(self.AbilityDuration, 1, true, function()
+		self:AbilityTimerIfValidPlayerAndAlive(self.AbilityDuration + FrameTime() * 2, 1, true, function()
 				local fadeIn = EffectData()
 				fadeIn:SetEntity(ply)
 				fadeIn:SetMagnitude(self.AbilityDuration)
-				fadeOut:SetScale(1)
+				fadeIn:SetScale(1)
+				fadeIn:SetSurfaceProp(1)
 				util.Effect("gw_spawn", fadeIn)
 				if SERVER then
 					ply:SetPos(self:GetCalculatedTeleportDestination())
@@ -89,28 +92,21 @@ function SWEP:DrawHUD()
 	self.destinationModel:SetPos(self.ClientCalculatedTeleportDestination)
 end
 
+function SWEP:GetTeleportTraceStart()
+	return self.Owner:GetPos() + Vector(0, 0, 100)
+end
+
 function SWEP:CalcTeleportDestination()
 	local forwardWithoutZ = self.Owner:GetForward()
 	forwardWithoutZ.z = 0
 
-	local eyeTraceStart = self.Owner:GetPos() + Vector(0, 0, 150) + self.Owner:GetRight() * 35
-
-	local eyeTrace = util.TraceLine( {
-		start = eyeTraceStart,
-		endpos = eyeTraceStart +  forwardWithoutZ * 1500
-	} )
-
-	local tpDistance = 1500
-
-	if eyeTrace.Hit then
-		tpDistance = math.Clamp((eyeTrace.HitPos - self.Owner:GetPos()):Length(), 100, 1500) + 120
-	end
+	local eyeTraceStart = self:GetTeleportTraceStart()
 
 	local aimVector = self.Owner:GetAimVector()
 
 	local trace = util.TraceLine({
 		start = eyeTraceStart,
-		endpos = eyeTraceStart + aimVector * tpDistance
+		endpos = eyeTraceStart + aimVector * self.AbilityRange
 	})
 
 	local secondTraceStart = trace.HitPos - (trace.Normal * 64)
@@ -123,10 +119,11 @@ function SWEP:CalcTeleportDestination()
 	local navArea = navmesh.GetNearestNavArea(secondTrace.HitPos + secondTrace.HitNormal, false, 10000, true)
 	if IsValid(navArea) then
 		local navAreaClosestPoint = navArea:GetClosestPointOnArea(secondTrace.HitPos)
-		return true, navAreaClosestPoint
+
+		return true, navAreaClosestPoint + Vector(0, 0, 5)
 	end
 
-	return false, secondTrace.HitPos
+	return false, trace.HitPos
 end
 
 function SWEP:AbilityCleanup()
