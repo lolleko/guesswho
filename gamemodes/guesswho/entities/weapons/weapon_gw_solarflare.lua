@@ -5,6 +5,7 @@ SWEP.Name = "Solarflare"
 SWEP.AbilitySound = "ambient/energy/zap1.wav"
 
 SWEP.AbilityRange = 400
+SWEP.AbilityShowTargetHalos = false
 SWEP.AbilityDuration = 7
 
 function SWEP:Ability()

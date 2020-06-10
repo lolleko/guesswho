@@ -5,6 +5,7 @@ SWEP.Name = "Shockwave"
 SWEP.AbilitySound = "ambient/energy/zap1.wav"
 
 SWEP.AbilityRange = 300
+SWEP.AbilityShowTargetHalos = true
 
 function SWEP:Ability()
 

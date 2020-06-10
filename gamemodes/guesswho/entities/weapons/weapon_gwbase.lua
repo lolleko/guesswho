@@ -27,6 +27,7 @@ SWEP.WorldModel = "models/brokenglass_piece.mdl"
 SWEP.HoldType = "normal"
 
 SWEP.AbilityRange = 0
+SWEP.AbilityShowTargetHalos = false
 SWEP.AbilityDuration = 0
 SWEP.AbilityStartTime = 0
 
@@ -44,7 +45,7 @@ function SWEP:AbilityCreated()
 end
 
 function SWEP:DrawWorldModel()
-    if self:Clip2() > 0 and self.AbilityRange > 0 and self:IsCarriedByLocalPlayer() then
+    if self:Clip2() > 0 and self.AbilityShowTargetHalos and self.AbilityRange > 0 and self:IsCarriedByLocalPlayer() then
         local ply = self.Owner
         for _, v in pairs( player.GetAll() ) do
           if v:GetPos():Distance( ply:GetPos() ) < self.AbilityRange and v:Alive() and v:IsSeeking() then

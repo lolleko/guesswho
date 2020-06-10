@@ -5,6 +5,7 @@ SWEP.Name = "Dance Party"
 SWEP.AbilitySound = {"vo/coast/odessa/female01/nlo_cheer01.wav", "vo/coast/odessa/female01/nlo_cheer02.wav", "vo/coast/odessa/female01/nlo_cheer03.wav"}
 
 SWEP.AbilityRange = 800
+SWEP.AbilityShowTargetHalos = true
 
 function SWEP:Ability()
 	local ply = self.Owner
