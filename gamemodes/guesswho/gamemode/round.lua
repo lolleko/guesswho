@@ -133,6 +133,8 @@ function GWRound:RoundEnd(caught)
     if timer.Exists("RoundThink") then timer.Remove("RoundThink") end
     -- choose winner and stuff
 
+    local postRoundDelay = 8
+
     if caught then
         PrintMessage(HUD_PRINTTALK,
                      "The " .. team.GetName(GW_TEAM_SEEKING) .. " win.")
@@ -141,8 +143,7 @@ function GWRound:RoundEnd(caught)
         end
         team.AddScore(GW_TEAM_SEEKING, 1)
     else
-        PrintMessage(HUD_PRINTTALK,
-                     "The " .. team.GetName(GW_TEAM_HIDING) .. " win.")
+        GWNotifications:Add("gwVictory" .. team.GetName(GW_TEAM_HIDING), "<font=gw_font_large>" .. team.GetName(GW_TEAM_HIDING) .. " Victory" .. "</font>", "", postRoundDelay)
         for k, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do
             v:ConCommand("act cheer")
             -- reset reroll protections and funcs
@@ -152,7 +153,7 @@ function GWRound:RoundEnd(caught)
         end
         team.AddScore(GW_TEAM_HIDING, 1)
     end
-    timer.Simple(8, function() self:PostRound() end)
+    timer.Simple(postRoundDelay, function() self:PostRound() end)
 end
 
 function GWRound:PostRound()

@@ -43,24 +43,15 @@ function CHHUD:TextSize( text, font )
 
 end
 
-function CHHUD:DrawPanel( x, y, w, h, clrs, brdwidth)
-
-    local b
-
-    if not brdwidth then b = 1 else b = brdwidth end
-
-    if clrs.border then
-        surface.SetDrawColor( color( clrs.border ) )
-
-        for i = 0, b - 1 do
-            surface.DrawOutlinedRect( x + i - b, y + i - b, w + b * 2 - i * 2, h + b * 2 - i * 2 ) --What a mess (TIDY?)
-        end
-
-    end
-
-    surface.SetDrawColor( color( clrs.background ) )
+function CHHUD:DrawPanel( x, y, w, h, clr)
+    surface.SetDrawColor( color( clr ) )
     surface.DrawRect( x, y, w, h )
+end
 
+function CHHUD:DrawUnderLinedPanel( x, y, w, h, clr)
+    local teamColor = team.GetColor(LocalPlayer():Team())
+    CHHUD:DrawPanel( x, y, w, h, clrs.darkgreybg )
+    CHHUD:DrawPanel( x, y + h - 5, w, 5, teamColor )
 end
 
 function CHHUD:DrawCircle( x, y, radius, seg, clr)
@@ -122,8 +113,7 @@ function CHuntHUD()
     local teamColor = team.GetColor(ply:Team())
     local label = GWRound:GetRoundLabel() or "ERROR"
 
-    CHHUD:DrawPanel( ScrW() / 2 - 100, 0, 200, 50, {background = clrs.darkgreybg})
-    CHHUD:DrawPanel( ScrW() / 2 - 100, 45, 200, 5, {background = teamColor})
+    CHHUD:DrawUnderLinedPanel( ScrW() / 2 - 100, 0, 200, 50, clrs.darkgreybg)
     CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(time, "gw_font_normal") / 2), 5, time, "gw_font_normal", clrs.white )
     CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize( label, "gw_font_small" ) / 2 ), 26, label, "gw_font_small", clrs.white )
 
@@ -141,8 +131,7 @@ function CHuntHUD()
 
     if ply:Alive() and ( ply:IsHiding() or ply:IsSeeking() ) and health > 0 then
 
-        CHHUD:DrawPanel( 20, ScrH() - 80, 100, 60, {background = clrs.darkgreybg})
-        CHHUD:DrawPanel( 20, ScrH() - 25, 100, 5, {background = teamColor})
+        CHHUD:DrawUnderLinedPanel( 20, ScrH() - 80, 100, 60, clrs.darkgreybg)
         CHHUD:DrawText( 70 - (CHHUD:TextSize(health, "gw_font_large") / 2), ScrH() - 75, health, "gw_font_large", clrs.white )
 
     end
@@ -190,13 +179,12 @@ function CHuntHUD()
         if ply:IsSeeking() then
 
             if clipLeft ~= -1 then
-                CHHUD:DrawPanel( ScrW() - 220, ScrH() - 80, 200, 60, {background = clrs.darkgreybg})
-                CHHUD:DrawPanel( ScrW() - 220, ScrH() - 25, 200, 5, {background = teamColor})
+                CHHUD:DrawUnderLinedPanel( ScrW() - 220, ScrH() - 80, 200, 60, clrs.darkgreybg)
                 CHHUD:DrawText( ScrW() - 120 - (CHHUD:TextSize(clipLeft.. "/" .. clipExtra, "gw_font_large") / 2), ScrH() - 75, clipLeft .. "/" .. clipExtra, "gw_font_large", clrs.white )
             end
 
             if secondaryAmmo > 0 then
-                CHHUD:DrawPanel( ScrW() - 310, ScrH() - 40, 80, 20, {background = teamColor})
+                CHHUD:DrawPanel( ScrW() - 310, ScrH() - 40, 80, 20, teamColor)
                 CHHUD:DrawText( ScrW() - 305, ScrH() - 38, "Nuke ready!", "gw_font_small", clrs.white )
             end
 
@@ -204,7 +192,7 @@ function CHuntHUD()
 
         if ply:IsHiding() and ply:GetActiveWeapon():Clip2() > 0 then
             draw.RoundedBoxEx(64, ScrW() - 148, ScrH() - 168, 128, 128, clrs.abilitybg, true, true)
-            CHHUD:DrawPanel( ScrW() - 148, ScrH() - 40, 128, 20, {background = clrs.darkgreybg})
+            CHHUD:DrawPanel( ScrW() - 148, ScrH() - 40, 128, 20, clrs.darkgreybg)
             CHHUD:DrawAbilityIcon(ply:GetActiveWeapon():GetClass(), ScrW() - 148, ScrH() - 168)
             CHHUD:DrawText( ScrW() - ( 84 + CHHUD:TextSize( ply:GetActiveWeapon().Name, "gw_font_small" ) / 2 ), ScrH() - 38, ply:GetActiveWeapon().Name, "gw_font_small", clrs.white )
         end
@@ -243,11 +231,11 @@ function CHuntHUD()
     if ply:Alive() and ply:IsHiding() and GetConVar("gw_touches_enabled"):GetBool() then
 
         for i = 1, GetConVar("gw_touches_required"):GetInt() do
-            CHHUD:DrawPanel( 110 + i * 20, ScrH() - 50, 10, 30, {background = clrs.darkgreybg})
+            CHHUD:DrawPanel( 110 + i * 20, ScrH() - 50, 10, 30, clrs.darkgreybg)
         end
 
         for i = 1, ply:GetSeekerTouches() do
-            CHHUD:DrawPanel( 110 + i * 20, ScrH() - 50, 10, 30, {background = teamColor})
+            CHHUD:DrawPanel( 110 + i * 20, ScrH() - 50, 10, 30, teamColor)
         end
 
 
@@ -257,7 +245,6 @@ function CHuntHUD()
     if LocalPlayer() ~= ply and IsValid( ply:GetActiveWeapon() ) and ply:GetActiveWeapon().DrawHUD then
         ply:GetActiveWeapon():DrawHUD()
     end
-
 end
 hook.Add( "HUDPaint", "CHuntHUD", CHuntHUD)
 
@@ -370,8 +357,7 @@ function GM:HUDDrawPickupHistory()
 
             local pickupTextSize = CHHUD:TextSize(pickupText, "gw_font_normal")
 
-            CHHUD:DrawPanel( v.x + v.height + 8 - pickupTextSize / 2 - 5, v.y - ( v.height / 2 ) - 80, pickupTextSize + 10, 35, {background = clrs.darkgreybg})
-            CHHUD:DrawPanel( v.x + v.height + 8 - pickupTextSize / 2 - 5, v.y - ( v.height / 2 ) - 50, pickupTextSize + 10, 5, {background = teamColor})
+            CHHUD:DrawUnderLinedPanel( v.x + v.height + 8 - pickupTextSize / 2 - 5, v.y - ( v.height / 2 ) - 80, pickupTextSize + 10, 35, clrs.darkgreybg)
             CHHUD:DrawText( v.x + v.height + 8 - (pickupTextSize / 2), v.y - ( v.height / 2 ) - 75, pickupText, "gw_font_normal", clrs.white )
 
             y = y + ( v.height + 26 )

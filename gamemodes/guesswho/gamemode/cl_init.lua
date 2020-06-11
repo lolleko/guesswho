@@ -28,6 +28,7 @@ surface.CreateFont("gw_font_normal", {
     antialias = true,
     shadow = false
 })
+
 surface.CreateFont("gw_font_small", {
     font = "Inter",
     size = 17,
@@ -35,6 +36,15 @@ surface.CreateFont("gw_font_small", {
     antialias = true,
     shadow = false
 })
+
+surface.CreateFont("gw_font_small_bold", {
+    font = "Inter",
+    size = 17,
+    weight = 800,
+    antialias = true,
+    shadow = false
+})
+
 surface.CreateFont("gw_font_smaller", {
     font = "Inter",
     size = 13,
@@ -55,7 +65,7 @@ clrs = {
     black = Color(0, 0, 0),
     darkgreybg = Color(26, 26, 26, 245),
     greybg = Color(42, 42, 42, 200),
-    abilitybg = Color(42, 42, 42, 150),
+    abilitybg = Color(90, 90, 90, 150),
     redbg = Color(158, 49, 74, 50),
     white = Color(255, 255, 255)
 }

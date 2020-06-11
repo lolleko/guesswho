@@ -7,6 +7,8 @@ AddCSLuaFile( "player_class/player_seeker.lua")
 AddCSLuaFile( "sh_animations.lua")
 AddCSLuaFile( "sh_config.lua")
 AddCSLuaFile( "sh_taunts.lua")
+AddCSLuaFile( "sh_notifications.lua")
+
 --translations
 for _,locale in pairs( file.Find( "gamemodes/guesswho/gamemode/lang/*", "GAME" ) ) do
     AddCSLuaFile( "lang/" .. locale )
@@ -43,10 +45,11 @@ for _,sound in pairs( file.Find( "sound/gwabilities/*", "GAME" ) ) do
     resource.AddFile( "sound/gwabilities/" .. sound )
 end
 
-util.AddNetworkString( "gwRoundState" )
-util.AddNetworkString( "gwPlayerHull" )
-util.AddNetworkString( "gwSendConfig" )
-util.AddNetworkString( "gwRequestUpdateConfig" )
+util.AddNetworkString("gwRoundState")
+util.AddNetworkString("gwPlayerHull")
+util.AddNetworkString("gwSendConfig")
+util.AddNetworkString("gwRequestUpdateConfig")
+util.AddNetworkString("gwSendNotification")
 
 
 -- Disable Enhanced playermodel selector

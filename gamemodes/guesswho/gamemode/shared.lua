@@ -55,6 +55,7 @@ include("player_class/player_guess_who.lua")
 include("player_class/player_hiding.lua")
 include("player_class/player_seeker.lua")
 include("sh_animations.lua")
+include("sh_notifications.lua")
 
 function GM:CreateTeams()
 	team.SetUp( GW_TEAM_HIDING, "Hiding", self.GWConfig.TeamHidingColor )
