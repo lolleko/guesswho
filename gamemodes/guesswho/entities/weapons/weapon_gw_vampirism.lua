@@ -5,12 +5,13 @@ SWEP.Name = "Vampirism"
 SWEP.AbilitySound = "HealthKit.Touch"
 
 SWEP.AbilityRange = 500
-SWEP.AbilityDuration = 3.5
+SWEP.AbilityDuration = 4
 SWEP.AbilityShowTargetHalos = true
 SWEP.AbilityTargetHalosRequireLOS = true
-SWEP.AbilityDamagePercentageString = "third"
+SWEP.AbilityDamagePercentageString = "quarter"
+SWEP.AbilityDamageSpeedBonusString = "twice"
 
-SWEP.AbilityDescription = "Steals energy from nearby seekers. Adding a $AbilityDamagePercentageString of their health to your own. Fueled by your victims energy you will also be able to run faster for $AbilityDuration seconds. Targets all seekers within $AbilityRange units and line of sight."
+SWEP.AbilityDescription = "\"Borrows\" energy from nearby seekers. Adding a $AbilityDamagePercentageString of their health to your own. Fueled by your victims energy you will also be able to run $AbilityDamageSpeedBonusString as fast for $AbilityDuration seconds. Targets all seekers within $AbilityRange units and line of sight."
 
 function SWEP:Ability()
     if CLIENT then return end
@@ -23,15 +24,7 @@ function SWEP:Ability()
 
     for _,v in pairs( player.GetAll() ) do
         if v:Alive() and v:GetPos():Distance( self.Owner:GetPos() ) < self.AbilityRange and v:IsSeeking() then
-
-            local losTrace = util.TraceLine( {
-                start = self.Owner:EyePos(),
-                endpos = v:EyePos(),
-                filter = self.Owner,
-                mask = MASK_SOLID_BRUSHONLY
-            })
-
-            if not losTrace.Hit then
+            if self:AbilityIsTargetInLOS(v) then
                 validTargetFound = true
             
                 v:EmitSound("physics/flesh/flesh_bloody_impact_hard1.wav")
@@ -42,7 +35,7 @@ function SWEP:Ability()
                 effectdata:SetRadius( 10 )
                 util.Effect("gw_vampirism", effectdata, true, true)
 
-                local dmg =  v:Health() / 3
+                local dmg =  v:Health() / 4
                 v:TakeDamage(dmg, self.Owner, self)
 
                 self.Owner:SetRunSpeed(self.Owner:GetRunSpeed() * 2)
