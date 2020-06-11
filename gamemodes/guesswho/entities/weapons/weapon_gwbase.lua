@@ -63,13 +63,7 @@ function SWEP:DrawWorldModel()
         local ply = self.Owner
         for _, v in pairs( player.GetAll() ) do
           if v:GetPos():Distance( ply:GetPos() ) < self.AbilityRange and v:Alive() and v:IsSeeking() then
-            local losTrace = util.TraceLine( {
-                start = self.Owner:EyePos(),
-                endpos = v:EyePos(),
-                filter = self.Owner,
-                mask = MASK_SOLID_BRUSHONLY
-            })
-            if not losTrace.Hit then
+            if self:AbilityIsTargetInLOS(v) then
                 halo.Add( {v}, Color(255, 0, 0), 3, 3, 5)
             end
           end
@@ -167,6 +161,19 @@ function SWEP:AbilityCleanup()
 
 end
 
+function SWEP:AbilityIsTargetInLOS(target, mask)
+    if not IsValid(self) or not IsValid(self.Owner) or not self.Owner:Alive() then return false end
+
+    local losTrace = util.TraceLine({
+        start = self.Owner:GetPos() + self.Owner:OBBCenter(),
+        endpos = self.Owner:GetPos() + target:OBBCenter(),
+        filter = self.Owner,
+        mask = mask or MASK_SOLID_BRUSHONLY
+    })
+
+    return not losTrace.Hit
+end
+
 function SWEP:AbilityTimer(dur, reps, remove, fn)
     local timerName = "gwAbility" .. "." .. self:EntIndex() .. "." .. self.currentTimerID
     self.currentTimerID = self.currentTimerID + 1
@@ -192,7 +199,7 @@ end
 
 function SWEP:AbilityTimerIfValidPlayerAndAlive(dur, reps, removeTimerWithSwep, fn)
     self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
-        if not IsValid(self) or not IsValid(self.Owner) or !self.Owner:Alive() then return end
+        if not IsValid(self) or not IsValid(self.Owner) or not self.Owner:Alive() then return end
         fn()
     end)
 end
