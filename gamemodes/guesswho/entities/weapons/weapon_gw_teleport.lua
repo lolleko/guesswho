@@ -106,14 +106,16 @@ function SWEP:CalcTeleportDestination()
 
 	local trace = util.TraceLine({
 		start = eyeTraceStart,
-		endpos = eyeTraceStart + aimVector * self.AbilityRange
+		endpos = eyeTraceStart + aimVector * self.AbilityRange,
+		mask = MASK_PLAYERSOLID,
 	})
 
 	local secondTraceStart = trace.HitPos - (trace.Normal * 64)
 
 	local secondTrace = util.TraceLine({
 		start = secondTraceStart,
-		endpos = secondTraceStart - Vector(0, 0, 1000)
+		endpos = secondTraceStart - Vector(0, 0, 1000),
+		mask = MASK_PLAYERSOLID,
 	})
 
 	local navArea = navmesh.GetNearestNavArea(secondTrace.HitPos + secondTrace.HitNormal, false, 10000, true)
@@ -128,10 +130,10 @@ end
 
 function SWEP:RemoveDestinationModel()
 	if self.destinationModel then
-		hook.Remove("PreDrawHalos", self.haloHookName)
 		SafeRemoveEntity(self.destinationModel)
 		self.destinationModel = nil
 	end
+	hook.Remove("PreDrawHalos", self.haloHookName)
 end
 
 function SWEP:AbilityCleanup()
