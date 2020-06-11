@@ -6,17 +6,16 @@ SWEP.AbilitySound = "gwabilities/timelapse.mp3"
 
 SWEP.AbilityDuration = 15
 
-function SWEP:Deploy()
-	local timerName = "gwAbilityTimelapseThink" .. self:EntIndex()
-	self.TimelapseData = {}
-	if not timer.Exists(timerName) then
-		timer.Create(timerName, 0.2, 0, function() if IsValid(self) then self:TimelapseThink() end end)
+SWEP.AbilityDescription = "Took a wrong turn? Fear not! This ability takes you back $AbilityDuration seconds in time."
+
+function SWEP:AbilityCreated()
+	if SERVER then
+		self.TimelapseData = {}
+		self.timelapsThinkName = self:AbilityTimerIfValidPlayerAndAlive(0.2, 0, true, function() self:TimelapseThink() end)
 	end
 end
 
 function SWEP:TimelapseThink()
-	if not IsValid(self.Owner) then return end
-
 	local data = {
 		pos = self.Owner:GetPos(),
 		ang = self.Owner:EyeAngles(),
@@ -34,7 +33,8 @@ function SWEP:Ability()
 		local startSize = 80
 		local endSize = 0
 
-		timer.Remove("gwAbilityTimelapseThink" .. self:EntIndex())
+		-- stop thinker
+		timer.Remove(self.timelapsThinkName)
 
 		for i, data in pairs(self.TimelapseData) do
 			if self.TimelapseData[i + 1] and data.pos == self.TimelapseData[i + 1].pos then
@@ -44,7 +44,7 @@ function SWEP:Ability()
 
 		if #self.TimelapseData ~= 0 then
 			self.TimeLapseTrail = util.SpriteTrail(self.Owner, 0, Color(255, 255, 255), false, startSize, endSize, 2, 1 / ( ( startSize + endSize ) * 0.5 ), "trails/physbeam.vmt")
-			timer.Create("gwAbilityTimelapseActive" .. self:EntIndex(), 0.001, #self.TimelapseData, function()
+			self:AbilityTimerIfValidPlayerAndAlive(0.001, #self.TimelapseData, true, function()
 				local data = self.TimelapseData[1]
 				self.Owner:SetPos(data.pos)
 				local ang = data.ang
@@ -65,10 +65,8 @@ function SWEP:Ability()
 	end
 end
 
-function SWEP:OnRemove()
+function SWEP:AbilityCleanup()
 	if SERVER then
 		SafeRemoveEntity(self.TimeLapseTrail)
-		timer.Remove("gwAbilityTimelapseThink" .. self:EntIndex())
-		timer.Remove("gwAbilityTimelapseActive" .. self:EntIndex())
 	end
 end
