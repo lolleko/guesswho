@@ -56,7 +56,7 @@ function GWNotifications:Remove(uuid)
 end
 
 function GWNotifications:Draw()
-    local yoffset  = ScrH() / 2 - 100
+    local yoffset  = ScrH() / 2 - 150
     local padding = 10
     local xStart = ScrW() - GWNotifications:GetMaxWidth() - padding * 2
     local width = GWNotifications:GetMaxWidth() + padding * 2 + 2 -- +2 because of weird gap
@@ -96,7 +96,7 @@ function GWNotifications:Draw()
                 notifcation.text:Draw(xStartAnimated + padding, yoffset + notifcation.header:GetHeight() + padding * 2, 0, 0)
             end
 
-            yoffset = yoffset + height
+            yoffset = yoffset + height + 20
         end
     end
 end

@@ -11,7 +11,7 @@ SWEP.AbilityTargetHalosRequireLOS = true
 SWEP.AbilityDamagePercentageString = "quarter"
 SWEP.AbilityDamageSpeedBonusString = "twice"
 
-SWEP.AbilityDescription = "Steals energy from nearby seekers. Adding a $AbilityDamagePercentageString of their health to your own. Fueled by your victims energy you will also be able to run $AbilityDamageSpeedBonusString as fast for $AbilityDuration seconds.\nTargets all seekers that are within $AbilityRange units and line of sight."
+SWEP.AbilityDescription = "Steals energy from nearby seekers. Adding a $AbilityDamagePercentageString of their health to your own. Fueled by your victims energy you will also be able to run $AbilityDamageSpeedBonusString as fast for $AbilityDuration seconds.\n\nTargets all seekers that are within $AbilityRange units and line of sight."
 
 function SWEP:Ability()
     if CLIENT then return end

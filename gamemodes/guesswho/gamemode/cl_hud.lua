@@ -359,8 +359,8 @@ function GM:HUDDrawPickupHistory()
                 pickupText = v.name
             end
             
-            CHHUD:DrawUnderLinedPanel(ScrW() - (240 * ratio), v.y -100, 240, 40, Color(clrs.darkgreybg.r, clrs.darkgreybg.g, clrs.darkgreybg.b , alpha))
-            CHHUD:DrawText(ScrW() - (230 * ratio), v.y - 100 + 5, pickupText, "gw_font_normal", Color(clrs.white.r, clrs.white.g, clrs.white.b , alpha))
+            CHHUD:DrawUnderLinedPanel(ScrW() - (240 * ratio), v.y - 125, 240, 40, Color(clrs.darkgreybg.r, clrs.darkgreybg.g, clrs.darkgreybg.b , alpha))
+            CHHUD:DrawText(ScrW() - (230 * ratio), v.y - 125 + 5, pickupText, "gw_font_normal", Color(clrs.white.r, clrs.white.g, clrs.white.b , alpha))
 
 			y = y + ( v.height + 16 )
 			tall = tall + v.height + 18

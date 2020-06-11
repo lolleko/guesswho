@@ -127,8 +127,8 @@ function GM:ShowTeam()
     InfoTitle:SetTextColor(clrs.lightgrey)
 
     local InfoDescription = vgui.Create("DTextEntry", TeamSelectFrame)
-    InfoDescription:SetPos(ScrW() / 2 - 620 + 4, linkOffsetY + 40)
-    InfoDescription:SetSize(272, 160)
+    InfoDescription:SetPos(ScrW() / 2 - 620 + 5, linkOffsetY + 40)
+    InfoDescription:SetSize(270, 160)
     InfoDescription:SetContentAlignment(5)
     InfoDescription:SetText(GAMEMODE.GWConfig.News)
     InfoDescription:SetPaintBackground(false)
@@ -169,7 +169,7 @@ function GM:ShowTeam()
     end
     if input.LookupBinding("menu") and input.LookupBinding("menu_context") then
         table.insert(controls, {
-            string.upper(input.LookupBinding("menu")) .. " + " ..
+            string.upper(input.LookupBinding("menu")) .. " / " ..
                 string.upper(input.LookupBinding("menu_context")),
             GWLANG:Translate("teamselect_controls_taunts")
         })
