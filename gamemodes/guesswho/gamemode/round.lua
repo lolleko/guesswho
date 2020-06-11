@@ -234,8 +234,8 @@ function GWRound:MeshController()
     if navmesh.IsLoaded() then
         MsgN("GW Navmesh loaded waiting for game to start.")
     else
+        timer.Remove("gwPreGameTimer")
         self:SetRoundState(GW_ROUND_NAV_GEN)
-        timer.Pause("gwPreGameTimer")
         navmesh.BeginGeneration()
         -- force generate
         if not navmesh.IsGenerating() then
@@ -258,8 +258,9 @@ function GWRound:MeshController()
                          " GW Navmesh generation failed, try to reload the map a few times.\nIf it still fails try a diffrent map!")
         else
             timer.Create("gwNavmeshGen", 1, 0, function()
+                print(self:GetRoundState())
                 PrintMessage(HUD_PRINTCENTER,
-                             "Generating navmesh, this will take some time!\nUp to 20min (worst case) depending on map size and your system.\nYou will only need to do this once.\nOn auto generated navs the ai pathing will fail a lot.\nUse a custom navmesh if available!")
+                             "Generating navmesh, this will take some time!\nUp to 10min (worst case) depending on map size and your system.\nYou will only need to do this once.")
             end)
         end
     end
@@ -375,7 +376,7 @@ function GWRound:IsCurrentState(state) return self.RoundState == state end
 function GWRound:SendRoundState(state, ply)
 
     net.Start("gwRoundState")
-    net.WriteUInt(state, 3)
+    net.WriteUInt(state, 8)
     return ply and net.Send(ply) or net.Broadcast()
 
 end

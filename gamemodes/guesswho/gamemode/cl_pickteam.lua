@@ -77,8 +77,7 @@ function GM:ShowTeam()
 
     function TeamSelectFrame:Think()
         if GWRound:IsCurrentState(GW_ROUND_NAV_GEN) then
-            self:Remove()
-            GAMEMODE.TeamSelectFrame = nil
+            GAMEMODE:HideTeam()
         end
     end
 
