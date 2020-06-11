@@ -328,25 +328,29 @@ function GM:HUDDrawPickupHistory()
 
         if ( v.time < CurTime() ) then
 
-            if ( v.y == nil ) then v.y = y end
+			if ( v.y == nil ) then v.y = y end
 
-            v.y = ( v.y * 5 + y ) / 6
+			v.y = ( v.y * 5 + y ) / 6
 
-            local delta = ( v.time + v.holdtime ) - CurTime()
-            delta = delta / v.holdtime
+			local delta = ( v.time + v.holdtime ) - CurTime()
+			delta = delta / v.holdtime
 
-            local alpha = 255
-            local colordelta = math.Clamp( delta, 0.6, 0.7 )
+			local alpha = 255
+			local colordelta = math.Clamp( delta, 0.6, 0.7 )
 
             -- Fade in/out
+            local ratio = 1
             if ( delta > 1 - v.fadein ) then
-                alpha = math.Clamp( ( 1.0 - delta ) * ( 255 / v.fadein ), 0, 255 )
+                ratio = math.Clamp( ( 1.0 - delta ) * ( 1 / v.fadein ), 0, 1)
+				alpha = ratio * 255
             elseif ( delta < v.fadeout ) then
-                alpha = math.Clamp( delta * ( 255 / v.fadeout ), 0, 255 )
-            end
+                ratio = math.Clamp( delta * ( 1 / v.fadeout ), 0, 1)
+				alpha = ratio * 255
+			end
 
-            v.x = x + self.PickupHistoryWide - (self.PickupHistoryWide * ( alpha / 255 ) )
+			v.x = x + self.PickupHistoryWide - ( self.PickupHistoryWide * ( alpha / 255 ) )
 
+            
             local pickupText
 
             if ply:IsHiding() and IsValid( ply:GetActiveWeapon() ) and ply:GetActiveWeapon():GetClass() ~= "weapon_gw_smgdummy" then
@@ -354,17 +358,18 @@ function GM:HUDDrawPickupHistory()
             else
                 pickupText = v.name
             end
+            
+            CHHUD:DrawUnderLinedPanel(ScrW() - (240 * ratio), v.y -100, 240, 40, Color(clrs.darkgreybg.r, clrs.darkgreybg.g, clrs.darkgreybg.b , alpha))
+            CHHUD:DrawText(ScrW() - (230 * ratio), v.y - 100 + 5, pickupText, "gw_font_normal", Color(clrs.white.r, clrs.white.g, clrs.white.b , alpha))
 
-            local pickupTextSize = CHHUD:TextSize(pickupText, "gw_font_normal")
+			y = y + ( v.height + 16 )
+			tall = tall + v.height + 18
+			wide = math.max( wide, v.width + v.height + 24 )
 
-            CHHUD:DrawUnderLinedPanel( v.x + v.height + 8 - pickupTextSize / 2 - 5, v.y - ( v.height / 2 ) - 80, pickupTextSize + 10, 35, clrs.darkgreybg)
-            CHHUD:DrawText( v.x + v.height + 8 - (pickupTextSize / 2), v.y - ( v.height / 2 ) - 75, pickupText, "gw_font_normal", clrs.white )
+			if ( alpha == 0 ) then self.PickupHistory[ k ] = nil end
 
-            y = y + ( v.height + 26 )
-            tall = tall + v.height + 18
-            wide = math.Max( wide, v.width + v.height + 24 )
 
-            if ( alpha == 0 ) then self.PickupHistory[ k ] = nil end
+
 
         end
 
