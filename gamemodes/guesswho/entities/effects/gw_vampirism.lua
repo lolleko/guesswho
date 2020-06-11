@@ -8,7 +8,7 @@ function EFFECT:Init( data )
     self:SetPos( self.Entity:GetPos() )
     self.TargetPos = data:GetOrigin()
 
-    self.EndTime = CurTime() + 1
+    self.EndTime = CurTime() + 2
 end
 
 function EFFECT:GenerateArc(startPos, endPos, branchChance, detail)

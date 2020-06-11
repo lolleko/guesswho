@@ -166,7 +166,7 @@ function SWEP:AbilityIsTargetInLOS(target, mask)
 
     local losTrace = util.TraceLine({
         start = self.Owner:GetPos() + self.Owner:OBBCenter(),
-        endpos = self.Owner:GetPos() + target:OBBCenter(),
+        endpos = target:GetPos() + target:OBBCenter(),
         filter = self.Owner,
         mask = mask or MASK_SOLID_BRUSHONLY
     })

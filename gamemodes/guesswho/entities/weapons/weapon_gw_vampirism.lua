@@ -5,13 +5,13 @@ SWEP.Name = "Vampirism"
 SWEP.AbilitySound = "HealthKit.Touch"
 
 SWEP.AbilityRange = 500
-SWEP.AbilityDuration = 4
+SWEP.AbilityDuration = 5
 SWEP.AbilityShowTargetHalos = true
 SWEP.AbilityTargetHalosRequireLOS = true
 SWEP.AbilityDamagePercentageString = "quarter"
 SWEP.AbilityDamageSpeedBonusString = "twice"
 
-SWEP.AbilityDescription = "\"Borrows\" energy from nearby seekers. Adding a $AbilityDamagePercentageString of their health to your own. Fueled by your victims energy you will also be able to run $AbilityDamageSpeedBonusString as fast for $AbilityDuration seconds. Targets all seekers within $AbilityRange units and line of sight."
+SWEP.AbilityDescription = "\"Borrows\" energy from nearby seekers. Adding a $AbilityDamagePercentageString of their health to your own. Fueled by your victims energy you will also be able to run $AbilityDamageSpeedBonusString as fast for $AbilityDuration seconds.\nTargets all seekers that are within $AbilityRange units and line of sight."
 
 function SWEP:Ability()
     if CLIENT then return end
@@ -41,7 +41,7 @@ function SWEP:Ability()
                 self.Owner:SetRunSpeed(self.Owner:GetRunSpeed() * 2)
                 self.Owner:SetWalkSpeed(self.Owner:GetWalkSpeed() * 2)
 
-                self:AbilityTimerIfValidPlayerAndAlive(0.25, 4, true, function()
+                self:AbilityTimerIfValidPlayerAndAlive(0.5, 4, true, function()
                     self.Owner:SetHealth(self.Owner:Health() + dmg / 4)
                 end)
             end
