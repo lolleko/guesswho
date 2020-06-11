@@ -5,6 +5,7 @@ SWEP.Name = "Teleport"
 
 SWEP.AbilityDuration = 1.5
 SWEP.AbilityRange = 1500
+SWEP.AbilityDescription = "Teleports you to the position indicated by the glowing playermodel.\nTeleportation occurs after a $AbilityDuration second delay. The maximum teleport range is $AbilityRange."
 
 function SWEP:SetupDataTables()
 	self:NetworkVar("Vector", 0, "CalculatedTeleportDestination")
@@ -19,12 +20,10 @@ function SWEP:AbilityCreated()
 		self.destinationModel:SetupBones()
 		self.destinationModel:SetColor(Color( 255, 255, 255, 220))
 		self.destinationModel:SetRenderMode(RENDERMODE_TRANSALPHA)
-
+		self.haloColor = Color(0, 255, 0)
 		self.haloHookName = "gwTeleportHalo" .. self:EntIndex()
 		hook.Add("PreDrawHalos", self.haloHookName, function()
-			if self:GetCalculatedTeleportDestinationValid() then
-				halo.Add({self.destinationModel}, Color(0, 255, 0), 2, 2, 3, true, true)
-			end
+			halo.Add({self.destinationModel}, self.haloColor, 2, 2, 3, true, true)
 		end)
 	end
 end
@@ -80,10 +79,12 @@ function SWEP:DrawHUD()
 	local teleportDestination = self:GetCalculatedTeleportDestination()
 	local teleportDestinationValid = self:GetCalculatedTeleportDestinationValid()
 
+	self.destinationModel:SetColor(Color( 255, 255, 255, 180))
+
 	if teleportDestinationValid then
-		self.destinationModel:SetColor(Color( 255, 255, 255, 180))
+		self.haloColor = Color(0, 255, 0)
 	else
-		self.destinationModel:SetColor(Color( 255, 255, 255, 0))
+		self.haloColor = Color(255, 0, 0)
 	end
 
 	self.ClientCalculatedTeleportDestination = LerpVector(math.Clamp(FrameTime() * 60, 0, 1), self.ClientCalculatedTeleportDestination, teleportDestination)
@@ -120,9 +121,22 @@ function SWEP:CalcTeleportDestination()
 
 	local navArea = navmesh.GetNearestNavArea(secondTrace.HitPos + secondTrace.HitNormal, false, 10000, true)
 	if IsValid(navArea) then
-		local navAreaClosestPoint = navArea:GetClosestPointOnArea(secondTrace.HitPos)
+		local navAreaClosestPoint = navArea:GetClosestPointOnArea(secondTrace.HitPos) + Vector(0, 0, 5)
 
-		return true, navAreaClosestPoint + Vector(0, 0, 5)
+		local hullTrace = util.TraceEntity(
+			{
+				start= navAreaClosestPoint,
+				endpos= navAreaClosestPoint,
+				mask=MASK_SOLID
+			},
+			self.Owner
+		)
+
+		if hullTrace.Hit then
+			return false, navAreaClosestPoint
+		end
+	
+		return true, navAreaClosestPoint
 	end
 
 	return false, trace.HitPos

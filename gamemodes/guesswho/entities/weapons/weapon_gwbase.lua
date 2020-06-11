@@ -28,14 +28,28 @@ SWEP.HoldType = "normal"
 
 SWEP.AbilityRange = 0
 SWEP.AbilityShowTargetHalos = false
+SWEP.AbilityTargetHalosRequireLOS = false
 SWEP.AbilityDuration = 0
 SWEP.AbilityStartTime = 0
+SWEP.AbilityDescription = ""
 
 function SWEP:Initialize()
     self:SetHoldType( self.HoldType )
 
     self.currentTimerID = 0
     self.activeTimers = {}
+
+    if CLIENT then
+        local description = self.AbilityDescription
+
+        if (description) then
+            description = string.gsub(description, "$(%w+)", function(specialValue)
+                return "<font=gw_font_small_bold>" .. tostring(self[specialValue]) .. "</font>"
+            end)
+        end
+
+        GWNotifications:Add("gwAbility", "<font=gw_font_normal>Ability: " .. self.Name .. "</font>", "<font=gw_font_small>" .. description .. "</font>", GWRound:GetEndTime() - CurTime())
+    end
 
     self:AbilityCreated()
 end
@@ -49,7 +63,15 @@ function SWEP:DrawWorldModel()
         local ply = self.Owner
         for _, v in pairs( player.GetAll() ) do
           if v:GetPos():Distance( ply:GetPos() ) < self.AbilityRange and v:Alive() and v:IsSeeking() then
-            halo.Add( {v}, Color(255, 0, 0), 3, 3, 5)
+            local losTrace = util.TraceLine( {
+                start = self.Owner:EyePos(),
+                endpos = v:EyePos(),
+                filter = self.Owner,
+                mask = MASK_SOLID_BRUSHONLY
+            })
+            if not losTrace.Hit then
+                halo.Add( {v}, Color(255, 0, 0), 3, 3, 5)
+            end
           end
         end
     end
