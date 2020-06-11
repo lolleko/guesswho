@@ -255,7 +255,7 @@ function GWRound:MeshController()
 
         if not navmesh.IsGenerating() then
             PrintMessage(HUD_PRINTCENTER,
-                         " GW Navmesh generation failed, try to reload the map a few times.\nIf it still fails try a diffrent map!")
+                         "Guess Who Navmesh generation failed, try to reload the map a few times.\nIf it still fails try a diffrent map!")
         else
             timer.Create("gwNavmeshGen", 1, 0, function()
                 print(self:GetRoundState())

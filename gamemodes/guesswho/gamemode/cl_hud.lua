@@ -366,10 +366,7 @@ function GM:HUDDrawPickupHistory()
 			tall = tall + v.height + 18
 			wide = math.max( wide, v.width + v.height + 24 )
 
-			if ( alpha == 0 ) then self.PickupHistory[ k ] = nil end
-
-
-
+            if ( alpha == 0 ) then self.PickupHistory[ k ] = nil end
 
         end
 

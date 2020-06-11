@@ -181,24 +181,26 @@ function SWEP:AbilityTimer(dur, reps, remove, fn)
     timer.Create(timerName, dur, reps, fn)
 
     self.activeTimers[timerName] = remove
+
+    return timerName
 end
 
 function SWEP:AbilityTimerIfValidSWEP(dur, reps, removeTimerWithSwep, fn)
-    self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
+    return self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
         if not IsValid(self) then return end
         fn()
     end)
 end
 
 function SWEP:AbilityTimerIfValidPlayer(dur, reps, remove, fn)
-    self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
+    return self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
         if not IsValid(self) or not IsValid(self.Owner) then return end
         fn()
     end)
 end
 
 function SWEP:AbilityTimerIfValidPlayerAndAlive(dur, reps, removeTimerWithSwep, fn)
-    self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
+    return self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
         if not IsValid(self) or not IsValid(self.Owner) or not self.Owner:Alive() then return end
         fn()
     end)
