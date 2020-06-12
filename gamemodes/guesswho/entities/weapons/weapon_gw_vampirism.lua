@@ -7,7 +7,6 @@ SWEP.AbilitySound = "HealthKit.Touch"
 SWEP.AbilityRange = 500
 SWEP.AbilityDuration = 5
 SWEP.AbilityShowTargetHalos = true
-SWEP.AbilityTargetHalosRequireLOS = true
 SWEP.AbilityDamagePercentageString = "quarter"
 SWEP.AbilityDamageSpeedBonusString = "twice"
 

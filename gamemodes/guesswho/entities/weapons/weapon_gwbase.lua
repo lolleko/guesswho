@@ -28,7 +28,6 @@ SWEP.HoldType = "normal"
 
 SWEP.AbilityRange = 0
 SWEP.AbilityShowTargetHalos = false
-SWEP.AbilityTargetHalosRequireLOS = false
 SWEP.AbilityDuration = 0
 SWEP.AbilityStartTime = 0
 SWEP.AbilityDescription = ""
