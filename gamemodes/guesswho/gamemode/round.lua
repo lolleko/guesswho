@@ -136,13 +136,13 @@ function GWRound:RoundEnd(caught)
     local postRoundDelay = 8
 
     if caught then
-        GWNotifications:Add("gwVictory" .. team.GetName(GW_TEAM_SEEKING), "<font=gw_font_large>" .. team.GetName(GW_TEAM_SEEKING) .. " Victory" .. "</font>", "", postRoundDelay)
+        GWNotifications:Add("gwVictory" .. team.GetName(GW_TEAM_SEEKING), "<font=gw_font_normal>" .. team.GetName(GW_TEAM_SEEKING) .. " Victory" .. "</font>", "", postRoundDelay)
         for k, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
             v:ConCommand("act cheer")
         end
         team.AddScore(GW_TEAM_SEEKING, 1)
     else
-        GWNotifications:Add("gwVictory" .. team.GetName(GW_TEAM_HIDING), "<font=gw_font_large>" .. team.GetName(GW_TEAM_HIDING) .. " Victory" .. "</font>", "", postRoundDelay)
+        GWNotifications:Add("gwVictory" .. team.GetName(GW_TEAM_HIDING), "<font=gw_font_normal>" .. team.GetName(GW_TEAM_HIDING) .. " Victory" .. "</font>", "", postRoundDelay)
         for k, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do
             v:ConCommand("act cheer")
             -- reset reroll protections and funcs

@@ -188,9 +188,9 @@ function ENT:RunBehaviour()
 
             local rand = math.random(1, 100)
 
-            if (rand > 0) and (rand < 15) then
+            if (rand > 0) and (rand < 20) then
                 self.loco:SetDesiredSpeed(200)
-            elseif (rand > 15) and (rand < 22) then
+            elseif (rand > 20) and (rand < 30) then
                 local entsAround = ents.FindInSphere(self:GetPos(), 300)
 
                 local walkersAround = {}
@@ -240,12 +240,12 @@ function ENT:RunBehaviour()
                 return Behaviour.Status.Success
             end
 
-            local radius = 2200
+            local radius = 3200
             if self.isFirstPath then
                 radius = 8000
             end
 
-            local navs = navmesh.Find(self:GetPos(), radius, 200, 200)
+            local navs = navmesh.Find(self:GetPos(), radius, 400, 400)
             local nav = navs[(math.random(#navs) - 1) + 1]
 
             if not IsValid(nav) then
@@ -259,13 +259,14 @@ function ENT:RunBehaviour()
             self.targetPos = nav:GetRandomPoint()
             self.currentPath = Path("Follow")
             self.currentPath:SetMinLookAheadDistance(10)
-            self.currentPath:SetGoalTolerance(30)
+            self.currentPath:SetGoalTolerance(35)
             self.currentPath:Compute(self, self.targetPos)
 
             if self.isFirstPath then
                 self.currentPathMaxAge = 20
             else
                 self.currentPathMaxAge = math.Clamp(self.currentPath:GetLength() / 90, 0.1, 12)
+                print(self.currentPath:GetLength(), self.currentPathMaxAge)
             end
 
             if not self.currentPath:IsValid() then
@@ -326,7 +327,9 @@ function ENT:RunBehaviour()
                         local scanPointNav = self:GetPos() + (self.loco:GetGroundMotionVector() * scanDist) + Vector(0, 0, self.loco:GetStepHeight() * 1.5)
 
                         local scanNavArea = navmesh.GetNearestNavArea(scanPointNav, false, scanDist * 2)
-                        if scanNavArea then
+                        -- If the path sample returned a value significantly below our current position, dont even check nav sample...
+                        local tryNavAreaScan = self:GetPos().z < scanPointOnPath.z + self.loco:GetStepHeight()
+                        if tryNavAreaScan and scanNavArea then
                             local scanPointOnNav = scanNavArea:GetClosestPointOnArea(scanPointNav)
                             if scanPointOnNav then
                                 debugoverlay.Sphere(scanPointOnNav, 10, 0.1, Color(255, 0, 0))
