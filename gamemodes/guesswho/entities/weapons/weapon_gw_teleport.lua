@@ -7,9 +7,10 @@ SWEP.AbilityDuration = 1.5
 SWEP.AbilityRange = 1500
 SWEP.AbilityDescription = "Teleports you to the position indicated by the glowing playermodel.\nTeleportation occurs after a $AbilityDuration second delay. The maximum teleport range is $AbilityRange."
 
-function SWEP:SetupDataTables()
+function SWEP:AbilitySetupDataTables()
 	self:NetworkVar("Vector", 0, "CalculatedTeleportDestination")
-	self:NetworkVar("Bool", 0, "CalculatedTeleportDestinationValid")
+	-- 0 is reserved for base class
+	self:NetworkVar("Bool", 1, "CalculatedTeleportDestinationValid")
 end
 
 function SWEP:AbilityCreated()
@@ -30,7 +31,9 @@ end
 
 function SWEP:Ability()
 	if self:GetCalculatedTeleportDestinationValid() then
-		if SERVER then self.Owner:ApplyStun(2) end
+		if CLIENT then return end
+			
+		self.Owner:ApplyStun(2)
 
 		local fadeOut = EffectData()
 		fadeOut:SetEntity(self.Owner)
@@ -38,7 +41,7 @@ function SWEP:Ability()
 		fadeOut:SetScale(-1)
 		fadeOut:SetSurfaceProp(-1)
 		util.Effect("gw_teleport_fade", fadeOut, true, true)
-	
+
 		self:AbilityTimerIfValidOwnerAndAlive(self.AbilityDuration + FrameTime() * 2, 1, true, function()
 				local fadeIn = EffectData()
 				fadeIn:SetEntity(self.Owner)
@@ -46,13 +49,14 @@ function SWEP:Ability()
 				fadeIn:SetScale(1)
 				fadeIn:SetSurfaceProp(1)
 				util.Effect("gw_teleport_fade", fadeIn, true, true)
+
 				if SERVER then
 					self.Owner:SetPos(self:GetCalculatedTeleportDestination())
 				end
 			end
 		)
 	else
-		return true
+		return GW_ABILTY_CAST_ERROR_INVALID_TARGET
 	end
 end
 
@@ -65,7 +69,7 @@ function SWEP:Think()
 end
 
 function SWEP:DrawHUD()
-	if self:Clip2() <= 0 then
+	if self:GetIsAbilityUsed() then
 		self:RemoveDestinationModel()
 		return
 	end
@@ -117,9 +121,9 @@ function SWEP:CalcTeleportDestination()
 		mask = MASK_PLAYERSOLID,
 	})
 
-	local navArea = navmesh.GetNearestNavArea(secondTrace.HitPos + secondTrace.HitNormal, false, 10000, true)
+	local navArea = navmesh.GetNearestNavArea(secondTrace.HitPos + secondTrace.HitNormal, false, self.AbilityRange, true)
 	if IsValid(navArea) then
-		local navAreaClosestPoint = navArea:GetClosestPointOnArea(secondTrace.HitPos) + Vector(0, 0, 5)
+		local navAreaClosestPoint = navArea:GetClosestPointOnArea(secondTrace.HitPos) + Vector(0, 0, 11)
 
 		local hullTrace = util.TraceEntity(
 			{

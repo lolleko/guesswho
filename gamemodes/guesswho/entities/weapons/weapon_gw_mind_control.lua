@@ -38,7 +38,7 @@ function SWEP:Ability()
 end
 
 function SWEP:DrawHUD()
-	if self:Clip2() == 0 then self.DrawGWCrossHair = false return end
+	if self:GetIsAbilityUsed() then self.DrawGWCrossHair = false return end
 	local tr = LocalPlayer():GetEyeTrace()
 	local hitEnt = tr.Entity
 	if IsValid(hitEnt) and hitEnt:GetClass() == GW_WALKER_CLASS then

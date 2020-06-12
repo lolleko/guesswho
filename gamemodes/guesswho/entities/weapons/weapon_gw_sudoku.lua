@@ -8,6 +8,8 @@ SWEP.AbilityDuration = math.log(SWEP.AbilityModelScaleTimes)
 SWEP.AbilityDescription = "Creates an explosion after $AbilityDuration seconds that damages nearby seekers."
 
 function SWEP:Ability()
+    if CLIENT then return end
+
     for t = self.AbilityModelScaleTimes, 1, -1 do
         self:AbilityTimerIfValidOwnerAndAlive(math.log(t), 1, true, function()
             self.Owner:SetColor(ColorRand())
@@ -18,16 +20,14 @@ function SWEP:Ability()
     end
 
     self:AbilityTimerIfValidOwnerAndAlive(self.AbilityDuration, 1, true, function()
-        if SERVER then
-            self.Owner:Kill()
-            local explode = ents.Create("env_explosion")
-        	explode:SetPos(self.Owner:GetPos())
-        	explode:SetOwner(self.Owner)
-        	explode:Spawn()
-        	explode:SetKeyValue("iMagnitude", "112")
-        	explode:Fire( "Explode", 0, 0 )
-        	explode:EmitSound( "BaseExplosionEffect.Sound", 100, 100 )
-        end
+        self.Owner:Kill()
+        local explode = ents.Create("env_explosion")
+        explode:SetPos(self.Owner:GetPos())
+        explode:SetOwner(self.Owner)
+        explode:Spawn()
+        explode:SetKeyValue("iMagnitude", "112")
+        explode:Fire( "Explode", 0, 0 )
+        explode:EmitSound( "BaseExplosionEffect.Sound", 100, 100 )
     end)
 end
 

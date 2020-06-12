@@ -190,7 +190,7 @@ function CHuntHUD()
 
         end
 
-        if ply:IsHiding() and ply:GetActiveWeapon():Clip2() > 0 then
+        if ply:IsHiding() and ply:GetActiveWeapon().GetIsAbilityUsed and not ply:GetActiveWeapon():GetIsAbilityUsed() then
             draw.RoundedBoxEx(64, ScrW() - 148, ScrH() - 168, 128, 128, clrs.abilitybg, true, true)
             CHHUD:DrawPanel( ScrW() - 148, ScrH() - 40, 128, 20, clrs.darkgreybg)
             CHHUD:DrawAbilityIcon(ply:GetActiveWeapon():GetClass(), ScrW() - 148, ScrH() - 168)

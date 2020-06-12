@@ -1,10 +1,6 @@
 AddCSLuaFile()
 
-EFFECT.Mat = Material("models/debug/debugwhite")
--- EFFECT.Mat = Material( "models/effects/comball_tape" )
-
 function EFFECT:Init(data)
-
     self.Entity = data:GetEntity()
     self.Radius = 0
     self.FinalRadius = data:GetRadius()
@@ -14,7 +10,6 @@ function EFFECT:Init(data)
 end
 
 function EFFECT:Think()
-
     self:SetPos(self.Entity:GetPos())
     self.Center = self.Entity:OBBCenter()
     if self.Radius < self.FinalRadius then
@@ -23,16 +18,11 @@ function EFFECT:Think()
     end
 
     return false
-
 end
 
 function EFFECT:Render()
-
-    render.SetMaterial(self.Mat)
-
     local pos = self:GetPos() + self.Center
 
     render.SetColorMaterial()
     render.DrawSphere(pos, self.Radius, 20, 20, Color(255, 255, 255, 255))
-
 end

@@ -11,6 +11,13 @@ SWEP.AbilityCastTime = 1.5
 SWEP.AbilityDescription = "\"A solar flare is a sudden flash of increased brightness on the Sun, usually observed near its surface.\"\n\nIn this instance you are the sun!\nSeekers within a range of $AbilityRange and line of sight will be blinded for $AbilityDuration."
 
 function SWEP:Ability()
+	local targets = self:GetSeekersInRange(self.AbilityRange)
+    -- dont use ability if no target was found
+    if #targets == 0 then
+        return GW_ABILTY_CAST_ERROR_NO_TARGET
+    end
+
+	if not SERVER then return end
 
 	local ply = self.Owner
 
@@ -20,17 +27,15 @@ function SWEP:Ability()
 	effectdata:SetMagnitude(self.AbilityCastTime)
 	util.Effect( "gw_solarflare", effectdata, true, true )
 
-	for _, v in pairs( player.GetAll() ) do
-		if v:GetPos():Distance( ply:GetPos() ) < self.AbilityRange and v:IsSeeking() then
-			local distanceRatio = v:GetPos():Distance(ply:GetPos()) / self.AbilityRange
-			timer.Simple(distanceRatio * self.AbilityCastTime, function()
-				if IsValid(v) then
-					v:SetNWFloat("gw_ability_solarflare_endtime", CurTime() + self.AbilityDuration)
-					v:SetNWFloat("gw_ability_solarflare_druation", self.AbilityDuration)
-				end
-			end)
-		end
-	end
+    for _,v in pairs(targets) do    
+		local distanceRatio = v:GetPos():Distance(ply:GetPos()) / self.AbilityRange
+		timer.Simple(distanceRatio * self.AbilityCastTime, function()
+			if IsValid(v) then
+				v:SetNWFloat("gw_ability_solarflare_endtime", CurTime() + self.AbilityDuration)
+				v:SetNWFloat("gw_ability_solarflare_druation", self.AbilityDuration)
+			end
+		end)
+    end
 end
 
 if CLIENT then

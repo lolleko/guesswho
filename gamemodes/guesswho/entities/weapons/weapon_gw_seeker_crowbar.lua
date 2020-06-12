@@ -84,18 +84,18 @@ function SWEP:PrimaryAttack()
 	trace = util.TraceLine(trace)
 	self.Owner:LagCompensation(false)
 
-	if SERVER then self.Owner:EmitSound(self.SwingSound) end
+	if SERVER then self:EmitSound(self.SwingSound) end
 
 	if trace.Fraction < 1 and trace.HitNonWorld and trace.Entity:IsPlayer() then
 		if SERVER then
 			trace.Entity:TakeDamage( self.Damage * 2, self.Owner, self )
-			self.Owner:EmitSound(self.HitSound)
+			self:EmitSound(self.HitSound)
 		end
 		self:SendWeaponAnim(ACT_VM_HITCENTER)
 	elseif trace.Hit and trace.Entity then
 		if SERVER then
 			trace.Entity:TakeDamage( self.Damage * 3, self.Owner, self )
-			self.Owner:EmitSound(self.HitSound)
+			self:EmitSound(self.HitSound)
 		end
 		self:SendWeaponAnim(ACT_VM_HITCENTER)
 	else
