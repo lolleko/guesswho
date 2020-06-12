@@ -450,7 +450,6 @@ end
 vgui.Register( "DGuessWhoSettingsPanel", SETTINGSPANEL, "DFrame")
 
 local function showSettings(ply, cmd, args)
-    print("yolo?")
     -- Is it better resource wise to destroy the panel on close since it wont be used that much?
     if (not IsValid(GW_SETTINGS_PANEL)) then
         GW_SETTINGS_PANEL = vgui.Create("DGuessWhoSettingsPanel")
