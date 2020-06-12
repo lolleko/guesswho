@@ -136,8 +136,7 @@ function GWRound:RoundEnd(caught)
     local postRoundDelay = 8
 
     if caught then
-        PrintMessage(HUD_PRINTTALK,
-                     "The " .. team.GetName(GW_TEAM_SEEKING) .. " win.")
+        GWNotifications:Add("gwVictory" .. team.GetName(GW_TEAM_SEEKING), "<font=gw_font_large>" .. team.GetName(GW_TEAM_SEEKING) .. " Victory" .. "</font>", "", postRoundDelay)
         for k, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
             v:ConCommand("act cheer")
         end
