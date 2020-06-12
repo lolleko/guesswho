@@ -11,7 +11,7 @@ SWEP.AbilityDescription = "Took a wrong turn? Fear not! This ability takes you b
 function SWEP:AbilityCreated()
 	if SERVER then
 		self.TimelapseData = {}
-		self.timelapsThinkName = self:AbilityTimerIfValidPlayerAndAlive(0.2, 0, true, function() self:TimelapseThink() end)
+		self.timelapsThinkName = self:AbilityTimerIfValidOwnerAndAlive(0.2, 0, true, function() self:TimelapseThink() end)
 	end
 end
 
@@ -44,7 +44,7 @@ function SWEP:Ability()
 
 		if #self.TimelapseData ~= 0 then
 			self.TimeLapseTrail = util.SpriteTrail(self.Owner, 0, Color(255, 255, 255), false, startSize, endSize, 2, 1 / ( ( startSize + endSize ) * 0.5 ), "trails/physbeam.vmt")
-			self:AbilityTimerIfValidPlayerAndAlive(0.001, #self.TimelapseData, true, function()
+			self:AbilityTimerIfValidOwnerAndAlive(0.001, #self.TimelapseData, true, function()
 				local data = self.TimelapseData[1]
 				self.Owner:SetPos(data.pos)
 				local ang = data.ang

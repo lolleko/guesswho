@@ -192,14 +192,14 @@ function SWEP:AbilityTimerIfValidSWEP(dur, reps, removeTimerWithSwep, fn)
     end)
 end
 
-function SWEP:AbilityTimerIfValidPlayer(dur, reps, remove, fn)
+function SWEP:AbilityTimerIfValidOwner(dur, reps, remove, fn)
     return self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
         if not IsValid(self) or not IsValid(self.Owner) then return end
         fn()
     end)
 end
 
-function SWEP:AbilityTimerIfValidPlayerAndAlive(dur, reps, removeTimerWithSwep, fn)
+function SWEP:AbilityTimerIfValidOwnerAndAlive(dur, reps, removeTimerWithSwep, fn)
     return self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
         if not IsValid(self) or not IsValid(self.Owner) or not self.Owner:Alive() then return end
         fn()

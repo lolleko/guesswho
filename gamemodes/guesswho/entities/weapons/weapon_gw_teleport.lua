@@ -29,27 +29,25 @@ function SWEP:AbilityCreated()
 end
 
 function SWEP:Ability()
-	local ply = self.Owner
-
 	if self:GetCalculatedTeleportDestinationValid() then
-		if SERVER then ply:ApplyStun(2) end
+		if SERVER then self.Owner:ApplyStun(2) end
 
 		local fadeOut = EffectData()
-		fadeOut:SetEntity(ply)
+		fadeOut:SetEntity(self.Owner)
 		fadeOut:SetMagnitude(self.AbilityDuration)
 		fadeOut:SetScale(-1)
 		fadeOut:SetSurfaceProp(-1)
 		util.Effect("gw_teleport_fade", fadeOut)
 	
-		self:AbilityTimerIfValidPlayerAndAlive(self.AbilityDuration + FrameTime() * 2, 1, true, function()
+		self:AbilityTimerIfValidOwnerAndAlive(self.AbilityDuration + FrameTime() * 2, 1, true, function()
 				local fadeIn = EffectData()
-				fadeIn:SetEntity(ply)
+				fadeIn:SetEntity(self.Owner)
 				fadeIn:SetMagnitude(self.AbilityDuration)
 				fadeIn:SetScale(1)
 				fadeIn:SetSurfaceProp(1)
 				util.Effect("gw_teleport_fade", fadeIn)
 				if SERVER then
-					ply:SetPos(self:GetCalculatedTeleportDestination())
+					self.Owner:SetPos(self:GetCalculatedTeleportDestination())
 				end
 			end
 		)

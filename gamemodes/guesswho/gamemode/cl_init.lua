@@ -13,6 +13,22 @@ surface.CreateFont("gw_font_medium", {
     shadow = false
 })
 
+surface.CreateFont("gw_font_huge", {
+    font = "Inter",
+    size = 144,
+    weight = 800,
+    antialias = true,
+    shadow = false
+})
+
+surface.CreateFont("gw_font_larger", {
+    font = "Inter",
+    size = 96,
+    weight = 400,
+    antialias = true,
+    shadow = false
+})
+
 surface.CreateFont("gw_font_large", {
     font = "Inter",
     size = 48,

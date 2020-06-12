@@ -3,14 +3,25 @@ AddCSLuaFile()
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "SUPER HOT"
 
+SWEP.AbilityDuration = 8
+SWEP.AbilityDescription = "Not quite like the original.\n\nSlow Motion for everyone, but yourself.\nLasts $AbilityDuration seconds."
+
+local playerSuperHotNWVarName = "gwIsSuperHotEnabled"
+
 function SWEP:Ability()
     local ply = self.Owner
     if SERVER then
+        -- dont consume if already activated by someone else
+        if GAMEMODE.AbilitySuperHotMode then
+            return true
+        end
+
         GAMEMODE.AbilitySuperHotMode = true
         GAMEMODE.AbilitySuperHotModePly = ply
-        GAMEMODE.AbilitySuperHotModeEndTime = RealTime() + 6
+        GAMEMODE.AbilitySuperHotModeEndTime = RealTime() + self.AbilityDuration
         ply:SetWalkSpeed(ply:GetWalkSpeed() * 5)
         ply:SetRunSpeed(ply:GetRunSpeed() * 5)
+        ply:SetNWBool(playerSuperHotNWVarName, true)
         game.SetTimeScale(0.3)
     end
 end
@@ -21,37 +32,53 @@ local function endSuperHotMode()
         game.SetTimeScale(1)
         ply:SetWalkSpeed(ply:GetWalkSpeed() / 5)
         ply:SetRunSpeed(ply:GetRunSpeed() / 5)
+        ply:SetNWBool(playerSuperHotNWVarName, false)
 
         GAMEMODE.AbilitySuperHotMode = false
-        GAMEMODE.AbilitySuperHotModePly = nill
-
-        if math.random(1, 100) <= 4 then
-            PrintMessage( HUD_PRINTCENTER, "BONUS SLOWMOTION" )
-            timer.Simple(8, function() game.SetTimeScale(1) end)
-            game.SetTimeScale(0.3)
-        end
+        GAMEMODE.AbilitySuperHotModePly = nil
     end
 end
 
-function SWEP:OnRemove()
+function SWEP:AbilityCleanup()
     if IsValid(self.Owner) and self.Owner == GAMEMODE.AbilitySuperHotModePly then
         endSuperHotMode()
     end
 end
 
 if SERVER then
-    local function superHotThink()
+    hook.Add("Think", "SuperHotThink", function()
         if GAMEMODE.AbilitySuperHotMode then
             local ply = GAMEMODE.AbilitySuperHotModePly
             if not IsValid(ply) or not ply:Alive() or GAMEMODE.AbilitySuperHotModeEndTime < RealTime() then
                 endSuperHotMode()
-            else
-                PrintMessage( HUD_PRINTCENTER, "SUPER HOT" )
             end
         end
-    end
+    end)
+end
 
-    hook.Add("Think", "SuperHotThink", superHotThink)
+if CLIENT then
+    hook.Add("HUDPaint", "gwSuperHotHudPaint", function()
+        if IsValid(LocalPlayer()) and LocalPlayer():GetNWBool(playerSuperHotNWVarName) then
+            local x = ScrW() / 2
+            local y = ScrH() / 2 - 200
+        
+            local text = ""
+
+            if math.floor(RealTime()) % 2 == 0 then
+                surface.SetFont("gw_font_larger")
+                text = "SUPER"
+            else
+                surface.SetFont("gw_font_huge")
+                text = "HOT"
+            end
+
+            local w, h = surface.GetTextSize(text);
+
+            surface.SetTextPos(x - w / 2, y - h / 2)
+            surface.SetTextColor(clrs.white:Unpack())
+            surface.DrawText(text)
+        end
+    end)
 end
 
 hook.Add( "EntityEmitSound", "", function( t )

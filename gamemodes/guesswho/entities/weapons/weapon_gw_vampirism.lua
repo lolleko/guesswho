@@ -41,7 +41,7 @@ function SWEP:Ability()
                 self.Owner:SetRunSpeed(self.Owner:GetRunSpeed() * 2)
                 self.Owner:SetWalkSpeed(self.Owner:GetWalkSpeed() * 2)
 
-                self:AbilityTimerIfValidPlayerAndAlive(0.5, 4, true, function()
+                self:AbilityTimerIfValidOwnerAndAlive(0.5, 4, true, function()
                     self.Owner:SetHealth(self.Owner:Health() + dmg / 4)
                 end)
             end
