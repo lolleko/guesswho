@@ -6,8 +6,9 @@ SWEP.AbilitySound = "ambient/energy/zap1.wav"
 
 SWEP.AbilityRange = 400
 SWEP.AbilityShowTargetHalos = true
-SWEP.AbilityDuration = 6
+SWEP.AbilityDuration = 6.5
 SWEP.AbilityCastTime = 1.5
+SWEP.AbilityDescription = "\"A solar flare is a sudden flash of increased brightness on the Sun, usually observed near its surface.\"\n\nIn this instance you are the sun!\nSeekers within a range of $AbilityRange and line of sight will be blinded for $AbilityDuration."
 
 function SWEP:Ability()
 
