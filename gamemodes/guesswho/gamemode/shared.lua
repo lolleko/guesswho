@@ -23,23 +23,23 @@ GW_ROUND_NAV_GEN = 9
 GW_WALKER_CLASS = "gw_npc_walker"
 
 --Shared CVars fallback
-CreateConVar("gw_target_finder_threshold", "700", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "The distance before the target finder will display nearby")
-CreateConVar("gw_target_finder_enabled", "0", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Wether target finder is enabled or not")
-CreateConVar("gw_abilities_enabled", "1", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Should hiding have abilities or not.")
-CreateConVar("gw_touches_enabled", "1", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Wether touching for weapons is enabled.")
-CreateConVar("gw_touches_required", "3", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "The amount of seeker touches that are required for a hider to receive a new weapon.")
-CreateConVar("gw_seeker_walk_speed", "100", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Seeker Walk Speed")
-CreateConVar("gw_seeker_run_speed", "200", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Seeker Run Speed")
-CreateConVar("gw_hiding_walk_speed", "100", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Hiding Walk Speed")
-CreateConVar("gw_hiding_run_speed", "200", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Hiding Run Speed")
-CreateConVar("gw_double_jump_enabled", "0", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Wether Double Jumps are enabled or not")
+-- https://github.com/Facepunch/garrysmod-issues/issues/3323
+local cVarFlags = {FCVAR_REPLICATED, FCVAR_ARCHIVE}
+if CLIENT then
+	cVarFlags = {FCVAR_REPLICATED}
+end
 
+CreateConVar("gw_target_finder_threshold", "700", cVarFlags, "The distance before the target finder will display nearby")
+CreateConVar("gw_target_finder_enabled", "0", cVarFlags, "Wether target finder is enabled or not")
+CreateConVar("gw_abilities_enabled", "1", cVarFlags, "Should hiding have abilities or not.")
+CreateConVar("gw_touches_enabled", "1", cVarFlags, "Wether touching for weapons is enabled.")
+CreateConVar("gw_touches_required", "3", cVarFlags, "The amount of seeker touches that are required for a hider to receive a new weapon.")
+CreateConVar("gw_seeker_walk_speed", "100", cVarFlags, "Seeker Walk Speed")
+CreateConVar("gw_seeker_run_speed", "200", cVarFlags, "Seeker Run Speed")
+CreateConVar("gw_hiding_walk_speed", "100", cVarFlags, "Hiding Walk Speed")
+CreateConVar("gw_hiding_run_speed", "200", cVarFlags, "Hiding Run Speed")
+CreateConVar("gw_double_jump_enabled", "0", cVarFlags, "Wether Double Jumps are enabled or not")
 
--- Ammo
-game.AddAmmoType( {
-	name = "gwAbility",
-	dmgtype = DMG_GENERIC
-} )
 
 game.AddAmmoType( {
 	name = "gwDashCharges",
