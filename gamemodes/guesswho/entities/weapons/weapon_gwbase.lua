@@ -35,6 +35,7 @@ SWEP.AbilityDescription = ""
 
 GW_ABILTY_CAST_ERROR_NO_TARGET = 1
 GW_ABILTY_CAST_ERROR_INVALID_TARGET = 2
+GW_ABILTY_CAST_ERROR_INVALID_ROUND_STATE = 3
 
 function SWEP:SetupDataTables()
     self:NetworkVar("Bool", 0, "IsAbilityUsed")
@@ -154,6 +155,8 @@ function SWEP:SecondaryAttack()
                     self.Owner:PrintMessage(HUD_PRINTTALK, "Ability Failed: No target!")
                 elseif abilityError == GW_ABILTY_CAST_ERROR_INVALID_TARGET then
                     self.Owner:PrintMessage(HUD_PRINTTALK, "Ability Failed: Invalid target!")
+                elseif abilityError == GW_ABILTY_CAST_ERROR_INVALID_ROUND_STATE then
+                    self.Owner:PrintMessage(HUD_PRINTTALK, "Ability Failed: Can't use during hiding phase!")
                 end
             end
         end

@@ -16,7 +16,7 @@ SWEP.AbilityDescription = "Steals energy from nearby seekers. Adding a $AbilityD
 function SWEP:Ability()
 
     if not GWRound:IsCurrentState(GW_ROUND_SEEK) then
-        return true
+        return GW_ABILTY_CAST_ERROR_INVALID_ROUND_STATE
     end
 
     local targets = self:GetSeekersInRange(self.AbilityRange)
