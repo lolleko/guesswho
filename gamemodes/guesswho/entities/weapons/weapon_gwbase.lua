@@ -36,6 +36,7 @@ SWEP.AbilityDescription = ""
 GW_ABILTY_CAST_ERROR_NO_TARGET = 1
 GW_ABILTY_CAST_ERROR_INVALID_TARGET = 2
 GW_ABILTY_CAST_ERROR_INVALID_ROUND_STATE = 3
+GW_ABILTY_CAST_ERROR_ALREADY_ACTIVE = 4
 
 function SWEP:SetupDataTables()
     self:NetworkVar("Bool", 0, "IsAbilityUsed")
@@ -76,10 +77,10 @@ end
 function SWEP:DrawWorldModel()
     if not self:GetIsAbilityUsed() and self.AbilityShowTargetHalos and self.AbilityRange > 0 and self:IsCarriedByLocalPlayer() then
         local ply = self.Owner
-        for _, v in pairs( player.GetAll() ) do
-          if v:GetPos():Distance( ply:GetPos() ) < self.AbilityRange and v:Alive() and v:IsSeeking() then
+        for _, v in pairs(player.GetAll()) do
+          if v:GetPos():Distance(ply:GetPos()) < self.AbilityRange and v:Alive() and v:IsSeeking() then
             if not self.AbilityShowTargetHalosCheckLOS or self:AbilityIsTargetInLOS(v) then
-                halo.Add( {v}, Color(255, 0, 0), 3, 3, 5)
+                halo.Add({v}, Color(255, 0, 0), 3, 3, 5)
             end
           end
         end
@@ -109,14 +110,14 @@ end
 
 function SWEP:PrimaryAttack()
 
-    self:SetNextPrimaryFire( CurTime() + 1.5 )
+    self:SetNextPrimaryFire(CurTime() + 1.5)
 
     if self.Owner.LagCompensation then
         self.Owner:LagCompensation(true)
     end
     local spos = self.Owner:GetShootPos()
     local sdest = spos + (self.Owner:GetAimVector() * 100)
-    local tr = util.TraceLine( {start = spos, endpos = sdest, filter = self.Owner, mask = MASK_SHOT_HULL} )
+    local tr = util.TraceLine({start = spos, endpos = sdest, filter = self.Owner, mask = MASK_SHOT_HULL})
     self.Owner:LagCompensation(false)
 
     if tr.Hit and IsValid(tr.Entity) and (tr.Entity:GetClass() == "func_breakable" or tr.Entity:GetClass() == "func_breakable_surf") then
@@ -137,13 +138,13 @@ function SWEP:SecondaryAttack()
     if not abilityError then
         if self.AbilitySound and SERVER then
             local abilitySound
-            if istable( self.AbilitySound ) then
-                abilitySound = Sound( self.AbilitySound[ math.random( #self.AbilitySound ) ] )
+            if istable(self.AbilitySound) then
+                abilitySound = Sound(self.AbilitySound[math.random(#self.AbilitySound)])
             else
-                abilitySound = Sound( self.AbilitySound )
+                abilitySound = Sound(self.AbilitySound)
             end
             if abilitySound then
-                self:EmitSound( abilitySound )
+                self:EmitSound(abilitySound)
             end
         end
         self:SetIsAbilityUsed(true)
@@ -152,11 +153,13 @@ function SWEP:SecondaryAttack()
             self:EmitSound(Sound("WallHealth.Deny"))
             if IsFirstTimePredicted() then
                 if abilityError == GW_ABILTY_CAST_ERROR_NO_TARGET then
-                    self.Owner:PrintMessage(HUD_PRINTTALK, "Ability Failed: No target!")
+                    self.Owner:PrintMessage(HUD_PRINTTALK, "Ability cast cancelled: No target!")
                 elseif abilityError == GW_ABILTY_CAST_ERROR_INVALID_TARGET then
-                    self.Owner:PrintMessage(HUD_PRINTTALK, "Ability Failed: Invalid target!")
+                    self.Owner:PrintMessage(HUD_PRINTTALK, "Ability cast cancelled: Invalid target!")
                 elseif abilityError == GW_ABILTY_CAST_ERROR_INVALID_ROUND_STATE then
-                    self.Owner:PrintMessage(HUD_PRINTTALK, "Ability Failed: Can't use during hiding phase!")
+                    self.Owner:PrintMessage(HUD_PRINTTALK, "Ability cast cancelled: Can't use during hiding phase!")
+                elseif abilityError == GW_ABILTY_CAST_ERROR_ALREADY_ACTIVE then
+                    self.Owner:PrintMessage(HUD_PRINTTALK, "Ability cast cancelled: Another instance is already active")
                 end
             end
         end
@@ -199,7 +202,7 @@ end
 
 function SWEP:GetSeekersInRange(range, ignoreLOS)
     local result = {}
-    for _,v in pairs( player.GetAll() ) do
+    for _,v in pairs(player.GetAll()) do
         if v:Alive() and v:GetPos():Distance(self.Owner:GetPos()) < range and v:IsSeeking() and (ignoreLOS or self:AbilityIsTargetInLOS(v)) then
             table.insert(result, v)
         end

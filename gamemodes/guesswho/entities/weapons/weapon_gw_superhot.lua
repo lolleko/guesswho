@@ -13,7 +13,7 @@ function SWEP:Ability()
     if SERVER then
         -- dont consume if already activated by someone else
         if GAMEMODE.AbilitySuperHotMode then
-            return true
+            return GW_ABILTY_CAST_ERROR_ALREADY_ACTIVE
         end
 
         GAMEMODE.AbilitySuperHotMode = true
