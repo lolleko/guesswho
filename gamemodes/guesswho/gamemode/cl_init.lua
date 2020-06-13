@@ -153,14 +153,3 @@ function GM:CalcView(ply, pos, angles, fov)
     return view
 
 end
-
-local function RecievePlayerHull()
-
-    local xy = net.ReadFloat()
-    local z = net.ReadFloat()
-
-    LocalPlayer():SetHull(Vector(-xy, -xy, 0), Vector(xy, xy, z))
-    LocalPlayer():SetHullDuck(Vector(-xy, -xy, 0), Vector(xy, xy, z))
-
-end
-net.Receive("gwPlayerHull", RecievePlayerHull)

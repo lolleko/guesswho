@@ -82,3 +82,25 @@ end
 function plymeta:IsDisguised()
     return self:GetNWBool("gwAbilityIsDisguised", false)
 end
+
+function plymeta:SetHullNetworked(xy, z)
+    self:SetHull(Vector(-xy, -xy, 0), Vector(xy, xy, z))
+    self:SetHullDuck(Vector(-xy, -xy, 0), Vector(xy, xy, z))
+
+    if SERVER then
+        net.Start("gwPlayerHull")
+        net.WriteFloat( xy )
+        net.WriteFloat( z )
+        net.Send(self)
+    end
+end
+
+net.Receive("gwPlayerHull", function(len, ply)
+
+    local xy = net.ReadFloat()
+    local z = net.ReadFloat()
+
+    if ply == LocalPlayer() then
+        LocalPlayer():SetHullNetworked(xy, z)
+    end
+end

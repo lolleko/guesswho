@@ -69,13 +69,7 @@ function SWEP:Ability()
     ply:SetRenderMode(RENDERMODE_NONE)
     ply:SetModel( tempEnt:GetModel() )
 
-    ply:SetHull(Vector(-xy, - xy, 0), Vector(xy, xy, z))
-    ply:SetHullDuck(Vector(-xy, - xy, 0), Vector(xy, xy, z))
-
-    net.Start( "gwPlayerHull" )
-    net.WriteFloat( xy )
-    net.WriteFloat( z )
-    net.Send( ply )
+    ply:SetHullNetworked(xy, z)
 
     ply:SetNoDraw(false)
     ply:DrawShadow(false)
