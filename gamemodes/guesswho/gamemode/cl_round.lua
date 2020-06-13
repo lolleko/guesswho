@@ -11,7 +11,7 @@ function GWRound:SetRoundLabel( lbl )
 end
 
 function GWRound:GetEndTime()
-	return GetGlobalFloat( "gwEndTime", 0 )
+    return GetGlobalFloat( "gwEndTime", 0 )
 end
 
 function GWRound:RoundStateChange( old, new )
@@ -44,11 +44,11 @@ end
 local function ReceiveRoundState()
 
     local old = GWRound:GetRoundState()
-	GWRound.RoundState = net.ReadUInt( 8 )
+    GWRound.RoundState = net.ReadUInt( 8 )
 
-	if old ~= GWRound.RoundState then
+    if old ~= GWRound.RoundState then
         GWRound:RoundStateChange( old, GWRound.RoundState )
-	end
+    end
 
 end
 net.Receive( "gwRoundState", ReceiveRoundState )

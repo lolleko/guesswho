@@ -328,27 +328,27 @@ function GM:HUDDrawPickupHistory()
 
         if ( v.time < CurTime() ) then
 
-			if ( v.y == nil ) then v.y = y end
+            if ( v.y == nil ) then v.y = y end
 
-			v.y = ( v.y * 5 + y ) / 6
+            v.y = ( v.y * 5 + y ) / 6
 
-			local delta = ( v.time + v.holdtime ) - CurTime()
-			delta = delta / v.holdtime
+            local delta = ( v.time + v.holdtime ) - CurTime()
+            delta = delta / v.holdtime
 
-			local alpha = 255
-			local colordelta = math.Clamp( delta, 0.6, 0.7 )
+            local alpha = 255
+            local colordelta = math.Clamp( delta, 0.6, 0.7 )
 
             -- Fade in/out
             local ratio = 1
             if ( delta > 1 - v.fadein ) then
                 ratio = math.Clamp( ( 1.0 - delta ) * ( 1 / v.fadein ), 0, 1)
-				alpha = ratio * 255
+                alpha = ratio * 255
             elseif ( delta < v.fadeout ) then
                 ratio = math.Clamp( delta * ( 1 / v.fadeout ), 0, 1)
-				alpha = ratio * 255
-			end
+                alpha = ratio * 255
+            end
 
-			v.x = x + self.PickupHistoryWide - ( self.PickupHistoryWide * ( alpha / 255 ) )
+            v.x = x + self.PickupHistoryWide - ( self.PickupHistoryWide * ( alpha / 255 ) )
 
             
             local pickupText
@@ -362,9 +362,9 @@ function GM:HUDDrawPickupHistory()
             CHHUD:DrawUnderLinedPanel(ScrW() - (240 * ratio), y - 125, 240, 40, Color(clrs.darkgreybg.r, clrs.darkgreybg.g, clrs.darkgreybg.b , alpha))
             CHHUD:DrawText(ScrW() - (230 * ratio), y - 125 + 5, pickupText, "gw_font_normal", Color(clrs.white.r, clrs.white.g, clrs.white.b , alpha))
 
-			y = y + ( v.height + 32 )
-			tall = tall + v.height + 18
-			wide = math.max( wide, v.width + v.height + 24 )
+            y = y + ( v.height + 32 )
+            tall = tall + v.height + 18
+            wide = math.max( wide, v.width + v.height + 24 )
 
             if ( alpha == 0 ) then self.PickupHistory[ k ] = nil end
 

@@ -12,7 +12,7 @@ SWEP.AbilityCastTime = 0.5
 SWEP.AbilityDescription = "Somehow you can emit a shockwave that stuns all seekers within $AbilityRange units for $AbilityDuration seconds."
 
 function SWEP:Ability()
-	local targets = self:GetSeekersInRange(self.AbilityRange, true)
+    local targets = self:GetSeekersInRange(self.AbilityRange, true)
     -- dont use ability if no target was found
     if #targets == 0 then
         return GW_ABILTY_CAST_ERROR_NO_TARGET
@@ -27,13 +27,13 @@ function SWEP:Ability()
     util.Effect("gw_shockwave", effectdata, true, true)
 
     for _,v in pairs(targets) do    
-		local distanceRatio = v:GetPos():Distance(self.Owner:GetPos()) / self.AbilityRange
-		timer.Simple(distanceRatio * self.AbilityCastTime, function()
+        local distanceRatio = v:GetPos():Distance(self.Owner:GetPos()) / self.AbilityRange
+        timer.Simple(distanceRatio * self.AbilityCastTime, function()
             local effect = EffectData()
             effect:SetEntity(v)
             effect:SetMagnitude(self.AbilityDuration)
             util.Effect("gw_stunned", effect, true, true)
             v:ApplyStun(self.AbilityDuration)
-		end)
+        end)
     end
 end

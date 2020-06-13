@@ -162,7 +162,7 @@ function SETTINGSPANEL:Config()
     local saveButton = vgui.Create("DButton", self.config)
     saveButton:SetText("Save changes (may require map change/restart)")
     saveButton.DoClick = function()
-	    self:SendConfigUpdateRequest()
+        self:SendConfigUpdateRequest()
     end
     saveButton:Dock(BOTTOM)
 

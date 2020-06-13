@@ -38,7 +38,7 @@ function SWEP:Ability()
     ragdoll:SetPos( ply:GetPos() )
     ragdoll:SetSkin(ply:GetSkin())
     for key, value in pairs(ply:GetBodyGroups()) do
-        ragdoll:SetBodygroup(value.id, ply:GetBodygroup(value.id))	
+        ragdoll:SetBodygroup(value.id, ply:GetBodygroup(value.id))
     end 
     ragdoll:SetColor(ply:GetColor())
     ragdoll:SetOwner(ply)

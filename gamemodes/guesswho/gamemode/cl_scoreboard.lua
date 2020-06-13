@@ -184,7 +184,7 @@ function PLAYERINFO:Init()
 
     self.Mute = self:Add( "DImageButton" )
     self.Mute:SetSize( 24, 24 )
-	self.Mute:SetPos( self.Avatar:GetWide() + 8, 4 )
+    self.Mute:SetPos( self.Avatar:GetWide() + 8, 4 )
 end
 
 function PLAYERINFO:Paint( w, h)
@@ -210,8 +210,8 @@ function PLAYERINFO:Think()
     if self.Player:Alive() then txtClr = clrs.lightgrey end
 
     if ( self.NumPing == nil or self.NumPing ~= self.Player:Ping() ) then
-	self.NumPing = self.Player:Ping()
-	self.Ping:SetText( self.NumPing )
+    self.NumPing = self.Player:Ping()
+    self.Ping:SetText( self.NumPing )
     end
 
     self.Avatar:SetPlayer( self.Player, 64 )
