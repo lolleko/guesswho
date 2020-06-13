@@ -2,17 +2,18 @@ AddCSLuaFile()
 
 DEFINE_BASECLASS( "base_anim" )
 
-if ( CLIENT ) then
 
-	function ENT:Draw()
-		self:DrawModel()
-	end
+function ENT:SetupDataTables()
+	self:NetworkVar("Vector", 0, "PropOffset")
+end
 
+function ENT:Draw()
+	self:DrawModel()
 end
 
 function ENT:Think()
-	if IsValid( self:GetOwner() ) and self:GetOwner():Alive() then
-		self:SetPos(self:GetOwner():GetPos())
+	if IsValid(self:GetOwner()) and self:GetOwner():Alive() then
+		self:SetPos(self:GetOwner():GetPos() + self:GetPropOffset())
 	else
 		self:Remove()
 	end
