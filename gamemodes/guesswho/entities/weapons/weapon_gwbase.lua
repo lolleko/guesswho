@@ -62,7 +62,7 @@ function SWEP:Initialize()
             end)
         end
 
-        GWNotifications:Add("gwAbility", "<font=gw_font_normal>Ability: " .. self.Name .. "</font>", "<font=gw_font_small>" .. description .. "</font>", GWRound:GetEndTime() - CurTime())
+        GWNotifications:Add("gwAbility", "<font=gw_font_normal>Ability: " .. self.Name .. "</font>", "<font=gw_font_small>" .. description .. "</font>", (GWRound:GetEndTime() - CurTime()) / 2)
     end
 
     self:AbilityCreated()
