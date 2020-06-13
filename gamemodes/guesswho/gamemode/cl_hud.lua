@@ -258,7 +258,7 @@ function GM:HUDDrawTargetID()
     local text
     local font = "gw_font_medium"
 
-    if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() or trace.Entity:GetDisguised() ) ) then
+    if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() or trace.Entity:IsDisguised() ) ) then
         text = trace.Entity:Nick()
     end
 
@@ -280,7 +280,7 @@ function GM:HUDDrawTargetID()
     local y = MouseY
 
     local teamColor = self:GetTeamColor( trace.Entity )
-    if trace.Entity:IsPlayer() and trace.Entity:GetDisguised() then teamColor = self:GetTeamColor(LocalPlayer()) end
+    if trace.Entity:IsPlayer() and trace.Entity:IsDisguised() then teamColor = self:GetTeamColor(LocalPlayer()) end
 
     x = x - w / 2
     y = y + 30
