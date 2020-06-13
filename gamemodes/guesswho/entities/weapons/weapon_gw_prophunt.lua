@@ -18,7 +18,7 @@ function SWEP:Ability()
 
     local models = {
         {model = "models/props_c17/signpole001.mdl", offset = Vector(0, 0 , 0)},
-        {model = "models/props_junk/garbage_coffeemug001a.mdl", offset = Vector(0, 0, 3)},
+        --{model = "models/props_junk/garbage_coffeemug001a.mdl", offset = Vector(0, 0, 3)},
         {model = "models/props_lab/huladoll.mdl", offset = Vector(0, 0, 0)},
         {model = "models/props_junk/plasticbucket001a.mdl", offset = Vector(0, 0, 7)},
         {model = "models/props_c17/doll01.mdl", offset = Vector(0, 0 , 8)},

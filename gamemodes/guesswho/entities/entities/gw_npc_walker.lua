@@ -57,7 +57,7 @@ function ENT:Initialize()
         self.loco:SetStepHeight(18)
         self.loco:SetJumpHeight(82)
         self.loco:SetDesiredSpeed(100)
-        self.nextPossibleJump = CurTime() + math.random(2, 3)
+        self.nextPossibleJump = CurTime() + 2 -- dont jump right after spawning
         self.nextPossibleSettingsChange = CurTime() + 10
         self.isDoging = false
         self.dogeUntil = CurTime()
