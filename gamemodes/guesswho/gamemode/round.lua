@@ -152,7 +152,7 @@ function GWRound:RoundEnd(caught)
         end
         team.AddScore(GW_TEAM_HIDING, 1)
     end
-    timer.Simple(postRoundDelay, function() self:PostRound() end)
+    timer.Create("gwPostRoundDelayTimer", postRoundDelay, 1, function() self:PostRound() end)
 end
 
 function GWRound:PostRound()
