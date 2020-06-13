@@ -300,7 +300,7 @@ function ENT:BodyUpdate()
 
     if self:GetActivity() ~= self.CalcIdeal and not self.Siting and not self.Dancing then self:StartActivity(self.CalcIdeal) end
 
-    if ( self.CalcIdeal == ACT_HL2MP_RUN || self.CalcIdeal == ACT_HL2MP_WALK ) then
+    if ( self.CalcIdeal == ACT_HL2MP_RUN or self.CalcIdeal == ACT_HL2MP_WALK ) then
 
         self:BodyMoveXY()
 

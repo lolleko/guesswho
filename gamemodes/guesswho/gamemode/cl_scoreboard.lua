@@ -209,7 +209,7 @@ function PLAYERINFO:Think()
     local txtClr = clrs.grey
     if self.Player:Alive() then txtClr = clrs.lightgrey end
 
-    if ( self.NumPing == nil || self.NumPing ~= self.Player:Ping() ) then
+    if ( self.NumPing == nil or self.NumPing ~= self.Player:Ping() ) then
 	self.NumPing = self.Player:Ping()
 	self.Ping:SetText( self.NumPing )
     end
