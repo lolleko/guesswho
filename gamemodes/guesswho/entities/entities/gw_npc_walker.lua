@@ -266,7 +266,6 @@ function ENT:RunBehaviour()
                 self.currentPathMaxAge = 20
             else
                 self.currentPathMaxAge = math.Clamp(self.currentPath:GetLength() / 90, 0.1, 12)
-                print(self.currentPath:GetLength(), self.currentPathMaxAge)
             end
 
             if not self.currentPath:IsValid() then

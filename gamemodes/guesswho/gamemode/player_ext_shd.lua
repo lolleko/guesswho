@@ -96,7 +96,6 @@ function plymeta:SetHullNetworked(xy, z)
 end
 
 net.Receive("gwPlayerHull", function(len, ply)
-
     local xy = net.ReadFloat()
     local z = net.ReadFloat()
 

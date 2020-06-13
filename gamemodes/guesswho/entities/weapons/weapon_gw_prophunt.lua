@@ -82,7 +82,6 @@ end
 function SWEP:AbilityCleanup()
     if not IsValid( self.Owner ) then return end
     local ply = self.Owner
-    timer.Remove( "Ability.Effect.Prophunt" .. ply:SteamID() )
     ply:ResetHull()
     ply:SetRunSpeed( GetConVar("gw_hiding_run_speed"):GetFloat() )
     ply:SetWalkSpeed( GetConVar("gw_hiding_walk_speed"):GetFloat() )
