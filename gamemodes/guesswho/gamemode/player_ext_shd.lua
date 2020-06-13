@@ -102,4 +102,4 @@ net.Receive("gwPlayerHull", function(len, ply)
     if ply == LocalPlayer() then
         LocalPlayer():SetHullNetworked(xy, z)
     end
-end
+end)
