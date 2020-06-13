@@ -9,7 +9,7 @@ SWEP.AbilityShowTargetHalos = true
 SWEP.AbilityDuration = 4
 SWEP.AbilityCastTime = 0.5
 
-SWEP.AbilityDescription = "Somehow you can send out a shockwave that stuns all seekers within $AbilityRange units for $AbilityDuration seconds."
+SWEP.AbilityDescription = "Somehow you can emit a shockwave that stuns all seekers within $AbilityRange units for $AbilityDuration seconds."
 
 function SWEP:Ability()
 	local targets = self:GetSeekersInRange(self.AbilityRange, true)
