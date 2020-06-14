@@ -40,14 +40,12 @@ GM.GWConfig.ActiveAbilities = {
     "weapon_gw_vampirism",
     "weapon_gw_ragdoll",
     "weapon_gw_superhot",
-    "weapon_gw_dance_party",
     "weapon_gw_blasting_off",
     "weapon_gw_teleport",
     "weapon_gw_deflect",
     "weapon_gw_timelapse",
     "weapon_gw_solarflare",
-    "weapon_gw_mind_control",
-    "weapon_gw_ant"
+    "weapon_gw_mind_transfer",
 }
 
 GM.GWConfigStatic.AllAbilities = {
@@ -62,14 +60,12 @@ GM.GWConfigStatic.AllAbilities = {
     "weapon_gw_vampirism",
     "weapon_gw_ragdoll",
     "weapon_gw_superhot",
-    "weapon_gw_dance_party",
     "weapon_gw_blasting_off",
     "weapon_gw_teleport",
     "weapon_gw_deflect",
     "weapon_gw_timelapse",
     "weapon_gw_solarflare",
-    "weapon_gw_mind_control",
-    "weapon_gw_ant"
+    "weapon_gw_mind_transfer",
 }
 
 GM.GWConfig.TeamSeekingColor = Color(155, 143, 48)

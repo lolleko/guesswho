@@ -3,7 +3,7 @@ CreateClientConVar("gw_language", "auto", true, false)
 
 language.Add(GW_WALKER_CLASS, "Walker")
 language.Add("gw_ability_wall", "Graviton Surge")
-language.Add("gw_mind_control_fake", "Mind Control Remnant")
+language.Add("gw_mind_transfer_fake", "Mind Transfer Remnant")
 
 surface.CreateFont("gw_font_medium", {
     font = "Roboto",
