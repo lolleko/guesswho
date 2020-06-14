@@ -17,15 +17,15 @@ function SWEP:Ability()
     local ply = self.Owner
 
     local models = {
-        {model = "models/props_c17/signpole001.mdl", offset = Vector(0, 0 , 0)},
+        {model = "models/props_c17/signpole001.mdl", offset = Vector(0, 0 , 0), health = 11},
         --{model = "models/props_junk/garbage_coffeemug001a.mdl", offset = Vector(0, 0, 3)},
-        {model = "models/props_lab/huladoll.mdl", offset = Vector(0, 0, 0)},
-        {model = "models/props_junk/plasticbucket001a.mdl", offset = Vector(0, 0, 7)},
-        {model = "models/props_c17/doll01.mdl", offset = Vector(0, 0 , 8)},
-        {model = "models/props_trainstation/trainstation_post001.mdl", offset = Vector(0, 0, 0)},
-        {model = "models/props_trainstation/trashcan_indoor001b.mdl", offset = Vector(0, 0, 17)},
-        {model = "models/props_lab/cactus.mdl", offset = Vector(0, 0, 5)},
-        {model = "models/props_c17/oildrum001.mdl", offset = Vector(0, 0, 0)},
+        {model = "models/props_lab/huladoll.mdl", offset = Vector(0, 0, 0), health = 1},
+        {model = "models/props_junk/plasticbucket001a.mdl", offset = Vector(0, 0, 7), health = 25},
+        {model = "models/props_c17/doll01.mdl", offset = Vector(0, 0 , 8), health = 15},
+        {model = "models/props_trainstation/trainstation_post001.mdl", offset = Vector(0, 0, 0), health = 30},
+        {model = "models/props_trainstation/trashcan_indoor001b.mdl", offset = Vector(0, 0, 17), health = 100},
+        {model = "models/props_lab/cactus.mdl", offset = Vector(0, 0, 5), health = 9},
+        {model = "models/props_c17/oildrum001.mdl", offset = Vector(0, 0, 0), health = 190},
     }
 
     local model = models[math.random(1, #models)]
@@ -35,7 +35,7 @@ function SWEP:Ability()
     tempEnt:Spawn()
     tempEnt:SetOwner(ply)
     tempEnt:SetMoveType(MOVETYPE_NONE)
-    tempEnt:PhysicsInit(SOLID_VPHYSICS)
+    tempEnt:PhysicsInit(SOLID_NONE)
     tempEnt:SetPos(ply:GetPos())
 
     tempEnt:SetPropOffset(model.offset)
@@ -43,24 +43,15 @@ function SWEP:Ability()
     local xy = math.Round(math.Max(tempEnt:OBBMaxs().x - tempEnt:OBBMins().x, tempEnt:OBBMaxs().y - tempEnt:OBBMins().y) / 2)
     local z = math.Round(tempEnt:OBBMaxs().z - tempEnt:OBBMins().z)
 
-    local phys = tempEnt:GetPhysicsObject()
-
-    if IsValid( phys ) then
-        volume = phys:GetVolume()
-        print("volume", volume)
-        health = math.Clamp(math.Round(volume / 190), 1, 200)
-    end
-    tempEnt:PhysicsInit(SOLID_NONE)
-
     SafeRemoveEntityDelayed( tempEnt, 7)
 
     local spd
 
-    if health < 50 then
+    if health <= 50 then
         spd = 450
-    elseif health < 100 then
+    elseif health <= 100 then
         spd = 400
-    elseif health < 150 then
+    elseif health <= 200 then
         spd = 325
     else
         spd = 275
@@ -73,7 +64,7 @@ function SWEP:Ability()
 
     ply:SetNoDraw(false)
     ply:DrawShadow(false)
-    ply:SetHealth( health )
+    ply:SetHealth(model.health)
 
     ply:SetRunSpeed( spd )
     ply:SetWalkSpeed( spd )

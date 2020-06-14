@@ -15,7 +15,9 @@ function ENT:Think()
     if IsValid(self:GetOwner()) and self:GetOwner():Alive() then
         self:SetPos(self:GetOwner():GetPos() + self:GetPropOffset())
     else
-        self:Remove()
+        if SERVER then
+            self:Remove()
+        end
     end
     self:NextThink(CurTime() + 0.05)
     return true
