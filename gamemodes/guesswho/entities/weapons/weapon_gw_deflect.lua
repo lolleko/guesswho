@@ -4,13 +4,14 @@ SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Deflect"
 SWEP.AbilitySound = "ambient/energy/zap1.wav"
 
-SWEP.AbilityDuration = 10
+SWEP.AbilityDuration = 12
+
+SWEP.AbilityDescription = "Deflects all damage taken to the attacker.\nLasts $AbilityDuration seconds and should probably be called Reflect instead of Deflect."
+
 
 function SWEP:Ability()
-    local ply = self.Owner
-
-    ply:SetDeflecting(true)
-    timer.Simple(self.AbilityDuration, function() ply:SetDeflecting(false) end)
+    self.Owner:SetDeflecting(true)
+    self:AbilityTimerIfValidOwner(self.AbilityDuration, 1, true, function() self:AbilityCleanup() end)
 end
 
 hook.Add("ScalePlayerDamage", "gw_deflect_damage", function(target, hitgroup, dmgInfo)
@@ -22,3 +23,9 @@ hook.Add("ScalePlayerDamage", "gw_deflect_damage", function(target, hitgroup, dm
         return true
     end
 end )
+
+function SWEP:AbilityCleanup()
+    if IsValid(self.Owner) then
+        self.Owner:SetDeflecting(false)
+    end
+end
