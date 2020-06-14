@@ -83,6 +83,14 @@ function plymeta:IsDisguised()
     return self:GetNWBool("gwAbilityIsDisguised", false)
 end
 
+function plymeta:SetDisguiseName(name)
+    self:SetNWString("gwAbilityIsDisguiseName", string.sub(name, 1, math.min(#name, 64)))
+end
+
+function plymeta:GetDisguiseName()
+    return self:GetNWString("gwAbilityIsDisguiseName", "")
+end
+
 function plymeta:SetHullNetworked(xy, z)
     self:SetHull(Vector(-xy, -xy, 0), Vector(xy, xy, z))
     self:SetHullDuck(Vector(-xy, -xy, 0), Vector(xy, xy, z))

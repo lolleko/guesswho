@@ -259,7 +259,11 @@ function GM:HUDDrawTargetID()
     local font = "gw_font_medium"
 
     if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() or trace.Entity:IsDisguised() ) ) then
-        text = trace.Entity:Nick()
+        if trace.Entity:IsDisguised() then
+            text = trace.Entity:GetDisguiseName()
+        else
+            text = trace.Entity:Nick()
+        end
     end
 
     if not text then return end

@@ -61,9 +61,9 @@ function SWEP:Ability()
     elseif health < 100 then
         spd = 400
     elseif health < 150 then
-        spd = 300
+        spd = 325
     else
-        spd = 250
+        spd = 275
     end
 
     ply:SetRenderMode(RENDERMODE_NONE)

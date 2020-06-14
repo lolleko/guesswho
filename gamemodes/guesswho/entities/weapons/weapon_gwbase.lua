@@ -40,9 +40,9 @@ GW_ABILTY_CAST_ERROR_ALREADY_ACTIVE = 4
 
 function SWEP:SetupDataTables()
     self:NetworkVar("Bool", 0, "IsAbilityUsed")
+
     self:AbilitySetupDataTables()
 end
-
 
 function SWEP:AbilitySetupDataTables()
 end
@@ -50,12 +50,16 @@ end
 function SWEP:Initialize()
     self:SetHoldType(self.HoldType)
 
-    self:SetIsAbilityUsed(false)
+    if self.IsNoAbility then
+        self:SetIsAbilityUsed(true)
+    else
+        self:SetIsAbilityUsed(false)
+    end
 
     self.currentTimerID = 0
     self.activeTimers = {}
 
-    if CLIENT and GWRound:IsCurrentState(GW_ROUND_HIDE) then
+    if CLIENT and not self.IsNoAbility and GWRound:IsCurrentState(GW_ROUND_HIDE) then
         local description = self.AbilityDescription
 
         if (description) then
