@@ -5,9 +5,9 @@ SWEP.Name = "Decoy"
 
 SWEP.AbilitySound = "vo/canals/matt_goodluck.wav"
 SWEP.AbilityDecoyCountMin = 1
-SWEP.AbilityDecoyCountMax = 11
+SWEP.AbilityDecoyCountMax = 10
 SWEP.AbilityDuration = 14
-SWEP.AbilityDescription = "Spawns between $AbilityDecoyCountMin and $AbilityDecoyCountMax NPCs around you and swaps you with one of the spawned NPCs.\nThe decoys disappear afer $AbilityDuration seconds."
+SWEP.AbilityDescription = "Spawns between $AbilityDecoyCountMin and $AbilityDecoyCountMax decoys around you and swaps you with one of the spawned decoys.\n\nRequires enough room to spawn all decoys.\nThe decoys disappear afer $AbilityDuration seconds."
 
 function SWEP:Ability()
 
