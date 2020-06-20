@@ -160,11 +160,11 @@ function SWEP:SecondaryAttack()
     vel.z = 0
     vel:Normalize()
     if self.Owner:IsOnGround() then
-        vel = vel * 600
+        vel = vel * 800
         self.Owner:SetPos(self:GetPos() + Vector(0, 0, 1))
-        vel.z = vel.z + 10
+        vel.z = vel.z + 20
     else
-        vel = vel * 250
+        vel = vel * 350
     end
     if not self.Owner:IsOnGround() and self.Owner:GetVelocity().z < 0 then
         vel.z = self.Owner:GetVelocity().z * - 1
