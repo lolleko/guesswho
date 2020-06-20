@@ -28,7 +28,8 @@ include("propfreeze.lua")
 include("targetfinder.lua")
 
 --resources
-resource.AddWorkshop("480998235")
+-- TODO reenable before update
+--resource.AddWorkshop("480998235")
 
 resource.AddFile("materials/vgui/gw/logo_main.png")
 
@@ -54,8 +55,11 @@ util.AddNetworkString("gwSendNotification")
 
 -- Disable Enhanced playermodel selector
 if GetConVar("sv_playermodel_selector_force") and GetConVar("sv_playermodel_selector_force"):GetBool() then
-    print("[Warning] Enhanced Playermodel Selector has been partially disabled, because it conflicts with Guess Who.")
-    GetConVar("sv_playermodel_selector_force"):SetBool(false)
+    local warningString = "[Warning] Enhanced Player Model Selector detected! This addon is not compatible with Guess Who, either remove/disable the addon or set \"sv_playermodel_selector_force\" to 0 (Requires map change or restart)!"
+    timer.Create("gwPlayermodelSelectorWarning", 30, 0, function()
+        PrintMessage(HUD_PRINTTALK, warningString)
+    end)
+    print(warningString)
 end
 
 function GM:Initialize()
