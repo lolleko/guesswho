@@ -59,7 +59,7 @@ function SWEP:Initialize()
     self.currentTimerID = 0
     self.activeTimers = {}
 
-    if CLIENT and not self.IsNoAbility and GWRound:IsCurrentState(GW_ROUND_HIDE) then
+    if CLIENT and not self.IsNoAbility and LocalPlayer() == self.Owner and GWRound:IsCurrentState(GW_ROUND_HIDE) then
         local description = self.AbilityDescription
 
         if (description) then
