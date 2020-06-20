@@ -12,8 +12,8 @@ function EFFECT:Init( data )
 
     local ent = data:GetEntity()
 
-    if ( !IsValid( ent ) ) then return end
-    if ( !ent:GetModel() ) then return end
+    if ( not IsValid( ent ) ) then return end
+    if ( not ent:GetModel() ) then return end
 
     self.ParentEntity = ent
     self:SetModel( ent:GetModel() )
@@ -29,7 +29,7 @@ end
 
 function EFFECT:Think()
 
-    if ( !IsValid( self.ParentEntity ) ) then return false end
+    if ( not IsValid( self.ParentEntity ) ) then return false end
 
     local PPos = self.ParentEntity:GetPos()
     self:SetPos( PPos + ( EyePos() - PPos ):GetNormal() )
@@ -40,6 +40,7 @@ function EFFECT:Think()
 
     self.ParentEntity.SpawnEffect = nil
 
+    -- Hack so the object does not pop in for a short duration between fade out and fade in
     if self.DontRemoveOverride then
         self.ParentEntity.RenderOverride = self.DontDraw
     else
