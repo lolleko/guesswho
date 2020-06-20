@@ -127,9 +127,9 @@ function SWEP:CalcTeleportDestination()
 
         local hullTrace = util.TraceEntity(
             {
-                start= navAreaClosestPoint,
-                endpos= navAreaClosestPoint,
-                mask=MASK_SOLID
+                start = navAreaClosestPoint,
+                endpos = navAreaClosestPoint,
+                mask = MASK_PLAYERSOLID
             },
             self.Owner
         )
