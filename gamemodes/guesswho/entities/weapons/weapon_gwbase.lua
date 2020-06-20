@@ -59,7 +59,7 @@ function SWEP:Initialize()
     self.currentTimerID = 0
     self.activeTimers = {}
 
-    if CLIENT and not self.IsNoAbility and LocalPlayer() == self.Owner and GWRound:IsCurrentState(GW_ROUND_HIDE) then
+    if CLIENT and not self.IsNoAbility and LocalPlayer() == self.Owner and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) then
         local description = self.AbilityDescription
 
         if (description) then
@@ -68,7 +68,7 @@ function SWEP:Initialize()
             end)
         end
 
-        GWNotifications:Add("gwAbility", "<font=gw_font_normal>Ability: " .. self.Name .. "</font>", "<font=gw_font_small>" .. description .. "</font>", (GWRound:GetEndTime() - CurTime()) / 2)
+        GWNotifications:Add("gwAbility", "<font=gw_font_normal>Ability: " .. self.Name .. "</font>", "<font=gw_font_small>" .. description .. "</font>", (GAMEMODE.GWRound:GetEndTime() - CurTime()) / 2)
     end
 
     self:AbilityCreated()
@@ -82,7 +82,7 @@ function SWEP:DrawWorldModel()
     if not self:GetIsAbilityUsed() and self.AbilityShowTargetHalos and self.AbilityRange > 0 and self:IsCarriedByLocalPlayer() then
         local ply = self.Owner
         for _, v in pairs(player.GetAll()) do
-          if v:GetPos():Distance(ply:GetPos()) < self.AbilityRange and v:Alive() and v:IsSeeking() then
+          if v:GetPos():Distance(ply:GetPos()) < self.AbilityRange and v:Alive() and v:GWIsSeeking() then
             if not self.AbilityShowTargetHalosCheckLOS or self:AbilityIsTargetInLOS(v) then
                 halo.Add({v}, Color(255, 0, 0), 3, 3, 5)
             end
@@ -96,9 +96,9 @@ end
 
 function SWEP:Equip()
     if SERVER then
-        if GWRound:IsCurrentState(GW_ROUND_HIDE) then
-            self.Owner:SetPrepAbility(self:GetClass())
-            if not self.Owner:GetReRolledAbility() then
+        if GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) then
+            self.Owner:SetGWPrepAbility(self:GetClass())
+            if not self.Owner:GetGWReRolledAbility() then
                 self.Owner:ChatPrint("Press Reload during hiding phase to reroll your ability. You can only do this once per round.")
             end
         end
@@ -106,9 +106,9 @@ function SWEP:Equip()
 end
 
 function SWEP:Reload()
-    if SERVER and GWRound:IsCurrentState(GW_ROUND_HIDE) and not self:GetIsAbilityUsed() and not self.Owner:GetReRolledAbility() then
-        self.Owner:SetReRolledAbility(true)
-        self.Owner:GiveRandomAbility()
+    if SERVER and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) and not self:GetIsAbilityUsed() and not self.Owner:GetGWReRolledAbility() then
+        self.Owner:SetGWReRolledAbility(true)
+        self.Owner:GWGiveRandomAbility()
     end
 end
 
@@ -207,7 +207,7 @@ end
 function SWEP:GetSeekersInRange(range, ignoreLOS)
     local result = {}
     for _,v in pairs(player.GetAll()) do
-        if v:Alive() and v:GetPos():Distance(self.Owner:GetPos()) < range and v:IsSeeking() and (ignoreLOS or self:AbilityIsTargetInLOS(v)) then
+        if v:Alive() and v:GetPos():Distance(self.Owner:GetPos()) < range and v:GWIsSeeking() and (ignoreLOS or self:AbilityIsTargetInLOS(v)) then
             table.insert(result, v)
         end
     end

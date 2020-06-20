@@ -1,33 +1,33 @@
 local plymeta = FindMetaTable( "Player" )
 if ( not plymeta ) then return end
 
-AccessorFunc(plymeta, "gwReRolledAbility", "ReRolledAbility", FORCE_BOOL)
-AccessorFunc(plymeta, "gwDiedInPrep", "DiedInPrep", FORCE_BOOL)
-AccessorFunc(plymeta, "gwPrepAbility", "PrepAbility", FORCE_STRING)
+AccessorFunc(plymeta, "gwReRolledAbility", "GWReRolledAbility", FORCE_BOOL)
+AccessorFunc(plymeta, "gwDiedInPrep", "GWDiedInPrep", FORCE_BOOL)
+AccessorFunc(plymeta, "gwPrepAbility", "GWPrepAbility", FORCE_STRING)
 
-function plymeta:ApplyStun( dur )
+function plymeta:GWApplyStun( dur )
 
     local ply = self
 
-    ply:SetStunned( true )
+    ply:GWSetStunned( true )
 
     ply:Freeze( true )
 
     local tname = ply:SteamID() .. ".Stunned"
 
     if timer.Exists( tname ) then
-        timer.Adjust( tname, dur, 1, function() ply:Freeze( false ) ply:SetStunned( false ) end )
+        timer.Adjust( tname, dur, 1, function() ply:Freeze( false ) ply:GWSetStunned( false ) end )
     else
-        timer.Create( tname, dur, 1, function() ply:Freeze( false ) ply:SetStunned( false ) end )
+        timer.Create( tname, dur, 1, function() ply:Freeze( false ) ply:GWSetStunned( false ) end )
     end
 
 end
 
-function plymeta:PlaySoundForPlayer(path)
+function plymeta:GWPlaySoundForPlayer(path)
     self:SendLua("surface.PlaySound('" .. path .. "')")
 end
 
-function plymeta:GiveRandomAbility()
+function plymeta:GWGiveRandomAbility()
     self:StripWeapons()
 
     self:Give( GAMEMODE.GWConfig.ActiveAbilities[ math.random( 1, #GAMEMODE.GWConfig.ActiveAbilities ) ] )

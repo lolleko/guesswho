@@ -9,7 +9,7 @@ SWEP.AbilityDescription = "Launches all seekers into the air after a short delay
 function SWEP:Ability()
     if SERVER then
         for _, ply in pairs(player.GetAll()) do
-            if ply:IsAlive() and ply:IsSeeking() then
+            if ply:IsAlive() and ply:GWIsSeeking() then
                 timer.Simple(0.5, function() ply:SetVelocity(Vector(0, 0, 2500)) end)
                 local effect = EffectData()
                 effect:SetEntity(ply)

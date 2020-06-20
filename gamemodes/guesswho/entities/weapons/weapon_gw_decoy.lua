@@ -4,7 +4,7 @@ SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Decoy"
 
 SWEP.AbilitySound = "vo/canals/matt_goodluck.wav"
-SWEP.AbilityDecoyCountMin = 1
+SWEP.AbilityDecoyCountMin = 2
 SWEP.AbilityDecoyCountMax = 9
 SWEP.AbilityDuration = 14
 SWEP.AbilityDescription = "Spawns between $AbilityDecoyCountMin and $AbilityDecoyCountMax decoys around you and swaps you with one of the spawned decoys.\n\nRequires enough room to spawn all decoys.\nThe decoys disappear afer $AbilityDuration seconds."

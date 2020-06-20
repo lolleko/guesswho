@@ -109,9 +109,9 @@ function CHuntHUD()
     if not ply:Alive() and IsValid(ply:GetObserverTarget()) then
         ply = ply:GetObserverTarget()
     end
-    local time = string.ToMinutesSeconds( GWRound:GetEndTime() - CurTime())
+    local time = string.ToMinutesSeconds( GAMEMODE.GWRound:GetEndTime() - CurTime())
     local teamColor = team.GetColor(ply:Team())
-    local label = GWRound:GetRoundLabel() or "ERROR"
+    local label = GAMEMODE.GWRound:GetRoundLabel() or "ERROR"
 
     CHHUD:DrawUnderLinedPanel( ScrW() / 2 - 100, 0, 200, 50, clrs.darkgreybg)
     CHHUD:DrawText( ScrW() / 2 - (CHHUD:TextSize(time, "gw_font_normal") / 2), 5, time, "gw_font_normal", clrs.white )
@@ -129,7 +129,7 @@ function CHuntHUD()
     --Health
     local health = ply:Health()
 
-    if ply:Alive() and ( ply:IsHiding() or ply:IsSeeking() ) and health > 0 then
+    if ply:Alive() and ( ply:GWIsHiding() or ply:GWIsSeeking() ) and health > 0 then
 
         CHHUD:DrawUnderLinedPanel( 20, ScrH() - 80, 100, 60, clrs.darkgreybg)
         CHHUD:DrawText( 70 - (CHHUD:TextSize(health, "gw_font_large") / 2), ScrH() - 75, health, "gw_font_large", clrs.white )
@@ -165,7 +165,7 @@ function CHuntHUD()
         end
     end
 
-    if LocalPlayer():Alive() and (LocalPlayer():IsSeeking() or IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().DrawGWCrossHair) then
+    if LocalPlayer():Alive() and (LocalPlayer():GWIsSeeking() or IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().DrawGWCrossHair) then
         CHHUD:Crosshair()
     end
 
@@ -176,7 +176,7 @@ function CHuntHUD()
         local clipExtra = ply:GetAmmoCount(ply:GetActiveWeapon():GetPrimaryAmmoType())
         local secondaryAmmo = ply:GetAmmoCount(ply:GetActiveWeapon():GetSecondaryAmmoType())
 
-        if ply:IsSeeking() then
+        if ply:GWIsSeeking() then
 
             if clipLeft ~= -1 then
                 CHHUD:DrawUnderLinedPanel( ScrW() - 220, ScrH() - 80, 200, 60, clrs.darkgreybg)
@@ -190,7 +190,7 @@ function CHuntHUD()
 
         end
 
-        if ply:IsHiding() and ply:GetActiveWeapon().GetIsAbilityUsed and not ply:GetActiveWeapon():GetIsAbilityUsed() then
+        if ply:GWIsHiding() and ply:GetActiveWeapon().GetIsAbilityUsed and not ply:GetActiveWeapon():GetIsAbilityUsed() then
             draw.RoundedBoxEx(64, ScrW() - 148, ScrH() - 168, 128, 128, clrs.abilitybg, true, true)
             CHHUD:DrawPanel( ScrW() - 148, ScrH() - 40, 128, 20, clrs.darkgreybg)
             CHHUD:DrawAbilityIcon(ply:GetActiveWeapon():GetClass(), ScrW() - 148, ScrH() - 168)
@@ -200,7 +200,7 @@ function CHuntHUD()
     end
 
     --TargetFinder
-    if ply:Alive() and ply:IsSeeking() and GetConVar("gw_target_finder_enabled"):GetBool() then
+    if ply:Alive() and ply:GWIsSeeking() and GetConVar("gw_target_finder_enabled"):GetBool() then
         local distance = ply:GetNWFloat("gwClosestTargetDistance", - 1)
 
         local distanceThreshold = GetConVar( "gw_target_finder_threshold" ):GetInt()
@@ -228,13 +228,13 @@ function CHuntHUD()
     end
 
     -- TOUCHES
-    if ply:Alive() and ply:IsHiding() and GetConVar("gw_touches_enabled"):GetBool() then
+    if ply:Alive() and ply:GWIsHiding() and GetConVar("gw_touches_enabled"):GetBool() then
 
         for i = 1, GetConVar("gw_touches_required"):GetInt() do
             CHHUD:DrawPanel( 110 + i * 20, ScrH() - 50, 10, 30, clrs.darkgreybg)
         end
 
-        for i = 1, ply:GetSeekerTouches() do
+        for i = 1, ply:GWGetSeekerTouches() do
             CHHUD:DrawPanel( 110 + i * 20, ScrH() - 50, 10, 30, teamColor)
         end
 
@@ -258,9 +258,9 @@ function GM:HUDDrawTargetID()
     local text
     local font = "gw_font_medium"
 
-    if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():IsHiding() or trace.Entity:IsDisguised() ) ) then
-        if trace.Entity:IsDisguised() then
-            text = trace.Entity:GetDisguiseName()
+    if LocalPlayer():Alive() and ( trace.Entity:IsPlayer() and ( trace.Entity:Team() == LocalPlayer():Team() or LocalPlayer():GWIsHiding() or trace.Entity:GWIsDisguised() ) ) then
+        if trace.Entity:GWIsDisguised() then
+            text = trace.Entity:GWGetDisguiseName()
         else
             text = trace.Entity:Nick()
         end
@@ -284,7 +284,7 @@ function GM:HUDDrawTargetID()
     local y = MouseY
 
     local teamColor = self:GetTeamColor( trace.Entity )
-    if trace.Entity:IsPlayer() and trace.Entity:IsDisguised() then teamColor = self:GetTeamColor(LocalPlayer()) end
+    if trace.Entity:IsPlayer() and trace.Entity:GWIsDisguised() then teamColor = self:GetTeamColor(LocalPlayer()) end
 
     x = x - w / 2
     y = y + 30
@@ -357,7 +357,7 @@ function GM:HUDDrawPickupHistory()
             
             local pickupText
 
-            if ply:IsHiding() and IsValid( ply:GetActiveWeapon() ) and ply:GetActiveWeapon():GetClass() ~= "weapon_gw_smgdummy" then
+            if ply:GWIsHiding() and IsValid( ply:GetActiveWeapon() ) and ply:GetActiveWeapon():GetClass() ~= "weapon_gw_smgdummy" then
                 pickupText = GWLANG:Translate("hud_ability_pickup")
             else
                 pickupText = v.name

@@ -95,19 +95,19 @@ function GM:ShouldCollide( ent1, ent2 )
         return false
     end
 
-    if GetConVar( "gw_abilities_enabled" ):GetBool() and GetConVar("gw_touches_enabled"):GetBool() and GWRound:IsCurrentState(GW_ROUND_SEEK) then
+    if GetConVar( "gw_abilities_enabled" ):GetBool() and GetConVar("gw_touches_enabled"):GetBool() and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_SEEK) then
         local hider, seeker
         if ent1:IsPlayer() and ent2:IsPlayer() then
-            if ent1:IsHiding() and ent2:IsSeeking() then
+            if ent1:GWIsHiding() and ent2:GWIsSeeking() then
                 hider = ent1
                 seeker = ent2
-            elseif ent2:IsHiding() and ent1:IsSeeking() then
+            elseif ent2:GWIsHiding() and ent1:GWIsSeeking() then
                 hider = ent2
                 seeker = ent1
             end
 
-            if hider and hider:GetLastSeekerTouch() + 3 < CurTime() and hider:GetPos():Distance(seeker:GetPos()) < 40 then
-                hider:AddSeekerTouch()
+            if hider and hider:GWGetLastSeekerTouch() + 3 < CurTime() and hider:GetPos():Distance(seeker:GetPos()) < 40 then
+                hider:GWAddSeekerTouch()
             end
         end
     end
@@ -117,7 +117,7 @@ end
 
 function GM:PlayerFootstep( ply, vPos, iFoot, strSoundName, fVolume, pFilter )
 
-    if ply:IsHiding() then
+    if ply:GWIsHiding() then
 
         return true
 

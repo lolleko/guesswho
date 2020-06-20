@@ -33,7 +33,7 @@ function SWEP:Ability()
             effect:SetEntity(v)
             effect:SetMagnitude(self.AbilityDuration)
             util.Effect("gw_stunned", effect, true, true)
-            v:ApplyStun(self.AbilityDuration)
+            v:GWApplyStun(self.AbilityDuration)
         end)
     end
 end

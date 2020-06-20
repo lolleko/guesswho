@@ -128,8 +128,8 @@ function GM:CalcView(ply, pos, angles, fov)
 
     end
 
-    if ply:IsHiding() or
-        ((ply:IsStunned() or ply:IsPlayingTaunt()) and GWRound:IsCurrentState(GW_ROUND_HIDE)) then
+    if ply:GWIsHiding() or
+        ((ply:GWIsStunned() or ply:IsPlayingTaunt()) and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE)) then
 
         local dist = 100
 
@@ -145,7 +145,7 @@ function GM:CalcView(ply, pos, angles, fov)
         view.origin = pos - (angles:Forward() * dist)
         view.drawviewer = true
 
-    elseif ply:IsSeeking() and GWRound:IsCurrentState(GW_ROUND_HIDE) then -- blind seekers
+    elseif ply:GWIsSeeking() and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) then -- blind seekers
         view.origin = Vector(20000, 0, 0)
         view.angles = Angle(0, 0, 0)
     end

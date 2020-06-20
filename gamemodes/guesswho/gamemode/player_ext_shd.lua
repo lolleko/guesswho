@@ -3,95 +3,90 @@ if ( not plymeta ) then return end
 
 AccessorFunc( plymeta, "iOldTeam", "PreviousTeam", FORCE_NUMBER )
 
-function plymeta:SetSpeed( spd )
-    self:SetWalkSpeed(spd)
-    self:SetRunSpeed(spd)
-end
-
-function plymeta:IsSeeking()
+function plymeta:GWIsSeeking()
     return ( self:Team() == GW_TEAM_SEEKING )
 end
 
-function plymeta:IsHiding()
+function plymeta:GWIsHiding()
     return ( self:Team() == GW_TEAM_HIDING )
 end
 
-function plymeta:SetStunned(state)
+function plymeta:GWSetStunned(state)
     self:SetNWBool("gwIsStunned", state)
 end
 
-function plymeta:GetStunned()
+function plymeta:GWGetStunned()
     return self:GetNWBool("gwIsStunned", false)
 end
 
-function plymeta:IsStunned()
-    return self:GetStunned()
+function plymeta:GWIsStunned()
+    return self:GWGetStunned()
 end
 
 -- TOUCHES
-function plymeta:GetSeekerTouches()
+function plymeta:GWGetSeekerTouches()
     return self:GetNWInt("gwSeekerTouches", 0)
 end
 
-function plymeta:SetSeekerTouches(val)
+function plymeta:GWSetSeekerTouches(val)
     self:SetNWInt("gwSeekerTouches", val)
 end
 
-function plymeta:GetLastSeekerTouch()
+function plymeta:GWGetLastSeekerTouch()
     return self:GetNWFloat("gwLastSeekerTouch", 0)
 end
 
-function plymeta:SetLastSeekerTouch(val)
+function plymeta:GWSetLastSeekerTouch(val)
     self:SetNWFloat("gwLastSeekerTouch", val)
 end
 
-function plymeta:AddSeekerTouch()
-    if self:GetLastSeekerTouch() + 2 < CurTime() then
-        self:SetSeekerTouches(self:GetSeekerTouches() + 1)
-        self:SetLastSeekerTouch(CurTime())
+function plymeta:GWAddSeekerTouch()
+    if self:GWGetLastSeekerTouch() + 2 < CurTime() then
+        self:GWSetSeekerTouches(self:GWGetSeekerTouches() + 1)
+        self:GWSetLastSeekerTouch(CurTime())
         if SERVER then
-            self:PlaySoundForPlayer("buttons/blip1.wav")
+            self:GWPlaySoundForPlayer("buttons/blip1.wav")
         end
 
-        if self:GetSeekerTouches() >= GetConVar("gw_touches_required"):GetInt() then
-            self:ResetSeekerTouches()
+        if self:GWGetSeekerTouches() >= GetConVar("gw_touches_required"):GetInt() then
+            self:GWResetSeekerTouches()
         end
     end
 end
 
-function plymeta:ResetSeekerTouches()
-    self:SetSeekerTouches(0)
+function plymeta:GWResetSeekerTouches()
+    self:GWSetSeekerTouches(0)
 
     if SERVER then
-        self:GiveRandomAbility()
+        self:GWGiveRandomAbility()
     end
 end
 
-function plymeta:SetDeflecting(state)
+function plymeta:GWSetDeflecting(state)
     self:SetNWBool("gwAbilityIsDeflecting", state)
 end
 
-function plymeta:IsDeflecting()
+function plymeta:GWIsDeflecting()
     return self:GetNWBool("gwAbilityIsDeflecting", false)
 end
 
-function plymeta:SetDisguised(state)
+function plymeta:GWSetDisguised(state)
     self:SetNWBool("gwAbilityIsDisguised", state)
 end
 
-function plymeta:IsDisguised()
+function plymeta:GWIsDisguised()
     return self:GetNWBool("gwAbilityIsDisguised", false)
 end
 
-function plymeta:SetDisguiseName(name)
-    self:SetNWString("gwAbilityIsDisguiseName", string.sub(name, 1, math.min(#name, 64)))
+function plymeta:GWSetDisguiseName(name)
+    self:SetNWString("gwAbilityDisguiseName", string.sub(name, 1, math.min(#name, 64)))
 end
 
-function plymeta:GetDisguiseName()
-    return self:GetNWString("gwAbilityIsDisguiseName", "")
+function plymeta:GWGetDisguiseName()
+    return self:GetNWString("gwAbilityDisguiseName", "")
 end
 
-function plymeta:SetHullNetworked(xy, z)
+function plymeta:GWSetHullNetworked(xy, z)
     self:SetHull(Vector(-xy, -xy, 0), Vector(xy, xy, z))
     self:SetHullDuck(Vector(-xy, -xy, 0), Vector(xy, xy, z))
 
@@ -108,6 +103,6 @@ net.Receive("gwPlayerHull", function(len, ply)
     local z = net.ReadFloat()
 
     if ply == LocalPlayer() then
-        LocalPlayer():SetHullNetworked(xy, z)
+        LocalPlayer():GWSetHullNetworked(xy, z)
     end
 end)

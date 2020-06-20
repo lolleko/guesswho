@@ -59,7 +59,7 @@ local function setLang( ply, cmd, args )
     else
         MsgN( "GW Language set to " .. GWLANG:GetLocale() .. "." )
         RunConsoleCommand( "gw_language", args[1] )
-        GWRound:RoundStateChange( GWRound:GetRoundState(), GWRound:GetRoundState() )
+        GAMEMODE.GWRound:RoundStateChange( GAMEMODE.GWRound:GetRoundState(), GAMEMODE.GWRound:GetRoundState() )
     end
 
 end

@@ -3,7 +3,7 @@ function GM:TargetFinderThink()
         return
     end
     for _, ply in pairs(player.GetAll()) do
-        if ply:IsSeeking() then
+        if ply:GWIsSeeking() then
             local minDist = -1
             for _, target in pairs( team.GetPlayers(GW_TEAM_HIDING) ) do
                 if target:Alive() then

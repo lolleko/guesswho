@@ -141,7 +141,7 @@ function ENT:Think()
 
         if (self.isStuck and (CurTime() > (self.stuckTime + 15))) and
             (self.stuckPos:DistToSqr(self:GetPos()) < 25) then
-            local spawnPoints = GWRound.SpawnPoints
+            local spawnPoints = GAMEMODE.GWRound.SpawnPoints
             local spawnPoint = spawnPoints[(math.random(#spawnPoints) - 1) + 1]:GetPos()
             self:SetPos(spawnPoint)
             self.isStuck = false
@@ -481,7 +481,7 @@ function ENT:OnUnStuck()
 end
 
 function ENT:Use(activator, caller, useType, value)
-    if caller:IsHiding() and GetConVar("gw_changemodel_hiding"):GetBool() then
+    if caller:GWIsHiding() and GetConVar("gw_changemodel_hiding"):GetBool() then
         caller:SetModel(self:GetModel())
     end
 end

@@ -33,7 +33,7 @@ function SWEP:Ability()
     if self:GetCalculatedTeleportDestinationValid() then
         if CLIENT then return end
             
-        self.Owner:ApplyStun(2)
+        self.Owner:GWApplyStun(2)
 
         local fadeOut = EffectData()
         fadeOut:SetEntity(self.Owner)

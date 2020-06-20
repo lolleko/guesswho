@@ -1,4 +1,6 @@
-GWRound = {}
+local GWRound = {}
+
+GM.GWRound = GWRound
 
 function GWRound:GetRoundState() return self.RoundState end
 
@@ -43,11 +45,11 @@ end
 
 local function ReceiveRoundState()
 
-    local old = GWRound:GetRoundState()
-    GWRound.RoundState = net.ReadUInt( 8 )
+    local old = GAMEMODE.GWRound:GetRoundState()
+    GAMEMODE.GWRound.RoundState = net.ReadUInt( 8 )
 
-    if old ~= GWRound.RoundState then
-        GWRound:RoundStateChange( old, GWRound.RoundState )
+    if old ~= GAMEMODE.GWRound.RoundState then
+        GAMEMODE.GWRound:RoundStateChange( old, GAMEMODE.GWRound.RoundState )
     end
 
 end

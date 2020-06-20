@@ -1,8 +1,10 @@
-GWRound = {}
+local GWRound = {}
+
+GM.GWRound = GWRound
 
 hook.Add("InitPostEntity", "gw_InitPostEntity", function()
-    GWRound:UpdateSettings()
-    GWRound:RoundPreGame()
+    GAMEMODE.GWRound:UpdateSettings()
+    GAMEMODE.GWRound:RoundPreGame()
 end)
 
 function GWRound:RoundPreGame()
@@ -146,8 +148,8 @@ function GWRound:RoundEnd(caught)
         for k, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do
             v:ConCommand("act cheer")
             -- reset reroll protections and funcs
-            v:SetDiedInPrep(false)
-            v:SetReRolledAbility(false)
+            v:SetGWDiedInPrep(false)
+            v:SetGWReRolledAbility(false)
             if v:Alive() then v:AddFrags(1) end -- if still alive as hiding after round give them one point (frag)
         end
         team.AddScore(GW_TEAM_HIDING, 1)

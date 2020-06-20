@@ -60,7 +60,7 @@ function SWEP:Ability()
     ply:SetRenderMode(RENDERMODE_NONE)
     ply:SetModel( tempEnt:GetModel() )
 
-    ply:SetHullNetworked(xy, z)
+    ply:GWSetHullNetworked(xy, z)
 
     ply:SetNoDraw(false)
     ply:DrawShadow(false)
