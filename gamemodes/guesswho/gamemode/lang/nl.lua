@@ -23,6 +23,7 @@ local nl = {
     teamselect_workshop_contact = "Contacteer",
     --Controls ( limited space keep it short )
     teamselect_controls_sit = "Zit",
+    teamselect_controls_change_model = "Van model veranderen",
     teamselect_controls_ability = "Vaardigheid (Verstoppers)",
     teamselect_controls_settings = "Hulp + Instellingen",
     teamselect_controls_team = "Kies team",

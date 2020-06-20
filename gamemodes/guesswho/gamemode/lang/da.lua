@@ -23,6 +23,7 @@ local da = {
     teamselect_workshop_contact = "Kontakt",
     --Controls ( limited space keep it short )
     teamselect_controls_sit = "Sid",
+    teamselect_controls_change_model = "Ændre model",
     teamselect_controls_ability = "Evne",
     teamselect_controls_settings = "Hjælp + indstillinger",
     teamselect_controls_team = "Vælg hold",

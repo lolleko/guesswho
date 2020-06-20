@@ -5,7 +5,7 @@ SWEP.Name = "Decoy"
 
 SWEP.AbilitySound = "vo/canals/matt_goodluck.wav"
 SWEP.AbilityDecoyCountMin = 1
-SWEP.AbilityDecoyCountMax = 10
+SWEP.AbilityDecoyCountMax = 9
 SWEP.AbilityDuration = 14
 SWEP.AbilityDescription = "Spawns between $AbilityDecoyCountMin and $AbilityDecoyCountMax decoys around you and swaps you with one of the spawned decoys.\n\nRequires enough room to spawn all decoys.\nThe decoys disappear afer $AbilityDuration seconds."
 
@@ -76,11 +76,11 @@ function SWEP:Ability()
     end
 
     if #walkers >= 2 then
-        local swap = walkers[ math.random(1, #walkers) ]
+        local swap = walkers[math.random(1, #walkers)]
         local spos = swap:GetPos() + Vector(0, 0, 2)
         swap:SetPos(self.Owner:GetPos() + Vector(0, 0, 2))
         self.Owner:SetPos(spos)
-        self.Owner:SetModel(GAMEMODE.GWConfig.HidingModels[ math.random(1, #GAMEMODE.GWConfig.HidingModels) ])
+        self.Owner:SetModel(GAMEMODE.GWConfig.HidingModels[math.random(1, #GAMEMODE.GWConfig.HidingModels)])
     else
         self.Owner:SetHealth(100)
     end

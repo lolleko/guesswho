@@ -23,6 +23,7 @@ local en = {
     teamselect_workshop_contact = "Contact",
     --Controls ( limited space keep it short )
     teamselect_controls_sit = "Sit",
+    teamselect_controls_change_model = "Change Model",
     teamselect_controls_ability = "Ability (Hiding)",
     teamselect_controls_settings = "Help + Settings",
     teamselect_controls_team = "Choose team",

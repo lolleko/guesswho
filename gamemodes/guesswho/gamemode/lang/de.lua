@@ -23,6 +23,7 @@ local de = {
     teamselect_workshop_contact = "Kontakt",
     --Controls ( limited space keep it short )
     teamselect_controls_sit = "Sitzen",
+    teamselect_controls_change_model = "Modell wechseln",
     teamselect_controls_ability = "Fähigkeit (Hiding)",
     teamselect_controls_settings = "Hilfe + Einstellungen",
     teamselect_controls_team = "Team wählen",

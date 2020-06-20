@@ -3,13 +3,13 @@ local logoMaterial = Material("vgui/gw/logo_main.png", "smooth")
 local function CreateTeamJoinButton(teamID, teamLangKey, parent, offsetX, offsetY, modelTable)
     local TeamPanel = vgui.Create("DPanel", parent)
     TeamPanel:SetPos(offsetX, offsetY)
-    TeamPanel:SetSize(280, 280)
+    TeamPanel:SetSize(280, 360)
     function TeamPanel:Paint(w, h)
         draw.RoundedBox(0, 0, 0, w, h, team.GetColor(teamID))
     end
 
     local TeamModel = vgui.Create("DModelPanel", TeamPanel)
-    TeamModel:SetSize(280, 240)
+    TeamModel:SetSize(280, 320)
     TeamModel:SetModel(modelTable[math.random(1,#modelTable)])
    
     if teamID == GW_TEAM_HIDING then
@@ -81,7 +81,7 @@ function GM:ShowTeam()
         end
     end
 
-    local topOffset = 240
+    local topOffset = 200
 
     local links = {
         {
@@ -115,7 +115,7 @@ function GM:ShowTeam()
 
     local InfoBox = vgui.Create("DPanel", TeamSelectFrame)
     InfoBox:SetPos(ScrW() / 2 - 620, linkOffsetY)
-    InfoBox:SetSize(280, 120)
+    InfoBox:SetSize(280, 200)
     function InfoBox:Paint(w, h) draw.RoundedBox(0, 0, 0, w, h, clrs.grey) end
 
     local InfoTitle = vgui.Create("DLabel", TeamSelectFrame)
@@ -147,6 +147,12 @@ function GM:ShowTeam()
         table.insert(controls, {
             string.upper(input.LookupBinding("attack2")),
             GWLANG:Translate("teamselect_controls_ability")
+        })
+    end
+    if input.LookupBinding("use") then
+        table.insert(controls, {
+            string.upper(input.LookupBinding("use")),
+            GWLANG:Translate("teamselect_controls_change_model")
         })
     end
     if input.LookupBinding("gm_showhelp") then
@@ -205,7 +211,7 @@ function GM:ShowTeam()
 
     local HeaderImage = vgui.Create("DImage", TeamSelectFrame)
     HeaderImage:SetSize(600, 100)
-    HeaderImage:SetPos(0, 60)
+    HeaderImage:SetPos(0, 40)
     HeaderImage:SetMaterial(logoMaterial)
     HeaderImage:CenterHorizontal()
 
@@ -217,7 +223,7 @@ function GM:ShowTeam()
 
     -- spectate and auto buttons
     local TeamSpectateButton = vgui.Create("DButton", TeamSelectFrame)
-    TeamSpectateButton:SetPos(ScrW() / 2 - 300, topOffset + 320)
+    TeamSpectateButton:SetPos(ScrW() / 2 - 300, topOffset + 400)
     TeamSpectateButton:SetSize(600, 40)
     TeamSpectateButton:SetFont("gw_font_small")
     TeamSpectateButton:SetText(GWLANG:Translate("teamselect_buttons_spectate"))
@@ -231,7 +237,7 @@ function GM:ShowTeam()
     end
 
     local TeamAutoButton = vgui.Create("DButton", TeamSelectFrame)
-    TeamAutoButton:SetPos(ScrW() / 2 - 300, topOffset + 320 + 80)
+    TeamAutoButton:SetPos(ScrW() / 2 - 300, topOffset + 400 + 80)
     TeamAutoButton:SetSize(600, 40)
     TeamAutoButton:SetFont("gw_font_small")
     TeamAutoButton:SetText(GWLANG:Translate("teamselect_buttons_auto"))
