@@ -184,8 +184,8 @@ function CHuntHUD()
             end
 
             if secondaryAmmo > 0 then
-                CHHUD:DrawPanel( ScrW() - 310, ScrH() - 40, 80, 20, teamColor)
-                CHHUD:DrawText( ScrW() - 305, ScrH() - 38, "Nuke ready!", "gw_font_small", clrs.white )
+                CHHUD:DrawPanel( ScrW() - 320, ScrH() - 40, 90, 20, teamColor)
+                CHHUD:DrawText( ScrW() - 315, ScrH() - 38, "Nuke ready!", "gw_font_small", clrs.white )
             end
 
         end
