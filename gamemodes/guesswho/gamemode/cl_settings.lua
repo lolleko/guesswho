@@ -291,6 +291,7 @@ function SETTINGSPANEL:Config()
     pickScreenLinkInput:SetContentAlignment(4)
     pickScreenLinkInput:SetTall(24)
     pickScreenLinkInput:SetValue(GAMEMODE.GWConfig.ServerUrl)
+    pickScreenLinkInput:SetUpdateOnType(true)
     function pickScreenLinkInput:OnValueChange(text)
         GAMEMODE.GWConfig.ServerUrl = text
     end
@@ -308,6 +309,7 @@ function SETTINGSPANEL:Config()
     pickScreenLinkLabelInput:SetContentAlignment(4)
     pickScreenLinkLabelInput:SetTall(24)
     pickScreenLinkLabelInput:SetValue(GAMEMODE.GWConfig.ServerName)
+    pickScreenLinkLabelInput:SetUpdateOnType(true)
     function pickScreenLinkLabelInput:OnValueChange(text)
         GAMEMODE.GWConfig.ServerName = text
     end
@@ -326,6 +328,7 @@ function SETTINGSPANEL:Config()
     pickScreenNewsLabelInput:SetTall(48)
     pickScreenNewsLabelInput:SetMultiline(true)
     pickScreenNewsLabelInput:SetValue(GAMEMODE.GWConfig.News)
+    pickScreenNewsLabelInput:SetUpdateOnType(true)
     function pickScreenNewsLabelInput:OnValueChange(text)
         GAMEMODE.GWConfig.News = text
     end
