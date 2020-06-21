@@ -56,7 +56,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
     ply.DeathTime = CurTime()
 
     -- reset touches
-    ply:SetGWSeekerTouches(0)
+    ply:GWSetSeekerTouches(0)
 
     if ply:Team() == GW_TEAM_HIDING and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) then
         ply:SetGWDiedInPrep(true)

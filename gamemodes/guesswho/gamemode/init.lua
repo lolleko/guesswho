@@ -27,10 +27,6 @@ include("round.lua")
 include("propfreeze.lua")
 include("targetfinder.lua")
 
---resources
--- TODO reenable before update
---resource.AddWorkshop("480998235")
-
 resource.AddFile("materials/vgui/gw/logo_main.png")
 
 local icons = file.Find("materials/vgui/gw/abilityicons/*.png", "GAME")

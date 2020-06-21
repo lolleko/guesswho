@@ -29,11 +29,13 @@ function SWEP:Ability()
     for _,v in pairs(targets) do    
         local distanceRatio = v:GetPos():Distance(self.Owner:GetPos()) / self.AbilityRange
         timer.Simple(distanceRatio * self.AbilityCastTime, function()
-            local effect = EffectData()
-            effect:SetEntity(v)
-            effect:SetMagnitude(self.AbilityDuration)
-            util.Effect("gw_stunned", effect, true, true)
-            v:GWApplyStun(self.AbilityDuration)
+            if IsValid(v) then
+                local effect = EffectData()
+                effect:SetEntity(v)
+                effect:SetMagnitude(self.AbilityDuration)
+                util.Effect("gw_stunned", effect, true, true)
+                v:GWApplyStun(self.AbilityDuration)
+            end
         end)
     end
 end
