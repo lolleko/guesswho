@@ -32,6 +32,7 @@ util.AddNetworkString("gwPlayerHull")
 util.AddNetworkString("gwSendConfig")
 util.AddNetworkString("gwRequestUpdateConfig")
 util.AddNetworkString("gwSendNotification")
+util.AddNetworkString("gwServerStartTauntForClient")
 
 
 -- Disable Enhanced playermodel selector

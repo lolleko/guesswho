@@ -23,15 +23,6 @@ if SERVER then
 
     function GM:PlayerShouldTaunt( ply, act )
         if not GetConVar( "gw_taunt_body_enabled" ):GetBool() then ply:ChatPrint("Body taunts are not enabled on this server." ) return false end
-        return true
     end
 
-end
-
-if CLIENT then
-    net.Receive( "gwTauntExecuted", function( len )
-        local ply = net.ReadEntity()
-        ply:AddVCDSequenceToGestureSlot(GESTURE_SLOT_CUSTOM, net.ReadInt(32), 0, true)
-        ply:AnimSetGestureWeight(GESTURE_SLOT_CUSTOM, 1)
-    end )
 end

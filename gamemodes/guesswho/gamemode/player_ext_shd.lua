@@ -95,8 +95,7 @@ function plymeta:GWIsRagdolled()
 end
 
 function plymeta:GWSetHullNetworked(xy, z)
-    self:SetHull(Vector(-xy, -xy, 0), Vector(xy, xy, z))
-    self:SetHullDuck(Vector(-xy, -xy, 0), Vector(xy, xy, z))
+    self:GWSetHull(xy, z)
 
     if SERVER then
         net.Start("gwPlayerHull")
@@ -106,11 +105,30 @@ function plymeta:GWSetHullNetworked(xy, z)
     end
 end
 
+function plymeta:GWSetHull(xy, z)
+    self:SetHull(Vector(-xy, -xy, 0), Vector(xy, xy, z))
+    self:SetHullDuck(Vector(-xy, -xy, 0), Vector(xy, xy, z))
+end
+
 net.Receive("gwPlayerHull", function(len, ply)
     local xy = net.ReadFloat()
     local z = net.ReadFloat()
 
     if ply == LocalPlayer() then
-        LocalPlayer():GWSetHullNetworked(xy, z)
+        LocalPlayer():GWSetHull(xy, z)
     end
 end)
+
+function plymeta:GWPlayTauntOnClient(taunt)
+    if SERVER then
+        net.Start("gwServerStartTauntForClient")
+        net.WriteString(taunt)
+        net.Send(self)
+    end
+end
+
+if CLIENT then
+    net.Receive("gwServerStartTauntForClient", function(len, ply)
+        RunConsoleCommand("act", net.ReadString())
+    end)
+end
