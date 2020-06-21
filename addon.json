@@ -1,0 +1,15 @@
+{
+  "title": "Guess Who Test",
+  "type": "gamemode",
+  "tags": ["fun", "roleplay"],
+  "ignore": [
+    "*.psd",
+    "*.vcproj",
+    "*.svn*",
+    "*.git*",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md",
+    "workshop.jpg"
+  ]
+}

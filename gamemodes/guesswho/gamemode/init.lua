@@ -27,21 +27,6 @@ include("round.lua")
 include("propfreeze.lua")
 include("targetfinder.lua")
 
-resource.AddFile("materials/vgui/gw/logo_main.png")
-
-local icons = file.Find("materials/vgui/gw/abilityicons/*.png", "GAME")
-for _, icon in pairs(icons) do
-    resource.AddFile(icon)
-end
-
-for _,sound in pairs(file.Find("sound/gwtaunts/*", "GAME")) do
-    resource.AddFile("sound/gwtaunts/" .. sound)
-end
-
-for _,sound in pairs(file.Find("sound/gwabilities/*", "GAME")) do
-    resource.AddFile("sound/gwabilities/" .. sound)
-end
-
 util.AddNetworkString("gwRoundState")
 util.AddNetworkString("gwPlayerHull")
 util.AddNetworkString("gwSendConfig")
