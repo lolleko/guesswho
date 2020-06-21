@@ -98,7 +98,7 @@ if SERVER then
         if configData.Version and configData.Version == GM.Version then
             GM.GWConfig = configData
         else
-            print("regenerating config")
+            print("GW existing config is for a different version => regenerating config.")
         end
     end
 
@@ -118,6 +118,7 @@ if SERVER then
 
     net.Receive("gwRequestUpdateConfig", function(len, ply)
         if not ply:IsSuperAdmin() then return end
+        print("GW Server updating config!")
         local config = net.ReadTable()
         GAMEMODE.GWConfig = config
         file.Write("guesswho/config.txt", util.TableToJSON(GAMEMODE.GWConfig))
@@ -130,6 +131,8 @@ end
 
 if CLIENT then
     net.Receive("gwSendConfig", function(len, ply)
+        print("GW Client updating config!")
+
         local config = net.ReadTable()
         GAMEMODE.GWConfig = config
         team.SetColor(GW_TEAM_HIDING, GAMEMODE.GWConfig.TeamHidingColor)
