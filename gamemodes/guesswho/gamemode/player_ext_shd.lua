@@ -86,6 +86,14 @@ function plymeta:GWGetDisguiseName()
     return self:GetNWString("gwAbilityDisguiseName", "")
 end
 
+function plymeta:GWSetRagdolled(state)
+    self:SetNWBool("gwAbilityIsRagdolled", state)
+end
+
+function plymeta:GWIsRagdolled()
+    return self:GetNWBool("gwAbilityIsRagdolled", false)
+end
+
 function plymeta:GWSetHullNetworked(xy, z)
     self:SetHull(Vector(-xy, -xy, 0), Vector(xy, xy, z))
     self:SetHullDuck(Vector(-xy, -xy, 0), Vector(xy, xy, z))

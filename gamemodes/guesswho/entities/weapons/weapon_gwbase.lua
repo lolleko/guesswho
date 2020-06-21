@@ -79,14 +79,11 @@ function SWEP:AbilityCreated()
 end
 
 function SWEP:DrawWorldModel()
-    if not self:GetIsAbilityUsed() and self.AbilityShowTargetHalos and self.AbilityRange > 0 and self:IsCarriedByLocalPlayer() then
-        local ply = self.Owner
-        for _, v in pairs(player.GetAll()) do
-          if v:GetPos():Distance(ply:GetPos()) < self.AbilityRange and v:Alive() and v:GWIsSeeking() then
-            if not self.AbilityShowTargetHalosCheckLOS or self:AbilityIsTargetInLOS(v) then
+    if not self:GetIsAbilityUsed() and self.AbilityShowTargetHalos and self.AbilityRange and self.AbilityRange > 0 and self:IsCarriedByLocalPlayer() then
+        for _, v in pairs(self:GetSeekersInRange(self.AbilityRange, not self.AbilityShowTargetHalosCheckLOS)) do
+            if not v:GWIsRagdolled() then
                 halo.Add({v}, Color(255, 0, 0), 3, 3, 5)
             end
-          end
         end
     end
 end
@@ -207,7 +204,7 @@ end
 function SWEP:GetSeekersInRange(range, ignoreLOS)
     local result = {}
     for _,v in pairs(player.GetAll()) do
-        if v:Alive() and v:GetPos():Distance(self.Owner:GetPos()) < range and v:GWIsSeeking() and (ignoreLOS or self:AbilityIsTargetInLOS(v)) then
+        if v:Alive() and v:GWIsSeeking() and v:GetPos():Distance(self.Owner:GetPos()) < range and (ignoreLOS or self:AbilityIsTargetInLOS(v)) then
             table.insert(result, v)
         end
     end

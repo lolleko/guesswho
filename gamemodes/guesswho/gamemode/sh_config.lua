@@ -46,6 +46,7 @@ GM.GWConfig.ActiveAbilities = {
     "weapon_gw_timelapse",
     "weapon_gw_solarflare",
     "weapon_gw_mind_transfer",
+    "weapon_gw_tumble"
 }
 
 GM.GWConfigStatic.AllAbilities = {
@@ -66,6 +67,7 @@ GM.GWConfigStatic.AllAbilities = {
     "weapon_gw_timelapse",
     "weapon_gw_solarflare",
     "weapon_gw_mind_transfer",
+    "weapon_gw_tumble"
 }
 
 GM.GWConfig.TeamSeekingColor = Color(155, 143, 48)
