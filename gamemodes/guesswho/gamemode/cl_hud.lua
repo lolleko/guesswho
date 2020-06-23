@@ -153,11 +153,6 @@ function CHuntHUD()
         if CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) then
             local headBone = CHHUD.HeadModel.Entity:LookupBone( "ValveBiped.Bip01_Head1" )
             local headpos = CHHUD.HeadModel.Entity:GetBonePosition(headBone)
-            if ply:Team() == GW_TEAM_SEEKING then
-              CHHUD.HeadModel.Entity:ManipulateBoneScale(headBone, Vector(0, 0, 0))
-            else
-              CHHUD.HeadModel.Entity:ManipulateBoneScale(headBone, Vector(1, 1, 1))
-            end
             if headpos then
                 CHHUD.HeadModel:SetLookAt( headpos )
                 CHHUD.HeadModel:SetCamPos( headpos - Vector( -18, 0, 0 ) )
