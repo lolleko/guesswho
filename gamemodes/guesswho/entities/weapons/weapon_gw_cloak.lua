@@ -10,7 +10,7 @@ function SWEP:Ability()
     local ply = self.Owner
     self:AbilityTimerIfValidOwner(self.AbilityDuration, 1, true, function() self:AbilityCleanup() end )
     ply:SetRenderMode( RENDERMODE_TRANSALPHA )
-    if SERVER then ply:Fire( "alpha", 5, 0 ) end
+    if SERVER then ply:Fire( "alpha", 4, 0 ) end
 end
 
 function SWEP:AbilityCleanup()

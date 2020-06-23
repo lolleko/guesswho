@@ -315,7 +315,7 @@ function ENT:RunBehaviour()
                         self:Jump()
                     else
                         local scanDist = 25 * self.loco:GetVelocity():Length2D() / 100
-                        local scanPointPath = self:EyePos() + (self.loco:GetGroundMotionVector() * scanDist)
+                        local scanPointPath = self:GetPos() + (self.loco:GetGroundMotionVector() * (scanDist / 1.5))
 
                         local scanPointOnPath = self.currentPath:GetClosestPosition(scanPointPath)
                         debugoverlay.Sphere(scanPointOnPath, 10, 0.1, Color(0, 255, 0))
