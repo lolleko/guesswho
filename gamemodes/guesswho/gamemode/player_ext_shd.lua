@@ -119,16 +119,35 @@ net.Receive("gwPlayerHull", function(len, ply)
     end
 end)
 
-function plymeta:GWPlayTauntOnClient(taunt)
-    if SERVER then
-        net.Start("gwServerStartTauntForClient")
-        net.WriteString(taunt)
-        net.Send(self)
+if CLIENT then
+    function plymeta:GWClientRequestTaunt(taunt)
+        net.Start("gwClientRequestTaunt")
+        net.WriteUInt(taunt, 32)
+        net.SendToServer()
     end
 end
 
+if SERVER then
+    function plymeta:GWPlayTauntOnClients(taunt)
+        net.Start("gwServerStartTauntForClient")
+        net.WriteEntity(self)
+        net.WriteUInt(taunt, 32)
+        net.Broadcast()
+    end
+end
+
+if SERVER then
+    net.Receive("gwClientRequestTaunt", function(len, ply)
+        ply:GWPlayTauntOnClients(net.ReadUInt(32))
+    end)
+end
+
 if CLIENT then
-    net.Receive("gwServerStartTauntForClient", function(len, ply)
-        RunConsoleCommand("act", net.ReadString())
+    net.Receive("gwServerStartTauntForClient", function(len)
+        local ply = net.ReadEntity()
+        if (IsValid(ply) and ply:IsPlayer()) then
+            ply:AnimRestartGesture(GESTURE_SLOT_VCD, net.ReadUInt(32), true)
+            ply:AnimSetGestureWeight(GESTURE_SLOT_VCD, 1)
+        end
     end)
 end

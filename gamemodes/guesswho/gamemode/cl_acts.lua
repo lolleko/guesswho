@@ -1,25 +1,25 @@
 local ActsFrame = {}
 
 local DefaultActs1 = {
-    "dance",
-    "muscle",
-    "wave",
-    "salute",
-    "bow",
-    "laugh",
-    "pers",
-    "cheer"
+    {name = "Dance", act = ACT_GMOD_TAUNT_DANCE},
+    {name = "Muscle", act = ACT_GMOD_TAUNT_MUSCLE},
+    {name = "Robot", act = ACT_GMOD_TAUNT_ROBOT},
+    {name = "Wave", act = ACT_GMOD_GESTURE_WAVE},
+    {name = "Salute", act = ACT_GMOD_TAUNT_SALUTE},
+    {name = "Persistence", act = ACT_GMOD_TAUNT_PERSISTENCE},
+    {name = "Laugh", act = ACT_GMOD_TAUNT_LAUGH},
+    {name = "Cheer", act = ACT_GMOD_TAUNT_CHEER},
 }
 
 local DefaultActs2 = {
-    "agree",
-    "disagree",
-    "zombie",
-    "robot",
-    "halt",
-    "group",
-    "forward",
-    "becon"
+    {name = "Agree", act = ACT_GMOD_GESTURE_AGREE},
+    {name = "Disagree", act = ACT_GMOD_GESTURE_DISAGREE},
+    {name = "Zombie", act = ACT_GMOD_GESTURE_TAUNT_ZOMBIE},
+    {name = "Bow", act = ACT_GMOD_GESTURE_BOW},
+    {name = "Halt", act = ACT_SIGNAL_HALT},
+    {name = "Group", act = ACT_SIGNAL_GROUP},
+    {name = "Forward", act = ACT_SIGNAL_FORWARD},
+    {name = "Becon", act = ACT_GMOD_GESTURE_BECON},
 }
 
 function ActsFrame:Init()
@@ -92,7 +92,7 @@ function ActsFrame:OnKeyCodePressed( keycode )
     end
 
     if self.actstable[actnmbr] then
-        RunConsoleCommand("act" , self.actstable[actnmbr])
+        LocalPlayer():GWClientRequestTaunt(self.actstable[actnmbr].act)
         return true
     end
 
@@ -112,10 +112,10 @@ function ActsFrame:SetActs( index )
     self.ActsContainer:Clear()
 
     local pnl
-    for i, value in pairs(self.actstable) do
+    for i, actInfo in pairs(self.actstable) do
         pnl = vgui.Create("DLabel", self.ActsContainer)
         pnl:SetFont("gw_font_small")
-        pnl:SetText(i .. ". " .. value)
+        pnl:SetText(i .. ". " .. actInfo.name)
         pnl:Dock(TOP)
     end
 

@@ -140,13 +140,13 @@ function GWRound:RoundEnd(caught)
     if caught then
         GWNotifications:Add("gwVictory" .. team.GetName(GW_TEAM_SEEKING), "<font=gw_font_normal>" .. team.GetName(GW_TEAM_SEEKING) .. " Victory" .. "</font>", "", postRoundDelay)
         for k, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
-            v:GWPlayTauntOnClient("cheer")
+            v:GWPlayTauntOnClients(ACT_GMOD_TAUNT_CHEER)
         end
         team.AddScore(GW_TEAM_SEEKING, 1)
     else
         GWNotifications:Add("gwVictory" .. team.GetName(GW_TEAM_HIDING), "<font=gw_font_normal>" .. team.GetName(GW_TEAM_HIDING) .. " Victory" .. "</font>", "", postRoundDelay)
         for k, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do
-            v:GWPlayTauntOnClient("cheer")
+            v:GWPlayTauntOnClients(ACT_GMOD_TAUNT_CHEER)
             -- reset reroll protections and funcs
             v:SetGWDiedInPrep(false)
             v:SetGWReRolledAbility(false)
