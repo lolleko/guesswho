@@ -97,17 +97,17 @@ language.Add("gw_ability_wall", "Graviton Surge")
 language.Add("gw_mind_transfer_fake", "Mind Transfer Remnant")
 
 -- Thirdpersoon + blinding
-function GM:CalcView(ply, pos, angles, fov)
+function GM:CalcView(ply, origin, angles, fov, znear, zfar)
 
     local Vehicle = ply:GetVehicle()
     local Weapon = ply:GetActiveWeapon()
 
     local view = {}
-    view.origin = pos
+    view.origin = origin
     view.angles = angles
     view.fov = fov
-    view.znear = 0
-    view.zfar = 0
+    view.znear = znear
+    view.zfar = zfar
     view.drawviewer = false
 
     if (IsValid(Vehicle)) then
@@ -123,7 +123,7 @@ function GM:CalcView(ply, pos, angles, fov)
         local func = Weapon.CalcView
         if (func) then
             view.origin, view.angles, view.fov =
-                func(Weapon, ply, pos * 1, angles * 1, fov)
+                func(Weapon, ply, origin * 1, angles * 1, fov)
         end
 
     end
@@ -134,15 +134,15 @@ function GM:CalcView(ply, pos, angles, fov)
         local dist = 100
 
         local tr = {}
-        tr.start = pos
-        tr.endpos = pos - (angles:Forward() * dist)
+        tr.start = origin
+        tr.endpos = origin - (angles:Forward() * dist)
         tr.filter = LocalPlayer()
         local trace = util.TraceLine(tr)
-        if trace.HitPos:Distance(pos) < dist - 10 then
-            dist = trace.HitPos:Distance(pos) - 10;
+        if trace.HitPos:Distance(origin) < dist - 10 then
+            dist = trace.HitPos:Distance(origin) - 10;
         end
 
-        view.origin = pos - (angles:Forward() * dist)
+        view.origin = origin - (angles:Forward() * dist)
         view.drawviewer = true
 
     elseif ply:GWIsSeeking() and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) then -- blind seekers
