@@ -137,7 +137,7 @@ if SERVER then
         local seq = self:SelectWeightedSequence(taunt)
         local duration = self:SequenceDuration(seq)
         self:SetNWBool("gwIsPlayingTaunt", true)
-        timer.Simple(duration, function()
+        timer.Create("gwIsPlayingTauntReset" .. self:SteamID(), duration, 1, function()
             if IsValid(self) then
                 self:SetNWBool("gwIsPlayingTaunt", false)
             end
