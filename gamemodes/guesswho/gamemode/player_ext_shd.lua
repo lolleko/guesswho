@@ -119,6 +119,11 @@ net.Receive("gwPlayerHull", function(len, ply)
     end
 end)
 
+local originalPlayingTaunt = plymeta.IsPlayingTaunt
+function plymeta:IsPlayingTaunt()
+    return self:GetNWBool("gwIsPlayingTaunt", false) or originalPlayingTaunt(self)
+end
+
 if CLIENT then
     function plymeta:GWClientRequestTaunt(taunt)
         net.Start("gwClientRequestTaunt")
@@ -129,6 +134,14 @@ end
 
 if SERVER then
     function plymeta:GWPlayTauntOnClients(taunt)
+        local seq = self:SelectWeightedSequence(taunt)
+        local duration = self:SequenceDuration(seq)
+        self:SetNWBool("gwIsPlayingTaunt", true)
+        timer.Simple(duration, function()
+            if IsValid(self) then
+                self:SetNWBool("gwIsPlayingTaunt", false)
+            end
+        end)
         net.Start("gwServerStartTauntForClient")
         net.WriteEntity(self)
         net.WriteUInt(taunt, 32)
@@ -138,7 +151,12 @@ end
 
 if SERVER then
     net.Receive("gwClientRequestTaunt", function(len, ply)
-        ply:GWPlayTauntOnClients(net.ReadUInt(32))
+        local act = net.ReadUInt(32)
+        local seq = ply:SelectWeightedSequence(act)
+        -- only network to clients if valid
+        if seq then
+            ply:GWPlayTauntOnClients(act)
+        end
     end)
 end
 
