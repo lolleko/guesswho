@@ -291,7 +291,7 @@ function GM:ShowSpare2( ply)
     local taunt = file.Find("sound/gwtaunts/*.mp3", "GAME")
     local randomNumber = math.random(1, table.Count(taunt))
 
-    tauntName = string.Explode(".mp3",tostring(taunt[randomNumber]))
+    local tauntName = string.Explode(".mp3",tostring(taunt[randomNumber]))
 
     ply:ConCommand("gw_voicetaunt " .. tauntName[1])
 

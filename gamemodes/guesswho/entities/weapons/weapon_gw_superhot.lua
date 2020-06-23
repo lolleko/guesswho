@@ -75,7 +75,7 @@ if CLIENT then
             local w, h = surface.GetTextSize(text);
 
             surface.SetTextPos(x - w / 2, y - h / 2)
-            surface.SetTextColor(clrs.white:Unpack())
+            surface.SetTextColor(G_GWColors.white:Unpack())
             surface.DrawText(text)
         end
     end)

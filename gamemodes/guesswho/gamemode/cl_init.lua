@@ -1,10 +1,6 @@
 CreateClientConVar("gw_hud_showhead", "1", true, false)
 CreateClientConVar("gw_language", "auto", true, false)
 
-language.Add(GW_WALKER_CLASS, "Walker")
-language.Add("gw_ability_wall", "Graviton Surge")
-language.Add("gw_mind_transfer_fake", "Mind Transfer Remnant")
-
 surface.CreateFont("gw_font_medium", {
     font = "Roboto",
     size = 32,
@@ -69,7 +65,7 @@ surface.CreateFont("gw_font_smaller", {
     shadow = false
 })
 
-clrs = {
+G_GWColors = {
     red = Color(158, 49, 74),
     blue = Color(53, 152, 219),
     green = Color(45, 204, 113),
@@ -96,6 +92,10 @@ include("cl_settings.lua")
 include("cl_acts.lua")
 include("cl_round.lua")
 
+language.Add(GW_WALKER_CLASS, "Walker")
+language.Add("gw_ability_wall", "Graviton Surge")
+language.Add("gw_mind_transfer_fake", "Mind Transfer Remnant")
+
 -- Thirdpersoon + blinding
 function GM:CalcView(ply, pos, angles, fov)
 
@@ -103,11 +103,11 @@ function GM:CalcView(ply, pos, angles, fov)
     local Weapon = ply:GetActiveWeapon()
 
     local view = {}
-    view.origin = origin
+    view.origin = pos
     view.angles = angles
     view.fov = fov
-    view.znear = znear
-    view.zfar = zfar
+    view.znear = 0
+    view.zfar = 0
     view.drawviewer = false
 
     if (IsValid(Vehicle)) then
@@ -123,7 +123,7 @@ function GM:CalcView(ply, pos, angles, fov)
         local func = Weapon.CalcView
         if (func) then
             view.origin, view.angles, view.fov =
-                func(Weapon, ply, origin * 1, angles * 1, fov)
+                func(Weapon, ply, pos * 1, angles * 1, fov)
         end
 
     end

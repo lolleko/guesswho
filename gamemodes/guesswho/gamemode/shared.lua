@@ -41,12 +41,12 @@ CreateConVar("gw_hiding_run_speed", "200", cVarFlags, "Hiding Run Speed")
 CreateConVar("gw_double_jump_enabled", "0", cVarFlags, "Wether Double Jumps are enabled or not")
 
 
-game.AddAmmoType( {
+game.AddAmmoType({
     name = "gwDashCharges",
     dmgtype = DMG_GENERIC
-} )
+})
 
-DeriveGamemode( "base" )
+DeriveGamemode("base")
 
 include("player_ext_shd.lua")
 include("sh_config.lua")

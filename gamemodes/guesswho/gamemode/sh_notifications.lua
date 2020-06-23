@@ -32,10 +32,10 @@ end
 
 net.Receive("gwSendNotification", function(len)
     GWNotifications:Add(
-        net.ReadString(uuid),
-        net.ReadString(header),
-        net.ReadString(text),
-        net.ReadFloat(duration)
+        net.ReadString(),
+        net.ReadString(),
+        net.ReadString(),
+        net.ReadFloat()
     )
 end)
 
@@ -85,7 +85,7 @@ function GWNotifications:Draw()
                 xStartAnimated = xStartAnimated + width * math.abs(notifcation.duration - lifeTime - fadeDuration) * (1 / fadeDuration)
             end
 
-            surface.SetDrawColor(clrs.darkgreybg)
+            surface.SetDrawColor(G_GWColors.darkgreybg)
             surface.DrawRect(xStartAnimated, yoffset, width, height + 5)
             surface.SetDrawColor(team.GetColor(LocalPlayer():Team()))
             surface.DrawRect(xStartAnimated + width * timeRatio, yoffset + height, width, 5)

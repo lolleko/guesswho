@@ -50,7 +50,7 @@ function ActsFrame:Init()
     self.ActsContainer:Dock(TOP)
 
     function self.ActsContainer:Paint(w,h)
-        draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg )
+        draw.RoundedBox( 0, 0, 0, w, h, G_GWColors.darkgreybg )
     end
 
 
@@ -126,26 +126,26 @@ end
 vgui.Register("DActFrame", ActsFrame, "DPanel")
 
 function GM:ActMenuOneOpen()
-    if ( not IsValid( g_gwActsMenu ) ) then
-        g_gwActsMenu = vgui.Create("DActFrame")
+    if ( not IsValid( G_GWActsMenu ) ) then
+        G_GWActsMenu = vgui.Create("DActFrame")
     end
 
-    if ( IsValid( g_gwActsMenu ) and LocalPlayer():Alive() and LocalPlayer():Team() ~= TEAM_SPECTATOR ) then
-        g_gwActsMenu:SetActs(1)
-        g_gwActsMenu:Show()
+    if ( IsValid( G_GWActsMenu ) and LocalPlayer():Alive() and LocalPlayer():Team() ~= TEAM_SPECTATOR ) then
+        G_GWActsMenu:SetActs(1)
+        G_GWActsMenu:Show()
     end
 
     return true
 end
 
 function GM:ActMenuTwoOpen()
-    if ( not IsValid( g_gwActsMenu ) ) then
-        g_gwActsMenu = vgui.Create("DActFrame")
+    if ( not IsValid( G_GWActsMenu ) ) then
+        G_GWActsMenu = vgui.Create("DActFrame")
     end
 
-    if ( IsValid( g_gwActsMenu) and LocalPlayer():Alive() and LocalPlayer():Team() ~= TEAM_SPECTATOR ) then
-        g_gwActsMenu:SetActs(2)
-        g_gwActsMenu:Show()
+    if ( IsValid( G_GWActsMenu) and LocalPlayer():Alive() and LocalPlayer():Team() ~= TEAM_SPECTATOR ) then
+        G_GWActsMenu:SetActs(2)
+        G_GWActsMenu:Show()
     end
 
     return true
@@ -153,8 +153,8 @@ end
 
 
 function GM:ActMenuClose()
-     if ( IsValid( g_gwActsMenu ) ) then
-        g_gwActsMenu:Hide()
+     if ( IsValid( G_GWActsMenu ) ) then
+        G_GWActsMenu:Hide()
     end
 end
 

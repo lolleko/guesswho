@@ -337,7 +337,7 @@ function ENT:RunBehaviour()
                             end
                         end
 
-                        if (jumpBasedOnPath or jumpBasedOnNavScan)  then
+                        if (jumpBasedOnPathScan or jumpBasedOnNavScan)  then
                             self:Jump()
                         end
                     end

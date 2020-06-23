@@ -26,8 +26,8 @@ function ENT:SetPlayer(ply)
 end
 
 function ENT:OnKilled(dmgInfo)
-    hook.Call("OnNPCKilled", GAMEMODE, self, dmginfo:GetAttacker(), dmginfo:GetInflictor())
-    self:BecomeRagdoll(dmginfo)
+    hook.Call("OnNPCKilled", GAMEMODE, self, dmgInfo:GetAttacker(), dmgInfo:GetInflictor())
+    self:BecomeRagdoll(dmgInfo)
     -- self.player:Kill()
 end
 

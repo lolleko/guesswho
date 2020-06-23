@@ -136,7 +136,7 @@ function SWEP:DrawHUD()
     local left = ScrW() - 120
     local bottom = ScrH() - 70
 
-    surface.SetDrawColor(clrs.darkgreybg)
+    surface.SetDrawColor(G_GWColors.darkgreybg)
     local offset2 = bottom
     for i = 1, self:GetMaxClip2() do
         surface.DrawPoly( translate(arrow, left, offset2) )

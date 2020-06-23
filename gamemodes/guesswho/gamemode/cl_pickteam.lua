@@ -45,10 +45,10 @@ local function CreateTeamJoinButton(teamID, teamLangKey, parent, offsetX, offset
     TeamName:AlignBottom()
     TeamName:SetContentAlignment(5)
     function TeamName:Paint(w, h)
-        draw.RoundedBox(0, 0, 0, w, h, clrs.grey)
+        draw.RoundedBox(0, 0, 0, w, h, G_GWColors.grey)
     end
     TeamName:SetFont("gw_font_small")
-    TeamName:SetTextColor(clrs.lightgrey)
+    TeamName:SetTextColor(G_GWColors.lightgrey)
     TeamName:SetText(GWLANG:Translate(teamLangKey) .. "(" ..
                                  team.NumPlayers(teamID) .. ")")
     function TeamName:Think()
@@ -105,10 +105,10 @@ function GM:ShowTeam()
         LinkButton:SetSize(280, 40)
         LinkButton:SetFont("gw_font_small")
         LinkButton:SetText(v[1])
-        LinkButton:SetTextColor(clrs.lightgrey)
+        LinkButton:SetTextColor(G_GWColors.lightgrey)
         function LinkButton.DoClick() gui.OpenURL(v[2]) end
         function LinkButton:Paint(w, h)
-            draw.RoundedBox(0, 0, 0, w, h, clrs.grey)
+            draw.RoundedBox(0, 0, 0, w, h, G_GWColors.grey)
         end
         linkOffsetY = linkOffsetY + 80
     end
@@ -116,7 +116,7 @@ function GM:ShowTeam()
     local InfoBox = vgui.Create("DPanel", TeamSelectFrame)
     InfoBox:SetPos(ScrW() / 2 - 620, linkOffsetY)
     InfoBox:SetSize(280, 200)
-    function InfoBox:Paint(w, h) draw.RoundedBox(0, 0, 0, w, h, clrs.grey) end
+    function InfoBox:Paint(w, h) draw.RoundedBox(0, 0, 0, w, h, G_GWColors.grey) end
 
     local InfoTitle = vgui.Create("DLabel", TeamSelectFrame)
     InfoTitle:SetContentAlignment(5)
@@ -124,7 +124,7 @@ function GM:ShowTeam()
     InfoTitle:SetSize(280, 40)
     InfoTitle:SetFont("gw_font_medium")
     InfoTitle:SetText("News")
-    InfoTitle:SetTextColor(clrs.lightgrey)
+    InfoTitle:SetTextColor(G_GWColors.lightgrey)
 
     local InfoDescription = vgui.Create("DTextEntry", TeamSelectFrame)
     InfoDescription:SetPos(ScrW() / 2 - 620 + 5, linkOffsetY + 40)
@@ -134,7 +134,7 @@ function GM:ShowTeam()
     InfoDescription:SetPaintBackground(false)
     InfoDescription:SetMultiline(true)
     InfoDescription:SetFont("gw_font_small")
-    InfoDescription:SetTextColor(clrs.lightgrey)
+    InfoDescription:SetTextColor(G_GWColors.lightgrey)
 
     local controls = {}
     if input.LookupBinding("duck") then
@@ -189,10 +189,10 @@ function GM:ShowTeam()
         ControlKey:SetSize(80, 40)
         ControlKey:SetFont("gw_font_smaller")
         ControlKey:SetText(v[1])
-        ControlKey:SetTextColor(clrs.lightgrey)
+        ControlKey:SetTextColor(G_GWColors.lightgrey)
         ControlKey:SetContentAlignment(5)
         function ControlKey:Paint(w, h)
-            draw.RoundedBox(0, 0, 0, w, h, clrs.red)
+            draw.RoundedBox(0, 0, 0, w, h, G_GWColors.red)
         end
 
         local ControlDesc = vgui.Create("DLabel", TeamSelectFrame)
@@ -200,10 +200,10 @@ function GM:ShowTeam()
         ControlDesc:SetSize(200, 40)
         ControlDesc:SetFont("gw_font_small")
         ControlDesc:SetText(v[2])
-        ControlDesc:SetTextColor(clrs.lightgrey)
+        ControlDesc:SetTextColor(G_GWColors.lightgrey)
         ControlDesc:SetContentAlignment(5)
         function ControlDesc:Paint(w, h)
-            draw.RoundedBox(0, 0, 0, w, h, clrs.grey)
+            draw.RoundedBox(0, 0, 0, w, h, G_GWColors.grey)
         end
 
         controlsOffsetY = controlsOffsetY + 80
@@ -227,13 +227,13 @@ function GM:ShowTeam()
     TeamSpectateButton:SetSize(600, 40)
     TeamSpectateButton:SetFont("gw_font_small")
     TeamSpectateButton:SetText(GWLANG:Translate("teamselect_buttons_spectate"))
-    TeamSpectateButton:SetTextColor(clrs.lightgrey)
+    TeamSpectateButton:SetTextColor(G_GWColors.lightgrey)
     function TeamSpectateButton.DoClick()
         self:HideTeam()
         RunConsoleCommand("changeteam", TEAM_SPECTATOR)
     end
     function TeamSpectateButton:Paint(w, h)
-        draw.RoundedBox(0, 0, 0, w, h, clrs.grey)
+        draw.RoundedBox(0, 0, 0, w, h, G_GWColors.grey)
     end
 
     local TeamAutoButton = vgui.Create("DButton", TeamSelectFrame)
@@ -241,13 +241,13 @@ function GM:ShowTeam()
     TeamAutoButton:SetSize(600, 40)
     TeamAutoButton:SetFont("gw_font_small")
     TeamAutoButton:SetText(GWLANG:Translate("teamselect_buttons_auto"))
-    TeamAutoButton:SetTextColor(clrs.lightgrey)
+    TeamAutoButton:SetTextColor(G_GWColors.lightgrey)
     function TeamAutoButton.DoClick()
         self:HideTeam()
         RunConsoleCommand("changeteam", team.BestAutoJoinTeam())
     end
     function TeamAutoButton:Paint(w, h)
-        draw.RoundedBox(0, 0, 0, w, h, clrs.grey)
+        draw.RoundedBox(0, 0, 0, w, h, G_GWColors.grey)
     end
 
     local CloseButton = vgui.Create("DButton", TeamSelectFrame)
@@ -255,10 +255,10 @@ function GM:ShowTeam()
     CloseButton:SetSize(40, 40)
     CloseButton:SetFont("gw_font_medium")
     CloseButton:SetText("X")
-    CloseButton:SetTextColor(clrs.lightgrey)
+    CloseButton:SetTextColor(G_GWColors.lightgrey)
     function CloseButton.DoClick() TeamSelectFrame:Remove() end
     function CloseButton:Paint(w, h)
-        draw.RoundedBox(0, 0, 0, w, h, clrs.grey)
+        draw.RoundedBox(0, 0, 0, w, h, G_GWColors.grey)
     end
 
     local GMVersion = vgui.Create("DLabel", TeamSelectFrame)
@@ -266,7 +266,7 @@ function GM:ShowTeam()
     GMVersion:SetSize(400, 40)
     GMVersion:SetFont("gw_font_medium")
     GMVersion:SetText("Version " .. GAMEMODE.Version)
-    GMVersion:SetTextColor(clrs.lightgrey)
+    GMVersion:SetTextColor(G_GWColors.lightgrey)
     GMVersion:SetContentAlignment(6)
     function GMVersion:Paint(w, h) return end
 

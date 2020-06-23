@@ -1,19 +1,19 @@
 function GM:ScoreboardShow()
-    if ( not IsValid( g_Scoreboard ) ) then
-        g_Scoreboard = vgui.Create( "DScoreboard" )
+    if ( not IsValid( G_GWScoreboard ) ) then
+        G_GWScoreboard = vgui.Create( "DScoreboard" )
     end
 
-    if ( IsValid( g_Scoreboard ) ) then
-        g_Scoreboard:Show()
-        g_Scoreboard:MakePopup()
-        g_Scoreboard:SetKeyboardInputEnabled( false )
+    if ( IsValid( G_GWScoreboard ) ) then
+        G_GWScoreboard:Show()
+        G_GWScoreboard:MakePopup()
+        G_GWScoreboard:SetKeyboardInputEnabled( false )
     end
 end
 
 function GM:ScoreboardHide()
 
-    if ( IsValid( g_Scoreboard ) ) then
-        g_Scoreboard:Hide()
+    if ( IsValid( G_GWScoreboard ) ) then
+        G_GWScoreboard:Hide()
     end
 
 end
@@ -28,7 +28,7 @@ function SB:Init()
     HeaderLabel:SetSize( 200, 64 )
     HeaderLabel:SetPos( 0, 0 )
     HeaderLabel:SetFont("gw_font_medium")
-    HeaderLabel:SetTextColor( clrs.lightgrey )
+    HeaderLabel:SetTextColor( G_GWColors.lightgrey )
     HeaderLabel:SetText("Guess Who?")
     HeaderLabel:CenterHorizontal()
     function HeaderLabel:Paint( w, h )
@@ -38,14 +38,14 @@ function SB:Init()
     Header1Label:SetSize( 200, 64 )
     Header1Label:SetPos( 560, 4 )
     Header1Label:SetFont("gw_font_small")
-    Header1Label:SetTextColor( clrs.lightgrey )
+    Header1Label:SetTextColor( G_GWColors.lightgrey )
     Header1Label:SetText("by Lolle")
 
     local Header2Label = vgui.Create("DLabel", self)
     Header2Label:SetSize( 980, 64 )
     Header2Label:SetPos( 20, 15 )
     Header2Label:SetFont("gw_font_small")
-    Header2Label:SetTextColor( clrs.lightgrey )
+    Header2Label:SetTextColor( G_GWColors.lightgrey )
     Header2Label:SetText( GWLANG:Translate( "scoreboard_server" ) .. ": " .. GetHostName() )
     function Header2Label:Think() self:SetText( GWLANG:Translate( "scoreboard_server" ) .. ": " .. GetHostName() ) end
     Header2Label:CenterHorizontal()
@@ -54,7 +54,7 @@ function SB:Init()
     Header3Label:SetSize( 980, 64 )
     Header3Label:SetPos( 20, 35 )
     Header3Label:SetFont("gw_font_small")
-    Header3Label:SetTextColor( clrs.lightgrey )
+    Header3Label:SetTextColor( G_GWColors.lightgrey )
     Header3Label:SetText( GWLANG:Translate( "scoreboard_map" ) .. ": " .. game.GetMap())
     function Header3Label:Think() self:SetText( GWLANG:Translate( "scoreboard_map" ) .. ": " .. game.GetMap() ) end
     Header3Label:CenterHorizontal()
@@ -63,7 +63,7 @@ function SB:Init()
     Header4Label:SetSize( 980, 64 )
     Header4Label:SetPos( 20, 15 )
     Header4Label:SetFont("gw_font_small")
-    Header4Label:SetTextColor( clrs.lightgrey )
+    Header4Label:SetTextColor( G_GWColors.lightgrey )
     Header4Label:SetText( GWLANG:Translate( "scoreboard_online" ) .. ": " .. #player.GetHumans() ..  "/" .. game.MaxPlayers())
     function Header4Label:Think() self:SetText( GWLANG:Translate( "scoreboard_online" ) .. ": " .. #player.GetHumans() ..  "/" .. game.MaxPlayers()) end
     Header4Label:CenterHorizontal()
@@ -73,7 +73,7 @@ function SB:Init()
     Header5Label:SetSize( 980, 64 )
     Header5Label:SetPos( 20, 35 )
     Header5Label:SetFont("gw_font_small")
-    Header5Label:SetTextColor( clrs.lightgrey )
+    Header5Label:SetTextColor( G_GWColors.lightgrey )
     Header5Label:SetText( GWLANG:Translate( "scoreboard_spectators" ) .. ": " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR))
     function Header5Label:Think() self:SetText( GWLANG:Translate( "scoreboard_spectators" ) .. ": " .. team.NumPlayers(TEAM_UNASSIGNED) + team.NumPlayers(TEAM_SPECTATOR)) end
     Header5Label:CenterHorizontal()
@@ -82,13 +82,13 @@ function SB:Init()
     self.HidingHeader = vgui.Create("DLabel", self)
     self.HidingHeader:SetPos( 30, 90 )
     self.HidingHeader:SetFont("gw_font_normal")
-    self.HidingHeader:SetTextColor( clrs.lightgreybg )
+    self.HidingHeader:SetTextColor( G_GWColors.lightgreybg )
 
     local HidingPanel = vgui.Create("DScrollPanel", self)
     HidingPanel:SetPos( 20, 120)
     HidingPanel:SetSize( 470, 580 )
     function HidingPanel:Paint( w, h )
-        draw.RoundedBox( 0, 0, 0, w, h, clrs.greybg )
+        draw.RoundedBox( 0, 0, 0, w, h, G_GWColors.greybg )
     end
 
     local HidingList = vgui.Create("DTeamPanel", HidingPanel)
@@ -98,13 +98,13 @@ function SB:Init()
     self.SeekingHeader = vgui.Create("DLabel", self)
     self.SeekingHeader:SetPos( 880, 90 )
     self.SeekingHeader:SetFont("gw_font_normal")
-    self.SeekingHeader:SetTextColor( clrs.lightgrey )
+    self.SeekingHeader:SetTextColor( G_GWColors.lightgrey )
 
     local SeekingPanel = vgui.Create("DScrollPanel", self)
     SeekingPanel:SetPos( 510, 120)
     SeekingPanel:SetSize( 470, 580 )
     function SeekingPanel:Paint( w, h )
-        draw.RoundedBox( 0, 0, 0, w, h, clrs.greybg )
+        draw.RoundedBox( 0, 0, 0, w, h, G_GWColors.greybg )
     end
 
     local SeekingList = vgui.Create("DTeamPanel", SeekingPanel)
@@ -113,8 +113,8 @@ function SB:Init()
 end
 
 function SB:Paint( w, h )
-    draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg )
-    draw.RoundedBox( 0, 0, 0, w, 80, clrs.red )
+    draw.RoundedBox( 0, 0, 0, w, h, G_GWColors.darkgreybg )
+    draw.RoundedBox( 0, 0, 0, w, 80, G_GWColors.red )
 end
 
 function SB:Think()
@@ -167,20 +167,20 @@ function PLAYERINFO:Init()
     self.Name = vgui.Create( "DLabel" , self )
     self.Name:SetPos( 68, 0)
     self.Name:SetFont( "gw_font_normal" )
-    self.Name:SetTextColor( clrs.darkgrey )
+    self.Name:SetTextColor( G_GWColors.darkgrey )
     self.Name:SetSize( 320, 32 )
 
     self.Score = vgui.Create( "DLabel" , self )
     self.Score:SetPos( 380, 4)
     self.Score:SetSize( 60, 48 )
     self.Score:SetFont( "gw_font_normal" )
-    self.Score:SetTextColor( clrs.darkgrey )
+    self.Score:SetTextColor( G_GWColors.darkgrey )
 
     self.Ping = vgui.Create( "DLabel" , self )
     self.Ping:SetPos( 450, 8 )
     self.Ping:SetWidth( 50 )
     self.Ping:SetFont( "gw_font_small" )
-    self.Ping:SetTextColor( clrs.darkgrey )
+    self.Ping:SetTextColor( G_GWColors.darkgrey )
 
     self.Mute = self:Add( "DImageButton" )
     self.Mute:SetSize( 24, 24 )
@@ -206,8 +206,8 @@ function PLAYERINFO:Think()
         return
     end
 
-    local txtClr = clrs.grey
-    if self.Player:Alive() then txtClr = clrs.lightgrey end
+    local txtClr = G_GWColors.grey
+    if self.Player:Alive() then txtClr = G_GWColors.lightgrey end
 
     if ( self.NumPing == nil or self.NumPing ~= self.Player:Ping() ) then
     self.NumPing = self.Player:Ping()

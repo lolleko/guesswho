@@ -12,7 +12,7 @@ function SETTINGSPANEL:Init()
     title:SetPos( 10, 3 )
     title:SetWide(self:GetWide())
     title:SetFont("gw_font_small")
-    title:SetTextColor(clrs.white)
+    title:SetTextColor(G_GWColors.white)
     title:SetText( "Settings" )
 
     self.sheet = vgui.Create( "DPropertySheet", self )
@@ -37,9 +37,9 @@ function SETTINGSPANEL:Init()
     self.sheet:AddSheet( "General", self.general, "icon16/wrench.png" )
 
     function self.sheet:Paint(w, h)
-        draw.RoundedBox( 0, 8, 28, w - 16, h - 36, clrs.lightgrey )
-        draw.RoundedBox( 0, 8, 0, w - 16, 28, clrs.grey )
-        draw.RoundedBox( 0, 8, 23, w - 16, 5, clrs.redbg )
+        draw.RoundedBox( 0, 8, 28, w - 16, h - 36, G_GWColors.lightgrey )
+        draw.RoundedBox( 0, 8, 0, w - 16, 28, G_GWColors.grey )
+        draw.RoundedBox( 0, 8, 23, w - 16, 5, G_GWColors.redbg )
         return
     end
 
@@ -49,7 +49,7 @@ function SETTINGSPANEL:Init()
         v.Tab.Paint = function(self, w1, h1)
             if k == 1 then left = 8 end
             if v.Tab == GW_SETTINGS_PANEL.sheet:GetActiveTab() then
-                draw.RoundedBox( 0, left, h1 - 5, w1 - left, 5, clrs.red )
+                draw.RoundedBox( 0, left, h1 - 5, w1 - left, 5, G_GWColors.red )
             end
         end
     end
@@ -57,7 +57,7 @@ function SETTINGSPANEL:Init()
 end
 
 function SETTINGSPANEL:Paint(w, h)
-    draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg )
+    draw.RoundedBox( 0, 0, 0, w, h, G_GWColors.darkgreybg )
 end
 
 function SETTINGSPANEL:Tutorial()
@@ -70,7 +70,7 @@ function SETTINGSPANEL:Tutorial()
     introtext:Dock( TOP )
     introtext:SetTall(32)
     introtext:SetFont("gw_font_medium")
-    introtext:SetTextColor(clrs.black)
+    introtext:SetTextColor(G_GWColors.black)
     introtext:SetContentAlignment( 5 )
     introtext:SetText("It’s all about spotting the odd one out.")
 
@@ -85,7 +85,7 @@ function SETTINGSPANEL:Tutorial()
     function maintext:PerformLayout()
 
         self:SetFontInternal( "gw_font_normal" )
-        self:SetFGColor( clrs.black )
+        self:SetFGColor( G_GWColors.black )
 
     end
 
@@ -94,7 +94,7 @@ function SETTINGSPANEL:Tutorial()
     outrotext:Dock( BOTTOM )
     outrotext:SetTall(32)
     outrotext:SetFont("gw_font_medium")
-    outrotext:SetTextColor(clrs.black)
+    outrotext:SetTextColor(G_GWColors.black)
     outrotext:SetContentAlignment( 5 )
     outrotext:SetText("Can you win?")
 
@@ -118,12 +118,12 @@ function MODELCATEGORY:SetModels(updateTable)
 
         modelIcon.PaintOver = function()
             if table.HasValue(updateTable, modelIcon:GetModelName()) then
-                surface.SetDrawColor(clrs.green)
+                surface.SetDrawColor(G_GWColors.green)
                 for i = 0, 2 do
                     surface.DrawOutlinedRect( i, i, modelIcon:GetWide() - i * 2, modelIcon:GetTall() - i * 2)
                 end
             else
-                surface.SetDrawColor(clrs.red)
+                surface.SetDrawColor(G_GWColors.red)
                 for i = 0, 1 do
                     surface.DrawOutlinedRect( i, i, modelIcon:GetWide() - i * 2, modelIcon:GetTall() - i * 2)
                 end
@@ -141,9 +141,9 @@ function MODELCATEGORY:SetModels(updateTable)
         local modelLabel = vgui.Create("DLabel", modelIcon)
         modelLabel:SetText(name)
         modelLabel:SetFont("gw_font_smaller")
-        modelLabel:SetTextColor(clrs.lightgrey)
+        modelLabel:SetTextColor(G_GWColors.lightgrey)
         function modelLabel:Paint( w, h )
-            draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg)
+            draw.RoundedBox( 0, 0, 0, w, h, G_GWColors.darkgreybg)
         end
         modelLabel:Dock(BOTTOM)
         modelLabel:SetContentAlignment(5)
@@ -200,12 +200,12 @@ function SETTINGSPANEL:Config()
 
         abilityIcon.PaintOver = function()
             if table.HasValue(GAMEMODE.GWConfig.ActiveAbilities, wepName) then
-                surface.SetDrawColor(clrs.green)
+                surface.SetDrawColor(G_GWColors.green)
                 for i = 0, 2 do
                     surface.DrawOutlinedRect( i, i, abilityIcon:GetWide() - i * 2, abilityIcon:GetTall() - i * 2)
                 end
             else
-                surface.SetDrawColor(clrs.red)
+                surface.SetDrawColor(G_GWColors.red)
                 for i = 0, 1 do
                     surface.DrawOutlinedRect( i, i, abilityIcon:GetWide() - i * 2, abilityIcon:GetTall() - i * 2)
                 end
@@ -223,9 +223,9 @@ function SETTINGSPANEL:Config()
         local abilityLabel = vgui.Create("DLabel", abilityIcon)
         abilityLabel:SetText(weapons.Get(wepName).Name)
         abilityLabel:SetFont("gw_font_smaller")
-        abilityLabel:SetTextColor(clrs.lightgrey)
+        abilityLabel:SetTextColor(G_GWColors.lightgrey)
         function abilityLabel:Paint( w, h )
-            draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg)
+            draw.RoundedBox( 0, 0, 0, w, h, G_GWColors.darkgreybg)
         end
         abilityLabel:Dock(BOTTOM)
         abilityLabel:SetContentAlignment(5)
@@ -245,7 +245,7 @@ function SETTINGSPANEL:Config()
     seekerColorLabel:Dock(TOP)
     seekerColorLabel:SetContentAlignment(5)
     seekerColorLabel:SetTall(24)
-    seekerColorLabel:SetTextColor(clrs.darkgrey)
+    seekerColorLabel:SetTextColor(G_GWColors.darkgrey)
 
     local seekerColor = vgui.Create("DColorMixer", colorsCategory)
     seekerColor:SetPalette(false)
@@ -262,7 +262,7 @@ function SETTINGSPANEL:Config()
     hidingColorLabel:Dock(TOP)
     hidingColorLabel:SetContentAlignment(5)
     hidingColorLabel:SetTall(24)
-    hidingColorLabel:SetTextColor(clrs.darkgrey)
+    hidingColorLabel:SetTextColor(G_GWColors.darkgrey)
 
     local hidingColor = vgui.Create("DColorMixer", colorsCategory)
     hidingColor:SetPalette(false)
@@ -284,7 +284,7 @@ function SETTINGSPANEL:Config()
     pickScreenLink:Dock(TOP)
     pickScreenLink:SetContentAlignment(4)
     pickScreenLink:SetTall(24)
-    pickScreenLink:SetTextColor(clrs.darkgrey)
+    pickScreenLink:SetTextColor(G_GWColors.darkgrey)
 
     local pickScreenLinkInput = vgui.Create("DTextEntry", serverCategory)
     pickScreenLinkInput:Dock(TOP)
@@ -302,7 +302,7 @@ function SETTINGSPANEL:Config()
     pickScreenLinkLabel:Dock(TOP)
     pickScreenLinkLabel:SetContentAlignment(4)
     pickScreenLinkLabel:SetTall(24)
-    pickScreenLinkLabel:SetTextColor(clrs.darkgrey)
+    pickScreenLinkLabel:SetTextColor(G_GWColors.darkgrey)
 
     local pickScreenLinkLabelInput = vgui.Create("DTextEntry", serverCategory)
     pickScreenLinkLabelInput:Dock(TOP)
@@ -320,7 +320,7 @@ function SETTINGSPANEL:Config()
     pickScreenNewsLabel:Dock(TOP)
     pickScreenNewsLabel:SetContentAlignment(4)
     pickScreenNewsLabel:SetTall(24)
-    pickScreenNewsLabel:SetTextColor(clrs.darkgrey)
+    pickScreenNewsLabel:SetTextColor(G_GWColors.darkgrey)
 
     local pickScreenNewsLabelInput = vgui.Create("DTextEntry", serverCategory)
     pickScreenNewsLabelInput:Dock(TOP)
@@ -343,7 +343,7 @@ function SETTINGSPANEL:General()
     local CheckShowHead = vgui.Create( "DCheckBoxLabel", self.general )
     CheckShowHead:SetPos( 10, 10 )
     CheckShowHead:SetText( "Show character portrait?" )
-    CheckShowHead:SetTextColor(clrs.black)
+    CheckShowHead:SetTextColor(G_GWColors.black)
     CheckShowHead:SetConVar( "gw_hud_showhead" ) -- ConCommand must be a 1 or 0 value
     CheckShowHead:SizeToContents()
 
@@ -351,7 +351,7 @@ function SETTINGSPANEL:General()
     LabelLang:SetPos( 10, 45 )
     LabelLang:SetWide( self:GetWide() - 45 )
     LabelLang:SetFont("gw_font_small")
-    LabelLang:SetTextColor(clrs.black)
+    LabelLang:SetTextColor(G_GWColors.black)
     LabelLang:SetText("Language:")
 
     local PanelLang = vgui.Create( "DPanel", self.general )
@@ -399,15 +399,7 @@ function SETTINGSPANEL:Taunts()
     bindSound.DoClick = function()
         if soundList:GetLine(soundList:GetSelectedLine()) == nil then Derma_Message( "Please select an item from the list above!", "Alert", "OK" ) return end
         local sound = soundList:GetLine(soundList:GetSelectedLine()):GetValue(1)
-        Derma_StringRequest(
-            "Taunt Hotkey",
-            "Enter the key you want to bind the taunt to.",
-            "",
-            function( text ) command("bind " .. text .. " \"gw_voicetaunt " .. sound .. "\"", "Command", "OK") end,
-            function( text ) end,
-            "Generate"
-        )
-        function command(cmd)
+        local function command(cmd)
             Derma_StringRequest(
                 "Console Print",
                 "Execute in your console to generate keybinding for your taunt.",
@@ -417,6 +409,14 @@ function SETTINGSPANEL:Taunts()
                 "Copy to Clipboard"
             )
         end
+        Derma_StringRequest(
+            "Taunt Hotkey",
+            "Enter the key you want to bind the taunt to.",
+            "",
+            function( text ) command("bind " .. text .. " \"gw_voicetaunt " .. sound .. "\"", "Command", "OK") end,
+            function( text ) end,
+            "Generate"
+        )
     end
 
     local helpBtn = vgui.Create( "DButton", self.taunts )
