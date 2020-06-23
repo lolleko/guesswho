@@ -88,7 +88,7 @@ GM.GWConfig.WalkerColors = {
 GM.GWConfig.ServerName = "Official Guess Who Discord"
 GM.GWConfig.ServerUrl = "https://discord.gg/3Pb6hcJ"
 
-GM.GWConfig.News = "2.2 The Final Guess Who update has been released. Packing a lot of bug fixes and new content."
+GM.GWConfig.News = "2.2 The Final Guess Who update has been released. Featuring a ton of bug fixes, checkout the changelog for more information.\n\nIf you have missing textures after joining for the first time, reconnect!"
 
 --load config from disk if exists
 if SERVER then
