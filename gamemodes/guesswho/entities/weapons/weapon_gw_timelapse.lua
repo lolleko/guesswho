@@ -17,9 +17,9 @@ end
 
 function SWEP:TimelapseThink()
     local data = {
-        pos = self.Owner:GetPos(),
-        ang = self.Owner:EyeAngles(),
-        health = self.Owner:Health()
+        pos = self:GetOwner():GetPos(),
+        ang = self:GetOwner():EyeAngles(),
+        health = self:GetOwner():Health()
     }
     table.insert(self.TimelapseData, 1, data)
 
@@ -43,18 +43,18 @@ function SWEP:Ability()
         end
 
         if #self.TimelapseData ~= 0 then
-            self.TimeLapseTrail = util.SpriteTrail(self.Owner, 0, Color(255, 255, 255), false, startSize, endSize, 2, 1 / ( ( startSize + endSize ) * 0.5 ), "trails/physbeam.vmt")
+            self.TimeLapseTrail = util.SpriteTrail(self:GetOwner(), 0, Color(255, 255, 255), false, startSize, endSize, 2, 1 / ( ( startSize + endSize ) * 0.5 ), "trails/physbeam.vmt")
             self:AbilityTimerIfValidOwnerAndAlive(0.001, #self.TimelapseData, true, function()
                 local data = self.TimelapseData[1]
-                self.Owner:SetPos(data.pos)
+                self:GetOwner():SetPos(data.pos)
                 local ang = data.ang
-                self.Owner:SetEyeAngles(ang)
-                self.Owner:SetHealth(data.health)
+                self:GetOwner():SetEyeAngles(ang)
+                self:GetOwner():SetHealth(data.health)
                 table.remove(self.TimelapseData, 1)
 
                 if #self.TimelapseData <= 18 then
                     ang:RotateAroundAxis(Vector(0, 0, 1), (18 - #self.TimelapseData) * 10)
-                    self.Owner:SetEyeAngles(ang)
+                    self:GetOwner():SetEyeAngles(ang)
                 end
 
                 if #self.TimelapseData == 0 then

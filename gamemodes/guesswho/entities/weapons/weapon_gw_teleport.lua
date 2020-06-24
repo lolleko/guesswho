@@ -16,8 +16,8 @@ end
 function SWEP:AbilityCreated()
     self.ClientCalculatedTeleportDestination = Vector(0, 0, 0)
 
-    if CLIENT and self.Owner == LocalPlayer() then
-        self.destinationModel = ClientsideModel(self.Owner:GetModel(), RENDERGROUP_TRANSLUCENT)
+    if CLIENT and self:GetOwner() == LocalPlayer() then
+        self.destinationModel = ClientsideModel(self:GetOwner():GetModel(), RENDERGROUP_TRANSLUCENT)
         self.destinationModel:SetupBones()
         self.destinationModel:SetColor(Color( 255, 255, 255, 220))
         self.destinationModel:SetRenderMode(RENDERMODE_TRANSALPHA)
@@ -33,10 +33,10 @@ function SWEP:Ability()
     if self:GetCalculatedTeleportDestinationValid() then
         if CLIENT then return end
 
-        self.Owner:GWApplyStun(2)
+        self:GetOwner():GWApplyStun(2)
 
         local fadeOut = EffectData()
-        fadeOut:SetEntity(self.Owner)
+        fadeOut:SetEntity(self:GetOwner())
         fadeOut:SetMagnitude(self.AbilityDuration)
         fadeOut:SetScale(-1)
         fadeOut:SetSurfaceProp(-1)
@@ -44,14 +44,14 @@ function SWEP:Ability()
 
         self:AbilityTimerIfValidOwnerAndAlive(self.AbilityDuration + FrameTime() * 2, 1, true, function()
                 local fadeIn = EffectData()
-                fadeIn:SetEntity(self.Owner)
+                fadeIn:SetEntity(self:GetOwner())
                 fadeIn:SetMagnitude(self.AbilityDuration)
                 fadeIn:SetScale(1)
                 fadeIn:SetSurfaceProp(1)
                 util.Effect("gw_teleport_fade", fadeIn, true, true)
 
                 if SERVER then
-                    self.Owner:SetPos(self:GetCalculatedTeleportDestination())
+                    self:GetOwner():SetPos(self:GetCalculatedTeleportDestination())
                 end
             end
         )
@@ -74,8 +74,8 @@ function SWEP:DrawHUD()
         return
     end
 
-    if self.destinationModel ~= self.Owner:GetModel() then
-        self.destinationModel:SetModel(self.Owner:GetModel())
+    if self.destinationModel ~= self:GetOwner():GetModel() then
+        self.destinationModel:SetModel(self:GetOwner():GetModel())
     end
 
     local teleportDestination = self:GetCalculatedTeleportDestination()
@@ -91,21 +91,21 @@ function SWEP:DrawHUD()
 
     self.ClientCalculatedTeleportDestination = LerpVector(math.Clamp(FrameTime() * 60, 0, 1), self.ClientCalculatedTeleportDestination, teleportDestination)
 
-    self.destinationModel:SetAngles(Angle(0, self.Owner:GetAngles().yaw, 0))
+    self.destinationModel:SetAngles(Angle(0, self:GetOwner():GetAngles().yaw, 0))
     self.destinationModel:SetPos(self.ClientCalculatedTeleportDestination)
 end
 
 function SWEP:GetTeleportTraceStart()
-    return self.Owner:GetPos() + Vector(0, 0, 100)
+    return self:GetOwner():GetPos() + Vector(0, 0, 100)
 end
 
 function SWEP:CalcTeleportDestination()
-    local forwardWithoutZ = self.Owner:GetForward()
+    local forwardWithoutZ = self:GetOwner():GetForward()
     forwardWithoutZ.z = 0
 
     local eyeTraceStart = self:GetTeleportTraceStart()
 
-    local aimVector = self.Owner:GetAimVector()
+    local aimVector = self:GetOwner():GetAimVector()
 
     local trace = util.TraceLine({
         start = eyeTraceStart,
@@ -131,7 +131,7 @@ function SWEP:CalcTeleportDestination()
                 endpos = navAreaClosestPoint,
                 mask = MASK_PLAYERSOLID
             },
-            self.Owner
+            self:GetOwner()
         )
 
         if hullTrace.Hit then
@@ -149,14 +149,14 @@ function SWEP:RemoveDestinationModel()
         SafeRemoveEntity(self.destinationModel)
         self.destinationModel = nil
     end
-    if CLIENT and IsValid(self.Owner) and self.Owner == LocalPlayer() then
+    if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() then
         hook.Remove("PreDrawHalos", self.haloHookName)
     end
 end
 
 function SWEP:AbilityCleanup()
-    if IsValid(self.Owner) then
-        self.Owner.RenderOverride = nil
+    if IsValid(self:GetOwner()) then
+        self:GetOwner().RenderOverride = nil
     end
     self:RemoveDestinationModel()
 end

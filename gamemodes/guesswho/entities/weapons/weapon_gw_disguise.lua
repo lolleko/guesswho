@@ -7,7 +7,7 @@ SWEP.AbilityDuration = 20
 SWEP.AbilityDescription = "Transforms you into a seeker for $AbilityDuration seconds."
 
 function SWEP:Ability()
-    local ply = self.Owner
+    local ply = self:GetOwner()
     self:AbilityTimerIfValidOwner(self.AbilityDuration, 1, true, function() self:AbilityCleanup() end)
     ply:GWSetDisguised(true)
     local seekers = team.GetPlayers(GW_TEAM_SEEKING)
@@ -24,8 +24,8 @@ function SWEP:Ability()
 end
 
 function SWEP:AbilityCleanup()
-    if not IsValid( self.Owner ) then return end
-    local ply = self.Owner
+    if not IsValid( self:GetOwner() ) then return end
+    local ply = self:GetOwner()
     ply:GWSetDisguised(false)
     if SERVER then
         ply:StripWeapon("weapon_gw_smgdummy")

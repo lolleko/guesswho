@@ -38,7 +38,7 @@
 			"text"		"The base amount of NPCs"
 			"help"		"The base amount (minimum) of NPCs that spawn in a round."
 			"type"		"Numeric"
-			"default"	"18"
+			"default"	"16"
 		}
 		5
 		{

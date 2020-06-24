@@ -26,6 +26,8 @@ SWEP.WorldModel = "models/brokenglass_piece.mdl"
 
 SWEP.HoldType = "normal"
 
+SWEP.DrawWeaponInfoBox = false
+
 SWEP.AbilityRange = 0
 SWEP.AbilityShowTargetHalos = false
 SWEP.AbilityShowTargetHalosCheckLOS = false
@@ -59,7 +61,7 @@ function SWEP:Initialize()
     self.currentTimerID = 0
     self.activeTimers = {}
 
-    if CLIENT and not self.IsNoAbility and LocalPlayer() == self.Owner and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) then
+    if CLIENT and not self.IsNoAbility and LocalPlayer() == self:GetOwner() and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) then
         local description = self.AbilityDescription
 
         if (description) then
@@ -94,18 +96,18 @@ end
 function SWEP:Equip()
     if SERVER then
         if GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) then
-            self.Owner:SetGWPrepAbility(self:GetClass())
-            if not self.Owner:GetGWReRolledAbility() then
-                self.Owner:ChatPrint("Press Reload during hiding phase to reroll your ability. You can only do this once per round.")
+            self:GetOwner():SetGWPrepAbility(self:GetClass())
+            if not self:GetOwner():GetGWReRolledAbility() then
+                self:GetOwner():ChatPrint("Press Reload during hiding phase to reroll your ability. You can only do this once per round.")
             end
         end
     end
 end
 
 function SWEP:Reload()
-    if SERVER and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) and not self:GetIsAbilityUsed() and not self.Owner:GetGWReRolledAbility() then
-        self.Owner:SetGWReRolledAbility(true)
-        self.Owner:GWGiveRandomAbility()
+    if SERVER and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) and not self:GetIsAbilityUsed() and not self:GetOwner():GetGWReRolledAbility() then
+        self:GetOwner():SetGWReRolledAbility(true)
+        self:GetOwner():GWGiveRandomAbility()
     end
 end
 
@@ -113,13 +115,13 @@ function SWEP:PrimaryAttack()
 
     self:SetNextPrimaryFire(CurTime() + 1.5)
 
-    if self.Owner.LagCompensation then
-        self.Owner:LagCompensation(true)
+    if self:GetOwner().LagCompensation then
+        self:GetOwner():LagCompensation(true)
     end
-    local spos = self.Owner:GetShootPos()
-    local sdest = spos + (self.Owner:GetAimVector() * 100)
-    local tr = util.TraceLine({start = spos, endpos = sdest, filter = self.Owner, mask = MASK_SHOT_HULL})
-    self.Owner:LagCompensation(false)
+    local spos = self:GetOwner():GetShootPos()
+    local sdest = spos + (self:GetOwner():GetAimVector() * 100)
+    local tr = util.TraceLine({start = spos, endpos = sdest, filter = self:GetOwner(), mask = MASK_SHOT_HULL})
+    self:GetOwner():LagCompensation(false)
 
     if tr.Hit and IsValid(tr.Entity) and (tr.Entity:GetClass() == "func_breakable" or tr.Entity:GetClass() == "func_breakable_surf") then
 
@@ -137,7 +139,7 @@ function SWEP:SecondaryAttack()
     local abilityError = self:Ability()
     
     if not abilityError then
-        if self.AbilitySound and SERVER then
+        if self.AbilitySound then
             local abilitySound
             if istable(self.AbilitySound) then
                 abilitySound = Sound(self.AbilitySound[math.random(#self.AbilitySound)])
@@ -154,13 +156,13 @@ function SWEP:SecondaryAttack()
             self:EmitSound(Sound("WallHealth.Deny"))
             if IsFirstTimePredicted() then
                 if abilityError == GW_ABILTY_CAST_ERROR_NO_TARGET then
-                    self.Owner:PrintMessage(HUD_PRINTTALK, "Ability cast cancelled: No target!")
+                    self:GetOwner():PrintMessage(HUD_PRINTTALK, "Ability cast cancelled: No target!")
                 elseif abilityError == GW_ABILTY_CAST_ERROR_INVALID_TARGET then
-                    self.Owner:PrintMessage(HUD_PRINTTALK, "Ability cast cancelled: Invalid target!")
+                    self:GetOwner():PrintMessage(HUD_PRINTTALK, "Ability cast cancelled: Invalid target!")
                 elseif abilityError == GW_ABILTY_CAST_ERROR_INVALID_ROUND_STATE then
-                    self.Owner:PrintMessage(HUD_PRINTTALK, "Ability cast cancelled: Can't use during hiding phase!")
+                    self:GetOwner():PrintMessage(HUD_PRINTTALK, "Ability cast cancelled: Can't use during hiding phase!")
                 elseif abilityError == GW_ABILTY_CAST_ERROR_ALREADY_ACTIVE then
-                    self.Owner:PrintMessage(HUD_PRINTTALK, "Ability cast cancelled: Another instance is already active")
+                    self:GetOwner():PrintMessage(HUD_PRINTTALK, "Ability cast cancelled: Another instance is already active")
                 end
             end
         end
@@ -189,12 +191,12 @@ function SWEP:AbilityCleanup()
 end
 
 function SWEP:AbilityIsTargetInLOS(target, mask)
-    if not IsValid(self) or not IsValid(self.Owner) or not self.Owner:Alive() then return false end
+    if not IsValid(self) or not IsValid(self:GetOwner()) or not self:GetOwner():Alive() then return false end
 
     local losTrace = util.TraceLine({
-        start = self.Owner:GetPos() + self.Owner:OBBCenter(),
+        start = self:GetOwner():GetPos() + self:GetOwner():OBBCenter(),
         endpos = target:GetPos() + target:OBBCenter(),
-        filter = self.Owner,
+        filter = self:GetOwner(),
         mask = mask or MASK_SOLID_BRUSHONLY
     })
 
@@ -204,7 +206,7 @@ end
 function SWEP:GetSeekersInRange(range, ignoreLOS)
     local result = {}
     for _,v in pairs(player.GetAll()) do
-        if v:Alive() and v:GWIsSeeking() and v:GetPos():Distance(self.Owner:GetPos()) < range and (ignoreLOS or self:AbilityIsTargetInLOS(v)) then
+        if v:Alive() and v:GWIsSeeking() and v:GetPos():Distance(self:GetOwner():GetPos()) < range and (ignoreLOS or self:AbilityIsTargetInLOS(v)) then
             table.insert(result, v)
         end
     end
@@ -231,14 +233,14 @@ end
 
 function SWEP:AbilityTimerIfValidOwner(dur, reps, removeTimerWithSwep, fn)
     return self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
-        if not IsValid(self) or not IsValid(self.Owner) then return end
+        if not IsValid(self) or not IsValid(self:GetOwner()) then return end
         fn()
     end)
 end
 
 function SWEP:AbilityTimerIfValidOwnerAndAlive(dur, reps, removeTimerWithSwep, fn)
     return self:AbilityTimer(dur, reps, removeTimerWithSwep, function()
-        if not IsValid(self) or not IsValid(self.Owner) or not self.Owner:Alive() then return end
+        if not IsValid(self) or not IsValid(self:GetOwner()) or not self:GetOwner():Alive() then return end
         fn()
     end)
 end

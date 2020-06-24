@@ -22,7 +22,7 @@ function SWEP:Ability()
 
     for _, target in pairs(targets) do
         local effectdata = EffectData()
-        effectdata:SetEntity(self.Owner)
+        effectdata:SetEntity(self:GetOwner())
         effectdata:SetOrigin(target:GetPos() + target:GetVelocity() / 2)
         effectdata:SetMagnitude(self.AbilityCastTime)
         util.Effect("gw_tumble", effectdata, true, true)

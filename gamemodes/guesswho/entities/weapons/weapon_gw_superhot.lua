@@ -9,7 +9,7 @@ SWEP.AbilityDescription = "Not quite like the original.\n\nSlow Motion for every
 local playerSuperHotNWVarName = "gwIsSuperHotEnabled"
 
 function SWEP:Ability()
-    local ply = self.Owner
+    local ply = self:GetOwner()
     if SERVER then
         -- dont consume if already activated by someone else
         if GAMEMODE.GWAbilitySuperHotMode then
@@ -44,7 +44,7 @@ local function endSuperHotMode()
 end
 
 function SWEP:AbilityCleanup()
-    if IsValid(self.Owner) and self.Owner == GAMEMODE.GWAbilitySuperHotModePly then
+    if IsValid(self:GetOwner()) and self:GetOwner() == GAMEMODE.GWAbilitySuperHotModePly then
         endSuperHotMode()
     end
 end

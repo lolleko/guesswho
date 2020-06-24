@@ -2,13 +2,14 @@ AddCSLuaFile()
 
 SWEP.PrintName = "Crowbar"
 
-if (CLIENT) then
+if CLIENT then
     SWEP.ViewModelFlip = false
-    SWEP.IconLetter = "y"
 end
+
 SWEP.Base = "weapon_base"
 SWEP.Slot = 0
 SWEP.SlotPos = 1
+SWEP.UseHands = true
 
 SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
 SWEP.WorldModel = "models/weapons/w_crowbar.mdl"
@@ -28,7 +29,6 @@ SWEP.HitSound = "Weapon_Crowbar.Melee_Hit"
 SWEP.HitWorldSound = "Weapon_Crowbar.Melee_HitWorld"
 
 SWEP.AllowDrop = false
-SWEP.Kind = WEAPON_MELEE
 SWEP.HoldType = "melee"
 
 SWEP.Delay = 0.7
@@ -37,6 +37,8 @@ SWEP.Damage = 20
 SWEP.AutoSpawnable = false
 
 SWEP.DashRestoreDelay = 3
+
+SWEP.DrawWeaponInfoBox = false
 
 if CLIENT then
     killicon.AddAlias("weapon_gw_seeker_crowbar", "weapon_crowbar")
@@ -52,8 +54,8 @@ function SWEP:Deploy()
 end
 
 function SWEP:Equip()
-    timer.Create("gwSeekerCrowbarRechargeThink" .. self.Owner:SteamID(), self.DashRestoreDelay, 0, function()
-        if IsValid(self) and IsValid(self.Owner) then
+    timer.Create("gwSeekerCrowbarRechargeThink" .. self:GetOwner():SteamID(), self.DashRestoreDelay, 0, function()
+        if IsValid(self) and IsValid(self:GetOwner()) then
             self:SetClip2(math.min(self:Clip2() + 1, self:GetMaxClip2()))
         end
     end)
@@ -64,24 +66,24 @@ function SWEP:OnDrop()
 end
 
 function SWEP:OnRemove()
-    if IsValid(self.Owner) then
-        timer.Remove("gwSeekerCrowbarRechargeThink" .. self.Owner:SteamID())
+    if IsValid(self:GetOwner()) then
+        timer.Remove("gwSeekerCrowbarRechargeThink" .. self:GetOwner():SteamID())
     end
 end
 
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Delay)
 
-    self.Owner:LagCompensation(true)
+    self:GetOwner():LagCompensation(true)
 
     local trace = {}
-    trace.start = self.Owner:GetShootPos()
-    trace.endpos = trace.start + (self.Owner:GetAimVector() * self.Range)
-    trace.filter = self.Owner
+    trace.start = self:GetOwner():GetShootPos()
+    trace.endpos = trace.start + (self:GetOwner():GetAimVector() * self.Range)
+    trace.filter = self:GetOwner()
     local traceResult = util.TraceLine(trace)
-    self.Owner:LagCompensation(false)
+    self:GetOwner():LagCompensation(false)
 
-    if SERVER then self:EmitSound(self.SwingSound) end
+    self:EmitSound(self.SwingSound)
 
     local hitEnt = traceResult.Entity
 
@@ -105,9 +107,9 @@ function SWEP:PrimaryAttack()
 
             if SERVER and IsValid(hitEnt) then
                 if hitEnt:IsPlayer() then
-                    hitEnt:TakeDamage(self.Damage * 2, self.Owner, self)
+                    hitEnt:TakeDamage(self.Damage * 2, self:GetOwner(), self)
                 else
-                    hitEnt:TakeDamage(self.Damage * 3, self.Owner, self)
+                    hitEnt:TakeDamage(self.Damage * 3, self:GetOwner(), self)
                 end
                 self:EmitSound(self.HitSound)
             end
@@ -116,7 +118,7 @@ function SWEP:PrimaryAttack()
         self:SendWeaponAnim(ACT_VM_MISSCENTER)
     end
 
-    if SERVER then self.Owner:SetAnimation(PLAYER_ATTACK1) end
+    if SERVER then self:GetOwner():SetAnimation(PLAYER_ATTACK1) end
 
 end
 
@@ -171,20 +173,20 @@ end
 function SWEP:SecondaryAttack()
     if ( not self:CanSecondaryAttack() ) then return end
 
-    local vel = self.Owner:GetForward()
+    local vel = self:GetOwner():GetForward()
     vel.z = 0
     vel:Normalize()
-    if self.Owner:IsOnGround() then
+    if self:GetOwner():IsOnGround() then
         vel = vel * 800
-        self.Owner:SetPos(self:GetPos() + Vector(0, 0, 1))
+        self:GetOwner():SetPos(self:GetPos() + Vector(0, 0, 1))
         vel.z = vel.z + 20
     else
         vel = vel * 350
     end
-    if not self.Owner:IsOnGround() and self.Owner:GetVelocity().z < 0 then
-        vel.z = self.Owner:GetVelocity().z * - 1
+    if not self:GetOwner():IsOnGround() and self:GetOwner():GetVelocity().z < 0 then
+        vel.z = self:GetOwner():GetVelocity().z * - 1
     end
     vel.z = vel.z + 90
-    self.Owner:SetVelocity(vel)
+    self:GetOwner():SetVelocity(vel)
     self:TakeSecondaryAmmo( 1 )
 end

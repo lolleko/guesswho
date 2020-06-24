@@ -31,19 +31,19 @@ function SWEP:Ability()
         v:EmitSound("physics/flesh/flesh_bloody_impact_hard1.wav")
 
         local effectdata = EffectData()
-        effectdata:SetEntity( self.Owner )
+        effectdata:SetEntity( self:GetOwner() )
         effectdata:SetOrigin(v:GetPos() + v:OBBCenter() + Vector(0, 0, 10))
         effectdata:SetRadius( 10 )
         util.Effect("gw_vampirism", effectdata, true, true)
 
         local dmg =  v:Health() / 3
-        v:TakeDamage(dmg, self.Owner, self)
+        v:TakeDamage(dmg, self:GetOwner(), self)
 
-        self.Owner:SetRunSpeed(self.Owner:GetRunSpeed() * 2)
-        self.Owner:SetWalkSpeed(self.Owner:GetWalkSpeed() * 2)
+        self:GetOwner():SetRunSpeed(self:GetOwner():GetRunSpeed() * 2)
+        self:GetOwner():SetWalkSpeed(self:GetOwner():GetWalkSpeed() * 2)
 
         self:AbilityTimerIfValidOwnerAndAlive(0.5, 4, true, function()
-            self.Owner:SetHealth(self.Owner:Health() + dmg / 4)
+            self:GetOwner():SetHealth(self:GetOwner():Health() + dmg / 4)
         end)
     end
 
@@ -53,7 +53,7 @@ function SWEP:Ability()
 end
 
 function SWEP:AbilityCleanup()
-  if not IsValid( self.Owner ) then return end
-  self.Owner:SetRunSpeed(GetConVar("gw_hiding_run_speed"):GetFloat())
-  self.Owner:SetWalkSpeed(GetConVar("gw_hiding_walk_speed"):GetFloat())
+  if not IsValid( self:GetOwner() ) then return end
+  self:GetOwner():SetRunSpeed(GetConVar("gw_hiding_run_speed"):GetFloat())
+  self:GetOwner():SetWalkSpeed(GetConVar("gw_hiding_walk_speed"):GetFloat())
 end

@@ -12,18 +12,18 @@ function SWEP:Ability()
 
     for t = self.AbilityModelScaleTimes, 1, -1 do
         self:AbilityTimerIfValidOwnerAndAlive(math.log(t), 1, true, function()
-            self.Owner:SetColor(ColorRand())
-            self.Owner:SetPlayerColor(Vector(math.Rand(0, 1), math.Rand(0, 1), math.Rand(0, 1)))
-            if SERVER then self.Owner:SetModel(GAMEMODE.GWConfig.HidingModels[math.random(1, #GAMEMODE.GWConfig.HidingModels)]) end
-            self.Owner:SetModelScale(self.Owner:GetModelScale() + self.Owner:GetModelScale() / 10, 0.2)
+            self:GetOwner():SetColor(ColorRand())
+            self:GetOwner():SetPlayerColor(Vector(math.Rand(0, 1), math.Rand(0, 1), math.Rand(0, 1)))
+            if SERVER then self:GetOwner():SetModel(GAMEMODE.GWConfig.HidingModels[math.random(1, #GAMEMODE.GWConfig.HidingModels)]) end
+            self:GetOwner():SetModelScale(self:GetOwner():GetModelScale() + self:GetOwner():GetModelScale() / 10, 0.2)
         end)
     end
 
     self:AbilityTimerIfValidOwnerAndAlive(self.AbilityDuration, 1, true, function()
-        self.Owner:Kill()
+        self:GetOwner():Kill()
         local explode = ents.Create("env_explosion")
-        explode:SetPos(self.Owner:GetPos())
-        explode:SetOwner(self.Owner)
+        explode:SetPos(self:GetOwner():GetPos())
+        explode:SetOwner(self:GetOwner())
         explode:Spawn()
         explode:SetKeyValue("iMagnitude", "112")
         explode:Fire( "Explode", 0, 0 )
@@ -32,8 +32,8 @@ function SWEP:Ability()
 end
 
 function SWEP:AbilityCleanup()
-    if IsValid(self.Owner) then
-        self.Owner:SetModelScale(1, 0.1)
-        self.Owner:SetColor(Color( 255, 255, 255, 255))
+    if IsValid(self:GetOwner()) then
+        self:GetOwner():SetModelScale(1, 0.1)
+        self:GetOwner():SetColor(Color( 255, 255, 255, 255))
     end
 end

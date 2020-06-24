@@ -51,7 +51,7 @@ function SWEP:Ability()
     for _,v in pairs(locations) do
         if decoyCount == spawnedCount then break end
 
-        local location = self.Owner:GetPos() + v + Vector(0, 0, 8)
+        local location = self:GetOwner():GetPos() + v + Vector(0, 0, 8)
 
         local tr = util.TraceHull({
             start = location,
@@ -76,11 +76,11 @@ function SWEP:Ability()
     if #walkers >= 2 then
         local swap = walkers[math.random(1, #walkers)]
         local spos = swap:GetPos() + Vector(0, 0, 2)
-        swap:SetPos(self.Owner:GetPos() + Vector(0, 0, 2))
-        self.Owner:SetPos(spos)
-        self.Owner:SetModel(GAMEMODE.GWConfig.HidingModels[math.random(1, #GAMEMODE.GWConfig.HidingModels)])
+        swap:SetPos(self:GetOwner():GetPos() + Vector(0, 0, 2))
+        self:GetOwner():SetPos(spos)
+        self:GetOwner():SetModel(GAMEMODE.GWConfig.HidingModels[math.random(1, #GAMEMODE.GWConfig.HidingModels)])
     else
-        self.Owner:SetHealth(100)
+        self:GetOwner():SetHealth(100)
     end
 
 end

@@ -21,13 +21,13 @@ function SWEP:Ability()
     if not SERVER then return end
     
     local effectdata = EffectData()
-    effectdata:SetEntity(self.Owner)
+    effectdata:SetEntity(self:GetOwner())
     effectdata:SetRadius(self.AbilityRange)
     effectdata:SetMagnitude(self.AbilityCastTime)
     util.Effect("gw_shockwave", effectdata, true, true)
 
     for _,v in pairs(targets) do    
-        local distanceRatio = v:GetPos():Distance(self.Owner:GetPos()) / self.AbilityRange
+        local distanceRatio = v:GetPos():Distance(self:GetOwner():GetPos()) / self.AbilityRange
         timer.Simple(distanceRatio * self.AbilityCastTime, function()
             if IsValid(v) then
                 local effect = EffectData()

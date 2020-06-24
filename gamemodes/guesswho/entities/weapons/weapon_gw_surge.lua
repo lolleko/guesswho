@@ -10,7 +10,7 @@ SWEP.AbilityDescription = "Launch a grenade that spawns a gravity well after $Ab
 -- Zarya Main 4 life
 function SWEP:Ability()
 
-   local ply = self.Owner
+   local ply = self:GetOwner()
 
    self.DetonationTime = CurTime() + self.AbilityDuration
 

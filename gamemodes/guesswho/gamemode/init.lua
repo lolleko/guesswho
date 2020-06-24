@@ -51,7 +51,11 @@ end
 hook.Add("OnEntityWaterLevelChanged", "gwDisableSwimmingForMaps", function(ent, oldLevel, newLevel)
     -- disable swimming on some maps
     if IsValid(ent) and ent:IsPlayer() and ent:Alive() and game.GetMap() == "gm_coast10" and newLevel == 3 then
-        timer.Simple(0.1, function() ent:Kill() end)
+        timer.Simple(0.1, function()
+            if IsValid(ent) then
+                ent:Kill()
+            end
+        end)
     end
 end)
 

@@ -11,15 +11,15 @@ SWEP.AbilityDescription = "Shrinks you and your health by $AbilityDamagePercenta
 
 function SWEP:Ability()
     self:AbilityTimerIfValidOwner(self.AbilityDuration, 1, true, function() self:AbilityCleanup() end )
-    self.Owner:SetRunSpeed(self.Owner:GetRunSpeed() * 1.75)
-    self.Owner:SetWalkSpeed(self.Owner:GetWalkSpeed() * 1.75)
-    self.Owner:SetModelScale(self.Owner:GetModelScale() / 2.5, 1)
-    self.Owner:SetHealth(self.Owner:Health() / 2.5)
+    self:GetOwner():SetRunSpeed(self:GetOwner():GetRunSpeed() * 1.75)
+    self:GetOwner():SetWalkSpeed(self:GetOwner():GetWalkSpeed() * 1.75)
+    self:GetOwner():SetModelScale(self:GetOwner():GetModelScale() / 2.5, 1)
+    self:GetOwner():SetHealth(self:GetOwner():Health() / 2.5)
 end
 
 function SWEP:AbilityCleanup()
-    if not IsValid(self.Owner) then return end
-    self.Owner:SetRunSpeed(GetConVar("gw_hiding_run_speed"):GetFloat())
-    self.Owner:SetWalkSpeed(GetConVar("gw_hiding_walk_speed"):GetFloat())
-    self.Owner:SetModelScale(1, 1)
+    if not IsValid(self:GetOwner()) then return end
+    self:GetOwner():SetRunSpeed(GetConVar("gw_hiding_run_speed"):GetFloat())
+    self:GetOwner():SetWalkSpeed(GetConVar("gw_hiding_walk_speed"):GetFloat())
+    self:GetOwner():SetModelScale(1, 1)
 end

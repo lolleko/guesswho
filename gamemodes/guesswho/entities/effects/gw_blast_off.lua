@@ -3,11 +3,11 @@ function EFFECT:Init(data)
     self.Duration = data:GetMagnitude()
     self.FadeoutTime = 3
     self.EndTime = CurTime() + self.Duration + self.FadeoutTime
-    self.Emitter = ParticleEmitter(Vector(0, 0, -1000))
+    self.Emitter = ParticleEmitter(self.Owner:GetPos())
 end
 
 function EFFECT:Think()
-    if self.EndTime < CurTime() then
+    if self.EndTime < CurTime() or not IsValid(self.Owner) then
         self.Emitter:Finish()
         return false
     end

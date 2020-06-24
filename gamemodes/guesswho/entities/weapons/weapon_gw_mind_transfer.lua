@@ -7,7 +7,7 @@ SWEP.AbilityRange = 1600
 SWEP.AbilityDescription = "Tranforms your mind to the targeted NPC leaving only an empty shell of your prior self behind.\n\nThe maximum transfer range is $AbilityRange units."
 
 function SWEP:Ability()
-    local ply = self.Owner
+    local ply = self:GetOwner()
     local target = self:GetMindTransferTarget()
     if IsValid(target) then
         if SERVER then
@@ -37,9 +37,9 @@ end
 
 function SWEP:GetMindTransferTarget()
     local tr = util.TraceHull( {
-        start = self.Owner:EyePos(),
-        endpos = self.Owner:EyePos() + (self.Owner:GetAimVector() * self.AbilityRange),
-        filter = self.Owner,
+        start = self:GetOwner():EyePos(),
+        endpos = self:GetOwner():EyePos() + (self:GetOwner():GetAimVector() * self.AbilityRange),
+        filter = self:GetOwner(),
         mins = Vector(-8, -8, -8),
         maxs = Vector(8, 8, 8),
         mask = MASK_SHOT_HULL

@@ -14,7 +14,7 @@ function SWEP:Ability()
 
     local health = 10
     local volume = 1
-    local ply = self.Owner
+    local ply = self:GetOwner()
 
     local models = {
         {model = "models/props_c17/signpole001.mdl", offset = Vector(0, 0 , 0), health = 11},
@@ -71,8 +71,8 @@ function SWEP:Ability()
 end
 
 function SWEP:AbilityCleanup()
-    if not IsValid( self.Owner ) then return end
-    local ply = self.Owner
+    if not IsValid( self:GetOwner() ) then return end
+    local ply = self:GetOwner()
     ply:ResetHull()
     ply:SetRunSpeed( GetConVar("gw_hiding_run_speed"):GetFloat() )
     ply:SetWalkSpeed( GetConVar("gw_hiding_walk_speed"):GetFloat() )

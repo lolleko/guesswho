@@ -9,7 +9,7 @@ SWEP.AbilityDescription ="Pretty much what the name suggests.\nTransforms you in
 function SWEP:Ability()
     if CLIENT then return end
 
-    local ply = self.Owner
+    local ply = self:GetOwner()
     self:AbilityTimerIfValidSWEP(self.AbilityDuration, 1, true, function()
         self:AbilityCleanup()
     end)
@@ -44,8 +44,8 @@ end
 
 function SWEP:AbilityCleanup()
     if CLIENT then return end
-    if not IsValid( self.Owner ) then return end
-    self.Owner:GWEndRagdoll()
+    if not IsValid( self:GetOwner() ) then return end
+    self:GetOwner():GWEndRagdoll()
 end
 
 if CLIENT then

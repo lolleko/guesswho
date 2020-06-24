@@ -19,7 +19,7 @@ function SWEP:Ability()
 
     if not SERVER then return end
 
-    local ply = self.Owner
+    local ply = self:GetOwner()
 
     local effectdata = EffectData()
     effectdata:SetEntity(ply)
