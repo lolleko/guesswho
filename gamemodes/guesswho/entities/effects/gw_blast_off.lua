@@ -3,7 +3,7 @@ function EFFECT:Init(data)
     self.Duration = data:GetMagnitude()
     self.FadeoutTime = 3
     self.EndTime = CurTime() + self.Duration + self.FadeoutTime
-    self.Emitter = ParticleEmitter(self.Owner:GetPos())
+    self.Emitter = ParticleEmitter(Vector(0, 0, -1000))
 end
 
 function EFFECT:Think()

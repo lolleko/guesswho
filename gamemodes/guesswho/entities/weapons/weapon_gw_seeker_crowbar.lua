@@ -116,7 +116,7 @@ function SWEP:PrimaryAttack()
         self:SendWeaponAnim(ACT_VM_MISSCENTER)
     end
 
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
+    if SERVER then self.Owner:SetAnimation(PLAYER_ATTACK1) end
 
 end
 

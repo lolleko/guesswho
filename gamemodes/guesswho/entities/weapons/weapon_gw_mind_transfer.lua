@@ -11,12 +11,6 @@ function SWEP:Ability()
     local target = self:GetMindTransferTarget()
     if IsValid(target) then
         if SERVER then
-            local effect = EffectData()
-            effect:SetStart(ply:EyePos())
-            effect:SetOrigin(ply:EyePos())
-            effect:SetNormal(ply:GetAngles():Up())
-            util.Effect("ManhackSparks", effect, true, true)
-
             local oldModel = ply:GetModel()
             local oldPos = ply:GetPos()
             local oldAngles = ply:GetAngles()
