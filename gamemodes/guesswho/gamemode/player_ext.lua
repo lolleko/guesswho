@@ -101,7 +101,7 @@ function plymeta:GWEndRagdoll()
         end
 
         local pos = ragdoll:GetPos()
-        pos.z = pos.z + 10 -- So they don't end up in the ground
+        pos.z = pos.z + 8 -- So they don't end up in the ground
 
         self:SetModel(ragdoll:GetModel())
         self:SetPos(pos)
