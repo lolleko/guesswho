@@ -10,6 +10,15 @@ function ENT:Initialize()
         return self:GetNWVector("gw_playercolor", Vector(1, 1, 1))
     end
 
+    if SERVER then
+        self.boundsSize = 16
+        self.boundsHeight = 70
+        self:SetCollisionBounds(
+            Vector(-self.boundsSize, -self.boundsSize, 0),
+            Vector(self.boundsSize, self.boundsSize, self.boundsHeight)
+        )
+    end
+
 end
 
 function ENT:RunBehaviour()

@@ -15,8 +15,8 @@ end
 
 function SWEP:AbilityCreated()
     self.ClientCalculatedTeleportDestination = Vector(0, 0, 0)
-    
-    if CLIENT then
+
+    if CLIENT and self.Owner == LocalPlayer() then
         self.destinationModel = ClientsideModel(self.Owner:GetModel(), RENDERGROUP_TRANSLUCENT)
         self.destinationModel:SetupBones()
         self.destinationModel:SetColor(Color( 255, 255, 255, 220))
@@ -32,7 +32,7 @@ end
 function SWEP:Ability()
     if self:GetCalculatedTeleportDestinationValid() then
         if CLIENT then return end
-            
+
         self.Owner:GWApplyStun(2)
 
         local fadeOut = EffectData()

@@ -128,7 +128,7 @@ function GM:CalcView(ply, origin, angles, fov, znear, zfar)
 
     end
 
-    if ply:GWIsHiding() or ((ply:GWIsStunned() or ply:IsPlayingTaunt()) and not GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE)) then
+    if ply:GWIsHiding() or ((ply:GWIsStunned() or ply:IsPlayingTaunt() or ply:GWIsRagdolled()) and not GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE)) then
 
         local dist = 100
 

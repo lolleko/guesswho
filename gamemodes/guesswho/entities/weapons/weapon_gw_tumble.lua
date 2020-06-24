@@ -39,6 +39,4 @@ function SWEP:Ability()
             end
         end)
     end
-
-    return true
 end
