@@ -22,7 +22,8 @@ The NPCs have been completly rewritten.
 
 ## Server Owners
 
-- Server owner can now adjust the news and discord link label via the F1 menu
+- Server owner can now adjust discord link in the team select scree. You replace it with any link e.g: your servers dicord, your servers website, your facebook profile... anything you like
+- The news in the team select screen is also adjustable via the F1 menu
 
 ## Abilities
 
