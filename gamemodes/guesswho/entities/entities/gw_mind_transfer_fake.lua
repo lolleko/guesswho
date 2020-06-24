@@ -12,7 +12,7 @@ function ENT:Initialize()
 
     if SERVER then
         self.boundsSize = 16
-        self.boundsHeight = 140
+        self.boundsHeight = 70
         self:SetCollisionBounds(
             Vector(-self.boundsSize, -self.boundsSize, 0),
             Vector(self.boundsSize, self.boundsSize, self.boundsHeight)

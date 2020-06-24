@@ -34,7 +34,6 @@ function SWEP:Ability()
             ply:SetPlayerColor(oldColor)
             timer.Simple(0.01, function()
                 fake:SetModel(oldModel)
-                fake:SetCollisionBounds( Vector(-8, - 8, 0), Vector(8, 8, 36) )
             end)
         end
     else

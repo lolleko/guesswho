@@ -35,8 +35,6 @@ util.AddNetworkString("gwSendNotification")
 util.AddNetworkString("gwServerStartTauntForClient")
 util.AddNetworkString("gwClientRequestTaunt")
 
-resource.AddWorkshop("2137734109")
-
 -- Disable Enhanced playermodel selector
 if GetConVar("sv_playermodel_selector_force") and GetConVar("sv_playermodel_selector_force"):GetBool() then
     local warningString = "[Warning] Enhanced Player Model Selector detected! This addon is not compatible with Guess Who, either remove/disable the addon or set \"sv_playermodel_selector_force\" to 0 (Requires map change or restart)!"

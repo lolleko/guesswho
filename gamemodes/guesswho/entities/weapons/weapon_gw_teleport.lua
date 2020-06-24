@@ -149,7 +149,7 @@ function SWEP:RemoveDestinationModel()
         SafeRemoveEntity(self.destinationModel)
         self.destinationModel = nil
     end
-    if IsValid(self.Owner) and self.Owner == LocalPlayer() then
+    if CLIENT and IsValid(self.Owner) and self.Owner == LocalPlayer() then
         hook.Remove("PreDrawHalos", self.haloHookName)
     end
 end
