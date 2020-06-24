@@ -29,7 +29,7 @@ function SWEP:Ability()
 
         timer.Simple(self.AbilityCastTime, function()
             if IsValid(target) and target:Alive() then
-                target:GWStartRagdoll(Vector(0, 0, 50), 8)
+                target:GWStartRagdoll(Vector(0, 0, 50), 9)
             end
         end)
 
