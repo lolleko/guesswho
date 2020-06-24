@@ -5,6 +5,7 @@ GM.GWRound = GWRound
 hook.Add("InitPostEntity", "gw_InitPostEntity", function()
     GAMEMODE.GWRound:UpdateSettings()
     GAMEMODE.GWRound:RoundPreGame()
+    GAMEMODE.GWRound.GeneratedSpawnPointCount = 0
 end)
 
 function GWRound:RoundPreGame()
@@ -66,11 +67,11 @@ function GWRound:RoundCreateWalkers()
     timer.Simple(5 * wave, function()
         self:SetRoundState(GW_ROUND_HIDE)
         hook.Run("GWHide")
-        for k, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do v:Spawn() end
+        for _, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do v:Spawn() end
     end)
 
     timer.Simple(5 + (5 * wave), function()
-        for k, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
+        for _, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
             v:Spawn()
             v:SetPos(v:GetPos() + Vector(2, 2, 2)) -- move them a little bit to make avoid players work
             v:Freeze(true)
@@ -88,7 +89,7 @@ function GWRound:RoundCreateWalkers()
 end
 
 function GWRound:RoundStart()
-    for k, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
+    for _, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
         v:Freeze(false)
         v:SetAvoidPlayers(false)
         v:GodDisable()
@@ -195,7 +196,7 @@ end
 
 function GWRound:SpawnNPCWave()
 
-    for k, v in pairs(self.SpawnPoints) do
+    for _, v in pairs(self.SpawnPoints) do
         if self.WalkerCount == self.MaxWalkers then break end
 
         local occupied = false
@@ -347,6 +348,52 @@ function GWRound:GetSpawnPoints()
         self.SpawnPoints = table.Add(self.SpawnPoints, ents.FindByClass(
                                          "info_player_zombiemaster"))
 
+    end
+
+     -- try to create more spawnpoints if we dont have enough
+     if #self.SpawnPoints < 5 then
+        local locations = {
+            Vector(48, 0, 2),
+            Vector(-48, 0, 2),
+            Vector(0, 48, 2),
+            Vector(0, -48, 2),
+            Vector(48, 48, 2),
+            Vector(48, -48, 2),
+            Vector(-48, 48, 2),
+            Vector(-48, -48, 2),
+            Vector(96, 0, 2),
+            Vector(-96, 0, 2),
+            Vector(0, 96, 2),
+            Vector(0, -96, 2),
+            Vector(96, 96, 2),
+            Vector(96, -96, 2),
+            Vector(-96, 96, 2),
+            Vector(-96, -96, 2),
+        }
+
+        for _, spawnPoint in pairs(self.SpawnPoints) do
+            for _, locationOffset in pairs(locations) do
+                local location = spawnPoint:GetPos() + locationOffset
+
+                local tr = util.TraceHull({
+                    start = location,
+                    endpos = location,
+                    maxs = Vector(16, 16, 70),
+                    mins = Vector(-16, -16, 0),
+                })
+
+                if self.GeneratedSpawnPointCount < 16 and not tr.Hit then
+                    local newSpawnPoint = ents.Create("info_player_start")
+                    if not IsValid(newSpawnPoint) then break end
+                    newSpawnPoint:SetPos(location)
+                    newSpawnPoint:Spawn()
+                    newSpawnPoint:Activate()
+                    table.insert(self.SpawnPoints, newSpawnPoint)
+                    self.GeneratedSpawnPointCount = self.GeneratedSpawnPointCount + 1
+                end
+
+            end
+        end
     end
 
     local rand = math.random

@@ -295,7 +295,6 @@ function ENT:RunBehaviour()
 
             if (self.isDoging and not self.isJumping and (self.dogeUntil > CurTime())) and
                 (self.dogePos:DistToSqr(self:GetPos()) > 100) then
-                local dogeDirection = (self.dogePos - self:GetPos()):GetNormalized()
                 self.loco:FaceTowards(self.dogePos)
                 self.loco:Approach(self.dogePos, 1)
                 return Behaviour.Status.Running
@@ -306,14 +305,24 @@ function ENT:RunBehaviour()
             local goal = self.currentPath:GetCurrentGoal()
             local distToGoal = self:GetPos():Distance(goal.pos)
 
+            local currentNavArea = navmesh.GetNearestNavArea(self:GetPos(), false)
+
             if not self.isJumping then
+
                 if goal.type == 3 then
+
                     self.isJumping = true
                     self.loco:JumpAcrossGap(goal.pos, goal.forward)
-                elseif not goal.area:HasAttributes(bit.bor(NAV_MESH_NO_JUMP, NAV_MESH_STAIRS)) then
+
+                elseif IsValid(goal.area) and not goal.area:HasAttributes(bit.bor(NAV_MESH_NO_JUMP, NAV_MESH_STAIRS)) and
+                       IsValid(currentNavArea) and not currentNavArea:HasAttributes(bit.bor(NAV_MESH_NO_JUMP, NAV_MESH_STAIRS)) then
+
                     if (goal.type == 2) and (distToGoal < 30) then
+
                         self:Jump()
+
                     else
+
                         local scanDist = 25 * self.loco:GetVelocity():Length2D() / 100
                         local scanPointPath = self:GetPos() + (self.loco:GetGroundMotionVector() * (scanDist / 1.5))
 
@@ -328,7 +337,7 @@ function ENT:RunBehaviour()
                         local scanNavArea = navmesh.GetNearestNavArea(scanPointNav, false, scanDist * 2)
                         -- If the path sample returned a value significantly below our current position, dont even check nav sample...
                         local tryNavAreaScan = self:GetPos().z < scanPointOnPath.z + self.loco:GetStepHeight()
-                        if tryNavAreaScan and scanNavArea then
+                        if tryNavAreaScan and IsValid(scanNavArea) then
                             local scanPointOnNav = scanNavArea:GetClosestPointOnArea(scanPointNav)
                             if scanPointOnNav then
                                 debugoverlay.Sphere(scanPointOnNav, 10, 0.1, Color(255, 0, 0))
@@ -340,6 +349,7 @@ function ENT:RunBehaviour()
                         if (jumpBasedOnPathScan or jumpBasedOnNavScan)  then
                             self:Jump()
                         end
+
                     end
                 end
             end
@@ -423,7 +433,7 @@ function ENT:OnContact(ent)
                 local dogeTargetOnNavArea = navAreaInDogeDir:GetClosestPointOnArea(dogeTarget)
 
                 if dogeTargetOnNavArea then
-                    self:Doge(dogeTargetOnNavArea, math.random(0.4, 0.7))
+                    self:Doge(dogeTargetOnNavArea, math.random(0.4, 0.6))
                 end
             end
         end

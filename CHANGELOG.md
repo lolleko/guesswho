@@ -7,6 +7,7 @@ This is going to be a long one so here is a summary:
 This is the final update of guess who, meaning there will be no more updates after this one (except bugfixes and translations).
 As a result the goal of this update is to deliver long overdue bugfixes and improvements.
 The update contains the following highlights:
+
 - Smarter and more performant NPCs
 - Reworked all abilities
 - New options for server owners
@@ -131,7 +132,8 @@ The objective is quality over qunatity, thats why 3 abilities have been removed 
 
 ## Maps
 
-As mentioned above the NPCs are now smarter, making a wider range of maps available.
+As mentioned above the NPCs are now smarter, In addition more spawnpoints are now generated if the map does not have enough!
+This makes a wider range of maps available for the gamemode, you should now be able to use any map.
 But if you are strugling finding good maps, I added a few new maps to the [official map collection](https://steamcommunity.com/workshop/filedetails/?id=479737012)
 
 - [Technically Legal](https://steamcommunity.com/sharedfiles/filedetails/?id=251679939)
@@ -139,6 +141,7 @@ But if you are strugling finding good maps, I added a few new maps to the [offic
 - [Halo 3 Rats Nest](https://steamcommunity.com/sharedfiles/filedetails/?id=2021417682)
 - [SkySraper Construction](https://steamcommunity.com/sharedfiles/filedetails/?id=656886437)
 - [Nuketown](https://steamcommunity.com/sharedfiles/filedetails/?id=1812043945)
+- [gm_coast10](https://steamcommunity.com/sharedfiles/filedetails/?id=1924034123)
 
 ## Misc
 
@@ -146,6 +149,7 @@ But if you are strugling finding good maps, I added a few new maps to the [offic
 - Guess Who now spams a warning if Enhanced Playermodel Selector is selected
 - Renamed many global variablrs and network strings to avoid addon conflicts
 - Reworked some of the gamemodes networking
+- Generate spawnpoints if a map has not enough
 
 # 2.1h
 
@@ -261,20 +265,19 @@ Added Ability that was supposed to be in 2.0
 
 **Timelapse**
 
-Travel `9` seconds back in time.  
-
+Travel `9` seconds back in time.
 
 # 2.0
 
 ## GUI Config Editor
 
-Press F1 to modify the Server config.  
+Press F1 to modify the Server config.
 
-Currently Supports:  
+Currently Supports:
 
-* Hiding & Seeker models
-* Abilities
-* Team Colors
+- Hiding & Seeker models
+- Abilities
+- Team Colors
 
 ## Reworked Seeker Movement
 
@@ -290,7 +293,7 @@ increased damage to `40`
 
 **Jump**
 
-The jump power was  increased `200 -> 250`
+The jump power was increased `200 -> 250`
 
 **Movespeed**
 
@@ -300,10 +303,10 @@ Seekers now walk and sprint at the same speed that the hiders walk/sprint.
 
 **General**
 
-* Added Range Indicator for some abilities
-* You can no longer suicide to reroll your ability
-* But you can reroll your ability once at the beginning (by pressing Reload)
-* Crosshair now only renders on certain abilities
+- Added Range Indicator for some abilities
+- You can no longer suicide to reroll your ability
+- But you can reroll your ability once at the beginning (by pressing Reload)
+- Crosshair now only renders on certain abilities
 
 **Deflect**
 
@@ -312,7 +315,7 @@ Increased duration `3 -> 5`
 
 **Disguise**
 
-*Secret* :)
+_Secret_ :)
 
 **Blasting Off**
 
@@ -325,7 +328,7 @@ Increased range `300 -> 350`
 
 **Shockwave**
 
-Stun duration increased `3.5 -> 4`  
+Stun duration increased `3.5 -> 4`
 
 Fixed a clientside Lua error.
 
