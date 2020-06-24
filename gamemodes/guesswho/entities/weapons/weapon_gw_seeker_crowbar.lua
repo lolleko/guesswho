@@ -72,36 +72,51 @@ end
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Delay)
 
-    if self.Owner.LagCompensation then
-        self.Owner:LagCompensation(true)
-    end
+    self.Owner:LagCompensation(true)
+
     local trace = {}
     trace.start = self.Owner:GetShootPos()
     trace.endpos = trace.start + (self.Owner:GetAimVector() * self.Range)
     trace.filter = self.Owner
-    trace.mins = Vector(1, 1, 1) * - 10
-    trace.maxs = Vector(1, 1, 1) * 10
-    trace = util.TraceLine(trace)
+    local traceResult = util.TraceLine(trace)
     self.Owner:LagCompensation(false)
 
     if SERVER then self:EmitSound(self.SwingSound) end
 
-    if trace.Fraction < 1 and trace.HitNonWorld and trace.Entity:IsPlayer() then
-        if SERVER then
-            trace.Entity:TakeDamage( self.Damage * 2, self.Owner, self )
-            self:EmitSound(self.HitSound)
+    local hitEnt = traceResult.Entity
+
+    if IsValid(hitEnt) or traceResult.HitWorld then
+        self.Weapon:SendWeaponAnim( ACT_VM_HITCENTER )
+
+        if not CLIENT or IsFirstTimePredicted() then
+            local impactEffect = EffectData()
+            impactEffect:SetStart(trace.start)
+            impactEffect:SetOrigin(traceResult.HitPos)
+            impactEffect:SetNormal(traceResult.Normal)
+            impactEffect:SetSurfaceProp(traceResult.SurfaceProps)
+            impactEffect:SetHitBox(traceResult.HitBox)
+            impactEffect:SetEntity(hitEnt)
+
+            if IsValid(hitEnt) and (hitEnt:IsPlayer() or hitEnt:GetClass() == "prop_ragdoll" or hitEnt:GetClass() == GW_WALKER_CLASS) then
+                util.Effect("BloodImpact", impactEffect)
+            else
+                util.Effect("Impact", impactEffect)
+            end
+
+            if SERVER and IsValid(hitEnt) then
+                if hitEnt:IsPlayer() then
+                    hitEnt:TakeDamage(self.Damage * 2, self.Owner, self)
+                else
+                    hitEnt:TakeDamage(self.Damage * 3, self.Owner, self)
+                end
+                self:EmitSound(self.HitSound)
+            end
         end
-        self:SendWeaponAnim(ACT_VM_HITCENTER)
-    elseif trace.Hit and trace.Entity then
-        if SERVER then
-            trace.Entity:TakeDamage( self.Damage * 3, self.Owner, self )
-            self:EmitSound(self.HitSound)
-        end
-        self:SendWeaponAnim(ACT_VM_HITCENTER)
     else
         self:SendWeaponAnim(ACT_VM_MISSCENTER)
     end
-    self.Owner:SetAnimation( PLAYER_ATTACK1 )
+
+    self.Owner:SetAnimation(PLAYER_ATTACK1)
 
 end
 
