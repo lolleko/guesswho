@@ -329,7 +329,7 @@ function ENT:RunBehaviour()
                         local scanPointOnPath = self.currentPath:GetClosestPosition(scanPointPath)
                         debugoverlay.Sphere(scanPointOnPath, 10, 0.1, Color(0, 255, 0))
 
-                        local jumpBasedOnPathScan = self:GetPos().z < scanPointOnPath.z and math.abs(self:GetPos().z - scanPointOnPath.z) > self.loco:GetStepHeight() and (distToGoal < 300)
+                        local jumpBasedOnPathScan = self:GetPos().z < scanPointOnPath.z and math.abs(self:GetPos().z - scanPointOnPath.z) > self.loco:GetStepHeight() and (distToGoal < 100)
 
                         local jumpBasedOnNavScan = false
                         local scanPointNav = self:GetPos() + (self.loco:GetGroundMotionVector() * scanDist) + Vector(0, 0, self.loco:GetStepHeight() * 1.5)
