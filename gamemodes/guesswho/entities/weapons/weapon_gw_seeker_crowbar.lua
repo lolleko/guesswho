@@ -45,7 +45,7 @@ if CLIENT then
 end
 
 function SWEP:Initialize()
-    self:SetWeaponHoldType(self.HoldType)
+    self:SetHoldType(self.HoldType)
 end
 
 function SWEP:Deploy()
@@ -118,8 +118,7 @@ function SWEP:PrimaryAttack()
         self:SendWeaponAnim(ACT_VM_MISSCENTER)
     end
 
-    if SERVER then self:GetOwner():SetAnimation(PLAYER_ATTACK1) end
-
+    self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 end
 
 function SWEP:Reload()
