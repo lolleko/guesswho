@@ -173,6 +173,7 @@
         "DMG_GENERIC",
         "markup",
         "DeriveGamemode",
-        "ACT_GMOD_IN_CHAT"
+        "ACT_GMOD_IN_CHAT",
+        "resource"
     ]
 }

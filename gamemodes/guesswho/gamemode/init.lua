@@ -35,6 +35,7 @@ util.AddNetworkString("gwSendNotification")
 util.AddNetworkString("gwServerStartTauntForClient")
 util.AddNetworkString("gwClientRequestTaunt")
 
+resource.AddWorkshop("2137734109")
 
 -- Disable Enhanced playermodel selector
 if GetConVar("sv_playermodel_selector_force") and GetConVar("sv_playermodel_selector_force"):GetBool() then
