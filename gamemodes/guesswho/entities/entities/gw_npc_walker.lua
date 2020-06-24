@@ -188,9 +188,9 @@ function ENT:RunBehaviour()
 
             local rand = math.random(1, 100)
 
-            if (rand > 0) and (rand < 20) then
+            if (rand > 0) and (rand < 25) then
                 self.loco:SetDesiredSpeed(200)
-            elseif (rand > 20) and (rand < 30) then
+            elseif (rand > 25) and (rand < 40) then
                 local entsAround = ents.FindInSphere(self:GetPos(), 300)
 
                 local walkersAround = {}
