@@ -26,7 +26,7 @@ The NPCs have been completly rewritten.
 
 ## Abilities
 
-The objective is quality over qunatity, thats why 3 abilities have benn removed and only one has been added. All other abilities have been reworked to reduce bugs and improve balancing, every ability should now be useful (if used correctly you should be able to escape with them).
+The objective is quality over qunatity, thats why 3 abilities have been removed and only one has been added. All other abilities have been reworked to reduce bugs and improve balancing, every ability should now be useful (if used correctly you should be able to escape with them).
 
 - Ability casts now fail properly and report the failure reason in chat, for example: if no target is in range the ability will not be cast and the ability charge will not be consumed
 - Added descriptions for all abilities, the descriptions will show at the beginning of the round
@@ -110,6 +110,11 @@ The objective is quality over qunatity, thats why 3 abilities have benn removed 
 - Added more possible models
 - Updated health and speed calculcation, overall health and speed bnous should be higher
 
+### Disguise
+
+- Now shows the name of a random seeker instead of the own name while disguised
+- Reduced duration from `25` to `20` seconds
+
 ### Deflect
 
 - Increased duration from `10` to `12` seconds
@@ -121,11 +126,7 @@ The objective is quality over qunatity, thats why 3 abilities have benn removed 
 
 ### Blast off
 
-- Improved visual
-
-## Misc
-
-- Increased seeker dash range
+- Improved visuals
 
 ## Maps
 
@@ -139,9 +140,12 @@ But feel free to give maps a try that are not in the collection, like I said all
 - [SkySraper Construction](https://steamcommunity.com/sharedfiles/filedetails/?id=656886437)
 - [Nuketown](https://steamcommunity.com/sharedfiles/filedetails/?id=1812043945)
 
-## Bugfixes
+## Misc
 
+- Increased seeker dash range
 - Guess Who now spams a warning if Enhanced Playermodel Selector is selected
+- Renamed many global variablrs and network strings to avoid addon conflicts
+- Reworked some of the gamemodes networking
 
 # 2.1h
 
