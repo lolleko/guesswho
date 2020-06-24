@@ -108,7 +108,7 @@ The objective is quality over qunatity, thats why 3 abilities have been removed 
 
 - Fixed models being stuck in ground
 - Added more possible models
-- Updated health and speed calculcation, overall health and speed bnous should be higher
+- Updated health and speed calculcation, overall health and speed bonus should be higher
 
 ### Disguise
 
@@ -131,8 +131,7 @@ The objective is quality over qunatity, thats why 3 abilities have been removed 
 ## Maps
 
 As mentioned above the NPCs are now smarter, making a wider range of maps available.
-In addition I added some maps to the offical map collection, these maps have improved NPC navifagation.
-But feel free to give maps a try that are not in the collection, like I said all maps should work better now!
+But if you are strugling finding good maps, I added some to the official map collection
 
 - [Technically Legal](https://steamcommunity.com/sharedfiles/filedetails/?id=251679939)
 - [GTA V Online Apartment](https://steamcommunity.com/sharedfiles/filedetails/?id=884391107)
