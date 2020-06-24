@@ -32,3 +32,27 @@ function SWEP:AbilityCleanup()
         ply:SetModel(GAMEMODE.GWConfig.HidingModels[math.random(1, #GAMEMODE.GWConfig.HidingModels)])
     end
 end
+
+if CLIENT then
+    hook.Add("HUDPaint", "gwDisguiseInfoHUDPaint", function()
+        local ply = LocalPlayer()
+        if not ply:Alive() and IsValid(ply:GetObserverTarget()) then
+            ply = ply:GetObserverTarget()
+        end
+        if IsValid(ply) and ply:GWIsDisguised() then
+      
+            local text = "Disguised as: " .. ply:GWGetDisguiseName()
+
+            surface.SetFont("gw_font_normal")
+
+            local w, h = surface.GetTextSize(text);
+
+            local x = ScrW() / 2
+            local y = ScrH() - h - 10
+
+            surface.SetTextPos(x - w / 2, y - h / 2)
+            surface.SetTextColor(G_GWColors.white:Unpack())
+            surface.DrawText(text)
+        end
+    end)
+end

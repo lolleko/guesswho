@@ -52,7 +52,7 @@ function GWRound:RoundCreateWalkers()
         MsgN("GW Spawned ", self.WalkerCount, " NPCs in 1 wave.")
     else
         local wpw
-        for w = 0, math.floor(self.MaxWalkers / #self.SpawnPoints) - 1, 1 do
+        for w = 0, math.Round(self.MaxWalkers / #self.SpawnPoints) - 1, 1 do
             wave = wave + 1
             timer.Simple(w * 5, function()
                 wpw = self.WalkerCount
@@ -136,7 +136,7 @@ function GWRound:RoundEnd(caught)
     if timer.Exists("RoundThink") then timer.Remove("RoundThink") end
     -- choose winner and stuff
 
-    local postRoundDelay = 30
+    local postRoundDelay = 8
 
     if caught then
         GWNotifications:Add("gwVictory" .. team.GetName(GW_TEAM_SEEKING), "<font=gw_font_normal>" .. team.GetName(GW_TEAM_SEEKING) .. " Victory" .. "</font>", "", postRoundDelay)

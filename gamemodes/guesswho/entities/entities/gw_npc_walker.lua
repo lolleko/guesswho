@@ -43,6 +43,9 @@ function ENT:SetupColorAndModel()
 end
 
 function ENT:Initialize()
+    GAMEMODE.GWStuckMessageCount = GAMEMODE.GWStuckMessageCount or 0
+
+
     self:SetupColorAndModel()
 
     self:SetHealth(100)
@@ -145,11 +148,19 @@ function ENT:Think()
             local spawnPoint = spawnPoints[(math.random(#spawnPoints) - 1) + 1]:GetPos()
             self:SetPos(spawnPoint)
             self.isStuck = false
-            MsgN(
-                "Nextbot [" .. self:EntIndex() .. "][" .. self:GetClass() .. "]" ..
-                "Got Stuck for over 15 seconds and will be repositioned, if this error gets spammed" ..
-                "you might want to consider the following: Edit the navmesh or lower the walker amount."
-            )
+            if GAMEMODE.GWStuckMessageCount <= 32 then
+                MsgN(
+                    "Nextbot [" .. self:EntIndex() .. "][" .. self:GetClass() .. "]" ..
+                    "Got stuck for over 15 seconds and will be repositioned, if this error gets spammed " ..
+                    "you might want to consider the following: Edit the navmesh or lower the walker amount."
+                )
+            end
+            if GAMEMODE.GWStuckMessageCount == 32 then
+                MsgN(
+                    "Nextbot stuck message displayed 32 times, supressing future messages."
+                )
+            end
+            GAMEMODE.GWStuckMessageCount = GAMEMODE.GWStuckMessageCount + 1
         end
 
         if self.isStuck and (self.stuckPos:DistToSqr(self:GetPos()) > 400) then
@@ -190,7 +201,7 @@ function ENT:RunBehaviour()
 
             if (rand > 0) and (rand < 25) then
                 self.loco:SetDesiredSpeed(200)
-            elseif (rand > 25) and (rand < 40) then
+            elseif (rand > 25) and (rand < 38) then
                 local entsAround = ents.FindInSphere(self:GetPos(), 300)
 
                 local walkersAround = {}
@@ -258,7 +269,7 @@ function ENT:RunBehaviour()
 
             self.targetPos = nav:GetRandomPoint()
             self.currentPath = Path("Follow")
-            self.currentPath:SetMinLookAheadDistance(10)
+            self.currentPath:SetMinLookAheadDistance(8)
             self.currentPath:SetGoalTolerance(35)
             self.currentPath:Compute(self, self.targetPos)
 

@@ -36,4 +36,8 @@ function PLAYER:Loadout()
     self.Player:GiveAmmo( 1, "smg1_grenade", true )
 end
 
+function PLAYER:Spawn()
+    self.Player:SetCustomCollisionCheck(true)
+end
+
 player_manager.RegisterClass( "player_seeker", PLAYER, "player_guess_who" )
