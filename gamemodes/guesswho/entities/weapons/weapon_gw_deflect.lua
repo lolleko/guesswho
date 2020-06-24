@@ -14,7 +14,7 @@ function SWEP:Ability()
     self:AbilityTimerIfValidOwner(self.AbilityDuration, 1, true, function() self:AbilityCleanup() end)
 end
 
-hook.Add("ScalePlayerDamage", "gw_deflect_damage", function(target, hitgroup, dmgInfo)
+hook.Add("EntityTakeDamage", "gw_deflect_damage", function(target, dmgInfo)
     local attacker = dmgInfo:GetAttacker()
     if IsValid(attacker) and attacker:IsPlayer() and IsValid(target) and target:IsPlayer() and target:GWIsDeflecting() then
         target:SetMaterial("models/props_combine/portalball001_sheet")
