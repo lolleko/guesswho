@@ -49,6 +49,13 @@ function GM:Initialize()
     timer.Create("gw.player.distance.update.think", 0.1, 0, self.TargetFinderThink)
 end
 
+hook.Add("OnEntityWaterLevelChanged", "gwDisableSwimmingForMaps", function(ent, oldLevel, newLevel)
+    -- disable swimming on some maps
+    if IsValid(ent) and ent:IsPlayer() and ent:Alive() and game.GetMap() == "gm_coast10" and newLevel == 3 then
+        timer.Simple(0.1, function() ent:Kill() end)
+    end
+end)
+
 --Take Damage if innocent NPC damaged
 function GM:EntityTakeDamage(target, dmginfo)
 

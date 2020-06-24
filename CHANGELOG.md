@@ -150,6 +150,7 @@ But if you are strugling finding good maps, I added a few new maps to the [offic
 - Renamed many global variablrs and network strings to avoid addon conflicts
 - Reworked some of the gamemodes networking
 - Generate spawnpoints if a map has not enough
+- Fixed ability showing up as unused sometimes for spectators
 
 # 2.1h
 
