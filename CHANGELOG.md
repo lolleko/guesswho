@@ -16,7 +16,7 @@ The update contains the following highlights:
 
 The NPCs have been completly rewritten.
 
-- Better performance (you can now have more NPCs active on the map if you like)
+- Better performance (you can now have more NPCs active at once if you like)
 - Improved jumping & doging logic: This improves support for tight maps and maps with a lot of verticality
 - Improved unstuck logic: NPCs will now be able to unstuck themself if stuck in a player or another NPC
 
