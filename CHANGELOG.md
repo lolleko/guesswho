@@ -131,7 +131,7 @@ The objective is quality over qunatity, thats why 3 abilities have been removed 
 ## Maps
 
 As mentioned above the NPCs are now smarter, making a wider range of maps available.
-But if you are strugling finding good maps, I added some to the official map collection
+But if you are strugling finding good maps, I added a few new maps to the [official map collection](https://steamcommunity.com/workshop/filedetails/?id=479737012)
 
 - [Technically Legal](https://steamcommunity.com/sharedfiles/filedetails/?id=251679939)
 - [GTA V Online Apartment](https://steamcommunity.com/sharedfiles/filedetails/?id=884391107)
