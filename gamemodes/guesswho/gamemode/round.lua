@@ -136,7 +136,7 @@ function GWRound:RoundEnd(caught)
     if timer.Exists("RoundThink") then timer.Remove("RoundThink") end
     -- choose winner and stuff
 
-    local postRoundDelay = 8
+    local postRoundDelay = 30
 
     if caught then
         GWNotifications:Add("gwVictory" .. team.GetName(GW_TEAM_SEEKING), "<font=gw_font_normal>" .. team.GetName(GW_TEAM_SEEKING) .. " Victory" .. "</font>", "", postRoundDelay)
@@ -170,9 +170,31 @@ function GWRound:PostRound()
         game.LoadNextMap()
     end
 
-    game.CleanUpMap()
+    -- cleanup everythiung except generated spawn points
+    game.CleanUpMap(false, {"info_player_start"})
 
-    for k, v in pairs(ents.FindByClass(GW_WALKER_CLASS)) do v:Remove() end
+    for _, walker in pairs(ents.FindByClass(GW_WALKER_CLASS)) do walker:Remove() end
+
+    -- Remove some HL2 entities
+    local hl2EntClasses = {
+        "weapon_357",
+        "weapon_pistol",
+        "weapon_bugbait",
+        "weapon_crossbow",
+        "weapon_crowbar",
+        "weapon_frag",
+        "weapon_physcannon",
+        "weapon_ar2",
+        "weapon_rpg",
+        "weapon_slam",
+        "weapon_shotgun",
+        "weapon_smg1",
+        "weapon_stunstick"
+    }
+
+    for _, hl2EntClass in pairs(hl2EntClasses) do
+        for _, hl2Ent in pairs(ents.FindByClass(hl2EntClass)) do hl2Ent:Remove() end
+    end
 
     timer.Simple(self.PostRoundDuration,
                  function() self:RoundWaitForPlayers() end)
@@ -183,7 +205,7 @@ function GWRound:PostRound()
     self:UpdateSettings()
 
     -- teamswap
-    for k, v in pairs(player.GetAll()) do
+    for _, v in pairs(player.GetAll()) do
         if v:Team() == GW_TEAM_SEEKING then
             v:SetTeam(GW_TEAM_HIDING)
         elseif v:Team() == GW_TEAM_HIDING then
