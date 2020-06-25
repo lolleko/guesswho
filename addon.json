@@ -1,5 +1,5 @@
 {
-  "title": "Guess Who Test",
+  "title": "Guess Who",
   "type": "gamemode",
   "tags": ["fun", "roleplay"],
   "ignore": [
@@ -10,6 +10,7 @@
     "LICENSE",
     "README.md",
     "CHANGELOG.md",
-    "workshop.jpg"
+    "workshop.jpg",
+    ".vscode/*"
   ]
 }

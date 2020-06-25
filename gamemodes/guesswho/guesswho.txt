@@ -3,8 +3,7 @@
 	"title"			"Guess Who"
 	"menusystem"	"1"
 	"base"			"base"
-	// TODO change to main workshop version before update
-	"workshopid"	"2137734109"
+	"workshopid"	"480998235"
 
 	"settings"
 	{
