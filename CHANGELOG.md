@@ -153,7 +153,7 @@ The objective is quality over qunatity, thats why 3 abilities have been removed 
 
 - Increased seeker dash range
 - Guess Who now spams a warning if Enhanced Playermodel Selector is selected
-- Renamed many global variablrs and network strings to avoid addon conflicts
+- Renamed many global variables and network strings to avoid addon conflicts
 - Reworked some of the gamemodes networking
 - Generate spawnpoints if a map has not enough
 - Fixed ability showing up as unused sometimes for spectators
