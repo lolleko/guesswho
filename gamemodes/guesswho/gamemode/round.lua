@@ -52,7 +52,7 @@ function GWRound:RoundCreateWalkers()
         MsgN("GW Spawned ", self.WalkerCount, " NPCs in 1 wave.")
     else
         local wpw
-        for w = 0, math.floor(self.MaxWalkers / #self.SpawnPoints) - 1, 1 do
+        for w = 0, math.ceil(self.MaxWalkers / #self.SpawnPoints) - 1, 1 do
             wave = wave + 1
             timer.Simple(w * 5, function()
                 wpw = self.WalkerCount
@@ -140,21 +140,25 @@ function GWRound:RoundEnd(caught)
 
     if caught then
         GWNotifications:Add("gwVictory" .. team.GetName(GW_TEAM_SEEKING), "<font=gw_font_normal>" .. team.GetName(GW_TEAM_SEEKING) .. " Victory" .. "</font>", "", postRoundDelay)
-        for k, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
+        for _, v in pairs(team.GetPlayers(GW_TEAM_SEEKING)) do
             v:GWPlayTauntOnClients(ACT_GMOD_TAUNT_CHEER)
         end
         team.AddScore(GW_TEAM_SEEKING, 1)
     else
         GWNotifications:Add("gwVictory" .. team.GetName(GW_TEAM_HIDING), "<font=gw_font_normal>" .. team.GetName(GW_TEAM_HIDING) .. " Victory" .. "</font>", "", postRoundDelay)
-        for k, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do
+        for _, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do
             v:GWPlayTauntOnClients(ACT_GMOD_TAUNT_CHEER)
-            -- reset reroll protections and funcs
-            v:SetGWDiedInPrep(false)
-            v:SetGWReRolledAbility(false)
             if v:Alive() then v:AddFrags(1) end -- if still alive as hiding after round give them one point (frag)
         end
         team.AddScore(GW_TEAM_HIDING, 1)
     end
+
+    -- reset reroll protections and funcs
+    for _, v in pairs(team.GetPlayers(GW_TEAM_HIDING)) do
+        v:SetGWDiedInPrep(false)
+        v:SetGWReRolledAbility(false)
+    end
+
     timer.Create("gwPostRoundDelayTimer", postRoundDelay, 1, function() self:PostRound() end)
 end
 
@@ -219,11 +223,11 @@ end
 function GWRound:SpawnNPCWave()
 
     for _, v in pairs(self.SpawnPoints) do
-        if self.WalkerCount == self.MaxWalkers then break end
+        if self.WalkerCount >= self.MaxWalkers then break end
 
         local occupied = false
         for _, ent in pairs(ents.FindInBox(v:GetPos() + Vector(-16, -16, 0),
-                                           v:GetPos() + Vector(16, 16, 64))) do
+                                           v:GetPos() + Vector(16, 16, 72))) do
             if ent:GetClass() == GW_WALKER_CLASS then occupied = true end
         end
 
@@ -243,7 +247,7 @@ end
 function GWRound:UpdateSettings()
 
     self.BaseWalkers = GetConVar("gw_basewalkeramount"):GetInt()
-    self.WalkerPerPly = GetConVar("gw_walkerperplayer"):GetInt()
+    self.WalkerPerPly = GetConVar("gw_walkerperplayer"):GetFloat()
     self.PreGameDuration = GetConVar("gw_pregameduration"):GetInt()
     self.RoundDuration = GetConVar("gw_roundduration"):GetInt()
     self.HideDuration = GetConVar("gw_hideduration"):GetInt()
@@ -282,7 +286,6 @@ function GWRound:MeshController()
                          "Guess Who Navmesh generation failed, try to reload the map a few times.\nIf it still fails try a diffrent map!")
         else
             timer.Create("gwNavmeshGen", 1, 0, function()
-                print(self:GetRoundState())
                 PrintMessage(HUD_PRINTCENTER,
                              "Generating navmesh, this will take some time!\nUp to 10min (worst case) depending on map size and your system.\nYou will only need to do this once.")
             end)
@@ -291,89 +294,92 @@ function GWRound:MeshController()
 end
 
 function GWRound:UpdateSpawnPoints()
-    if (not self.SpawnPoints or not IsTableOfEntitiesValid(self.SpawnPoints)) then
+    self.SpawnPoints = ents.FindByClass("info_player_start")
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_deathmatch"))
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_combine"))
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_rebel"))
 
-        self.LastSpawnPoint = 0
-        self.SpawnPoints = ents.FindByClass("info_player_start")
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_deathmatch"))
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_combine"))
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_rebel"))
+    -- CS Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints, ents.FindByClass(
+                                        "info_player_counterterrorist"))
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_terrorist"))
 
-        -- CS Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints, ents.FindByClass(
-                                         "info_player_counterterrorist"))
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_terrorist"))
+    -- DOD Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_axis"))
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_allies"))
 
-        -- DOD Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_axis"))
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_allies"))
+    -- (Old) GMod Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("gmod_player_start"))
 
-        -- (Old) GMod Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("gmod_player_start"))
+    -- TF Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_teamspawn"))
 
-        -- TF Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_teamspawn"))
+    -- INS Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("ins_spawnpoint"))
 
-        -- INS Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("ins_spawnpoint"))
+    -- AOC Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("aoc_spawnpoint"))
 
-        -- AOC Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("aoc_spawnpoint"))
+    -- Dystopia Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("dys_spawn_point"))
 
-        -- Dystopia Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("dys_spawn_point"))
+    -- PVKII Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_pirate"))
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_viking"))
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_knight"))
 
-        -- PVKII Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_pirate"))
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_viking"))
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_knight"))
+    -- DIPRIP Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("diprip_start_team_blue"))
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("diprip_start_team_red"))
 
-        -- DIPRIP Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("diprip_start_team_blue"))
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("diprip_start_team_red"))
+    -- OB Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_red"))
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_blue"))
 
-        -- OB Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_red"))
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_blue"))
+    -- SYN Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_coop"))
 
-        -- SYN Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_coop"))
+    -- ZPS Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_human"))
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_zombie"))
 
-        -- ZPS Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_human"))
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_zombie"))
+    -- ZM Maps
+    self.SpawnPoints = table.Add(self.SpawnPoints,
+                                    ents.FindByClass("info_player_deathmatch"))
+    self.SpawnPoints = table.Add(self.SpawnPoints, ents.FindByClass(
+                                        "info_player_zombiemaster"))
 
-        -- ZM Maps
-        self.SpawnPoints = table.Add(self.SpawnPoints,
-                                     ents.FindByClass("info_player_deathmatch"))
-        self.SpawnPoints = table.Add(self.SpawnPoints, ents.FindByClass(
-                                         "info_player_zombiemaster"))
+    -- FOF Maps
+    self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass("info_player_fof"))
+    self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass("info_player_desperado"))
+    self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass("info_player_vigilante"))
 
-    end
+    -- L4D Maps
+    self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass("info_survivor_rescue"))
 
-     -- try to create more spawnpoints if we dont have enough
-     if #self.SpawnPoints < 5 then
+    -- try to create more spawnpoints if we dont have enough
+    if #self.SpawnPoints < 5 then
         local locations = {
             Vector(48, 0, 2),
             Vector(-48, 0, 2),
@@ -400,7 +406,7 @@ function GWRound:UpdateSpawnPoints()
                 local tr = util.TraceHull({
                     start = location,
                     endpos = location,
-                    maxs = Vector(16, 16, 70),
+                    maxs = Vector(16, 16, 72),
                     mins = Vector(-16, -16, 0),
                 })
 

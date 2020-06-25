@@ -4,7 +4,7 @@ SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Disguise"
 
 SWEP.AbilityDuration = 20
-SWEP.AbilityDescription = "Transforms you into a seeker for $AbilityDuration seconds."
+SWEP.AbilityDescription = "Transforms you into a random seeker for $AbilityDuration seconds."
 
 function SWEP:Ability()
     local ply = self:GetOwner()
@@ -48,7 +48,7 @@ if CLIENT then
             local w, h = surface.GetTextSize(text);
 
             local x = ScrW() / 2
-            local y = ScrH() - h - 10
+            local y = ScrH() - h - 40
 
             surface.SetTextPos(x - w / 2, y - h / 2)
             surface.SetTextColor(G_GWColors.white:Unpack())

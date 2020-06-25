@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Deflect"
-SWEP.AbilitySound = "ambient/energy/zap1.wav"
+SWEP.AbilitySound = "Weapon_StunStick.Activate"
 
 SWEP.AbilityDuration = 12
 
@@ -18,6 +18,7 @@ hook.Add("EntityTakeDamage", "gw_deflect_damage", function(target, dmgInfo)
     local attacker = dmgInfo:GetAttacker()
     if IsValid(attacker) and attacker:IsPlayer() and IsValid(target) and target:IsPlayer() and target:GWIsDeflecting() then
         target:SetMaterial("models/props_combine/portalball001_sheet")
+        target:EmitSound(Sound("FX_RicochetSound.Ricochet"))
         timer.Simple(0.15, function()
             if IsValid(target) then
                 target:SetMaterial("")

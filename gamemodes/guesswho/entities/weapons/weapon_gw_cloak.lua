@@ -4,7 +4,7 @@ SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Cloak"
 
 SWEP.AbilityDuration = 7
-SWEP.AbilityDescription = "Disappear almost completly for $AbilityDuration seconds."
+SWEP.AbilityDescription = "Disappear almost completely for $AbilityDuration seconds."
 
 function SWEP:Ability()
     local ply = self:GetOwner()

@@ -1,3 +1,11 @@
+# 2.2a (Hotfix)
+
+- Fixed an issue that prevented the new unstuck logic from working correctly
+- Fixed some spelling misstakes
+- Changed a few sounds
+- Slightly adjsuted some numbers
+- Fixed ability reload only working in the first round
+
 # 2.2
 
 This is going to be a long one so here is a summary:

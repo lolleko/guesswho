@@ -37,7 +37,7 @@
 			"text"		"The base amount of NPCs"
 			"help"		"The base amount (minimum) of NPCs that spawn in a round."
 			"type"		"Numeric"
-			"default"	"16"
+			"default"	"13"
 		}
 		5
 		{
@@ -117,7 +117,7 @@
 			"text"		"Extra NPCs per player."
 			"help"		"The amount of NPCs to add for each player on the server."
 			"type"		"Numeric"
-			"default"	"1"
+			"default"	"1.25"
 		}
 		15
 		{

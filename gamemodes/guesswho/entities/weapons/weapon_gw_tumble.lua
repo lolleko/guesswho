@@ -2,14 +2,14 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Tumble"
-SWEP.AbilitySound = "ambient/energy/zap1.wav"
+SWEP.AbilitySound = "WeaponFrag.Roll"
 
 SWEP.AbilityRange = 500
 SWEP.AbilityShowTargetHalos = true
 SWEP.AbilityDuration = 3
 SWEP.AbilityCastTime = 0.5
 
-SWEP.AbilityDescription = "Looks like somebody forgot to tie their shoe laces.\n\nHurls all Seekers within $AbilityRange units forward."
+SWEP.AbilityDescription = "Looks like somebody forgot to tie their shoe laces.\n\nAll Seekers within $AbilityRange will collapse and tumble forward."
 
 function SWEP:Ability()
     local targets = self:GetSeekersInRange(self.AbilityRange, true)

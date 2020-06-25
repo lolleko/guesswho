@@ -2,16 +2,16 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Solarflare"
-SWEP.AbilitySound = "ambient/energy/zap1.wav"
+SWEP.AbilitySound = "Weapon_Mortar.Incomming"
 
 SWEP.AbilityRange = 400
 SWEP.AbilityShowTargetHalos = true
-SWEP.AbilityDuration = 6.5
-SWEP.AbilityCastTime = 1.5
-SWEP.AbilityDescription = "\"A solar flare is a sudden flash of increased brightness on the Sun, usually observed near its surface.\"\n\nIn this instance you are the sun!\nSeekers within a range of $AbilityRange and line of sight will be blinded for $AbilityDuration seconds."
+SWEP.AbilityDuration = 6
+SWEP.AbilityCastTime = 1.25
+SWEP.AbilityDescription = "\"A solar flare is a sudden flash of increased brightness on the Sun, usually observed near its surface.\"\n\nIn this instance you are the sun!\nSeekers within a range of $AbilityRange units will be blinded for $AbilityDuration seconds."
 
 function SWEP:Ability()
-    local targets = self:GetSeekersInRange(self.AbilityRange)
+    local targets = self:GetSeekersInRange(self.AbilityRange, true)
     -- dont use ability if no target was found
     if #targets == 0 then
         return GW_ABILTY_CAST_ERROR_NO_TARGET
@@ -25,7 +25,7 @@ function SWEP:Ability()
     effectdata:SetEntity(ply)
     effectdata:SetRadius(self.AbilityRange)
     effectdata:SetMagnitude(self.AbilityCastTime)
-    util.Effect( "gw_solarflare", effectdata, true, true )
+    util.Effect("gw_solarflare", effectdata, true, true)
 
     for _,v in pairs(targets) do    
         local distanceRatio = v:GetPos():Distance(ply:GetPos()) / self.AbilityRange

@@ -5,7 +5,7 @@ SWEP.Name = "Teleport"
 
 SWEP.AbilityDuration = 1.5
 SWEP.AbilityRange = 2000
-SWEP.AbilityDescription = "Teleports you to the position indicated by the glowing playermodel.\nTeleportation occurs after a $AbilityDuration second delay. The maximum teleport range is $AbilityRange units."
+SWEP.AbilityDescription = "Teleports you to the position indicated by the outlined playermodel.\nTeleportation occurs after a $AbilityDuration second delay. The maximum teleport range is $AbilityRange units."
 
 function SWEP:AbilitySetupDataTables()
     self:NetworkVar("Vector", 0, "CalculatedTeleportDestination")

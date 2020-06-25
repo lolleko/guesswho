@@ -160,3 +160,42 @@ function GM:OnNPCKilled(ent, attacker, inflictor)
     net.Broadcast()
 
 end
+
+function GM:PlayerSelectSpawn(pl, transiton)
+
+    -- If we are in transition, do not reset player's position
+    if (transiton) then return end
+
+    if not self.GWRound.SpawnPoints or #self.GWRound.SpawnPoints == 0 then
+        self.GWRound:UpdateSpawnPoints()
+    end
+
+    local Count = table.Count(self.GWRound.SpawnPoints)
+
+    if (Count == 0) then
+        Msg("[PlayerSelectSpawn] Error! No spawn points!\n")
+        return nil
+    end
+
+    local ChosenSpawnPoint = nil
+
+    -- Try to work out the best, random spawnpoint
+    for i = 1, Count do
+
+        ChosenSpawnPoint = table.Random(self.GWRound.SpawnPoints)
+
+        if (IsValid(ChosenSpawnPoint) and ChosenSpawnPoint:IsInWorld()) then
+            if ((ChosenSpawnPoint == pl:GetVar("LastSpawnpoint") or ChosenSpawnPoint == self.LastSpawnPoint) and Count > 1 ) then continue end
+
+            if (hook.Call("IsSpawnpointSuitable", GAMEMODE, pl, ChosenSpawnPoint, i == Count)) then
+                self.LastSpawnPoint = ChosenSpawnPoint
+                pl:SetVar("LastSpawnpoint", ChosenSpawnPoint)
+                return ChosenSpawnPoint
+            end
+
+        end
+
+    end
+
+    return ChosenSpawnPoint
+end

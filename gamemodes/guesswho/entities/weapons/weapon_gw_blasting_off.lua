@@ -4,13 +4,13 @@ SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Blast Off"
 
 SWEP.AbilityDuration = 3
-SWEP.AbilityDescription = "Launches all seekers into the air after a short delay.\n The seekers are stuck in the air for at least $AbilityDuration seconds.\n\nDoes not work well indoors."
+SWEP.AbilityDescription = "Launches all seekers into the air after a short delay.\nThe seekers are stuck in the air for at least $AbilityDuration seconds.\n\nDoes not work well indoors."
 
 function SWEP:Ability()
     if SERVER then
         for _, ply in pairs(player.GetAll()) do
             if IsValid(ply) and ply:Alive() and ply:GWIsSeeking() then
-                timer.Simple(0.5, function() ply:SetVelocity(Vector(0, 0, 2500)) end)
+                timer.Simple(0.5, function() ply:SetVelocity(Vector(0, 0, 2000)) end)
                 local effect = EffectData()
                 effect:SetEntity(ply)
                 effect:SetMagnitude(3)

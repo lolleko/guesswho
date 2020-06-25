@@ -4,7 +4,7 @@ SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Mind Transfer"
 
 SWEP.AbilityRange = 1600
-SWEP.AbilityDescription = "Tranforms your mind to the targeted NPC leaving only an empty shell of your prior self behind.\n\nThe maximum transfer range is $AbilityRange units."
+SWEP.AbilityDescription = "Transfers your mind to the targeted NPC, leaving only an empty shell of your prior self behind.\n\nThe maximum transfer range is $AbilityRange units."
 
 function SWEP:Ability()
     local ply = self:GetOwner()
