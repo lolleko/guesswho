@@ -144,6 +144,11 @@ The objective is quality over qunatity, thats why 3 abilities have been removed 
 
 - Improved visuals
 
+## Community Contributions
+
+- Russian translation [Blueberry](https://github.com/Blueberryy)
+- Replace `#player.GetAll()` with `player.Getcount` [craig-g](https://github.com/craig-g)
+
 ## Misc
 
 - Increased seeker dash range
