@@ -18,8 +18,21 @@ The update contains the following highlights:
 The NPCs have been completly rewritten.
 
 - Better performance (you can now have more NPCs active at once if you like)
-- Improved jumping & doging logic: This improves support for tight maps and maps with a lot of verticality
+- Improved jumping & doging logic: This improves support for close quarter maps and maps with a lot of verticality
 - Improved unstuck logic: NPCs will now be able to unstuck themself if stuck in a player or another NPC
+
+## Maps
+
+As mentioned above the NPCs are now smarter, In addition more spawnpoints are now generated if the map does not have enough!
+This makes a wider range of maps available for the gamemode, you should now be able to use any map.
+But if you are strugling finding good maps, I added a few new maps to the [official map collection](https://steamcommunity.com/workshop/filedetails/?id=479737012).
+
+- [Technically Legal](https://steamcommunity.com/sharedfiles/filedetails/?id=251679939)
+- [GTA V Online Apartment](https://steamcommunity.com/sharedfiles/filedetails/?id=884391107)
+- [Halo 3 Rats Nest](https://steamcommunity.com/sharedfiles/filedetails/?id=2021417682)
+- [SkySraper Construction](https://steamcommunity.com/sharedfiles/filedetails/?id=656886437)
+- [Nuketown](https://steamcommunity.com/sharedfiles/filedetails/?id=1812043945)
+- [gm_coast10](https://steamcommunity.com/sharedfiles/filedetails/?id=1924034123)
 
 ## Server Owners
 
@@ -28,7 +41,7 @@ The NPCs have been completly rewritten.
 
 ## Abilities
 
-The objective is quality over qunatity, thats why 3 abilities have been removed and only one has been added. All other abilities have been reworked to reduce bugs and improve balancing, every ability should now be useful (if used correctly you should be able to escape with them).
+The objective is quality over qunatity, thats why 3 abilities have been removed and only one has been added. All other abilities have been reworked to reduce bugs and improve balancing.
 
 - Ability casts now fail properly and report the failure reason in chat, for example: if no target is in range the ability will not be cast and the ability charge will not be consumed
 - Added descriptions for all abilities, the descriptions will show at the beginning of the round
@@ -51,7 +64,7 @@ The objective is quality over qunatity, thats why 3 abilities have been removed 
 
 **[Added]** Tumble, this ability will launch and ragdoll all seekers in the vicinity into the air.
 
-### Mind Control
+### Mind Transfer
 
 - Fixed mind control remnat having an incorrect angle
 - Improved target selection, it should be easier to select an NPC to transfer to
@@ -86,16 +99,17 @@ The objective is quality over qunatity, thats why 3 abilities have been removed 
 
 - Reworked visuals (text overlay)
 - Now lasts `8` instead of `6` seconds
+- Increased speed of casting player
 
 ### Solarflare
 
 - Reduced duration from `7` to `6` seconds
 - The blind start is now timed with the visual effect
+- Can no longer be cast if no seeker is in range
 
 ### Shrink
 
 - Cleaned up code
-- Can no longer be cast if no seeker is in range
 
 ### Shockwave
 
@@ -129,19 +143,6 @@ The objective is quality over qunatity, thats why 3 abilities have been removed 
 ### Blast off
 
 - Improved visuals
-
-## Maps
-
-As mentioned above the NPCs are now smarter, In addition more spawnpoints are now generated if the map does not have enough!
-This makes a wider range of maps available for the gamemode, you should now be able to use any map.
-But if you are strugling finding good maps, I added a few new maps to the [official map collection](https://steamcommunity.com/workshop/filedetails/?id=479737012)
-
-- [Technically Legal](https://steamcommunity.com/sharedfiles/filedetails/?id=251679939)
-- [GTA V Online Apartment](https://steamcommunity.com/sharedfiles/filedetails/?id=884391107)
-- [Halo 3 Rats Nest](https://steamcommunity.com/sharedfiles/filedetails/?id=2021417682)
-- [SkySraper Construction](https://steamcommunity.com/sharedfiles/filedetails/?id=656886437)
-- [Nuketown](https://steamcommunity.com/sharedfiles/filedetails/?id=1812043945)
-- [gm_coast10](https://steamcommunity.com/sharedfiles/filedetails/?id=1924034123)
 
 ## Misc
 
