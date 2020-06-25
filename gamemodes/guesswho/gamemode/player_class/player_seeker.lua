@@ -27,15 +27,6 @@ function PLAYER:SetModel()
 
     util.PrecacheModel( model )
     self.Player:SetModel( model )
-
-    if GAMEMODE.HalloweenEvent then
-      local bone = self.Player:LookupBone("ValveBiped.Bip01_Head1")
-      if bone then
-        self.Player:ManipulateBoneScale(bone, Vector(0,0,0))
-        --- Y GMOD YYYYYYYY I DONT UNDERSTAND
-        self.Player:ManipulateBoneScale(bone, Vector(0,0,0))
-      end
-    end
 end
 
 function PLAYER:Loadout()
@@ -43,6 +34,10 @@ function PLAYER:Loadout()
     self.Player:Give( "weapon_smg1" )
     self.Player:GiveAmmo( 200, "smg1", true )
     self.Player:GiveAmmo( 1, "smg1_grenade", true )
+end
+
+function PLAYER:Spawn()
+    self.Player:SetCustomCollisionCheck(true)
 end
 
 player_manager.RegisterClass( "player_seeker", PLAYER, "player_guess_who" )

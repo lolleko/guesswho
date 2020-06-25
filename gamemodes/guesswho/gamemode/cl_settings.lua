@@ -11,8 +11,8 @@ function SETTINGSPANEL:Init()
     local title = vgui.Create( "DLabel", self )
     title:SetPos( 10, 3 )
     title:SetWide(self:GetWide())
-    title:SetFont("robot_small")
-    title:SetTextColor(clrs.white)
+    title:SetFont("gw_font_small")
+    title:SetTextColor(G_GWColors.white)
     title:SetText( "Settings" )
 
     self.sheet = vgui.Create( "DPropertySheet", self )
@@ -37,19 +37,19 @@ function SETTINGSPANEL:Init()
     self.sheet:AddSheet( "General", self.general, "icon16/wrench.png" )
 
     function self.sheet:Paint(w, h)
-        draw.RoundedBox( 0, 8, 28, w - 16, h - 36, clrs.lightgrey )
-        draw.RoundedBox( 0, 8, 0, w - 16, 28, clrs.grey )
-        draw.RoundedBox( 0, 8, 23, w - 16, 5, clrs.redbg )
+        draw.RoundedBox( 0, 8, 28, w - 16, h - 36, G_GWColors.lightgrey )
+        draw.RoundedBox( 0, 8, 0, w - 16, 28, G_GWColors.grey )
+        draw.RoundedBox( 0, 8, 23, w - 16, 5, G_GWColors.redbg )
         return
     end
 
     for k, v in pairs(self.sheet.Items) do
-        if (!v.Tab) then continue end
+        if (not v.Tab) then continue end
         local left = 0
         v.Tab.Paint = function(self, w1, h1)
             if k == 1 then left = 8 end
-            if v.Tab == g_Settings.sheet:GetActiveTab() then
-                draw.RoundedBox( 0, left, h1 - 5, w1 - left, 5, clrs.red )
+            if v.Tab == GW_SETTINGS_PANEL.sheet:GetActiveTab() then
+                draw.RoundedBox( 0, left, h1 - 5, w1 - left, 5, G_GWColors.red )
             end
         end
     end
@@ -57,7 +57,7 @@ function SETTINGSPANEL:Init()
 end
 
 function SETTINGSPANEL:Paint(w, h)
-    draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg )
+    draw.RoundedBox( 0, 0, 0, w, h, G_GWColors.darkgreybg )
 end
 
 function SETTINGSPANEL:Tutorial()
@@ -69,8 +69,8 @@ function SETTINGSPANEL:Tutorial()
     introtext:DockMargin(0, 5, 0, 5)
     introtext:Dock( TOP )
     introtext:SetTall(32)
-    introtext:SetFont("robot_medium")
-    introtext:SetTextColor(clrs.black)
+    introtext:SetFont("gw_font_medium")
+    introtext:SetTextColor(G_GWColors.black)
     introtext:SetContentAlignment( 5 )
     introtext:SetText("It’s all about spotting the odd one out.")
 
@@ -84,8 +84,8 @@ function SETTINGSPANEL:Tutorial()
     maintext:SetVerticalScrollbarEnabled( true )
     function maintext:PerformLayout()
 
-        self:SetFontInternal( "robot_normal" )
-        self:SetFGColor( clrs.black )
+        self:SetFontInternal( "gw_font_normal" )
+        self:SetFGColor( G_GWColors.black )
 
     end
 
@@ -93,8 +93,8 @@ function SETTINGSPANEL:Tutorial()
     outrotext:DockMargin(0, 5, 0, 5)
     outrotext:Dock( BOTTOM )
     outrotext:SetTall(32)
-    outrotext:SetFont("robot_medium")
-    outrotext:SetTextColor(clrs.black)
+    outrotext:SetFont("gw_font_medium")
+    outrotext:SetTextColor(G_GWColors.black)
     outrotext:SetContentAlignment( 5 )
     outrotext:SetText("Can you win?")
 
@@ -118,12 +118,12 @@ function MODELCATEGORY:SetModels(updateTable)
 
         modelIcon.PaintOver = function()
             if table.HasValue(updateTable, modelIcon:GetModelName()) then
-                surface.SetDrawColor(clrs.green)
+                surface.SetDrawColor(G_GWColors.green)
                 for i = 0, 2 do
                     surface.DrawOutlinedRect( i, i, modelIcon:GetWide() - i * 2, modelIcon:GetTall() - i * 2)
                 end
             else
-                surface.SetDrawColor(clrs.red)
+                surface.SetDrawColor(G_GWColors.red)
                 for i = 0, 1 do
                     surface.DrawOutlinedRect( i, i, modelIcon:GetWide() - i * 2, modelIcon:GetTall() - i * 2)
                 end
@@ -140,10 +140,10 @@ function MODELCATEGORY:SetModels(updateTable)
 
         local modelLabel = vgui.Create("DLabel", modelIcon)
         modelLabel:SetText(name)
-        modelLabel:SetFont("robot_smaller")
-        modelLabel:SetTextColor(clrs.lightgrey)
+        modelLabel:SetFont("gw_font_smaller")
+        modelLabel:SetTextColor(G_GWColors.lightgrey)
         function modelLabel:Paint( w, h )
-            draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg)
+            draw.RoundedBox( 0, 0, 0, w, h, G_GWColors.darkgreybg)
         end
         modelLabel:Dock(BOTTOM)
         modelLabel:SetContentAlignment(5)
@@ -162,7 +162,7 @@ function SETTINGSPANEL:Config()
     local saveButton = vgui.Create("DButton", self.config)
     saveButton:SetText("Save changes (may require map change/restart)")
     saveButton.DoClick = function()
-	    self:SendConfigUpdateRequest()
+        self:SendConfigUpdateRequest()
     end
     saveButton:Dock(BOTTOM)
 
@@ -200,12 +200,12 @@ function SETTINGSPANEL:Config()
 
         abilityIcon.PaintOver = function()
             if table.HasValue(GAMEMODE.GWConfig.ActiveAbilities, wepName) then
-                surface.SetDrawColor(clrs.green)
+                surface.SetDrawColor(G_GWColors.green)
                 for i = 0, 2 do
                     surface.DrawOutlinedRect( i, i, abilityIcon:GetWide() - i * 2, abilityIcon:GetTall() - i * 2)
                 end
             else
-                surface.SetDrawColor(clrs.red)
+                surface.SetDrawColor(G_GWColors.red)
                 for i = 0, 1 do
                     surface.DrawOutlinedRect( i, i, abilityIcon:GetWide() - i * 2, abilityIcon:GetTall() - i * 2)
                 end
@@ -222,10 +222,10 @@ function SETTINGSPANEL:Config()
 
         local abilityLabel = vgui.Create("DLabel", abilityIcon)
         abilityLabel:SetText(weapons.Get(wepName).Name)
-        abilityLabel:SetFont("robot_smaller")
-        abilityLabel:SetTextColor(clrs.lightgrey)
+        abilityLabel:SetFont("gw_font_smaller")
+        abilityLabel:SetTextColor(G_GWColors.lightgrey)
         function abilityLabel:Paint( w, h )
-            draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg)
+            draw.RoundedBox( 0, 0, 0, w, h, G_GWColors.darkgreybg)
         end
         abilityLabel:Dock(BOTTOM)
         abilityLabel:SetContentAlignment(5)
@@ -237,15 +237,15 @@ function SETTINGSPANEL:Config()
     local colorsCategory = vgui.Create( "DCollapsibleCategory", configScroll)
     colorsCategory:SetExpanded( 0 )
     colorsCategory:Dock(TOP)
-    colorsCategory:SetLabel("Colors")
+    colorsCategory:SetLabel("Team Colors")
 
     local seekerColorLabel = vgui.Create("DLabel", colorsCategory)
     seekerColorLabel:SetText("Team Seeker Color")
-    seekerColorLabel:SetFont("robot_normal")
+    seekerColorLabel:SetFont("gw_font_normal")
     seekerColorLabel:Dock(TOP)
     seekerColorLabel:SetContentAlignment(5)
     seekerColorLabel:SetTall(24)
-    seekerColorLabel:SetTextColor(clrs.darkgrey)
+    seekerColorLabel:SetTextColor(G_GWColors.darkgrey)
 
     local seekerColor = vgui.Create("DColorMixer", colorsCategory)
     seekerColor:SetPalette(false)
@@ -258,11 +258,11 @@ function SETTINGSPANEL:Config()
 
     local hidingColorLabel = vgui.Create("DLabel", colorsCategory)
     hidingColorLabel:SetText("Team Hiding Color")
-    hidingColorLabel:SetFont("robot_normal")
+    hidingColorLabel:SetFont("gw_font_normal")
     hidingColorLabel:Dock(TOP)
     hidingColorLabel:SetContentAlignment(5)
     hidingColorLabel:SetTall(24)
-    hidingColorLabel:SetTextColor(clrs.darkgrey)
+    hidingColorLabel:SetTextColor(G_GWColors.darkgrey)
 
     local hidingColor = vgui.Create("DColorMixer", colorsCategory)
     hidingColor:SetPalette(false)
@@ -271,6 +271,66 @@ function SETTINGSPANEL:Config()
     hidingColor:SetColor(GAMEMODE.GWConfig.TeamHidingColor)
     function hidingColor:ValueChanged(color)
         GAMEMODE.GWConfig.TeamHidingColor = color
+    end
+
+    local serverCategory = vgui.Create( "DCollapsibleCategory", configScroll)
+    serverCategory:SetExpanded( 0 )
+    serverCategory:Dock(TOP)
+    serverCategory:SetLabel("Team select screen (F2) customization")
+
+    local pickScreenLink = vgui.Create("DLabel", serverCategory)
+    pickScreenLink:SetText("Custom team select server link")
+    pickScreenLink:SetFont("gw_font_small")
+    pickScreenLink:Dock(TOP)
+    pickScreenLink:SetContentAlignment(4)
+    pickScreenLink:SetTall(24)
+    pickScreenLink:SetTextColor(G_GWColors.darkgrey)
+
+    local pickScreenLinkInput = vgui.Create("DTextEntry", serverCategory)
+    pickScreenLinkInput:Dock(TOP)
+    pickScreenLinkInput:SetContentAlignment(4)
+    pickScreenLinkInput:SetTall(24)
+    pickScreenLinkInput:SetValue(GAMEMODE.GWConfig.ServerUrl)
+    pickScreenLinkInput:SetUpdateOnType(true)
+    function pickScreenLinkInput:OnValueChange(text)
+        GAMEMODE.GWConfig.ServerUrl = text
+    end
+
+    local pickScreenLinkLabel = vgui.Create("DLabel", serverCategory)
+    pickScreenLinkLabel:SetText("Custom team select server label")
+    pickScreenLinkLabel:SetFont("gw_font_small")
+    pickScreenLinkLabel:Dock(TOP)
+    pickScreenLinkLabel:SetContentAlignment(4)
+    pickScreenLinkLabel:SetTall(24)
+    pickScreenLinkLabel:SetTextColor(G_GWColors.darkgrey)
+
+    local pickScreenLinkLabelInput = vgui.Create("DTextEntry", serverCategory)
+    pickScreenLinkLabelInput:Dock(TOP)
+    pickScreenLinkLabelInput:SetContentAlignment(4)
+    pickScreenLinkLabelInput:SetTall(24)
+    pickScreenLinkLabelInput:SetValue(GAMEMODE.GWConfig.ServerName)
+    pickScreenLinkLabelInput:SetUpdateOnType(true)
+    function pickScreenLinkLabelInput:OnValueChange(text)
+        GAMEMODE.GWConfig.ServerName = text
+    end
+
+    local pickScreenNewsLabel = vgui.Create("DLabel", serverCategory)
+    pickScreenNewsLabel:SetText("Custom team select news message")
+    pickScreenNewsLabel:SetFont("gw_font_small")
+    pickScreenNewsLabel:Dock(TOP)
+    pickScreenNewsLabel:SetContentAlignment(4)
+    pickScreenNewsLabel:SetTall(24)
+    pickScreenNewsLabel:SetTextColor(G_GWColors.darkgrey)
+
+    local pickScreenNewsLabelInput = vgui.Create("DTextEntry", serverCategory)
+    pickScreenNewsLabelInput:Dock(TOP)
+    pickScreenNewsLabelInput:SetContentAlignment(4)
+    pickScreenNewsLabelInput:SetTall(48)
+    pickScreenNewsLabelInput:SetMultiline(true)
+    pickScreenNewsLabelInput:SetValue(GAMEMODE.GWConfig.News)
+    pickScreenNewsLabelInput:SetUpdateOnType(true)
+    function pickScreenNewsLabelInput:OnValueChange(text)
+        GAMEMODE.GWConfig.News = text
     end
 
 end
@@ -283,15 +343,15 @@ function SETTINGSPANEL:General()
     local CheckShowHead = vgui.Create( "DCheckBoxLabel", self.general )
     CheckShowHead:SetPos( 10, 10 )
     CheckShowHead:SetText( "Show character portrait?" )
-    CheckShowHead:SetTextColor(clrs.black)
+    CheckShowHead:SetTextColor(G_GWColors.black)
     CheckShowHead:SetConVar( "gw_hud_showhead" ) -- ConCommand must be a 1 or 0 value
     CheckShowHead:SizeToContents()
 
     local LabelLang = vgui.Create( "DLabel", self.general )
     LabelLang:SetPos( 10, 45 )
     LabelLang:SetWide( self:GetWide() - 45 )
-    LabelLang:SetFont("robot_small")
-    LabelLang:SetTextColor(clrs.black)
+    LabelLang:SetFont("gw_font_small")
+    LabelLang:SetTextColor(G_GWColors.black)
     LabelLang:SetText("Language:")
 
     local PanelLang = vgui.Create( "DPanel", self.general )
@@ -309,7 +369,7 @@ function SETTINGSPANEL:General()
     p:SetSpaceY( 5 )
     p:SetSpaceX( 5 )
 
-    for _, locale in pairs( gwlang:getLocaleList() ) do
+    for _, locale in pairs( GWLANG:GetLocaleList() ) do
         local f = p:Add( "DImageButton" )
         f:SetImage( "../resource/localization/" .. locale .. ".png" )
         f:SetSize( 16, 12 )
@@ -339,15 +399,7 @@ function SETTINGSPANEL:Taunts()
     bindSound.DoClick = function()
         if soundList:GetLine(soundList:GetSelectedLine()) == nil then Derma_Message( "Please select an item from the list above!", "Alert", "OK" ) return end
         local sound = soundList:GetLine(soundList:GetSelectedLine()):GetValue(1)
-        Derma_StringRequest(
-            "Taunt Hotkey",
-            "Enter the key you want to bind the taunt to.",
-            "",
-            function( text ) command("bind " .. text .. " \"gw_voicetaunt " .. sound .. "\"", "Command", "OK") end,
-            function( text ) end,
-            "Generate"
-        )
-        function command(cmd)
+        local function command(cmd)
             Derma_StringRequest(
                 "Console Print",
                 "Execute in your console to generate keybinding for your taunt.",
@@ -357,6 +409,14 @@ function SETTINGSPANEL:Taunts()
                 "Copy to Clipboard"
             )
         end
+        Derma_StringRequest(
+            "Taunt Hotkey",
+            "Enter the key you want to bind the taunt to.",
+            "",
+            function( text ) command("bind " .. text .. " \"gw_voicetaunt " .. sound .. "\"", "Command", "OK") end,
+            function( text ) end,
+            "Generate"
+        )
     end
 
     local helpBtn = vgui.Create( "DButton", self.taunts )
@@ -394,22 +454,15 @@ vgui.Register( "DGuessWhoSettingsPanel", SETTINGSPANEL, "DFrame")
 
 local function showSettings(ply, cmd, args)
     -- Is it better resource wise to destroy the panel on close since it wont be used that much?
-    if ( !IsValid( g_Settings ) ) then
-        g_Settings = vgui.Create("DGuessWhoSettingsPanel")
-        g_Settings:SetVisible(false) -- use the visible bool as toggle indicator
-    end
-
-    if ( IsValid( g_Settings ) ) then
-        if g_Settings:IsVisible() then
-            g_Settings:Hide()
-            gui.EnableScreenClicker( false )
-            g_Settings:SetVisible(false)
-            g_Settings:Remove()
-        else
-            g_Settings:Show()
-            gui.EnableScreenClicker( true )
-            g_Settings:SetVisible(true)
-        end
+    if (not IsValid(GW_SETTINGS_PANEL)) then
+        GW_SETTINGS_PANEL = vgui.Create("DGuessWhoSettingsPanel")
+        GW_SETTINGS_PANEL:Show()
+        GW_SETTINGS_PANEL:MakePopup()
+        gui.EnableScreenClicker(true)
+    else
+        gui.EnableScreenClicker( false )
+        GW_SETTINGS_PANEL:Remove()
+        GW_SETTINGS_PANEL = nil
     end
 end
 concommand.Add("gw_settings", showSettings)

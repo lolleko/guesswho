@@ -21,9 +21,9 @@ local en = {
     teamselect_workshop_changelog = "Changelog",
     teamselect_workshop_bug = "Submit a bug",
     teamselect_workshop_contact = "Contact",
-    teamselect_discord = "Discord",
     --Controls ( limited space keep it short )
     teamselect_controls_sit = "Sit",
+    teamselect_controls_change_model = "Change Model",
     teamselect_controls_ability = "Ability (Hiding)",
     teamselect_controls_settings = "Help + Settings",
     teamselect_controls_team = "Choose team",
@@ -44,4 +44,4 @@ local en = {
 
 }
 
-gwlang:addLangguage( en, "en" )
+GWLANG:AddLangguage( en, "en" )

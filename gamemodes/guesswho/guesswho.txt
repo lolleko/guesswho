@@ -37,7 +37,7 @@
 			"text"		"The base amount of NPCs"
 			"help"		"The base amount (minimum) of NPCs that spawn in a round."
 			"type"		"Numeric"
-			"default"	"15"
+			"default"	"16"
 		}
 		5
 		{
@@ -185,21 +185,13 @@
 		}
 		23
 		{
-			"name"		"gw_easter_egg_hunt_enabled"
-			"text"		"Enable Easter Event"
-			"help"		"Should easter eggs be spawned or not"
-			"type"		"CheckBox"
-			"default"	"0"
-		}
-		24
-		{
 			"name"		"gw_hiding_walk_speed"
 			"text"		"Hiding Walk Speed"
 			"help"		"Hiding Walk Speed"
 			"type"		"Numeric"
 			"default"	"100"
 		}
-		25
+		24
 		{
 			"name"		"gw_hiding_run_speed"
 			"text"		"Hiding Run Speed"
@@ -207,7 +199,7 @@
 			"type"		"Numeric"
 			"default"	"200"
 		}
-		26
+		25
 		{
 			"name"		"gw_seeker_walk_speed"
 			"text"		"Seeker Walk Speed"
@@ -215,7 +207,7 @@
 			"type"		"Numeric"
 			"default"	"100"
 		}
-		27
+		26
 		{
 			"name"		"gw_seeker_run_speed"
 			"text"		"Seeker Run Speed"
@@ -223,7 +215,7 @@
 			"type"		"Numeric"
 			"default"	"200"
 		}
-		28
+		27
 		{
 			"name"		"gw_double_jump_enabled"
 			"text"		"Double Jump"

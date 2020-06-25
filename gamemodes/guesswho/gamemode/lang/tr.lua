@@ -23,6 +23,7 @@ local tr = {
     teamselect_workshop_contact = "İletişim",
     --Controls ( limited space keep it short )
     teamselect_controls_sit = "Otur",
+    teamselect_controls_change_model = "Modeli değiştir",
     teamselect_controls_ability = "Beceri (Saklananlar)",
     teamselect_controls_settings = "Yardım + Ayarlar",
     teamselect_controls_team = "Takım seç",
@@ -40,4 +41,4 @@ local tr = {
 
 }
 
-gwlang:addLangguage( tr, "tr" )
+GWLANG:AddLangguage( tr, "tr" )

@@ -34,18 +34,18 @@ function ENT:SetDetonateExact(t)
 end
 
 function ENT:Explode(tr)
-	if SERVER then
-	    local pull = ents.Create( "gw_ability_wall" )
-	    if not IsValid( pull ) then self:Remove() return end
-	    pull:SetPos( self:GetPos() + Vector(0, 0, 75) )
-	    pull:Spawn()
-	    pull:Activate()
+    if SERVER then
+        local pull = ents.Create( "gw_ability_wall" )
+        if not IsValid( pull ) then self:Remove() return end
+        pull:SetPos( self:GetPos() + Vector(0, 0, 75) )
+        pull:Spawn()
+        pull:Activate()
 
         pull:EmitSound("ambient/levels/labs/electric_explosion1.wav", 200)
 
-	    SafeRemoveEntityDelayed( pull, 5)
-		self:Remove()
-	end
+        SafeRemoveEntityDelayed( pull, 5)
+        self:Remove()
+    end
 end
 
 function ENT:Think()

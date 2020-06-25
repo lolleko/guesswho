@@ -23,6 +23,7 @@ local zhtw = {
     teamselect_workshop_contact = "聯絡",
     --Controls ( limited space keep it short )
     teamselect_controls_sit = "坐下",
+    teamselect_controls_change_model = "變更型號",
     teamselect_controls_ability = "能力 (匿藏者)",
     teamselect_controls_settings = "說明 + 設定",
     teamselect_controls_team = "選擇隊伍",
@@ -40,4 +41,4 @@ local zhtw = {
 
 }
 
-gwlang:addLangguage( zhtw, "zh-TW" )
+GWLANG:AddLangguage( zhtw, "zh-TW" )

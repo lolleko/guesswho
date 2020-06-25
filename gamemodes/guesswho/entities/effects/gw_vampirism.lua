@@ -2,16 +2,13 @@ AddCSLuaFile()
 
 EFFECT.Mat = Material( "sprites/physbeama" )
 
---[[---------------------------------------------------------
-   Init( data table )
------------------------------------------------------------]]
 function EFFECT:Init( data )
 
     self.Entity = data:GetEntity()
     self:SetPos( self.Entity:GetPos() )
     self.TargetPos = data:GetOrigin()
 
-    self.EndTime = CurTime() + 1
+    self.EndTime = CurTime() + 2
 end
 
 function EFFECT:GenerateArc(startPos, endPos, branchChance, detail)
@@ -19,7 +16,7 @@ function EFFECT:GenerateArc(startPos, endPos, branchChance, detail)
     local points = {}
     local maxPoints = 2^detail
 
-    if maxPoints % 2 != 0 then
+    if maxPoints % 2 ~= 0 then
         maxPoints = maxPoints + 1
     end
 
@@ -52,10 +49,6 @@ function EFFECT:GenerateArc(startPos, endPos, branchChance, detail)
     return points
 end
 
-
---[[---------------------------------------------------------
-   THINK
------------------------------------------------------------]]
 function EFFECT:Think()
 
     self:SetPos( self.Entity:GetPos() + self.Entity:OBBCenter() + Vector(0, 0, 10) )
@@ -64,9 +57,6 @@ function EFFECT:Think()
 
 end
 
---[[---------------------------------------------------------
-   Draw the effect
------------------------------------------------------------]]
 function EFFECT:Render()
 
     render.SetMaterial( self.Mat )

@@ -3,49 +3,37 @@ AddCSLuaFile()
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Sudoku"
 SWEP.AbilitySound = {"vo/npc/male01/runforyourlife01.wav", "vo/canals/female01/gunboat_farewell.wav", "vo/canals/male01/stn6_incoming.wav"}
+SWEP.AbilityModelScaleTimes = 10
+SWEP.AbilityDuration = math.log(SWEP.AbilityModelScaleTimes)
+SWEP.AbilityDescription = "Creates an explosion after $AbilityDuration seconds that damages nearby seekers."
 
 function SWEP:Ability()
+    if CLIENT then return end
 
-    local ply = self.Owner
-    local last = 1
-    --[[1 + 1 = 2
-    1+0.95 = 1.95
-    0.95 + 0.9 = 1.85
-    0.9 + 0.85 = 1.75
-    0.85 + 0.77 = 1.57
-    0.77 + 0.69 = 1.46
-    0.69 + 0.60 = 1.29
-    0.6 + 0.47 = 1.07
-    0.47 + 0.3 = 0.77
-    0.3 + 0 = 0.3--]]
-    for t = 10, 1, -1 do
-        timer.Simple( math.log( t ), function()
-            if !IsValid( ply ) or !ply:Alive() then return end
-            ply:SetColor( ColorRand() )
-            ply:SetPlayerColor( Vector( math.Rand(0, 1), math.Rand(0, 1), math.Rand(0, 1) ) )
-            if SERVER then ply:SetModel( GAMEMODE.GWConfig.HidingModels[ math.random( 1, #GAMEMODE.GWConfig.HidingModels ) ] ) end
-            ply:SetModelScale( ply:GetModelScale() + ply:GetModelScale() / 10, 0.1 )
-        end )
-        last = math.log( t )
+    for t = self.AbilityModelScaleTimes, 1, -1 do
+        self:AbilityTimerIfValidOwnerAndAlive(math.log(t), 1, true, function()
+            self:GetOwner():SetColor(ColorRand())
+            self:GetOwner():SetPlayerColor(Vector(math.Rand(0, 1), math.Rand(0, 1), math.Rand(0, 1)))
+            if SERVER then self:GetOwner():SetModel(GAMEMODE.GWConfig.HidingModels[math.random(1, #GAMEMODE.GWConfig.HidingModels)]) end
+            self:GetOwner():SetModelScale(self:GetOwner():GetModelScale() + self:GetOwner():GetModelScale() / 10, 0.2)
+        end)
     end
 
-    timer.Simple( 2, function()
-        if !IsValid( ply ) or !ply:Alive() then return end
-        if SERVER then
-            ply:Kill()
-            local explode = ents.Create( "env_explosion" )
-        	explode:SetPos( ply:GetPos() )
-        	explode:SetOwner( ply:GetPos() )
-        	explode:Spawn()
-        	explode:SetKeyValue( "iMagnitude", "112" )
-        	explode:Fire( "Explode", 0, 0 )
-        	explode:EmitSound( "BaseExplosionEffect.Sound", 100, 100 )
-        end
+    self:AbilityTimerIfValidOwnerAndAlive(self.AbilityDuration, 1, true, function()
+        self:GetOwner():Kill()
+        local explode = ents.Create("env_explosion")
+        explode:SetPos(self:GetOwner():GetPos())
+        explode:SetOwner(self:GetOwner())
+        explode:Spawn()
+        explode:SetKeyValue("iMagnitude", "112")
+        explode:Fire( "Explode", 0, 0 )
+        explode:EmitSound( "BaseExplosionEffect.Sound", 100, 100 )
     end)
+end
 
-    timer.Simple( 2.1, function()
-        ply:SetModelScale( 1, 0.1 )
-        ply:SetColor( Color( 255, 255, 255, 255 ) )
-    end)
-
+function SWEP:AbilityCleanup()
+    if IsValid(self:GetOwner()) then
+        self:GetOwner():SetModelScale(1, 0.1)
+        self:GetOwner():SetColor(Color( 255, 255, 255, 255))
+    end
 end

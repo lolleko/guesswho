@@ -3,85 +3,55 @@ AddCSLuaFile()
 SWEP.Base = "weapon_gwbase"
 SWEP.Name = "Ragdoll"
 
+SWEP.AbilityDuration = 8
+SWEP.AbilityDescription ="Pretty much what the name suggests.\nTransforms you into a ragdoll for $AbilityDuration seconds."
+
 function SWEP:Ability()
-    local ply = self.Owner
-    timer.Create( "Ability.Effect.Prophunt" .. ply:SteamID(), 8, 1, function() self:OnRemove() end )
+    if CLIENT then return end
 
-    if SERVER then
+    local ply = self:GetOwner()
+    self:AbilityTimerIfValidSWEP(self.AbilityDuration, 1, true, function()
+        self:AbilityCleanup()
+    end)
 
-        local hunters = team.GetPlayers(TEAM_SEEKING)
-        local hunter = hunters[math.random(#hunters)]
 
+    local hunters = team.GetPlayers(GW_TEAM_SEEKING)
+    local aliveHunters = {}
+    for _, hunter in pairs(hunters) do
+        if IsValid(hunter) and hunter:Alive() then
+            table.insert(aliveHunters, hunter)
+        end
+    end
+
+    local aliveHunter = aliveHunters[math.random(#aliveHunters)]
+
+    if IsValid(aliveHunter) and IsValid(aliveHunter:GetActiveWeapon()) then
         net.Start( "PlayerKilledByPlayer" )
 
-        net.WriteEntity( ply )
-        net.WriteString( hunter:GetActiveWeapon():GetClass() )
-        net.WriteEntity( hunter )
+        net.WriteEntity(ply)
+        net.WriteString(aliveHunter:GetActiveWeapon():GetClass())
+        net.WriteEntity(aliveHunter)
 
         net.Broadcast()
-
-        if ply:InVehicle() then
-            ply:ExitVehicle()
-        end
-
-        local ragdoll = ents.Create( "prop_ragdoll" )
-        ragdoll:SetAngles( ply:GetAngles() )
-        ragdoll:SetModel( ply:GetModel() )
-        ragdoll:SetPos( ply:GetPos() )
-        function ragdoll:GetPlayerColor() return Vector(0, 0.5, 0) end
-        ragdoll:Spawn()
-        ragdoll:Activate()
-        ply:SetParent( ragdoll ) -- So their player ent will match up (position-wise) with where their ragdoll is.
-        -- Set velocity for each peice of the ragdoll
-
-        local velocity = ply:GetVelocity()
-        local j = 1
-        while true do -- Break inside
-            local phys_obj = ragdoll:GetPhysicsObjectNum( j )
-            if phys_obj then
-                phys_obj:SetVelocity( velocity )
-                j = j + 1
-            else
-                break
-            end
-        end
-
-        ply:Spectate( OBS_MODE_CHASE )
-        ply:SpectateEntity( ragdoll )
-
-        ply.ragdoll = ragdoll
+    else
+        net.Start("PlayerKilledSelf")
+            net.WriteEntity( ply )
+        net.Broadcast()
     end
+
+    ply:GWStartRagdoll()
 end
 
-function SWEP:OnRemove()
-    if SERVER then
-        if not IsValid( self.Owner ) then return end
-        local ply = self.Owner
-        timer.Remove( "Ability.Effect.Prophunt" .. ply:SteamID() )
-        ply:SetParent()
-        ply:UnSpectate()
+function SWEP:AbilityCleanup()
+    if CLIENT then return end
+    if not IsValid( self:GetOwner() ) then return end
+    self:GetOwner():GWEndRagdoll()
+end
 
-        local ragdoll = ply.ragdoll
-        ply.ragdoll = nil -- Gotta do this before spawn or our hook catches it
-
-        if not IsValid(ragdoll) or not ragdoll:IsValid() then -- Something must have removed it, just spawn
-            return
-        else
-
-            if ply:Alive() then
-                ply:Spawn()
-            end
-
-            local pos = ragdoll:GetPos()
-            pos.z = pos.z + 10 -- So they don't end up in the ground
-
-            ply:SetModel(ragdoll:GetModel())
-            ply:SetPos( pos )
-            ply:SetVelocity( ragdoll:GetVelocity() )
-            local yaw = ragdoll:GetAngles().yaw
-            ply:SetAngles( Angle( 0, yaw, 0 ) )
-            ragdoll:Remove()
-
+if CLIENT then
+    hook.Add( "OnEntityCreated", "gwRagdollPlayerColor", function( ent )
+        if IsValid(ent) and ent:GetClass() == "prop_ragdoll" and IsValid(ent:GetOwner()) and ent:GetOwner():IsPlayer() then
+            ent.GetPlayerColor = function(self) return self:GetOwner():GetPlayerColor() end
         end
-    end
+    end)
 end

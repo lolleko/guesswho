@@ -23,6 +23,7 @@ local svse = {
     teamselect_workshop_contact = "Kontakt",
     --Controls ( limited space keep it short )
     teamselect_controls_sit = "Sitt",
+    teamselect_controls_change_model = "Byt modell",
     teamselect_controls_ability = "Förmåga",
     teamselect_controls_settings = "Hjälp + Inställningar",
     teamselect_controls_team = "Välj lag",
@@ -40,4 +41,4 @@ local svse = {
 
 }
 
-gwlang:addLangguage( svse, "sv-SE" )
+GWLANG:AddLangguage( svse, "sv-SE" )

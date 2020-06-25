@@ -1,8 +1,8 @@
 function GM:HandlePlayerDucking( ply, velocity )
 
-    if ( !ply:Crouching() ) then return false end
+    if ( not ply:Crouching() ) then return false end
 
-    if ply:Team() == TEAM_SEEKING then
+    if ply:Team() == GW_TEAM_SEEKING then
 
         if ( velocity:Length2D() > 0.5 ) then
             ply.CalcIdeal = ACT_MP_CROUCHWALK
@@ -28,7 +28,7 @@ function GM:GrabEarAnimation( ply )
     -- Don't show this when we're playing a taunt!
     if ( ply:IsPlayingTaunt() ) then return end
 
-    if ply:IsHiding() then return end
+    if ply:GWIsHiding() then return end
 
     if ( ply:IsTyping() ) then
         ply.ChatGestureWeight = math.Approach( ply.ChatGestureWeight, 1, FrameTime() * 5.0 )

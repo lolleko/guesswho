@@ -40,15 +40,13 @@ GM.GWConfig.ActiveAbilities = {
     "weapon_gw_vampirism",
     "weapon_gw_ragdoll",
     "weapon_gw_superhot",
-    "weapon_gw_dance_party",
     "weapon_gw_blasting_off",
-    "weapon_gw_decoy2",
     "weapon_gw_teleport",
     "weapon_gw_deflect",
     "weapon_gw_timelapse",
     "weapon_gw_solarflare",
-    "weapon_gw_mind_control",
-    "weapon_gw_ant"
+    "weapon_gw_mind_transfer",
+    "weapon_gw_tumble"
 }
 
 GM.GWConfigStatic.AllAbilities = {
@@ -56,7 +54,6 @@ GM.GWConfigStatic.AllAbilities = {
     "weapon_gw_surge",
     "weapon_gw_shockwave",
     "weapon_gw_cloak",
-    --"weapon_gw_smoke",
     "weapon_gw_shrink",
     "weapon_gw_decoy",
     "weapon_gw_sudoku",
@@ -64,19 +61,17 @@ GM.GWConfigStatic.AllAbilities = {
     "weapon_gw_vampirism",
     "weapon_gw_ragdoll",
     "weapon_gw_superhot",
-    "weapon_gw_dance_party",
     "weapon_gw_blasting_off",
-    "weapon_gw_decoy2",
     "weapon_gw_teleport",
     "weapon_gw_deflect",
     "weapon_gw_timelapse",
     "weapon_gw_solarflare",
-    "weapon_gw_mind_control",
-    "weapon_gw_ant"
+    "weapon_gw_mind_transfer",
+    "weapon_gw_tumble"
 }
 
-GM.GWConfig.TeamSeekingColor = Color(138, 155, 15)
-GM.GWConfig.TeamHidingColor = Color(23, 89, 150)
+GM.GWConfig.TeamSeekingColor = Color(155, 143, 48)
+GM.GWConfig.TeamHidingColor = Color(48, 96, 155)
 
 GM.GWConfig.WalkerColors = {
     Color(61, 87, 105), -- original blue
@@ -90,6 +85,11 @@ GM.GWConfig.WalkerColors = {
     Color(94, 25, 34) --dark red
 }
 
+GM.GWConfig.ServerName = "Official Guess Who Discord"
+GM.GWConfig.ServerUrl = "https://discord.gg/3Pb6hcJ"
+
+GM.GWConfig.News = "2.2 The Final Guess Who update has been released. Featuring a ton of bug fixes and improvements, checkout the changelog for more information.\n\nIf you have missing textures after joining for the first time, reconnect!"
+
 --load config from disk if exists
 if SERVER then
     if file.Exists("guesswho/config.txt", "DATA") then
@@ -98,7 +98,7 @@ if SERVER then
         if configData.Version and configData.Version == GM.Version then
             GM.GWConfig = configData
         else
-            print("regenerating config")
+            print("GW existing config is for a different version => regenerating config.")
         end
     end
 
@@ -118,6 +118,7 @@ if SERVER then
 
     net.Receive("gwRequestUpdateConfig", function(len, ply)
         if not ply:IsSuperAdmin() then return end
+        print("GW Server updating config!")
         local config = net.ReadTable()
         GAMEMODE.GWConfig = config
         file.Write("guesswho/config.txt", util.TableToJSON(GAMEMODE.GWConfig))
@@ -130,9 +131,11 @@ end
 
 if CLIENT then
     net.Receive("gwSendConfig", function(len, ply)
+        print("GW Client updating config!")
+
         local config = net.ReadTable()
         GAMEMODE.GWConfig = config
-        team.SetColor(TEAM_HIDING, GAMEMODE.GWConfig.TeamHidingColor)
-        team.SetColor(TEAM_SEEKING, GAMEMODE.GWConfig.TeamSeekingColor)
+        team.SetColor(GW_TEAM_HIDING, GAMEMODE.GWConfig.TeamHidingColor)
+        team.SetColor(GW_TEAM_SEEKING, GAMEMODE.GWConfig.TeamSeekingColor)
     end)
 end

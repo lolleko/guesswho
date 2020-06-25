@@ -88,10 +88,10 @@ function ENT:Think()
                 end
 
                 local vecPush = magnitude * pushDir
-                if bit.band(target:GetFlags(), FL_BASEVELOCITY) != 0 then
+                if bit.band(target:GetFlags(), FL_BASEVELOCITY) ~= 0 then
                     vecPush = vecPush + target:GetBaseVelocity()
                 end
-                if ( vecPush.z > 0 && bit.band(target:GetFlags(), FL_ONGROUND) != 0 ) then
+                if ( vecPush.z > 0 and bit.band(target:GetFlags(), FL_ONGROUND) ~= 0 ) then
                     target:SetGroundEntity( nil )
                     local origin = target:GetPos()
                     origin.z = origin.z + 1

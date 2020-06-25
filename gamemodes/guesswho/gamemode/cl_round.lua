@@ -1,36 +1,42 @@
-function GM:GetRoundState() return GAMEMODE.RoundState end
+local GWRound = {}
 
-function GM:GetRoundLabel() return GAMEMODE.RoundLabel end
+GM.GWRound = GWRound
 
-function GM:SetRoundLabel( lbl )
+function GWRound:GetRoundState() return self.RoundState end
+
+function GWRound:IsCurrentState(state) return self.RoundState == state end
+
+function GWRound:GetRoundLabel() return self.RoundLabel end
+
+function GWRound:SetRoundLabel( lbl )
     self.RoundLabel = lbl
 end
 
-function GM:GetEndTime()
-	return GetGlobalFloat( "gwEndTime", 0 )
+function GWRound:GetEndTime()
+    return GetGlobalFloat( "gwEndTime", 0 )
 end
 
-function GM:RoundStateChange( old, new )
+function GWRound:RoundStateChange( old, new )
 
-    if ROUND_PRE_GAME == new then
-        self:SetRoundLabel( gwlang:translate( "round_pre_game" ) )
+    if GW_ROUND_PRE_GAME == new then
+        self:SetRoundLabel( GWLANG:Translate( "round_pre_game" ) )
         hook.Call( "GWPreGame", GAMEMODE  )
-    elseif ROUND_WAITING_PLAYERS == new then
-        self:SetRoundLabel( gwlang:translate( "round_waiting_players" ) )
-    elseif ROUND_CREATING == new then
-        self:SetRoundLabel( gwlang:translate( "round_creating" ) )
+    elseif GW_ROUND_WAITING_PLAYERS == new then
+        self:SetRoundLabel( GWLANG:Translate( "round_waiting_players" ) )
+    elseif GW_ROUND_CREATING_NPCS == new then
+        self:SetRoundLabel( GWLANG:Translate( "round_creating" ) )
         hook.Call( "GWCreating", GAMEMODE  )
-    elseif ROUND_HIDE == new then
-        self:SetRoundLabel( gwlang:translate( "round_hide" ) )
+    elseif GW_ROUND_HIDE == new then
+        self:SetRoundLabel( GWLANG:Translate( "round_hide" ) )
         hook.Call( "GWHide", GAMEMODE  )
-    elseif ROUND_SEEK == new then
-        self:SetRoundLabel( gwlang:translate( "round_seek" ) )
+    elseif GW_ROUND_SEEK == new then
+        self:SetRoundLabel( GWLANG:Translate( "round_seek" ) )
         hook.Call( "GWSeek", GAMEMODE  )
-    elseif ROUND_POST == new then
-        self:SetRoundLabel( gwlang:translate( "round_post" ) )
+    elseif GW_ROUND_POST == new then
+        self:SetRoundLabel( GWLANG:Translate( "round_post" ) )
         hook.Call( "GWPostRound", GAMEMODE  )
-    elseif ROUND_NAV_GEN == new then
-        self:SetRoundLabel( gwlang:translate( "round_nav_gen" ) )
+    elseif GW_ROUND_NAV_GEN == new then
+        self:SetRoundLabel( GWLANG:Translate( "round_nav_gen" ) )
     else
         self:SetRoundLabel( "ERROR!" )
     end
@@ -39,12 +45,12 @@ end
 
 local function ReceiveRoundState()
 
-    local old = GAMEMODE:GetRoundState()
-	GAMEMODE.RoundState = net.ReadUInt( 3 )
+    local old = GAMEMODE.GWRound:GetRoundState()
+    GAMEMODE.GWRound.RoundState = net.ReadUInt( 8 )
 
-	if old != GAMEMODE.RoundState then
-	  GAMEMODE:RoundStateChange( old, GAMEMODE.RoundState )
-	end
+    if old ~= GAMEMODE.GWRound.RoundState then
+        GAMEMODE.GWRound:RoundStateChange( old, GAMEMODE.GWRound.RoundState )
+    end
 
 end
 net.Receive( "gwRoundState", ReceiveRoundState )

@@ -1,46 +1,69 @@
 local ActsFrame = {}
 
 local DefaultActs1 = {
-    "dance",
-    "muscle",
-    "wave",
-    "salute",
-    "bow",
-    "laugh",
-    "pers",
-    "cheer"
+    {name = "Dance", act = ACT_GMOD_TAUNT_DANCE},
+    {name = "Muscle", act = ACT_GMOD_TAUNT_MUSCLE},
+    {name = "Robot", act = ACT_GMOD_TAUNT_ROBOT},
+    {name = "Wave", act = ACT_GMOD_GESTURE_WAVE},
+    {name = "Salute", act = ACT_GMOD_TAUNT_SALUTE},
+    {name = "Persistence", act = ACT_GMOD_TAUNT_PERSISTENCE},
+    {name = "Laugh", act = ACT_GMOD_TAUNT_LAUGH},
+    {name = "Cheer", act = ACT_GMOD_TAUNT_CHEER},
 }
 
 local DefaultActs2 = {
-    "agree",
-    "disagree",
-    "zombie",
-    "robot",
-    "halt",
-    "group",
-    "forward",
-    "becon"
+    {name = "Agree", act = ACT_GMOD_GESTURE_AGREE},
+    {name = "Disagree", act = ACT_GMOD_GESTURE_DISAGREE},
+    {name = "Zombie", act = ACT_GMOD_GESTURE_TAUNT_ZOMBIE},
+    {name = "Bow", act = ACT_GMOD_GESTURE_BOW},
+    {name = "Halt", act = ACT_SIGNAL_HALT},
+    {name = "Group", act = ACT_SIGNAL_GROUP},
+    {name = "Forward", act = ACT_SIGNAL_FORWARD},
+    {name = "Becon", act = ACT_GMOD_GESTURE_BECON},
 }
 
 function ActsFrame:Init()
+    local height = 300
+    local width = 150
 
-    self:SetPos( 0, 0 )
-    self:SetSize(200, 400)
+    self:SetPos(0, 0)
+    self:SetSize(width, height)
     self:CenterVertical()
-    self:SetName("Select your Taunt!")
-    self:Hide()
+
+    self.HeaderContainer = vgui.Create("DPanel", self)
+    self.HeaderContainer:DockPadding(8, 8, 8, 8)
+    self.HeaderContainer:Dock(TOP)
+    self.HeaderContainer:SetSize(width, 32)
+
+    local header = vgui.Create("DLabel", self.HeaderContainer)
+    header:SetFont("gw_font_normal")
+    header:SetText("Select taunt!")
+    header:Dock(FILL)
+
+    function self.HeaderContainer:Paint(w,h)
+        local clr = team.GetColor(LocalPlayer():Team())
+        draw.RoundedBox( 0, 0, 0, w, h, clr )
+    end
+
+    self.ActsContainer = vgui.Create("DPanel", self)
+    self.ActsContainer:DockPadding(8, 8, 8, 8)
+    self.ActsContainer:Dock(TOP)
+
+    function self.ActsContainer:Paint(w,h)
+        draw.RoundedBox( 0, 0, 0, w, h, G_GWColors.darkgreybg )
+    end
+
 
     self:MakePopup()
 
     self:SetMouseInputEnabled( false )
     self:SetKeyboardInputEnabled( true )
 
+    self:Hide()
 end
 
 function ActsFrame:Paint(w,h)
-    draw.RoundedBox( 0, 0, 0, w, h, clrs.darkgreybg )
-    local clr = team.GetColor(LocalPlayer():Team())
-    draw.RoundedBox( 0, 0, 0, w, h-(h-20), clr )
+
 end
 
 function ActsFrame:OnKeyCodePressed( keycode )
@@ -64,16 +87,20 @@ function ActsFrame:OnKeyCodePressed( keycode )
         actnmbr = 8
     elseif keycode == KEY_9 then
         actnmbr = 9
-    else return end
+    else
+        return false
+    end
 
     if self.actstable[actnmbr] then
-        RunConsoleCommand("act" , self.actstable[actnmbr])
+        LocalPlayer():GWClientRequestTaunt(self.actstable[actnmbr].act)
+        return true
     end
 
 
 end
 
 function ActsFrame:SetActs( index )
+    
     self.actstable = {}
 
     if index == 2 then
@@ -82,38 +109,43 @@ function ActsFrame:SetActs( index )
         self.actstable = DefaultActs1
     end
 
-    for i, value in pairs(self.actstable) do
-        local pnl = vgui.Create("DLabel", self)
-        pnl:SetText(i .. ". " .. value)
-        self:AddItem(pnl)
+    self.ActsContainer:Clear()
+
+    local pnl
+    for i, actInfo in pairs(self.actstable) do
+        pnl = vgui.Create("DLabel", self.ActsContainer)
+        pnl:SetFont("gw_font_small")
+        pnl:SetText(i .. ". " .. actInfo.name)
+        pnl:Dock(TOP)
     end
+
+    local _, paddingTop, _, paddingBottom = self.ActsContainer:GetDockPadding();
+    self.ActsContainer:SetTall((pnl:GetTall() * #self.actstable) + paddingTop + paddingBottom)
 end
 
-vgui.Register("DActFrame", ActsFrame, "DForm")
+vgui.Register("DActFrame", ActsFrame, "DPanel")
 
 function GM:ActMenuOneOpen()
-    if ( !IsValid( g_Acts ) ) then
-        g_Acts = vgui.Create("DActFrame")
+    if ( not IsValid( G_GWActsMenu ) ) then
+        G_GWActsMenu = vgui.Create("DActFrame")
     end
 
-    if ( IsValid( g_Acts ) and LocalPlayer():Alive() and LocalPlayer():Team() != TEAM_SPECTATOR ) then
-        g_Acts:Clear()
-        g_Acts:SetActs(1)
-        g_Acts:Show()
+    if ( IsValid( G_GWActsMenu ) and LocalPlayer():Alive() and LocalPlayer():Team() ~= TEAM_SPECTATOR ) then
+        G_GWActsMenu:SetActs(1)
+        G_GWActsMenu:Show()
     end
 
     return true
 end
 
 function GM:ActMenuTwoOpen()
-    if ( !IsValid( g_Acts ) ) then
-        g_Acts = vgui.Create("DActFrame")
+    if ( not IsValid( G_GWActsMenu ) ) then
+        G_GWActsMenu = vgui.Create("DActFrame")
     end
 
-    if ( IsValid( g_Acts) and LocalPlayer():Alive() and LocalPlayer():Team() != TEAM_SPECTATOR ) then
-        g_Acts:Clear()
-        g_Acts:SetActs(2)
-        g_Acts:Show()
+    if ( IsValid( G_GWActsMenu) and LocalPlayer():Alive() and LocalPlayer():Team() ~= TEAM_SPECTATOR ) then
+        G_GWActsMenu:SetActs(2)
+        G_GWActsMenu:Show()
     end
 
     return true
@@ -121,8 +153,8 @@ end
 
 
 function GM:ActMenuClose()
-     if ( IsValid( g_Acts ) ) then
-        g_Acts:Hide()
+     if ( IsValid( G_GWActsMenu ) ) then
+        G_GWActsMenu:Hide()
     end
 end
 

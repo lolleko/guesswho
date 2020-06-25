@@ -2,22 +2,22 @@ function GM:PlayerDeathThink( ply )
 
     local spectargets = team.GetPlayers( ply:Team() )
 
-    if GAMEMODE:GetRoundState() == ROUND_SEEK then
-        if !ply.SpecID then
+    if GAMEMODE.GWRound:IsCurrentState(GW_ROUND_SEEK) then
+        if not ply.SpecID then
             ply:Spectate(OBS_MODE_CHASE)
-            if spectargets != nil then
+            if spectargets ~= nil then
                 for k,v in pairs(spectargets) do
                     if v:Alive() then ply.SpecID = k ply:SpectateEntity(v)  break end
                 end
             end
-            if !ply.SpecID then ply.SpecID = 1 end
+            if not ply.SpecID then ply.SpecID = 1 end
         end
         if ply:KeyPressed( IN_ATTACK ) then
             ply.SpecID = ply.SpecID + 1
             if ply.SpecID > #spectargets then
                 ply.SpecID = 1
             end
-            while !spectargets[ply.SpecID]:Alive() do ply.SpecID = ply.SpecID + 1 if spectargets[ply.SpecID] == nil then break end end -- if player not alive find next alive
+            while not spectargets[ply.SpecID]:Alive() do ply.SpecID = ply.SpecID + 1 if spectargets[ply.SpecID] == nil then break end end -- if player not alive find next alive
             if IsValid(spectargets[ply.SpecID]) then
                 ply:SpectateEntity(spectargets[ply.SpecID])
             end
@@ -26,7 +26,7 @@ function GM:PlayerDeathThink( ply )
             if ply.SpecID < 1 then
                 ply.SpecID = #spectargets
             end
-            while !spectargets[ply.SpecID]:Alive() do ply.SpecID = ply.SpecID - 1 if spectargets[ply.SpecID] == nil then break end end -- if player not alive find next alive
+            while not spectargets[ply.SpecID]:Alive() do ply.SpecID = ply.SpecID - 1 if spectargets[ply.SpecID] == nil then break end end -- if player not alive find next alive
             if IsValid(spectargets[ply.SpecID]) then
                 ply:SpectateEntity(spectargets[ply.SpecID])
             end
@@ -35,11 +35,11 @@ function GM:PlayerDeathThink( ply )
 
     if ( ply.NextSpawnTime and ply.NextSpawnTime > CurTime() ) then return end
 
-    if ply:Team() == TEAM_HIDING and GAMEMODE:GetRoundState() == ROUND_HIDE then
+    if ply:Team() == GW_TEAM_HIDING and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) then
         ply:Spawn()
     end
 
-    if ply:Team() == TEAM_SEEKING or ply:Team() == TEAM_HIDING then return end
+    if ply:Team() == GW_TEAM_SEEKING or ply:Team() == GW_TEAM_HIDING then return end
 
     if ( ply:IsBot() or ply:KeyPressed( IN_ATTACK ) or ply:KeyPressed( IN_ATTACK2 ) or ply:KeyPressed( IN_JUMP ) ) then
 
@@ -56,16 +56,16 @@ function GM:PlayerDeath( ply, inflictor, attacker )
     ply.DeathTime = CurTime()
 
     -- reset touches
-    ply:SetSeekerTouches(0)
+    ply:GWSetSeekerTouches(0)
 
-    if ply:Team() == TEAM_HIDING and GAMEMODE:GetRoundState() == ROUND_HIDE then
-        ply:SetDiedInPrep(true)
+    if ply:Team() == GW_TEAM_HIDING and GAMEMODE.GWRound:IsCurrentState(GW_ROUND_HIDE) then
+        ply:SetGWDiedInPrep(true)
     end
 
     ---spectate first alive player in team
     ply:Spectate(OBS_MODE_CHASE)
     local spectargets = team.GetPlayers( ply:Team() )
-    if spectargets != nil then
+    if spectargets ~= nil then
         for k,v in pairs(spectargets) do
             if v:Alive() then ply.SpecID = k ply:SpectateEntity(v)  break end
         end
@@ -77,7 +77,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
         attacker = attacker:GetDriver()
     end
 
-    if ( !IsValid( inflictor ) and IsValid( attacker ) ) then
+    if ( not IsValid( inflictor ) and IsValid( attacker ) ) then
         inflictor = attacker
     end
 
@@ -87,7 +87,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
     if ( IsValid( inflictor ) and inflictor == attacker and ( inflictor:IsPlayer() or inflictor:IsNPC() ) ) then
 
         inflictor = inflictor:GetActiveWeapon()
-        if ( !IsValid( inflictor ) ) then inflictor = attacker end
+        if ( not IsValid( inflictor ) ) then inflictor = attacker end
 
     end
 
@@ -97,7 +97,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
             net.WriteEntity( ply )
         net.Broadcast()
 
-        MsgAll( attacker:Nick() .. " suicided!\n" )
+        MsgAll( attacker:Nick() .. " suicidednot \n" )
 
     return end
 
@@ -140,9 +140,9 @@ function GM:PlayerSpawn( pl )
 
     end
 
-    if pl:Team() == TEAM_SEEKING then
+    if pl:Team() == GW_TEAM_SEEKING then
         player_manager.SetPlayerClass( pl, "player_seeker")
-    elseif pl:Team() == TEAM_HIDING then
+    elseif pl:Team() == GW_TEAM_HIDING then
         player_manager.SetPlayerClass( pl, "player_hiding")
     end
 
@@ -171,7 +171,7 @@ end
 function GM:PlayerSetHandsModel( pl, ent )
 
     local info = player_manager.RunClass( pl, "GetHandsModel" )
-    if ( !info ) then
+    if ( not info ) then
         local playermodel = player_manager.TranslateToPlayerModelName( pl:GetModel() )
         info = player_manager.TranslatePlayerHands( playermodel )
     end
@@ -200,11 +200,11 @@ function GM:OnPlayerChangedTeam( ply, oldteam, newteam )
         -- If we're changing from spectator, join the game
         --disabled ply:Spawn()
 
-    elseif newteam == TEAM_SEEKING then
+    elseif newteam == GW_TEAM_SEEKING then
 
         player_manager.SetPlayerClass( ply, "player_seeker")
 
-    elseif newteam == TEAM_HIDING then
+    elseif newteam == GW_TEAM_HIDING then
 
         player_manager.SetPlayerClass( ply, "player_hiding")
 
@@ -234,7 +234,7 @@ function GM:IsSpawnpointSuitable( pl, spawnpointent, bMakeSuitable )
     local Blockers = 0
 
     for k, v in pairs( Ents ) do
-        if ( IsValid( v ) and (v != pl and v:GetClass() == "player" and v:Alive()) or v:GetClass() == "npc_walker" ) then
+        if ( IsValid( v ) and (v ~= pl and v:GetClass() == "player" and v:Alive()) or v:GetClass() == GW_WALKER_CLASS ) then
 
             Blockers = Blockers + 1
 
@@ -259,18 +259,18 @@ function GM:PlayerCanJoinTeam( ply, teamid )
         return false
     end
 
-    -- Already on this team!
+    -- Already on this teamnot 
     if ( ply:Team() == teamid ) then
         ply:ChatPrint( "You're already on that team" )
         return false
     end
 
-    if teamid == TEAM_SEEKING then
-        if team.NumPlayers( TEAM_SEEKING ) > team.NumPlayers( TEAM_HIDING ) or (ply:Team() == TEAM_HIDING and team.NumPlayers( TEAM_SEEKING ) == team.NumPlayers( TEAM_HIDING )) then
+    if teamid == GW_TEAM_SEEKING then
+        if team.NumPlayers( GW_TEAM_SEEKING ) > team.NumPlayers( GW_TEAM_HIDING ) or (ply:Team() == GW_TEAM_HIDING and team.NumPlayers( GW_TEAM_SEEKING ) == team.NumPlayers( GW_TEAM_HIDING )) then
             return false
         end
-    elseif teamid == TEAM_HIDING then
-        if team.NumPlayers( TEAM_HIDING ) > team.NumPlayers( TEAM_SEEKING ) or (ply:Team() == TEAM_SEEKING and team.NumPlayers( TEAM_SEEKING ) == team.NumPlayers( TEAM_HIDING )) then
+    elseif teamid == GW_TEAM_HIDING then
+        if team.NumPlayers( GW_TEAM_HIDING ) > team.NumPlayers( GW_TEAM_SEEKING ) or (ply:Team() == GW_TEAM_SEEKING and team.NumPlayers( GW_TEAM_SEEKING ) == team.NumPlayers( GW_TEAM_HIDING )) then
             return false
         end
     end
@@ -291,7 +291,7 @@ function GM:ShowSpare2( ply)
     local taunt = file.Find("sound/gwtaunts/*.mp3", "GAME")
     local randomNumber = math.random(1, table.Count(taunt))
 
-    tauntName = string.Explode(".mp3",tostring(taunt[randomNumber]))
+    local tauntName = string.Explode(".mp3",tostring(taunt[randomNumber]))
 
     ply:ConCommand("gw_voicetaunt " .. tauntName[1])
 
@@ -301,13 +301,13 @@ end
 
 function GM:PlayerCanSeePlayersChat( text, teamonly, listenply, speakply )
 
-    if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false end
+    if ( not IsValid( speakply ) or not IsValid( listenply ) ) then return false end
 
     if ( teamonly ) then
-        if ( listenply:Team() != speakply:Team() ) then return false end
+        if ( listenply:Team() ~= speakply:Team() ) then return false end
     end
 
-    if listenply:Alive() and !speakply:Alive() then return false end
+    if listenply:Alive() and not speakply:Alive() then return false end
 
     return true
 
@@ -317,9 +317,9 @@ local sv_alltalk = GetConVar( "sv_alltalk" )
 
 function GM:PlayerCanHearPlayersVoice( listenply, speakply )
 
-    if ( !IsValid( speakply ) or !IsValid( listenply ) ) then return false, false end
+    if ( not IsValid( speakply ) or not IsValid( listenply ) ) then return false, false end
 
-	if listenply:Alive() and !speakply:Alive() then return false, false end
+    if listenply:Alive() and not speakply:Alive() then return false, false end
 
     local alltalk = sv_alltalk:GetInt()
     if ( alltalk >= 1 ) then return true, alltalk == 2 end
@@ -337,15 +337,15 @@ function GM:PlayerInitialSpawn( pl )
     end
 
     --sync endtime with clients that connected
-    if self:GetRoundState() then
-        self:SendRoundState( self:GetRoundState(), pl )
+    if GAMEMODE.GWRound:GetRoundState() then
+        GAMEMODE.GWRound:SendRoundState(GAMEMODE.GWRound:GetRoundState(), pl)
     end
 
 end
 
 function GM:AllowPlayerPickup( ply, ent )
 
-    if !ply:Alive() then return false end
+    if not ply:Alive() then return false end
 
     return true
 

@@ -23,6 +23,7 @@ local fr = {
     teamselect_workshop_contact = "Contact",
     --Controls ( limited space keep it short )
     teamselect_controls_sit = "S'asseoir",
+    teamselect_controls_change_model = "Changer de modèle",
     teamselect_controls_ability = "Capacité (Se cacher)",
     teamselect_controls_settings = "Aide + Options",
     teamselect_controls_team = "Choix de l'équipe",
@@ -40,4 +41,4 @@ local fr = {
 
 }
 
-gwlang:addLangguage( fr, "fr" )
+GWLANG:AddLangguage( fr, "fr" )
