@@ -207,7 +207,7 @@ function PLAYERINFO:Think()
     end
 
     local txtClr = G_GWColors.grey
-    if self.Player:Alive() then txtClr = G_GWColors.lightgrey end
+    if self.Player:Alive() or self.Player:GWIsRagdolled() then txtClr = G_GWColors.lightgrey end
 
     if ( self.NumPing == nil or self.NumPing ~= self.Player:Ping() ) then
     self.NumPing = self.Player:Ping()

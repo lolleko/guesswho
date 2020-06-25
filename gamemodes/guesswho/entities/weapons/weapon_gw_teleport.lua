@@ -74,6 +74,10 @@ function SWEP:DrawHUD()
         return
     end
 
+    if not IsValid(self.destinationModel) then
+        return
+    end
+
     if self.destinationModel ~= self:GetOwner():GetModel() then
         self.destinationModel:SetModel(self:GetOwner():GetModel())
     end

@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Base = "base_nextbot"
 
 function ENT:Initialize()
-    self:SetHealth(20)
+    self:SetHealth(10)
     self:SetModel( "models/player/eli.mdl" )
 
     self.GetPlayerColor = function()

@@ -51,7 +51,12 @@ end
 if CLIENT then
     hook.Add( "OnEntityCreated", "gwRagdollPlayerColor", function( ent )
         if IsValid(ent) and ent:GetClass() == "prop_ragdoll" and IsValid(ent:GetOwner()) and ent:GetOwner():IsPlayer() then
-            ent.GetPlayerColor = function(self) return self:GetOwner():GetPlayerColor() end
+            ent.GetPlayerColor = function(self)
+                if IsValid(ent:GetOwner()) and ent:GetOwner():IsPlayer()  and ent:GetOwner().GetPlayerColor then
+                    return self:GetOwner():GetPlayerColor()
+                end
+                return Vector(1, 1, 1)
+            end
         end
     end)
 end

@@ -39,7 +39,7 @@ function GWRound:RoundCreateWalkers()
     self:SetRoundState(GW_ROUND_CREATING_NPCS)
     hook.Run("GWCreating")
 
-    self:GetSpawnPoints()
+    self:UpdateSpawnPoints()
 
     local wave = 1
     local playerCount = player.GetCount()
@@ -52,7 +52,7 @@ function GWRound:RoundCreateWalkers()
         MsgN("GW Spawned ", self.WalkerCount, " NPCs in 1 wave.")
     else
         local wpw
-        for w = 0, math.Round(self.MaxWalkers / #self.SpawnPoints) - 1, 1 do
+        for w = 0, math.floor(self.MaxWalkers / #self.SpawnPoints) - 1, 1 do
             wave = wave + 1
             timer.Simple(w * 5, function()
                 wpw = self.WalkerCount
@@ -263,7 +263,7 @@ function GWRound:MeshController()
         navmesh.BeginGeneration()
         -- force generate
         if not navmesh.IsGenerating() then
-            self:GetSpawnPoints()
+            self:UpdateSpawnPoints()
 
             local tr = util.TraceLine({
                 start = self.SpawnPoints[1]:GetPos(),
@@ -290,7 +290,7 @@ function GWRound:MeshController()
     end
 end
 
-function GWRound:GetSpawnPoints()
+function GWRound:UpdateSpawnPoints()
     if (not self.SpawnPoints or not IsTableOfEntitiesValid(self.SpawnPoints)) then
 
         self.LastSpawnPoint = 0
