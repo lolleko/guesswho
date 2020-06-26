@@ -80,7 +80,11 @@ function SWEP:PrimaryAttack()
     trace.start = self:GetOwner():GetShootPos()
     trace.endpos = trace.start + (self:GetOwner():GetAimVector() * self.Range)
     trace.filter = self:GetOwner()
-    local traceResult = util.TraceLine(trace)
+    trace.mins = Vector(-1.5, -1.5, -1.5)
+    trace.maxs = Vector(1.5, 1.5, 1.5)
+    trace.mask = MASK_SHOT_HULL
+    local traceResult = util.TraceHull(trace)
+
     self:GetOwner():LagCompensation(false)
 
     self:EmitSound(self.SwingSound)
@@ -106,11 +110,17 @@ function SWEP:PrimaryAttack()
             end
 
             if SERVER and IsValid(hitEnt) then
+
                 if hitEnt:IsPlayer() then
                     hitEnt:TakeDamage(self.Damage * 2, self:GetOwner(), self)
                 else
                     hitEnt:TakeDamage(self.Damage * 3, self:GetOwner(), self)
                 end
+
+                if (hitEnt:GetClass() == "func_breakable" or hitEnt:GetClass() == "func_breakable_surf") then
+                    hitEnt:Fire("shatter")
+                end
+
                 self:EmitSound(self.HitSound)
             end
         end

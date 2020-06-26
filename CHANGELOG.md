@@ -1,3 +1,8 @@
+# 2.2b (Hotfix)
+
+- Fixed seeker crowbar not shattering windows and other destroyable objects
+- Ragdolled players now show up as dead on the scoreboard
+
 # 2.2a (Hotfix)
 
 - Fixed an issue that prevented the new unstuck logic from working correctly

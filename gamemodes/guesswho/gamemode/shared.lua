@@ -3,7 +3,7 @@ GM.Author = "Lolleko"
 GM.Email = "N/A"
 GM.Website = "https://github.com/lolleko/guesswho"
 
-GM.Version = "2.2a (77)"
+GM.Version = "2.2b (78)"
 
 GM.TeamBased = true
 
@@ -39,7 +39,6 @@ CreateConVar("gw_seeker_run_speed", "200", cVarFlags, "Seeker Run Speed")
 CreateConVar("gw_hiding_walk_speed", "100", cVarFlags, "Hiding Walk Speed")
 CreateConVar("gw_hiding_run_speed", "200", cVarFlags, "Hiding Run Speed")
 CreateConVar("gw_double_jump_enabled", "0", cVarFlags, "Wether Double Jumps are enabled or not")
-
 
 game.AddAmmoType({
     name = "gwDashCharges",
