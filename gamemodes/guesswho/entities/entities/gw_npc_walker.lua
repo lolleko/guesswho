@@ -4,6 +4,10 @@ local Behaviour = include("gw_behaviour_tree_lib.lua")
 
 ENT.Base = "base_nextbot"
 
+GW_WALKER_TARGET_TYPE_NONE = 0
+GW_WALKER_TARGET_TYPE_POSITION = 1
+GW_WALKER_TARGET_TYPE_HIDING_SPOT = 2
+
 function ENT:SetupDataTables()
 
     self:NetworkVar("Int", 0, "LastAct")
@@ -78,13 +82,40 @@ function ENT:Initialize()
         self.stuckTime = CurTime()
         self.stuckPos = Vector()
         self.targetPos = Vector()
+        self.targetType = GW_WALKER_TARGET_TYPE_NONE
         self.isSitting = false
+        self.isIdle = false
         self.isDancing = false
         self.sitUntil = CurTime()
 
         self.behaviourTree = nil
         self.currentPath = nil
     end
+end
+
+function ENT:IsAlone(radius)
+    local entsAround = ents.FindInSphere(self:GetPos(), radius)
+
+    local walkersAround = {}
+    for _, ent in pairs(entsAround) do
+        if ent:GetClass() == self:GetClass() then
+            table.insert(walkersAround, ent)
+        end
+    end
+
+    local doorsAround = {}
+    for _, ent in pairs(entsAround) do
+        if ((ent:GetClass() == "func_door") or (ent:GetClass() == "func_door_rotating")) or
+            (ent:GetClass() == "prop_door_rotating") then
+            table.insert(doorsAround, ent)
+        end
+    end
+
+    if ((#walkersAround) < 3) and ((#doorsAround) == 0) then
+        return true
+    end
+
+    return false
 end
 
 function ENT:Sit(duration)
@@ -94,10 +125,31 @@ function ENT:Sit(duration)
 
     self.isSitting = true
     self.sitUntil = CurTime() + duration
+
+    self:SetSequence("sit_zen")
+    self:SetCrouchCollision(true)
+end
+
+function ENT:StopSit()
+    self:SetCrouchCollision(false)
+    self.isSitting = false
 end
 
 function ENT:Dance()
     self.isDancing = true
+end
+
+function ENT:Idle(duration)
+    if duration == nil then
+        duration = math.random(10, 30)
+    end
+
+    self.isIdle = true
+    self.idleUntil = CurTime() + duration
+end
+
+function ENT:StopIdle()
+    self.isIdle = false
 end
 
 function ENT:SetCrouchCollision(state)
@@ -157,6 +209,10 @@ function ENT:Think()
             local spawnPoint = spawnPoints[(math.random(#spawnPoints) - 1) + 1]:GetPos()
             self:SetPos(spawnPoint)
             self.isStuck = false
+            self.targetType = GW_WALKER_TARGET_TYPE_NONE
+            if (IsValid(self.currentPath)) then
+                self.currentPath:Invalidate()
+            end
             if GAMEMODE.GWStuckMessageCount <= 32 then
                 MsgN(
                     "Nextbot [" .. self:EntIndex() .. "][" .. self:GetClass() .. "]" ..
@@ -212,24 +268,7 @@ function ENT:RunBehaviour()
             if (rand > 0) and (rand < 25) then
                 self.loco:SetDesiredSpeed(self.runSpeed)
             elseif (rand > 25) and (rand < 38) then
-                local entsAround = ents.FindInSphere(self:GetPos(), 350)
-
-                local walkersAround = {}
-                for _, ent in pairs(entsAround) do
-                    if ent:GetClass() == self:GetClass() then
-                        table.insert(walkersAround, ent)
-                    end
-                end
-
-                local doorsAround = {}
-                for _, ent in pairs(entsAround) do
-                    if ((ent:GetClass() == "func_door") or (ent:GetClass() == "func_door_rotating")) or
-                        (ent:GetClass() == "prop_door_rotating") then
-                        table.insert(doorsAround, ent)
-                    end
-                end
-
-                if ((#walkersAround) < 3) and ((#doorsAround) == 0) then
+                if self:IsAlone(350) then
                     self:Sit(math.random(10, 60))
                 end
             else
@@ -245,12 +284,20 @@ function ENT:RunBehaviour()
                 return Behaviour.Status.Success
             end
 
-            self:SetSequence("sit_zen")
-            self:SetCrouchCollision(true)
-
             if self.sitUntil < CurTime() then
-                self:SetCrouchCollision(false)
-                self.isSitting = false
+                self:StopSit()
+                return Behaviour.Status.Success
+            end
+
+            return Behaviour.Status.Running
+        end)
+        :Action(function()
+            if not self.isIdle then
+                return Behaviour.Status.Success
+            end
+
+            if self.idleUntil < CurTime() then
+                self:StopIdle()
                 return Behaviour.Status.Success
             end
 
@@ -266,18 +313,32 @@ function ENT:RunBehaviour()
                 radius = 8000
             end
 
-            local navs = navmesh.Find(self:GetPos(), radius, 400, 400)
-            local nav = navs[(math.random(#navs) - 1) + 1]
+            local rand = math.random(1, 100)
 
-            if not IsValid(nav) then
-                return Behaviour.Status.Failure
+            local allowedStepChange = 400
+
+            if rand < 25 then
+                self.targetPos = self:FindSpot("random", {type= "hiding", pos = self:GetPos(), radius = radius, stepup = allowedStepChange, stepdown = allowedStepChange})
+
+                if (not self.targetPos) then
+                    self.targetType = GW_WALKER_TARGET_TYPE_NONE
+                    return Behaviour.Status.Failure
+                end
+
+                self.targetType = GW_WALKER_TARGET_TYPE_HIDING_SPOT
+            else 
+                local navs = navmesh.Find(self:GetPos(), radius, allowedStepChange, allowedStepChange)
+                local nav = navs[(math.random(#navs) - 1) + 1]
+
+                if not IsValid(nav) or nav:IsUnderwater() then
+                    self.targetType = GW_WALKER_TARGET_TYPE_NONE
+                    return Behaviour.Status.Failure
+                end
+
+                self.targetType = GW_WALKER_TARGET_TYPE_POSITION
+                self.targetPos = nav:GetRandomPoint()
             end
 
-            if nav:IsUnderwater() then
-                return Behaviour.Status.Failure
-            end
-
-            self.targetPos = nav:GetRandomPoint()
             self.currentPath = Path("Follow")
             self.currentPath:SetMinLookAheadDistance(10)
             self.currentPath:SetGoalTolerance(42)
@@ -303,6 +364,9 @@ function ENT:RunBehaviour()
         end)
         :Action(function()
             if not IsValid(self.currentPath) then
+                if (self.targetType == GW_WALKER_TARGET_TYPE_HIDING_SPOT and self.targetPos:Distance(self:GetPos()) < 50) and self:IsAlone(150) then
+                    self:Idle(math.random(4, 10))
+                end
                 return Behaviour.Status.Success
             end
 
