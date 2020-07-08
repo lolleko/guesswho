@@ -1,6 +1,6 @@
 # 2.2c (Hotfix)
 
-- Re-added a chance for npcs to idle for a short duration (statnding around not moving for a few secons)
+- Re-added a chance for npcs to idle for a short duration (standing around not moving for a few secodns)
 
 # 2.2b (Hotfix)
 
