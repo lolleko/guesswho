@@ -543,10 +543,12 @@ function ENT:OnContact(ent)
                 local dogeTarget = self:GetPos() + (dogeDirection * 200)
 
                 local navAreaInDogeDir = navmesh.GetNearestNavArea(dogeTarget, false, 400, true)
-                local dogeTargetOnNavArea = navAreaInDogeDir:GetClosestPointOnArea(dogeTarget)
+                if IsValid(navAreaInDogeDir) then
+                    local dogeTargetOnNavArea = navAreaInDogeDir:GetClosestPointOnArea(dogeTarget)
 
-                if dogeTargetOnNavArea then
-                    self:Doge(dogeTargetOnNavArea, math.random(0.4, 0.6))
+                    if dogeTargetOnNavArea then
+                        self:Doge(dogeTargetOnNavArea, math.random(0.4, 0.6))
+                    end
                 end
             end
         end

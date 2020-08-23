@@ -117,7 +117,7 @@
 			"text"		"Extra NPCs per player."
 			"help"		"The amount of NPCs to add for each player on the server."
 			"type"		"Numeric"
-			"default"	"1.25"
+			"default"	"1.20"
 		}
 		15
 		{

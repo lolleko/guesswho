@@ -1,13 +1,18 @@
-# 2.2c (Hotfix)
+# 2.2.d (Bugfix)
+
+- Fixed some issues caused by the latest gmod update (August 2020 update)
+- Hopefully fixed issue where player would stay invisible if killed during teleport
+
+# 2.2c (Bugfix)
 
 - Re-added a chance for npcs to idle for a short duration (standing around not moving for a few secodns)
 
-# 2.2b (Hotfix)
+# 2.2b (Bugfix)
 
 - Fixed seeker crowbar not shattering windows and other destroyable objects
 - Ragdolled players now show up as dead on the scoreboard
 
-# 2.2a (Hotfix)
+# 2.2a (Bugfix)
 
 - Fixed an issue that prevented the new unstuck logic from working correctly
 - Fixed some spelling misstakes

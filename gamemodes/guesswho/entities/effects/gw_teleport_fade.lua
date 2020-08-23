@@ -3,11 +3,9 @@ AddCSLuaFile()
 local matRefract = Material( "models/spawn_effect" )
 
 function EFFECT:Init( data )
-    -- This is how long the spawn effect
-    -- takes from start to finish.
     self.Duration = data:GetMagnitude()
     self.PlayBackwards = data:GetScale() < 0
-    self.DontRemoveOverride = data:GetSurfaceProp() == -1
+    self.DontRemoveOverride = data:GetSurfaceProp() < 0
     self.EndTime = CurTime() + self.Duration
 
     local ent = data:GetEntity()
@@ -39,6 +37,11 @@ function EFFECT:Think()
     end
 
     self.ParentEntity.SpawnEffect = nil
+
+    if self.ParentEntity:IsPlayer() and not self.ParentEntity:Alive() then
+        self.ParentEntity.RenderOverride = nil
+        return false
+    end
 
     -- Hack so the object does not pop in for a short duration between fade out and fade in
     if self.DontRemoveOverride then
